@@ -5,26 +5,13 @@
         <script type="text/javascript" src="FiCharts.js">
         </script>
         <script type="text/javascript">
-            var mainChart = new Chart2D({id: 'main', width: 500, height: 400})
-            var detailChart;
-            
-            mainChart.setConfigFile('mainData.xml');
-            
-            mainChart.onClicked(function(e){
-            	
-            	if (e.data.xLabel == "Apple"){
-            		
-            		if (typeof detailChart == 'undefined'){
-            			detailChart = new Chart2D('detail');
-            			detailChart.setConfigFile('detail.xml');
-            		}
-            	}
-            })
+        	
+            var mainChart = new Chart2D({id: 'main', width: 500, height: 400});
+            mainChart.setConfigFile('data.xml');
             
         </script>
     </head>
     <body>
         <div id="main"></div>
-        <div id="detail"></div>
     </body>
 </html>
