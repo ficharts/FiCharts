@@ -1,0 +1,527 @@
+package com.fiCharts.charts.chart2D.encry
+{
+	import com.fiCharts.charts.chart2D.core.TitleBox;
+	import com.fiCharts.charts.chart2D.core.backgound.ChartBGUI;
+	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
+	import com.fiCharts.charts.chart2D.pie.PieChartModel;
+	import com.fiCharts.charts.chart2D.pie.PieChartProxy;
+	import com.fiCharts.charts.chart2D.pie.series.PieSeries;
+	import com.fiCharts.charts.chart2D.pie.series.Series;
+	import com.fiCharts.charts.common.IChart;
+	import com.fiCharts.charts.legend.LegendPanel;
+	import com.fiCharts.charts.legend.LegendStyle;
+	import com.fiCharts.charts.legend.model.LegendVO;
+	import com.fiCharts.ui.toolTips.ToolTipsManager;
+	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
+	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	
+	import flash.display.Sprite;
+	import flash.display.StageDisplayState;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	
+	/**
+	 * 饼图的基类
+	 */	
+	public class PieChartBase extends Sprite implements IChart
+	{
+		public function PieChartBase()
+		{
+			super();
+			
+			init();
+		}
+		
+		/**
+		 * 创建序列
+		 */		
+		private function createSeriesHandler(value:Vector.<PieSeries>):void
+		{
+			while (seriesContainer.numChildren)
+				seriesContainer.removeChildAt(0);
+			
+			for each (var seriesItem:PieSeries in this.series)
+			{
+				seriesItem.dataFormatter = chartModel.dataFormatter;
+				seriesContainer.addChild(seriesItem);
+			}
+		}
+		
+		
+		//------------------------------------------------------
+		//
+		// 渲染
+		//
+		//------------------------------------------------------
+		
+		/**
+		 */		
+		public function render():void
+		{
+			if (configXML && this.dataXML && chartModel.series.length)
+				ifRenderable = true;
+			
+			if (ifRenderable)
+			{
+				updateSeriesAndLegendData();
+				
+				renderTitle();// 渲染标题
+				renderLegend(); // 渲染图例并调整好位置
+				layout();// 调整布局， 计算出饼图位置及半径；
+				renderPieSeries();			
+							
+				ifRenderable = false
+			}
+		}
+		
+		/**
+		 */		
+		private function renderPieSeries():void
+		{
+			for each (var seriesItem:PieSeries in this.series)
+			{
+				seriesItem.x = centerX;
+				seriesItem.y = conterY;
+				seriesItem.radius = pieRadius;
+				
+				seriesItem.render();
+			}
+		}
+		
+		/**
+		 */		
+		private function layout():void
+		{
+			topContainer.x = (this.chartWidth - xSize) * 0.5;
+			topContainer.y = (this.gutterTop - topContainer.height) * 0.5;
+			
+			rightContainer.x = xSize + this.gutterLeft;
+			rightContainer.y = (this.chartHeight - rightContainer.height) * 0.5;
+			
+			bottomContainer.x = (this.chartWidth - bottomContainer.width) * 0.5;
+			bottomContainer.y = this.chartHeight - bottomContainer.height - chartModel.chartBG.paddingBottom;
+			
+			leftContainer.x = chartModel.chartBG.paddingLeft;
+			leftContainer.y = (this.chartHeight - leftContainer.height) * 0.5;
+			
+			centerX = this.xSize / 2 + this.gutterLeft;
+			conterY = this.ySize / 2 + this.gutterTop;
+			
+			if (this.xSize <= this.ySize)
+				pieRadius = xSize / 2;
+			else
+				pieRadius = ySize / 2;
+			
+		}
+		
+		/**
+		 */		
+		private var pieRadius:Number = 0;
+		
+		/**
+		 */		
+		private var centerX:Number = 0;
+		
+		/**
+		 */		
+		private var conterY:Number = 0;
+		
+		/**
+		 */		
+		private function renderTitle():void
+		{
+			if (ifRenderable)
+			{
+				title.boxWidth = this.xSize;
+				this.title.render();
+			}
+		}
+		
+		/**
+		 */		
+		private function renderLegend():void
+		{
+			if (chartModel.legend.enable == false)
+			{
+				legendPanel.clear();
+				return;
+			}
+			
+			if (chartModel.legend.position == 'top')
+			{
+				legendPanel.panelWidth = this.xSize;
+				legendPanel.direction = LegendPanel.HIRIZONTAL;
+				
+				if (title.ifHasTitles)
+					legendPanel.y = chartModel.chartBG.paddingTop + title.boxHeight;
+				
+				this.topContainer.addChild(legendPanel);
+				
+				legendPanel.render();
+				legendPanel.x = (xSize - legendPanel.width) / 2;
+				
+			}
+			else if (chartModel.legend.position == 'right')
+			{
+				legendPanel.panelHeight = this.ySize;
+				legendPanel.direction = LegendPanel.VERTICAL;
+				this.rightContainer.addChild(legendPanel);
+				legendPanel.render();
+			}
+			else if (chartModel.legend.position == 'bottom')
+			{
+				legendPanel.panelWidth = this.xSize;
+				legendPanel.direction = LegendPanel.HIRIZONTAL;
+				this.bottomContainer.addChild(legendPanel);
+				legendPanel.render();
+			}
+			else
+			{
+				legendPanel.panelHeight = this.ySize;
+				legendPanel.direction = LegendPanel.VERTICAL;
+				this.leftContainer.addChild(legendPanel);
+				legendPanel.render();
+			}
+			
+		}
+			
+		/**
+		 */		
+		private function updateSeriesAndLegendData():void
+		{
+			var legends:Vector.<LegendVO> = new Vector.<LegendVO>();
+			
+			if (ifDataChanged)
+			{
+				for each (var seriesItem:PieSeries in series)  
+				{
+					seriesItem.configed();				
+					seriesItem.initData(this.dataXML);
+					
+					if (chartModel.legend.enable)
+						legends = legends.concat(seriesItem.legendData);
+				}
+				
+				if (chartModel.legend.enable)
+					legendPanel.legendData = legends;
+				
+				ifDataChanged = false;
+			}
+		}
+		
+		/**
+		 */
+		private function get series():Vector.<PieSeries>
+		{
+			return this.chartModel.series.items;
+		}
+		
+		/**
+		 */		
+		private var ifRenderable:Boolean = false;
+		
+
+		
+		
+		
+		//-----------------------------------------------
+		//
+		// 配置与数据
+		//
+		//-----------------------------------------------
+		
+		/**
+		 */		
+		public function set configXML(value:XML):void
+		{
+			_configXML = value;
+			
+			chartProxy.setConfigCore(XMLVOMapper.extendFrom(
+				chartProxy.currentStyleXML.copy(), _configXML.copy()));
+			
+			if (_configXML.hasOwnProperty('data') && _configXML.data.children().length())
+				this.dataXML = XML(_configXML.data.toXMLString());
+		}
+		
+		/**
+		 */		
+		public function get configXML():XML
+		{
+			return _configXML;
+		}
+		
+		/**
+		 */		
+		private var _configXML:XML;
+		
+		/**
+		 */		
+		public function set dataXML(value:XML):void
+		{
+			_dataXML = value;
+			ifDataChanged = true;
+		}
+		
+		/**
+		 * 
+		 */		
+		private var ifDataChanged:Boolean = false;
+		
+		/**
+		 */		
+		public function get dataXML():XML
+		{
+			return _dataXML;
+		}
+		
+		/**
+		 */		
+		private var _dataXML:XML;
+		
+		
+		
+		
+		
+		//-------------------------------------------------
+		//
+		// 尺寸控制
+		//
+		//-------------------------------------------------
+			
+		/**
+		 */		
+		private function get xSize():Number
+		{
+			return this.chartWidth - this.gutterLeft - this.gutterRight;
+		}
+		
+		/**
+		 */		
+		private function get ySize():Number
+		{
+			return this.chartHeight - this.gutterTop - this.gutterBottom;
+		}
+		
+		/**
+		 */		
+		private function get gutterTop():Number
+		{
+			var temGutter:Number = this.topContainer.height + chartModel.chartBG.paddingTop * 2;
+			if (temGutter > chartModel.chartBG.gutterTop)
+				return temGutter;
+			else
+				return chartModel.chartBG.gutterTop;
+		}
+		
+		/**
+		 */		
+		private function get gutterBottom():Number
+		{
+			var temGutter:Number = this.bottomContainer.height + chartModel.chartBG.paddingBottom * 2;
+			if (temGutter > chartModel.chartBG.gutterBottom)
+				return temGutter;
+			else
+				return chartModel.chartBG.gutterBottom;
+		}
+		
+		/**
+		 */		
+		private function get gutterLeft():Number
+		{
+			var temGutter:Number = this.leftContainer.width + chartModel.chartBG.paddingLeft * 2;
+			if (temGutter > chartModel.chartBG.gutterLeft)
+				return temGutter;
+			else
+				return chartModel.chartBG.gutterLeft;
+		}
+		
+		/**
+		 */		
+		private function get gutterRight():Number
+		{
+			var temGutter:Number = this.rightContainer.width + chartModel.chartBG.paddingRight * 2;
+			if (temGutter > chartModel.chartBG.gutterRight)
+				return temGutter;
+			else
+				return chartModel.chartBG.gutterRight;
+		}
+		
+		
+		/**
+		 */		
+		public function set chartWidth(value:Number):void
+		{
+			_chartWidth = value;
+		}
+		
+		/**
+		 */		
+		public function get chartWidth():Number
+		{
+			return _chartWidth;
+		}
+		
+		/**
+		 */		
+		private var _chartWidth:Number = 0;
+		
+		/**
+		 */		
+		public function get chartHeight():Number
+		{
+			return _chartHeight;
+		}
+		
+		/**
+		 */		
+		public function set chartHeight(value:Number):void
+		{
+			_chartHeight = value;
+		}
+		
+		/**
+		 */		
+		private var _chartHeight:Number = 0;
+		
+		
+		
+		//------------------------------------------------------
+		//
+		// 样式
+		//
+		//------------------------------------------------------
+		
+		/**
+		 */		
+		public function setStyle(newStyle:String):void
+		{
+			if (chartProxy.currentStyleName == newStyle) return;
+			chartProxy.styleInit(newStyle);
+			
+			if (configXML)
+				chartProxy.setConfigCore(XMLVOMapper.extendFrom(
+					chartProxy.currentStyleXML.copy(), configXML.copy()));
+		}
+		
+		/**
+		 */		
+		public function setCustomStyle(value:XML):void
+		{
+		}
+		
+		/**
+		 */		
+		private function updateLegendStyleHandler(value:Object):void
+		{
+			this.legendPanel.setStyle(value as LegendStyle);
+		}
+		
+		/**
+		 */		
+		private function updateTitleStyleHandler(value:Object):void
+		{
+			title.updateStyle(chartModel.title, chartModel.subTitle);
+			this.renderTitle();
+		}
+		
+		/**
+		 * 背景区域点击后全屏模式控制
+		 */		
+		private function fullScreenHandler(evt:Event):void
+		{
+			if (chartModel.fullScreen)
+			{
+				if (stage.displayState == StageDisplayState.NORMAL)
+					stage.displayState = StageDisplayState.FULL_SCREEN;
+				else
+					stage.displayState = StageDisplayState.NORMAL;
+			}
+		}
+		
+		/**
+		 * 初始化
+		 */		
+		private function init():void
+		{
+			chartBG.doubleClickEnabled = true;
+			chartBG.addEventListener(MouseEvent.DOUBLE_CLICK, fullScreenHandler, false, 0, true);
+			
+			addChild(chartBG);
+			addChild(seriesContainer);
+			
+			topContainer.addChild(this.title);
+			addChild(this.topContainer);
+			addChild(this.rightContainer);
+			addChild(this.bottomContainer);
+			addChild(this.leftContainer);
+			
+			XMLVOLib.addCreationHandler(Series.SERIES_CREATED, createSeriesHandler);
+			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_TITLE_STYLE, updateTitleStyleHandler);
+			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_LEGEND_STYLE, updateLegendStyleHandler);
+			
+			chartProxy = new PieChartProxy;
+			chartProxy.styleInit();
+			chartProxy.setConfigCore(chartProxy.currentStyleXML);
+		}
+		
+		/**
+		 */		
+		private function get chartModel():PieChartModel
+		{
+			return chartProxy.chartModel;
+		}
+		
+		/**
+		 * 图表模型定义
+		 */		
+		private var chartProxy:PieChartProxy;
+		
+		
+		
+		//--------------------------------------------
+		//
+		// UI 相关
+		//
+		//--------------------------------------------
+		
+		
+		/**
+		 */		
+		private var legendPanel:LegendPanel = new LegendPanel;
+		
+		/**
+		 */		
+		private var toolTipManager:ToolTipsManager;
+		
+		/**
+		 * 图表背景 
+		 */		
+		protected var chartBG:ChartBGUI = new ChartBGUI;
+		
+		/**
+		 * 标题
+		 */
+		private var title:TitleBox = new TitleBox;
+		
+		/**
+		 * 
+		 */		
+		private var seriesContainer:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var leftContainer:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var rightContainer:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var topContainer:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var bottomContainer:Sprite = new Sprite;
+	}
+}
