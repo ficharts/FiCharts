@@ -122,7 +122,7 @@ package com.fiCharts.charts.chart2D.core.model
 		 */
 		public function set fullScreen(value:Object):void
 		{
-			_fullScreen = value;
+			_fullScreen = XMLVOMapper.boolean(value);
 		}
 		
 		
