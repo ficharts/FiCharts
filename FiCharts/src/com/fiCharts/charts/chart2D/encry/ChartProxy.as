@@ -117,7 +117,6 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.setASLabelStyleKey('valueLabel');
 			XMLVOLib.setASLabelStyleKey('innerValueLabel');
 			
-			
 			XMLVOLib.registerObjectToProperty('config', 'title', 'text');
 			XMLVOLib.registerObjectToProperty('config', 'subTitle', 'text');
 			

@@ -1,8 +1,10 @@
 package com.fiCharts.ui.toolTips
 {
+	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	
 	import flash.geom.Point;
 
-	public class ToolTipHolder
+	public class ToolTipHolder extends TooltipDataItem
 	{
 		public function ToolTipHolder()
 		{

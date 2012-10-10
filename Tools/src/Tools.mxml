@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="windowedapplication1_creationCompleteHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				sourceFile.browse();
+			}
+			
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				sourceFile = new File();
+				sourceFile.addEventListener(Event.SELECT, sourceFileSelected, false, 0, true);
+			}
+			
+			private function sourceFileSelected(evt:Event):void
+			{
+				var pathArrar:Array = sourceFile.nativePath.split('\\');
+				var fileNameFull:String = pathArrar.pop().split('.')[0];
+				sourceNativePath = pathArrar.join('\\') + '\\';
+				
+				
+				var myFileStream:FileStream = new FileStream();
+				
+				var sourceCodeBytes:ByteArray = new ByteArray();
+				myFileStream.open(sourceFile, FileMode.READ);
+				myFileStream.readBytes(sourceCodeBytes, 0, myFileStream.bytesAvailable);
+				myFileStream.close();
+				
+				sourceCodeBytes.compress();
+				
+				var productFile:File = File.documentsDirectory.resolvePath(sourceNativePath + fileNameFull + '.z');
+				myFileStream.open(productFile, FileMode.WRITE);
+				myFileStream.writeBytes(sourceCodeBytes, 0, sourceCodeBytes.bytesAvailable);
+				myFileStream.close();
+			}
+			
+			private var sourceNativePath:String;
+			
+			private var sourceFile:File;
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:Button label="压缩XML" click="button1_clickHandler(event)"/>
+</s:WindowedApplication>

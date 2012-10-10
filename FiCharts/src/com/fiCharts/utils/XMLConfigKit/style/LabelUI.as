@@ -67,7 +67,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		}
 		
 		/**
-		 * 相对于某点的布局
+		 * 相对于某点的布局, 默认居中
 		 */		
 		public function layout(x:Number, y:Number):void
 		{

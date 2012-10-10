@@ -23,6 +23,10 @@ package com.fiCharts.charts.chart2D.core.model
 		public static const UPDATE_LEGEND_STYLE:String = 'updateLegendStyle';
 		
 		/**
+		 */		
+		public static const UPDATE_TOOLTIP_STYLE:String = 'updateToolTipStyle';
+		
+		/**
 		 * 每个序列都有自己单独的数据渲染相关样式, 这包含 tootip, valueLabel, dataRender;
 		 * 
 		 * 以此名称为Key值存储在 XMLVOMapper中， 在序列初始化的时候应用这些统一的样式配置， 同时每个序列

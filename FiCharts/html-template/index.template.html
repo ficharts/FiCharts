@@ -6,12 +6,16 @@
         </script>
         <script type="text/javascript">
         	
-            var mainChart = new Chart2D({id: 'main', width: 500, height: 400});
-            mainChart.setConfigFile('data.xml');
+            var chart2D = new Chart2D({id: 'chart2D_div', width: 500, height: 400, style: 'white'});
+            chart2D.setConfigFile('chart2dData.xml');
+            
+            var pie2D = new Pie2D({id: 'pie2D_div', width: 500, height: 400, style: 'white'});
+            pie2D.setConfigFile('pieData.xml');
             
         </script>
     </head>
     <body>
-        <div id="main"></div>
+        <div id="chart2D_div"></div>
+        <div id="pie2D_div"></div>
     </body>
 </html>

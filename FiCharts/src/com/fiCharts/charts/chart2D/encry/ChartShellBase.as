@@ -237,7 +237,7 @@ package com.fiCharts.charts.chart2D.encry
 			item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 			myContextMenu.customItems.push(item);
 			
-			item = new ContextMenuItem(languageConfig.version + " 1.1.0 Beta");
+			item = new ContextMenuItem(languageConfig.version + " 1.2.0 Beta");
 			item.enabled = false;
 			myContextMenu.customItems.push(item);
 			
@@ -333,6 +333,14 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 */
+		protected function resizeChart():void
+		{
+			chart.chartWidth = stage.stageWidth;
+			chart.chartHeight = stage.stageHeight;
+		}
+		
+		/**
 		 * 初始化一些全局事件， 当图表被添加进显示列表以后才开始创建图表；
 		 */		
 		protected function initChart():void
@@ -371,8 +379,14 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function resizeHandler(evt:Event):void
 		{
+			if (stage.stageWidth <=  ChartShellBase.MIN_SIZE || stage.stageHeight <= ChartShellBase.MIN_SIZE)
+				return;
+			
 			if (infoLabel.visible)
 				LayoutManager.stageCenter(infoLabel, stage);
+			
+			resizeChart();
+			chart.render();
 		}
 		
 		/**

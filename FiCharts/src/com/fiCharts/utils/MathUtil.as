@@ -30,7 +30,7 @@ package com.fiCharts.utils
 			var integer:String = String(result).split('.')[0];
 			var decimal:String = String(result).split('.')[1];
 			
-			if (decimal.length < length)
+			if (decimal && decimal.length < length)
 			{
 				for (i = 0; i < length - decimal.length; i ++)
 					decimal = decimal + '0';

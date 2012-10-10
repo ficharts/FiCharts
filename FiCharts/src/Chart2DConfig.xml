@@ -132,7 +132,7 @@
                 <format color='${color}{adjustColor:0.5}' font='微软雅黑'/>
                 <text value='${valueLabel}'>
                     <effects>
-                        <shadow color='${color}{adjustColor:1.6}' alpha='1' distance='1' blur='1' angle='90'/>
+                        <shadow color='${color}{adjustColor:1.4}' alpha='1' distance='1' blur='1' angle='90'/>
                     </effects>
                 </text>
             </innerValueLabel>

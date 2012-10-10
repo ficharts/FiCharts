@@ -2,7 +2,6 @@ package com.fiCharts.charts.chart2D.pie
 {
 	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
 	import com.fiCharts.charts.chart2D.core.model.ChartBGStyle;
-	import com.fiCharts.charts.chart2D.pie.PieChartModel;
 	import com.fiCharts.charts.chart2D.pie.series.PieSeries;
 	import com.fiCharts.charts.chart2D.pie.series.Series;
 	import com.fiCharts.charts.common.ChartColorManager;
@@ -32,9 +31,13 @@ package com.fiCharts.charts.chart2D.pie
 			
 			XMLVOLib.setASLabelStyleKey('title');
 			XMLVOLib.setASLabelStyleKey('subTitle');
-			
 			XMLVOLib.setASLabelStyleKey('valueLabel');
-			XMLVOLib.setASLabelStyleKey('innerValueLabel');
+			
+			XMLVOLib.registerObjectToProperty('config', 'valueLabel', 'text');
+			XMLVOLib.registerObjectToProperty('valueLabel', 'text', 'value');
+			
+			XMLVOLib.registerObjectToProperty('config', 'tooltip', 'text');
+			XMLVOLib.registerObjectToProperty('tooltip', 'text', 'value');
 			
 			XMLVOLib.registerObjectToProperty('config', 'title', 'text');
 			XMLVOLib.registerObjectToProperty('title', 'text', 'value');
@@ -43,7 +46,7 @@ package com.fiCharts.charts.chart2D.pie
 			XMLVOLib.registerObjectToProperty('label', 'text', 'value');
 			
 			TooltipStyle;
-			XMLVOLib.registerCustomClasses(<tooltip path='com.fiCharts.uiComponents.toolTips.TooltipStyle'/>);
+			XMLVOLib.registerCustomClasses(<tooltip path='com.fiCharts.ui.toolTips.TooltipStyle'/>);
 			
 			LegendStyle;
 			XMLVOLib.registerCustomClasses(<legend path='com.fiCharts.charts.legend.LegendStyle'/>);
@@ -57,6 +60,12 @@ package com.fiCharts.charts.chart2D.pie
 			this._chartModel = new PieChartModel();
 			
 			XMLVOLib.setXML(PieChartModel.PIE_SERIES_STYLE, value.child('pieSeries'));
+			
+			var seriesDataStyle:XML = <seriesDataStyle/>
+			
+			seriesDataStyle.appendChild(value.child('tooltip'));
+			seriesDataStyle.appendChild(value.child('valueLabel'));
+			XMLVOLib.setXML(PieChartModel.SERIES_DATA_STYLE, seriesDataStyle);
 			
 			for each (var item:XML in value.child('definition').children())
 				XMLVOLib.setXML(item.@id, item);

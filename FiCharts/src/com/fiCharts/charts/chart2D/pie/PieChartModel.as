@@ -5,6 +5,7 @@ package com.fiCharts.charts.chart2D.pie
 	import com.fiCharts.charts.chart2D.pie.series.Series;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.charts.legend.LegendStyle;
+	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -17,6 +18,11 @@ package com.fiCharts.charts.chart2D.pie
 		/**
 		 */		
 		public static const PIE_SERIES_STYLE:String = 'pieSeriesStyle';
+		
+		/**
+		 * 数值，工具提示等元素的样式 
+		 */		
+		public static const SERIES_DATA_STYLE:String = 'seriesDataStyle';
 		
 		/**
 		 * 
@@ -195,6 +201,51 @@ package com.fiCharts.charts.chart2D.pie
 		
 		
 		
+		
+		
+		//------------------------------------------------------------
+		//
+		//
+		// 数值与信息提示
+		//
+		//
+		//-----------------------------------------------------------
+		
+		
+		public function get valueLabel():LabelStyle
+		{
+			return _valueLabel;
+		}
+		
+		public function set valueLabel(value:LabelStyle):void
+		{
+			_valueLabel = value;
+		}
+		
+		/**
+		 *  数值
+		 */		
+		private var _valueLabel:LabelStyle
+		
+		
+		/**
+		 *  信息提示样式
+		 */		
+		private var _tooltip:TooltipStyle
+
+		public function get tooltip():TooltipStyle
+		{
+			return _tooltip;
+		}
+
+		public function set tooltip(value:TooltipStyle):void
+		{
+			_tooltip = value;
+		}
+		
+		
+		
+		
 		//------------------------------------------------------------
 		//
 		//
@@ -260,6 +311,7 @@ package com.fiCharts.charts.chart2D.pie
 		 * 是否开启开场动画
 		 */		
 		private var _animation:Object = true;
+		
 
 	}
 }

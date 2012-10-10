@@ -3,6 +3,7 @@ package com.fiCharts.ui.toolTips
 	import com.fiCharts.ui.text.Label;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.XMLConfigKit.style.Text;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Fill;
@@ -24,6 +25,7 @@ package com.fiCharts.ui.toolTips
 		}
 		
 		/**
+		 * 信息提示的样式取决于节点，而非统一设置；
 		 */		
 		private var _style:LabelStyle = new LabelStyle;
 
@@ -62,15 +64,6 @@ package com.fiCharts.ui.toolTips
 			addChild(bg);
 			labelsContainer = new Sprite;
 			addChild(labelsContainer);
-		}
-		
-		/**
-		 * 以中心点为基点对齐；
-		 */		
-		private function updatePosition():void
-		{
-			labelsContainer.x = - labelsContainer.width / 2;
-			labelsContainer.y = labelsContainer.height / 2;
 		}
 		
 		/**
@@ -118,12 +111,45 @@ package com.fiCharts.ui.toolTips
 		private var label:Label	= new Label;
 		
 		/**
+		 * 有两种信息提示模式，一是含有多个一是只有一项内容；
 		 */		
 		public function updateLabel():void
 		{
 			while (labelsContainer.numChildren)
 				labelsContainer.removeChildAt(0);
 			
+			if (tooltipHolder.tipLength)
+			{
+				updateMultiDataLabel();
+				updateBgSize();
+				
+				StyleManager.drawRect(this.bg, style, tooltipHolder.tooltips[0].metaData);
+				StyleManager.setEffects(bg, style);
+				
+				labelsContainer.x = - labelsContainer.width / 2;
+				labelsContainer.y = labelsContainer.height / 2;
+			}
+			else
+			{
+				this.style = tooltipHolder.style;
+				updateBgSize();
+				
+				var labelUI:LabelUI = new LabelUI();
+				labelUI.style = this.style;
+				labelUI.metaData = tooltipHolder.metaData;
+				labelUI.render();
+				labelsContainer.addChild(labelUI);
+				
+				labelsContainer.x = - labelsContainer.width / 2;
+				labelsContainer.y = - labelsContainer.height / 2;
+			}
+		}
+		
+		/**
+		 * 
+		 */		
+		private function updateMultiDataLabel():void
+		{
 			// 动态调整颜色
 			var fontColor:uint;
 			var bm:Bitmap;
@@ -158,9 +184,6 @@ package com.fiCharts.ui.toolTips
 				labelsContainer.addChild(bm);
 				labelY = - labelsContainer.height - style.vPadding;
 			}
-			
-			updatePosition(); 
-			drawBG();
 		}
 		
 		/**
@@ -185,23 +208,19 @@ package com.fiCharts.ui.toolTips
 				pStyle.fontWeight = 'bold';
 			else 
 				pStyle.fontWeight = 'normal';
-			
-			StyleManager.setEffects(bg, style);
 		}
 		
 		/**
-		 * 绘制背景
+		 * 背景
 		 */		
-		private function drawBG():void
+		private function updateBgSize():void
 		{
+			// 设置背景尺寸参数
 			bg.graphics.clear();
-			
 			style.tx = leftX;
 			style.ty = topY;
 			style.width = thisWidth;
 			style.height = thisHeight;
-			
-			StyleManager.drawRect(this.bg, style, tooltipHolder.tooltips[0].metaData);
 		}
 		
 		/**

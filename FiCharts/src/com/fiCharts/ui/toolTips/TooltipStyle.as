@@ -12,7 +12,7 @@ package com.fiCharts.ui.toolTips
 	 * @author wallen
 	 * 
 	 */	
-	public class TooltipStyle
+	public class TooltipStyle extends LabelStyle
 	{
 		public function TooltipStyle()
 		{
@@ -39,25 +39,6 @@ package com.fiCharts.ui.toolTips
 				return group.text.value;
 			else
 				return null;
-		}
-		
-		/**
-		 */		
-		private var _enable:Object
-
-		/**
-		 */
-		public function get enable():Object
-		{
-			return _enable;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set enable(value:Object):void
-		{
-			_enable = XMLVOMapper.boolean(value);
 		}
 		
 		/**

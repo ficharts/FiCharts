@@ -2,6 +2,7 @@ package com.fiCharts.charts.chart2D.encry
 {
 	import com.fiCharts.charts.chart2D.core.TitleBox;
 	import com.fiCharts.charts.chart2D.core.backgound.ChartBGUI;
+	import com.fiCharts.charts.chart2D.core.events.Chart2DEvent;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.pie.PieChartModel;
 	import com.fiCharts.charts.chart2D.pie.PieChartProxy;
@@ -19,6 +20,8 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	/**
 	 * 饼图的基类
@@ -67,23 +70,107 @@ package com.fiCharts.charts.chart2D.encry
 				
 				renderTitle();// 渲染标题
 				renderLegend(); // 渲染图例并调整好位置
+				renderBG();
 				layout();// 调整布局， 计算出饼图位置及半径；
-				renderPieSeries();			
-							
+				openFlash();			
 				ifRenderable = false
+			}
+		}
+		
+		
+		
+		
+		//----------------------------------------------------
+		//
+		// 动画控制
+		//
+		//----------------------------------------------------
+		
+		
+		private function openFlash():void
+		{
+			var seriesItem:PieSeries;
+			
+			// 为播放动画做准备；
+			if (chartModel.animation && ifFirstRender)
+			{
+				flashSeriesPercent = 0;
+			}
+			else
+			{
+				flashSeriesPercent = 1;
+			}
+			
+			renderPieSeries(flashSeriesPercent);
+			
+			//播放动画
+			if (chartModel.animation && ifFirstRender)
+			{
+				flashTimmer.addEventListener(TimerEvent.TIMER, flashSeriesHandler, false, 0, true);
+				flashTimmer.start();
+			}
+			else
+			{
+				this.dispatchEvent(new Chart2DEvent(Chart2DEvent.RENDERED));
 			}
 		}
 		
 		/**
 		 */		
-		private function renderPieSeries():void
+		private function flashSeriesHandler(evt:Event):void
+		{
+			flashSeriesPercent += flashUint;
+			flashUint -= 0.0054;
+			if (flashUint <= 0)
+				flashUint = 0.01;
+			
+			if (flashSeriesPercent > 1)
+			{
+				ifFirstRender = false;// 新数据渲染动画仅播放一次；
+				flashSeriesPercent = 1;
+				flashTimmer.stop();
+				flashTimmer.removeEventListener(TimerEvent.TIMER, flashSeriesHandler);
+			}
+			
+			renderPieSeries(flashSeriesPercent);
+		}
+		
+		/**
+		 */		
+		private var flashUint:Number = 0.1;
+		
+		/**
+		 */		
+		private var flashSeriesPercent:Number;
+		
+		/**
+		 */		
+		private var ifFirstRender:Boolean = true;
+		
+		/**
+		 */		
+		private var flashTimmer:Timer = new Timer(30, 0);
+		
+		/**
+		 */
+		private function renderBG():void
+		{
+			chartModel.chartBG.width = chartWidth;
+			chartModel.chartBG.height = chartHeight;
+			chartBG.render(chartModel.chartBG);
+		}
+		
+		/**
+		 */		
+		private function renderPieSeries(percent:Number):void
 		{
 			for each (var seriesItem:PieSeries in this.series)
 			{
 				seriesItem.x = centerX;
 				seriesItem.y = conterY;
-				seriesItem.radius = pieRadius;
-				
+				seriesItem.radius = pieRadius * percent;
+				//seriesItem.alpha = percent;
+				seriesItem.rotation = 360 * percent;
 				seriesItem.render();
 			}
 		}
@@ -92,19 +179,19 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function layout():void
 		{
-			topContainer.x = (this.chartWidth - xSize) * 0.5;
+			topContainer.x = (this.chartWidth - title.boxWidth) * 0.5;
 			topContainer.y = (this.gutterTop - topContainer.height) * 0.5;
 			
-			rightContainer.x = xSize + this.gutterLeft;
-			rightContainer.y = (this.chartHeight - rightContainer.height) * 0.5;
+			rightContainer.x = (chartWidth - this.gutterRight) + (this.gutterRight - rightContainer.width) / 2 ;
+			rightContainer.y = (this.chartHeight + this.gutterTop - rightContainer.height) * 0.5;
 			
 			bottomContainer.x = (this.chartWidth - bottomContainer.width) * 0.5;
 			bottomContainer.y = this.chartHeight - bottomContainer.height - chartModel.chartBG.paddingBottom;
 			
 			leftContainer.x = chartModel.chartBG.paddingLeft;
-			leftContainer.y = (this.chartHeight - leftContainer.height) * 0.5;
+			leftContainer.y = (this.chartHeight - leftContainer.height + this.gutterTop) * 0.5;
 			
-			centerX = this.xSize / 2 + this.gutterLeft;
+			centerX = this.xSize / 2 + this.gutterLeft;//this.chartWidth / 2;
 			conterY = this.ySize / 2 + this.gutterTop;
 			
 			if (this.xSize <= this.ySize)
@@ -138,6 +225,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 
 		 */		
 		private function renderLegend():void
 		{
@@ -166,7 +254,9 @@ package com.fiCharts.charts.chart2D.encry
 				legendPanel.panelHeight = this.ySize;
 				legendPanel.direction = LegendPanel.VERTICAL;
 				this.rightContainer.addChild(legendPanel);
+				
 				legendPanel.render();
+				
 			}
 			else if (chartModel.legend.position == 'bottom')
 			{
@@ -346,7 +436,6 @@ package com.fiCharts.charts.chart2D.encry
 				return chartModel.chartBG.gutterRight;
 		}
 		
-		
 		/**
 		 */		
 		public function set chartWidth(value:Number):void
@@ -454,6 +543,7 @@ package com.fiCharts.charts.chart2D.encry
 			addChild(this.rightContainer);
 			addChild(this.bottomContainer);
 			addChild(this.leftContainer);
+			tooltipManager = new ToolTipsManager(this);
 			
 			XMLVOLib.addCreationHandler(Series.SERIES_CREATED, createSeriesHandler);
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_TITLE_STYLE, updateTitleStyleHandler);
@@ -463,6 +553,10 @@ package com.fiCharts.charts.chart2D.encry
 			chartProxy.styleInit();
 			chartProxy.setConfigCore(chartProxy.currentStyleXML);
 		}
+		
+		/**
+		 */		
+		private var tooltipManager:ToolTipsManager;
 		
 		/**
 		 */		

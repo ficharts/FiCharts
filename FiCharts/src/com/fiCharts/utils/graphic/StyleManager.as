@@ -23,10 +23,42 @@ package com.fiCharts.utils.graphic
 	import flash.geom.Matrix;
 
 	/**
-	 * 定义应用各种样式的  样式控制器；
+	 * 定义应用各种样式的  样式控制器；负责具体的绘制工作
 	 */	
 	dynamic public class StyleManager extends Array
 	{
+		
+		/**
+		 * 
+		 * 绘制圆弧
+		 * 
+		 * @param canvas
+		 * @param style
+		 * @param radius
+		 * @param metaData
+		 * 
+		 */		
+		public static function drawArc(canvas:Sprite, style:Style, 
+									   radius:Number, rads:Vector.<Number>, metaData:Object = null):void
+		{
+			style.radius = radius;
+			setShapeStyle(style, canvas.graphics, metaData);
+			
+			canvas.graphics.moveTo(0, 0);
+			
+			for each (var rad:Number in rads)
+			{
+				canvas.graphics.lineTo(radius * Math.cos(rad), 
+					- radius * Math.sin(rad));
+			}
+			
+			canvas.graphics.lineTo(0, 0);
+			canvas.graphics.endFill();
+			
+			StyleManager.setEffects(canvas, style, metaData);
+		}
+		
+		
 		/**
 		 */		
 		public static function drawRect(target:Sprite, style:Style, metaData:Object = null):void
@@ -52,7 +84,7 @@ package com.fiCharts.utils.graphic
 		}
 		
 		/**
-		 * 
+		 * 设定滤镜，噪点等效果；
 		 */		
 		public static function setEffects(target:DisplayObject, effectable:IEffectable, metaData:Object = null):void
 		{
@@ -97,7 +129,7 @@ package com.fiCharts.utils.graphic
 				target.filters = null;
 			}
 			
-			new BitmapData(200, 200).draw(target);
+			//new BitmapData(200, 200).draw(target);
 		}
 		
 		
@@ -237,7 +269,7 @@ package com.fiCharts.utils.graphic
 					var ratios:Array = fillStyle.radioes as Array;
 					
 					matr.createGradientBox(style.width, style.height, fillStyle.angle, style.tx, style.ty);
-					graphic.beginGradientFill(fillStyle.type, colors, alphas, ratios, matr, SpreadMethod.PAD); 
+					graphic.beginGradientFill(fillStyle.type, colors, alphas, ratios, matr, SpreadMethod.REFLECT); 
 				}
 				else
 				{

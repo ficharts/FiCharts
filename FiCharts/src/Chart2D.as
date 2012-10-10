@@ -6,6 +6,7 @@ package
 	import flash.events.Event;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import flash.utils.ByteArray;
 	
 	/**
 	 * 2D图表主程序
@@ -16,49 +17,10 @@ package
 		 */
 		public function Chart2D()
 		{
-			/*
-			* 加载配置文件，这是ficharts的基础配置文件, 主要是样式模板，这样可以简化图表配置.
-			* 用户的图表配置文件先会继承基础配置文件,省去了大部分配置信息。为了方便查看基础配置信息，此文件没有压缩，
-			× 你可以将此文件压缩并嵌入SWF中一起编译。
-			*/
-			var urlLoader:URLLoader = new URLLoader();
-			urlLoader.addEventListener(Event.COMPLETE, configLoadedHandler);
-			urlLoader.load(new URLRequest('Chart2DConfig.xml'));
-		}
-		
-		/**
-		 */		
-		private function configLoadedHandler(evt:Event):void
-		{
-			setDefaultConfig(evt.target.data);
+			var chart2DConfig:ByteArray = ByteArray(new Chart2DConfigXML);
+			chart2DConfig.uncompress();
+			setDefaultConfig(chart2DConfig.toString());
 			this.init();
-		}
-		
-		
-		//----------------------------------------
-		//
-		// 初始化
-		//
-		//----------------------------------------
-		
-		/**
-		 * @param evt
-		 */
-		override protected function resizeHandler(evt:Event):void
-		{
-			if (stage.stageWidth <=  ChartShellBase.MIN_SIZE || stage.stageHeight <= ChartShellBase.MIN_SIZE)
-				return;
-			
-			resizeChart();
-			chart.render();
-		}
-		
-		/**
-		 */
-		private function resizeChart():void
-		{
-			chart.chartWidth = stage.stageWidth;
-			chart.chartHeight = stage.stageHeight;
 		}
 		
 		/**
@@ -70,6 +32,12 @@ package
 			
 			super.initChart(); 
 		}
+		
+		/**
+		 *  这里的压缩文件是由  chart2DConfig.xml 压缩得来， 源文件可查看完整配置；
+		 */		
+		[Embed(source="chart2DConfig.z", mimeType="application/octet-stream")]
+		private var Chart2DConfigXML:Class;
 		
 	}
 }

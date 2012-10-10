@@ -13,8 +13,22 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		}
 		
 		/**
-		 */		
-		private var _color:Object;
+		 * radial 或者 linear 
+		 */
+		public function get type():String
+		{
+			return _type;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set type(value:String):void
+		{
+			_type = value;
+		}
+		
+		private var _type:String = 'linear';
 
 		public function get color():Object
 		{
@@ -25,6 +39,10 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		{
 			_color = StyleManager.setColor(value);
 		}
+		
+		/**
+		 */		
+		private var _color:Object;
 		
 		/**
 		 */		
@@ -73,10 +91,6 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 			_angle = value / 180 * Math.PI;
 		}
 
-		/**
-		 * radial 或者 linear 
-		 */		
-		public var type:String = 'linear';
 		
 	}
 }

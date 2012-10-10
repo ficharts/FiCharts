@@ -7,6 +7,12 @@
 		this.initChart(arg);
 		return this;
     },
+    
+    Pie2D = function(arg){
+		this.constructor(arg);
+		this.initChart(arg);
+		return this;
+    },
 
 	UNDEF = "undefined",
 	OBJECT = "object",
@@ -571,11 +577,32 @@
 		var that = chartBase();
 		that.constructor = function(arg) {
 			init(this, arg);
-			this.swfURL = getSWFURL();
+			this.swfURL = getSWFURL(Chart2D.swfURL);
 		};
 		
 		return that;
 	}();
+	
+	//------------------------------
+	//
+	// 2D图表
+	//
+	//------------------------------
+	
+	win.Pie2D = Pie2D;
+	Pie2D.swfURL = "Pie2D.swf";
+	Pie2D.prototype = function() {
+		
+		var that = chartBase();
+		that.constructor = function(arg) {
+			init(this, arg);
+			this.swfURL = getSWFURL(Pie2D.swfURL);
+		};
+		
+		return that;
+	}();
+	
+	
 	
 	
 	//------------------------------
@@ -737,7 +764,7 @@
 	//
 	//-------------------------------
 	
-	function getSWFURL() {
+	function getSWFURL(swfURL) {
 		var url;
 		var items = doc.getElementsByTagName('script');
 		var length = items.length;
@@ -748,14 +775,14 @@
 			if (src.indexOf('FiCharts.js') != - 1)
 			{
 				src = src.slice(0, src.indexOf('FiCharts.js'))
-				url = src + "Chart2D.swf"
+				url = src + swfURL;
 			}
 		}
 		
 		if (hasProp(url))
 			return url;
 		else
-			return Chart2D.swfURL;
+			return swfURL;
 	};
 	
 	function registerChart(id, chart){

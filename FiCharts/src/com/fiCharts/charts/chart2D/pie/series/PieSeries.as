@@ -1,17 +1,21 @@
 package com.fiCharts.charts.chart2D.pie.series
 {
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
+	import com.fiCharts.charts.chart2D.core.itemRender.LegendStateControl;
 	import com.fiCharts.charts.chart2D.pie.PieChartModel;
 	import com.fiCharts.charts.chart2D.pie.PieDataFormatter;
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
+	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.MathUtil;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
+	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
@@ -26,18 +30,12 @@ package com.fiCharts.charts.chart2D.pie.series
 	{
 		public function PieSeries()
 		{
-			//this.statesControl = new StatesControl(this);
-			//this.legendStateContorl = new LegendStateControl(dataItem, this.statesControl);
 		}
 		
 		/**
 		 */		
 		public function render():void
 		{
-			this.graphics.clear();
-			this.graphics.beginFill(0);
-			//this.graphics.drawCircle(0, 0, this.radius);
-			
 			var partUI:PartPieUI;
 			if (this.ifDataChanged)
 			{
@@ -51,7 +49,9 @@ package com.fiCharts.charts.chart2D.pie.series
 				{
 					partUI = new PartPieUI(dataItem);
 					partUI.states = this.states;
-					partUI.metaData = dataItem.metaData;
+					partUI.labelStyle = this.valueLabel;
+					partUI.tooltipStyle = this.tooltip;
+					partUI.init();
 					partUIs.push(partUI);
 					addChild(partUI);
 				}
@@ -61,12 +61,11 @@ package com.fiCharts.charts.chart2D.pie.series
 			{
 				for each(partUI in this.partUIs)
 				{
-					partUI.style.radius = this.radius;
-					partUI.arcPoints = new Vector.<Point>;
+					partUI.radius = this.radius;
+					partUI.rads = new Vector.<Number>;
 					
 					var partRad:Number = precisionRad;
 					var rad:Number = 0;
-					var point:Point;
 					var segment:uint = Math.ceil(partUI.angleRadRange / partRad);
 					
 					for (var i:uint = 0; i < segment; i ++)
@@ -80,10 +79,7 @@ package com.fiCharts.charts.chart2D.pie.series
 							rad = partUI.pieDataItem.startRad + partRad * i;
 						}
 						
-						point = new Point
-						point.x = this.radius * Math.cos(rad);
-						point.y = - this.radius * Math.sin(rad);
-						partUI.arcPoints.push(point);
+						partUI.rads.push(rad);
 					}
 					
 					partUI.render();
@@ -94,6 +90,16 @@ package com.fiCharts.charts.chart2D.pie.series
 			}
 			
 		}
+		
+		/**
+		 * 数值标签的样式 
+		 */		
+		public var valueLabel:LabelStyle;
+		
+		/**
+		 * 信息提示的样式
+		 */		
+		public var tooltip:TooltipStyle;
 		
 		/**
 		 */		
@@ -113,7 +119,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		/**
 		 * 弧线的等分距离，决定了弧线的光滑度，
 		 */		
-		private var precisionLength:uint = 2;
+		private var precisionLength:uint = 1;
 		
 		/**
 		 */		
@@ -124,6 +130,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		private var _radius:Number = 0;
 
 		/**
+		 * 饼图的半径自适应窗口尺寸
 		 */
 		public function get radius():Number
 		{
@@ -138,8 +145,6 @@ package com.fiCharts.charts.chart2D.pie.series
 			if (value != _radius && value > 0)
 			{
 				_radius = value;
-				
-				trace(_radius);
 				ifSizeChanged = true;
 			}
 		}
@@ -153,6 +158,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		public function beforeUpdateProperties(xml:* = null):void
 		{
 			XMLVOMapper.fuck(XMLVOLib.getXML(PieChartModel.PIE_SERIES_STYLE), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(PieChartModel.SERIES_DATA_STYLE), this);
 		}
 		
 		/**
@@ -166,7 +172,6 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */		
 		public function configed():void
 		{
-			
 		}
 		
 		
@@ -281,6 +286,9 @@ package com.fiCharts.charts.chart2D.pie.series
 				startRad += partRad;
 					
 				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, ['percent', 'percentLabel']);
+				
+				// 数值标签的元数据内容
+				seriesDataItem.metaData.valueLabel = seriesDataItem.percentLabel;
 			}
 			
 			ifDataChanged = true;
@@ -450,9 +458,5 @@ package com.fiCharts.charts.chart2D.pie.series
 			_style = value;
 		}
 		
-		/**
-		 */		
-		private var statesControl:StatesControl;
-
 	}
 }

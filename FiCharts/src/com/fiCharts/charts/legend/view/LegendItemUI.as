@@ -52,7 +52,7 @@ package com.fiCharts.charts.legend.view
 			else
 			{
 				this.vo.dispatchEvent(new LegendEvent(LegendEvent.SHOW_LEGEND, vo));
-				this.filters = StyleManager.getOverFilter();;
+				this.filters = null;
 				this.ifShow = true;
 				this.alpha = 1;
 			}
