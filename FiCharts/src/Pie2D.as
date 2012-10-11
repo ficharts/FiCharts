@@ -17,6 +17,7 @@ package
 		{
 			super();
 			
+			
 			var pie2DConfig:ByteArray = ByteArray(new Chart2DConfigXML);
 			pie2DConfig.uncompress();
 			setDefaultConfig(pie2DConfig.toString());
