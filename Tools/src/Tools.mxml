@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
-					   xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="windowedapplication1_creationCompleteHandler(event)">
+					   xmlns:mx="library://ns.adobe.com/flex/mx" 
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)">
 	
 	<fx:Script>
 		<![CDATA[
@@ -51,5 +52,7 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:Button label="压缩XML" click="button1_clickHandler(event)"/>
+	<s:Label text="将配置文件压缩，用于文件嵌入，降低源程序文件体积" left="5" top="5"/>
+	<s:Button label="压缩XML" click="button1_clickHandler(event)" 
+			  horizontalCenter="0" verticalCenter="0"/>
 </s:WindowedApplication>
