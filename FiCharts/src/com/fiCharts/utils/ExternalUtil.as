@@ -11,13 +11,16 @@ package com.fiCharts.utils
 		 */		
 		public static function addCallback( functionName : String, handlerFunction : Function ) : void
 		{
-			try
+			if (ExternalInterface.available)
 			{
-				ExternalInterface.addCallback( functionName, handlerFunction );
-			}
-			catch ( e : Error )
-			{
-				
+				try
+				{
+					ExternalInterface.addCallback( functionName, handlerFunction );
+				}
+				catch ( e : Error )
+				{
+					
+				}
 			}
 		}
 		
@@ -30,30 +33,34 @@ package com.fiCharts.utils
 		 */		
 		public static function call( functionName : String, ...arg ) : void
 		{
-			try
+			if (ExternalInterface.available)
 			{
-				if ( (arg as Array).length == 0 )
+				try
 				{
-					ExternalInterface.call( functionName );
-				}
-				else if ( ( arg as Array ).length == 1 )
-				{
-					ExternalInterface.call( functionName, arg[ 0 ] );
-				}
-				else if ( ( arg as Array ).length == 2 )
-				{
-					ExternalInterface.call( functionName, arg[ 0 ], arg[ 1 ] );
-				}
-				else if ( ( arg as Array ).length == 3 )
-				{
-					ExternalInterface.call( functionName, arg[ 0 ], arg[ 1 ], arg[ 2 ] );
-				}
+					if ( (arg as Array).length == 0 )
+					{
+						ExternalInterface.call( functionName );
+					}
+					else if ( ( arg as Array ).length == 1 )
+					{
+						ExternalInterface.call( functionName, arg[ 0 ] );
+					}
+					else if ( ( arg as Array ).length == 2 )
+					{
+						ExternalInterface.call( functionName, arg[ 0 ], arg[ 1 ] );
+					}
+					else if ( ( arg as Array ).length == 3 )
+					{
+						ExternalInterface.call( functionName, arg[ 0 ], arg[ 1 ], arg[ 2 ] );
+					}
 					
+				}
+				catch ( e : Error )
+				{
+					
+				}
 			}
-			catch ( e : Error )
-			{
-				
-			}
+			
 		}
 		
 		/**

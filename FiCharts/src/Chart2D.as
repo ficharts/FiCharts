@@ -8,6 +8,8 @@ package
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
+	import mx.core.ByteArrayAsset;
+	
 	/**
 	 * 2D图表主程序
 	 */	
@@ -17,20 +19,27 @@ package
 		 */
 		public function Chart2D()
 		{
+			super();
+		}
+		
+		/**
+		 */		
+		override protected function init():void
+		{
 			var chart2DConfig:ByteArray = ByteArray(new Chart2DConfigXML);
 			chart2DConfig.uncompress();
 			setDefaultConfig(chart2DConfig.toString());
-			this.init();
+			
+			super.init();
 		}
 		
 		/**
 		 */
-		override protected function initChart():void
+		override protected function createChart():void
 		{
 			chart = new ChartBase();
-			resizeChart();
 			
-			super.initChart(); 
+			super.createChart(); 
 		}
 		
 		/**

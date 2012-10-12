@@ -37,7 +37,7 @@ package com.fiCharts.charts.chart2D.pie
 
 		/**
 		 */
-		public function get series():Series
+		public function get pieSeries():Series
 		{
 			return _series;
 		}
@@ -45,7 +45,7 @@ package com.fiCharts.charts.chart2D.pie
 		/**
 		 * @private
 		 */
-		public function set series(value:Series):void
+		public function set pieSeries(value:Series):void
 		{
 			_series = value;
 		}
@@ -275,7 +275,7 @@ package com.fiCharts.charts.chart2D.pie
 		
 		/**
 		 */		
-		private var _fullScreen:Boolean;
+		private var _fullScreen:Boolean = true;
 
 		/**
 		 */

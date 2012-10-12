@@ -18,7 +18,7 @@ package com.fiCharts.charts.chart2D.pie
 		public function PieChartProxy()
 		{
 			Series;
-			XMLVOLib.registerCustomClasses(<series path='com.fiCharts.charts.chart2D.pie.series.Series'/>);
+			XMLVOLib.registerCustomClasses(<pieSeries path='com.fiCharts.charts.chart2D.pie.series.Series'/>);
 			
 			PieSeries;
 			XMLVOLib.registerCustomClasses(<pie path='com.fiCharts.charts.chart2D.pie.series.PieSeries'/>);
@@ -59,7 +59,7 @@ package com.fiCharts.charts.chart2D.pie
 		{
 			this._chartModel = new PieChartModel();
 			
-			XMLVOLib.setXML(PieChartModel.PIE_SERIES_STYLE, value.child('pieSeries'));
+			XMLVOLib.setXML(PieChartModel.PIE_SERIES_STYLE, value.child('pieSeriesStyle'));
 			
 			var seriesDataStyle:XML = <seriesDataStyle/>
 			

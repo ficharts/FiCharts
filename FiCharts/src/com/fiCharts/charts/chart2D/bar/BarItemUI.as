@@ -1,7 +1,7 @@
 package com.fiCharts.charts.chart2D.bar
 {
 	import com.fiCharts.charts.chart2D.column2D.Column2DUI;
-	import com.fiCharts.charts.chart2D.core.events.Chart2DEvent;
+	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.graphic.StyleManager;
@@ -47,7 +47,7 @@ package com.fiCharts.charts.chart2D.bar
 		{
 			y = this.dataItem.y + 1;
 			
-			var event:Chart2DEvent = new Chart2DEvent(Chart2DEvent.ITEM_CLICKED);
+			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_CLICKED);
 			event.dataItem = this.dataItem;
 			this.dispatchEvent(event);
 		}

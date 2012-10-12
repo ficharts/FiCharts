@@ -16,23 +16,26 @@ package
 		public function Pie2D()
 		{
 			super();
-			
-			
+		}
+		
+		/**
+		 */		
+		override protected function init():void
+		{
 			var pie2DConfig:ByteArray = ByteArray(new Chart2DConfigXML);
 			pie2DConfig.uncompress();
 			setDefaultConfig(pie2DConfig.toString());
 			
-			this.init();
+			super.init();
 		}
 		
 		/**
 		 */
-		override protected function initChart():void
+		override protected function createChart():void
 		{
 			chart = new PieChartBase
-			resizeChart();
 			
-			super.initChart(); 
+			super.createChart(); 
 		}
 		
 		/**

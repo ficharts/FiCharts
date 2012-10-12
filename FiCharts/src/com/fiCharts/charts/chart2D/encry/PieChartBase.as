@@ -2,7 +2,7 @@ package com.fiCharts.charts.chart2D.encry
 {
 	import com.fiCharts.charts.chart2D.core.TitleBox;
 	import com.fiCharts.charts.chart2D.core.backgound.ChartBGUI;
-	import com.fiCharts.charts.chart2D.core.events.Chart2DEvent;
+	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.pie.PieChartModel;
 	import com.fiCharts.charts.chart2D.pie.PieChartProxy;
@@ -61,7 +61,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function render():void
 		{
-			if (configXML && this.dataXML && chartModel.series.length)
+			if (configXML && this.dataXML && chartModel.pieSeries.length)
 				ifRenderable = true;
 			
 			if (ifRenderable)
@@ -111,7 +111,7 @@ package com.fiCharts.charts.chart2D.encry
 			}
 			else
 			{
-				this.dispatchEvent(new Chart2DEvent(Chart2DEvent.RENDERED));
+				this.dispatchEvent(new FiChartsEvent(FiChartsEvent.RENDERED));
 			}
 		}
 		
@@ -303,7 +303,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		private function get series():Vector.<PieSeries>
 		{
-			return this.chartModel.series.items;
+			return this.chartModel.pieSeries.items;
 		}
 		
 		/**

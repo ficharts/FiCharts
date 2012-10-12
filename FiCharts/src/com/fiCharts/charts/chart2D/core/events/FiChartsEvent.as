@@ -8,7 +8,7 @@ package com.fiCharts.charts.chart2D.core.events
 	/**
 	 * @author wallen
 	 */	
-	public class Chart2DEvent extends Event
+	public class FiChartsEvent extends Event
 	{
 		
 		/**
@@ -19,7 +19,7 @@ package com.fiCharts.charts.chart2D.core.events
 		/**
 		 * 图表创建完成事件
 		 */		
-		public static const INIT_COMPLETED:String="initComplete";
+		public static const READY:String="ready";
 		
 		/**
 		 * 配置文件发生改变时触发 
@@ -32,6 +32,7 @@ package com.fiCharts.charts.chart2D.core.events
 		public static const ITEM_CLICKED:String = 'itemClicked';
 		
 		/**
+		 * 图表渲染完成
 		 */		
 		public static const RENDERED:String = 'renderd';
 		
@@ -43,7 +44,7 @@ package com.fiCharts.charts.chart2D.core.events
 		
 		/**
 		 */
-		public function Chart2DEvent(type:String)
+		public function FiChartsEvent(type:String)
 		{
 			super(type, true);
 		}

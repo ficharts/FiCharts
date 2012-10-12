@@ -18,7 +18,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.backgound.ChartBGUI;
 	import com.fiCharts.charts.chart2D.core.backgound.GridFieldUI;
-	import com.fiCharts.charts.chart2D.core.events.Chart2DEvent;
+	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.model.AxisModel;
@@ -51,10 +51,10 @@ package com.fiCharts.charts.chart2D.encry
 	
 	/**
 	 */
-	[Event(name="legendDataChanged", type = "com.fiCharts.charts.chart2D.core.events.Chart2DEvent")]
-	[Event(name="initComplete", type = "com.fiCharts.charts.chart2D.core.events.Chart2DEvent")]
-	[Event(name="itemClicked", type = "com.fiCharts.charts.chart2D.core.events.Chart2DEvent")]
-	[Event(name="rendered", type = "com.fiCharts.charts.chart2D.core.events.Chart2DEvent")]
+	[Event(name="legendDataChanged", type = "com.fiCharts.charts.chart2D.core.events.FiChartsEvent")]
+	[Event(name="ready", type = "com.fiCharts.charts.chart2D.core.events.FiChartsEvent")]
+	[Event(name="itemClicked", type = "com.fiCharts.charts.chart2D.core.events.FiChartsEvent")]
+	[Event(name="rendered", type = "com.fiCharts.charts.chart2D.core.events.FiChartsEvent")]
 	
 	/**
 	 * ChartBase
@@ -261,7 +261,7 @@ package com.fiCharts.charts.chart2D.encry
 				renderSeries();
 				renderBG();
 				
-				if (chartModel.legend.enable)
+				if (legendPanel && chartModel.legend.enable)
 					legendPanel.render();
 				
 				layoutChart(); 
@@ -642,7 +642,7 @@ package com.fiCharts.charts.chart2D.encry
 			}
 			else
 			{
-				this.dispatchEvent(new Chart2DEvent(Chart2DEvent.RENDERED));
+				this.dispatchEvent(new FiChartsEvent(FiChartsEvent.RENDERED));
 			}
 		}
 		
@@ -679,7 +679,7 @@ package com.fiCharts.charts.chart2D.encry
 				flashTimmer.stop();
 				flashTimmer.removeEventListener(TimerEvent.TIMER, flashItemRendersHandler);
 				
-				this.dispatchEvent(new Chart2DEvent(Chart2DEvent.RENDERED));
+				this.dispatchEvent(new FiChartsEvent(FiChartsEvent.RENDERED));
 			}
 			
 			itemRendersContainer.alpha = valueLabelsContainer.alpha = flashItemRenderPercent;
@@ -741,14 +741,16 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		private function layoutLegendPanel():void
 		{
-			legendPanel.x = (this.chartWidth - legendPanel.width) / 2;
-			
 			var bottomGutter:Number = bottomSpace;
 			
 			if (this.bottomAxisContainer.numChildren)
 				bottomGutter = bottomSpace - bottomAxisContainer.height;
 			
-			legendPanel.y = this.chartHeight - bottomGutter / 2 - legendPanel.height / 2 //- legendPanel.style.vMargin;
+			if (this.legendPanel)
+			{
+				legendPanel.x = (this.chartWidth - legendPanel.width) / 2;
+				legendPanel.y = this.chartHeight - bottomGutter / 2 - legendPanel.height / 2 //- legendPanel.style.vMargin
+			}
 		}
 		
 		/**
@@ -798,7 +800,10 @@ package com.fiCharts.charts.chart2D.encry
 			}
 			
 			sizeX = chartWidth - this.leftSpace - this.rightSpace;
-			legendPanel.panelWidth = this.chartWidth - legendPanel.style.hMargin * 2;
+			
+			if (legendPanel)
+				legendPanel.panelWidth = this.chartWidth - legendPanel.style.hMargin * 2;
+			
 			ifLayoutChanged = true; 
 		}
 		
@@ -825,7 +830,7 @@ package com.fiCharts.charts.chart2D.encry
 			var result:Number = chartModel.chartBG.paddingBottom;
 			result =  this.bottomAxisContainer.height + result;
 			
-			if (chartModel.legend && chartModel.legend.enable)
+			if (legendPanel && chartModel.legend && chartModel.legend.enable)
 				result = result + this.legendPanel.height + legendPanel.style.vMargin * 2;
 			
 			return result;
@@ -1082,7 +1087,7 @@ package com.fiCharts.charts.chart2D.encry
 				}
 				
 				legends.reverse();
-				if (chartModel.legend.enable)
+				if (legendPanel && chartModel.legend.enable)
 					legendPanel.legendData = legends;
 			}
 		}
@@ -1177,7 +1182,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function updateLegendStyleHandler(value:Object):void
 		{
-			this.legendPanel.setStyle(value as LegendStyle);
+			if (legendPanel)
+				this.legendPanel.setStyle(value as LegendStyle);
 		}	
 		
 		/**

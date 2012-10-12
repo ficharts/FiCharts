@@ -287,8 +287,11 @@ package com.fiCharts.charts.chart2D.pie.series
 					
 				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, ['percent', 'percentLabel']);
 				
-				// 数值标签的元数据内容
-				seriesDataItem.metaData.valueLabel = seriesDataItem.percentLabel;
+				// 默认数值标签的元数据内容
+				seriesDataItem.metaData.valueLabel = seriesDataItem.xLabel;
+				
+				// 默认tooltip
+				seriesDataItem.metaData.tooltip = seriesDataItem.yLabel + "," + seriesDataItem.percentLabel;
 			}
 			
 			ifDataChanged = true;

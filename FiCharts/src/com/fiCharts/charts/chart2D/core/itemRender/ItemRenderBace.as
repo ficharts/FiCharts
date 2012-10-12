@@ -1,6 +1,6 @@
 package com.fiCharts.charts.chart2D.core.itemRender
 {
-	import com.fiCharts.charts.chart2D.core.events.Chart2DEvent;
+	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.ui.toolTips.ToolTipHolder;
@@ -254,7 +254,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		{
 			this.y = itemVO.dataItemY + 1;
 			
-			var event:Chart2DEvent = new Chart2DEvent(Chart2DEvent.ITEM_CLICKED);
+			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_CLICKED);
 			event.dataItem = this._itemVO;
 			this.dispatchEvent(event);
 		}

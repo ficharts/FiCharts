@@ -771,10 +771,6 @@ package com.fiCharts.charts.chart2D.encry
 			this.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.UPDATE_VALUE_LABEL, false, true));
 		}
 											   
-		/**
-		 */		
-		private var overFilter:Array;
-		
 		
 		
 		
