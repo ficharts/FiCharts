@@ -19,5 +19,15 @@ package com.fiCharts.utils.graphic
 			
 			return myBitmapData;
 		}
+		
+		/**
+		 */		
+		public static function drawWithSize(target:DisplayObject, width:Number, height:Number):BitmapData
+		{
+			var myBitmapData:BitmapData = new BitmapData(width, height, true, 0xFFFFFF);
+			myBitmapData.draw(target, null, null, null, null, false);
+			
+			return myBitmapData;
+		}
 	}
 }

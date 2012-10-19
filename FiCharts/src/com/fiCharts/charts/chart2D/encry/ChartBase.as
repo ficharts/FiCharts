@@ -18,6 +18,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.backgound.ChartBGUI;
 	import com.fiCharts.charts.chart2D.core.backgound.GridFieldUI;
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
@@ -32,14 +33,17 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.ui.toolTips.ToolTipsManager;
 	import com.fiCharts.ui.toolTips.TooltipDataItem;
 	import com.fiCharts.utils.RexUtil;
+	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
+	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.system.GC;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.PixelSnapping;
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
@@ -86,6 +90,110 @@ package com.fiCharts.charts.chart2D.encry
 			
 			init();
 		}
+		
+		
+		
+		//----------------------------------
+		//
+		// 数据缩放
+		//
+		//-----------------------------------
+		
+		/**
+		 */		
+		private function initDataResizeContorl():void
+		{
+			 stage.addEventListener(MouseEvent.MOUSE_DOWN, startScrollHadler, false, 0, true);
+			 stage.addEventListener(MouseEvent.MOUSE_UP, endScrollHadler);
+		}
+		
+		/**
+		 */		
+		private function startScrollHadler(evt:MouseEvent):void
+		{
+			currentPosition = evt.stageX;
+			fullSize = this.sizeX / (this.dataEnd - this.dataStart);
+				
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, dataRangeScrollHandler);
+		}
+		
+		/**
+		 */		
+		private function endScrollHadler(evt:MouseEvent):void
+		{
+			stage.removeEventListener(MouseEvent.MOUSE_MOVE, dataRangeScrollHandler);
+		}
+		
+		/**
+		 */		
+		private var fullSize:Number = 0;
+		
+		/**
+		 */		
+		private function dataRangeScrollHandler(evt:MouseEvent):void
+		{
+			var offset:Number = - (evt.stageX - currentPosition) / fullSize;
+			resizeData(this.dataStart + offset, this.dataEnd + offset);
+			currentPosition = evt.stageX;
+		}
+		
+		/**
+		 */		
+		private var currentPosition:Number = 0;
+		
+		/**
+		 *
+		 * 制定数据范围，此范围是在整体数据中的位置范围
+		 *  
+		 * @param startIndex
+		 * @param endIndex
+		 * 
+		 */		
+		private function resizeData(startPercent:Number, endPercent:Number):void
+		{
+			if( startPercent >= 0 && startPercent <= 1 && endPercent >= 0 && endPercent <= 1)
+			{
+				dataStart = startPercent;
+				dataEnd = endPercent;
+				
+				if (dataStart == 0 && dataEnd == 1) return;
+				
+				// 每次都会重新绘制   数值标签， 只有范围内的数值标签才会被渲染，其他都被清空掉；
+				this.clearValueLabels();
+				
+				for each (var aixs:AxisBase in  hAxises)
+				{
+					// 坐标轴会驱动序列按照节点位置或数据范围方式完成
+					// 数据缩放
+					aixs.resizeData(dataStart, dataEnd);
+					aixs.renderHoriticalAxis();
+				}
+				
+				this.combileItemRender();
+				gridField.render(this.hAxises[0].ticks, this.vAxises[0].ticks, chartModel.gridField);
+			}
+			
+		}
+		
+		/**
+		 */		
+		private function drawResizeValueLabels(evt:DataResizeEvent):void
+		{
+			this.drawValueLabels(evt.sizedItemRenders);
+		}
+		
+		/**
+		 * 数据起始位置，取值范围 0~1
+		 */		
+		private var dataStart:Number = 0;
+		
+		/**
+		 * 数据结束位置， 取值范围 0~1
+		 */		
+		private var dataEnd:Number = 1;
+		
+		
+		
 		
 		
 		
@@ -210,11 +318,22 @@ package com.fiCharts.charts.chart2D.encry
 			preRender();
 			coreRender();
 			
+			// 坐标轴尺寸渲染后会变，需要重新调整布局再渲染；
 			if(isLayoutUpdated())
 			{
 				preLayout();
 				preRender();
 				coreRender();
+				
+				openFlash();
+				GC.run();
+				ifRenderable = false;
+			}
+			else
+			{
+				openFlash();
+				GC.run();
+				ifRenderable = false;
 			}
 		}
 		
@@ -265,9 +384,6 @@ package com.fiCharts.charts.chart2D.encry
 					legendPanel.render();
 				
 				layoutChart(); 
-				openFlash();
-				
-				GC.run();
 			}
 		}
 
@@ -329,7 +445,7 @@ package com.fiCharts.charts.chart2D.encry
 			this.bottomAxisContainer.size = this.topAxisContainer.size = 0;
 			for each (axis in hAxises)
 			{
-				axis.updateAxis();
+				axis.beforeRender();
 				axis.renderHoriticalAxis();
 				
 				temOffset = axis.width - axis.size;
@@ -353,7 +469,7 @@ package com.fiCharts.charts.chart2D.encry
 			this.leftAxisContainer.size = this.rightAxisContainer.size = 0;
 			for each (axis in this.vAxises)
 			{
-				axis.updateAxis();
+				axis.beforeRender();
 				axis.renderVerticalAxis();
 				
 				temOffset = axis.height - axis.size
@@ -400,6 +516,7 @@ package com.fiCharts.charts.chart2D.encry
 			if (chartModel.series.changed || ifSourceDataChanged)
 			{
 				itemRenders = [];
+				clearItemRenders();
 				
 				// 汇总  节点渲染器；
 				for each (seriesItem in series)
@@ -417,49 +534,45 @@ package com.fiCharts.charts.chart2D.encry
 					}
 				}
 				
-				clearItemRenders();
-				
-				for each (itemRender in itemRenders)
-					itemRender.render();
-				
 				leftOffBubblesItemRender();// 调节显示列表深度；
+				for each (itemRender in itemRenders)
+				{
+					itemRender.render();
+					itemRendersContainer.addChild(itemRender);
+				}
+				
 				chartModel.series.changed = ifSourceDataChanged = false;
 			}
 			
 			for each (itemRender in itemRenders)
-			{
 				itemRender.layout();
-				itemRendersContainer.addChild(itemRender);
-			}
 				
 			combileItemRender();
 			
-			updateValueLabels();
+			clearValueLabels();
+			drawValueLabels(itemRenders);
 		}
 		
 		/**
 		 */		
 		private function updateValueLabelHandler(evt:ItemRenderEvent):void
 		{
-			updateValueLabels();
+			clearValueLabels();
+			drawValueLabels(this.itemRenders);
 		}
 		
 		/**
 		 * 当布局或者图例显示状态发生改变时更新数值标签显示；
 		 */		
-		private function updateValueLabels():void
+		private function drawValueLabels(renders:Array):void
 		{
-			valueLabelsContainer.graphics.clear();
-			while (valueLabelsContainer.numChildren)
-				valueLabelsContainer.removeChildAt(0);
-			
 			var px:Number;
 			var py:Number;
 			var bd:BitmapData;
 			var bm:Bitmap = new Bitmap(bd);
 			var mar:Matrix = new Matrix;
 			
-			for each (var itemRender:ItemRenderBace in this.itemRenders)
+			for each (var itemRender:ItemRenderBace in renders)
 			{
 				if (itemRender.valueLabel.enable == false) continue;
 				
@@ -489,6 +602,15 @@ package com.fiCharts.charts.chart2D.encry
 					}
 				}
 			}
+		}
+		
+		/**
+		 */		
+		private function clearValueLabels():void
+		{
+			valueLabelsContainer.graphics.clear();
+			while (valueLabelsContainer.numChildren)
+				valueLabelsContainer.removeChildAt(0);
 		}
 		
 		/**
@@ -546,12 +668,17 @@ package com.fiCharts.charts.chart2D.encry
 			
 			for (var i:uint = 0; i < itemRenderLength; i ++)
 			{
+				prevItemRender = itemRenders[i];
+				
 				for (var j:uint = i + 1; j < itemRenderLength; j ++)
 				{
-					prevItemRender = itemRenders[i];
 					nextItemRender = itemRenders[j];
 					
-					// 开启 工具提示时才会合并将要显示的toolTip;
+					// 两个数据结点均不在渲染范围内，忽略
+					if (prevItemRender.visible == false && nextItemRender.visible == false)
+						continue;
+					
+					// 开启 工具提示时才会合并将要显示的toolTip;  
 					if (prevItemRender.tooltip.enable && nextItemRender.tooltip.enable)
 					{
 						prevLabels = prevItemRender.toolTipsHolder.tooltips;
@@ -569,12 +696,13 @@ package com.fiCharts.charts.chart2D.encry
 						
 						for each (labelVO in nextLabels)
 						{
+							// 合并节点
 							if (itemDistance <= (prevItemRender.radius + nextItemRender.radius) &&
 								prevLabels.indexOf(labelVO) == - 1 && nextItemRender.isEnable && !(nextItemRender is BubbleItemRender)) 
 							{
 								prevLabels.push(labelVO);
 								nextItemRender.disable();// 销毁节点渲染器， 不再接受事件；
-							}
+							}// 分离节点
 							else if (itemDistance > (prevItemRender.radius + nextItemRender.radius) && 
 								prevLabels.indexOf(labelVO) != - 1 && !nextItemRender.isEnable)
 							{
@@ -680,6 +808,20 @@ package com.fiCharts.charts.chart2D.encry
 				flashTimmer.removeEventListener(TimerEvent.TIMER, flashItemRendersHandler);
 				
 				this.dispatchEvent(new FiChartsEvent(FiChartsEvent.RENDERED));
+				
+				BitmapUtil.drawWithSize(this.seriesContainer, this.sizeX, this.sizeY)
+				
+				var pre:Number = new Date().getTime()
+				resizeData(0.3, 0.6);
+				var end:Number = new Date().getTime();
+				
+				trace(end - pre);
+				
+				/*resizeData(0.2, 0.25);
+				resizeData(0, 1);
+				resizeData(0.5, 1);
+				resizeData(0.1, 0.8);*/
+				
 			}
 			
 			itemRendersContainer.alpha = valueLabelsContainer.alpha = flashItemRenderPercent;
@@ -718,11 +860,18 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			if (ifLayoutChanged)
 			{
-				itemRendersMask.x = seriesContainer.x = itemRendersContainer.x = valueLabelsContainer.x = gridField.x = originX;
-				itemRendersMask.y = seriesContainer.y = itemRendersContainer.y = valueLabelsContainer.y = originY;
+				this.seriesMask.x = itemRendersMask.x = seriesContainer.x = itemRendersContainer.x 
+					= valueLabelsContainer.x = gridField.x = originX;
+				
+				this.seriesMask.y = itemRendersMask.y = seriesContainer.y = itemRendersContainer.y 
+					= valueLabelsContainer.y = originY;
 				
 				gridField.y = topY;
-				updateItemRenderMask();
+				
+				
+				drawMask(seriesMask);
+				drawMask(itemRendersMask);
+				
 				layoutLegendPanel();
 				ifLayoutChanged = false;
 			}
@@ -730,11 +879,11 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private function updateItemRenderMask():void
+		private function drawMask(mask:Shape):void
 		{
-			itemRendersMask.graphics.clear();
-			itemRendersMask.graphics.beginFill(0);
-			itemRendersMask.graphics.drawRect(0, 0, this.sizeX, - this.sizeY);
+			mask.graphics.clear();
+			mask.graphics.beginFill(0);
+			mask.graphics.drawRect(0, 0, this.sizeX, - this.sizeY);
 		}
 		
 		/**
@@ -1081,6 +1230,8 @@ package com.fiCharts.charts.chart2D.encry
 				{
 					seriesItem.configed(this.chartModel.series.colorMananger);// 图表整体配置完毕， 可以开始子序列的定义了；					
 					seriesItem.dataProvider = this.dataXML;
+					seriesItem.addEventListener(DataResizeEvent.RENDER_SIZED_VALUE_LABELS, drawResizeValueLabels, false, 0, true);
+					
 					
 					if (chartModel.legend.enable)
 						legends = legends.concat(seriesItem.legendData);
@@ -1221,6 +1372,8 @@ package com.fiCharts.charts.chart2D.encry
 			// 设置当前默认的样式配置
 			chartProxy.styleInit();
 			chartProxy.setConfigCore(chartProxy.currentStyleXML);
+			
+			StageUtil.initApplication(this, initDataResizeContorl);
 		}
 		
 		/**
@@ -1293,11 +1446,14 @@ package com.fiCharts.charts.chart2D.encry
 			seriesContainer = new Sprite();
 			addChild(seriesContainer);
 			
+			seriesMask = new Shape;
+			addChild(seriesMask);
+			seriesContainer.mask = seriesMask;
+			
 			itemRendersContainer = new Sprite();
 			addChild(itemRendersContainer);
 			
-			itemRendersMask = new Sprite;
-			itemRendersMask.mouseEnabled = false;
+			itemRendersMask = new Shape;
 			addChild(itemRendersMask);
 			
 			itemRendersContainer.mask = itemRendersMask;
@@ -1305,9 +1461,6 @@ package com.fiCharts.charts.chart2D.encry
 			valueLabelsContainer = new Sprite;
 			valueLabelsContainer.mouseEnabled = valueLabelsContainer.mouseChildren = false;
 			addChild(valueLabelsContainer);
-			
-			surfaceContainer = new Sprite();
-			addChild(surfaceContainer);
 		}
 		
 		/**
@@ -1381,8 +1534,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private var bgContainer:Sprite;
 		private var seriesContainer:Sprite;
-		private var surfaceContainer:Sprite;
-		private var itemRendersMask:Sprite;
+		private var seriesMask:Shape;
+		private var itemRendersMask:Shape;
 		private var itemRendersContainer:Sprite;
 		private var valueLabelsContainer:Sprite;
 		

@@ -1,6 +1,5 @@
 package com.fiCharts.charts.chart2D.area2D
 {
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.line.LineSeries;
@@ -12,9 +11,11 @@ package com.fiCharts.charts.chart2D.area2D
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Shape;
-	import flash.display.Sprite;
 
 	/**
+	 * 
+	 * 区域图序列
+	 * 
 	 */	
 	public class AreaSeries2D extends LineSeries implements IDirectionSeries
 	{
@@ -72,28 +73,33 @@ package com.fiCharts.charts.chart2D.area2D
 		
 		/**
 		 */		
-		override public function renderPartUI(canvas:Shape, style:Style, metaData:Object):void
+		override public function renderPartUI(canvas:Shape, style:Style, metaData:Object, renderIndex:uint):void
 		{
+			var startIndex:uint, endIndex:uint;
+			
+			startIndex = dataOffsetter.offsetMin(renderIndex, 0);
+			endIndex = dataOffsetter.offsetMax(renderIndex, itemRenderMaxIndex);
+			
 			canvas.graphics.clear();
 			
 			StyleManager.setFillStyle(canvas.graphics, style, metaData);
 			StyleManager.setLineStyle(canvas.graphics, style.getBorder, style, metaData);
 			
-			renderLine(canvas);
+			renderLine(canvas, 0, renderIndex);
 			
 			//绘制闭合区域以便填充
 			canvas.graphics.lineStyle(0, 0, 0);
-			canvas.graphics.lineTo((dataItemVOs[dataItemVOs.length - 1] as SeriesDataItemVO).x, 0);
-			canvas.graphics.lineTo((dataItemVOs[0] as SeriesDataItemVO).x, 0);
-			canvas.graphics.lineTo((dataItemVOs[0] as SeriesDataItemVO).x, 
-				(dataItemVOs[0] as SeriesDataItemVO).y - this.baseLine);
+			canvas.graphics.lineTo((dataItemVOs[endIndex] as SeriesDataItemVO).x, 0);
+			canvas.graphics.lineTo((dataItemVOs[startIndex] as SeriesDataItemVO).x, 0);
+			canvas.graphics.lineTo((dataItemVOs[startIndex] as SeriesDataItemVO).x, 
+				(dataItemVOs[startIndex] as SeriesDataItemVO).y - this.baseLine);
 			
 			canvas.graphics.endFill();
 			
 			if (style.cover && style.cover.border)
 			{
 				StyleManager.setLineStyle(canvas.graphics, style.cover.border, style, metaData);
-				renderLine(canvas, style.cover.offset);
+				renderLine(canvas, style.cover.offset, renderIndex);
 			}
 			
 			StyleManager.setEffects(canvas, style, metaData);

@@ -1,13 +1,37 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
+	/**
+	 * 
+	 * 字符类型的坐标轴， 数据节点均匀分部
+	 * 
+	 * @author wallen
+	 * 
+	 */	
 	public class FieldAxis extends AxisBase
 	{
 		public function FieldAxis()
 		{
 			super();
+		}
+		
+		/**
+		 * 字符类型数据节点均匀分布， 根据位置就可划定数值范围
+		 */		
+		override public function resizeData(start:Number, end:Number):void
+		{
+			var len:uint = this.sourceValues.length - 1;
+			
+			labelStartIndex = Math.floor(start * len);
+			labelEndIndex = Math.ceil(end * len);
+			
+			unitSize = size / this.labelsData.length;
+			changed = true;
+			
+			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_INDEX, labelStartIndex, labelEndIndex));
 		}
 		
 		/**
@@ -40,7 +64,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */
 		override protected function valueToSize(value:Object):Number
 		{
-			var result:Number = unitSize * .5 + sourceValues.indexOf(value.toString()) * unitSize;
+			var result:Number = unitSize * .5 + (sourceValues.indexOf(value.toString()) - this.labelStartIndex) * unitSize;
 			
 			if (inverse)
 				return size - result;
@@ -168,8 +192,11 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 * 
+		 * 数据源与label节点一一对应；
+		 * 
 		 */		
-		override public function updateAxis():void
+		override public function beforeRender():void
 		{
 			if (changed)
 			{
@@ -183,8 +210,10 @@ package com.fiCharts.charts.chart2D.core.axis
 					labelsData.push(labelData);
 				}
 				
-				unitSize = size / labelAmount;
+				super.beforeRender();
+				unitSize = size / this.labelsData.length;
 			}
 		}
+		
 	}
 }
