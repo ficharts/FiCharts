@@ -226,6 +226,13 @@ package com.fiCharts.charts.chart2D.encry
 				
 				this.combileItemRender();
 				gridField.render(this.hAxises[0].ticks, this.vAxises[0].ticks, chartModel.gridField);
+				
+				
+				var pre:Number = new Date().getTime()
+				BitmapUtil.drawWithSize(this, this.width, this.height)
+				var end:Number = new Date().getTime();
+				
+				trace(end - pre);
 			}
 		}
 		
@@ -881,18 +888,7 @@ package com.fiCharts.charts.chart2D.encry
 				
 				this.dispatchEvent(new FiChartsEvent(FiChartsEvent.RENDERED));
 				
-				BitmapUtil.drawWithSize(this.seriesContainer, this.sizeX, this.sizeY)
-				
-				var pre:Number = new Date().getTime()
-				dataResized(0.3, 0.4);
-				var end:Number = new Date().getTime();
-				
-				trace(end - pre);
-				
-				/*resizeData(0.2, 0.25);
-				resizeData(0, 1);
-				resizeData(0.5, 1);
-				resizeData(0.1, 0.8);*/
+				dataResized(0.2, 0.25);
 				
 			}
 			
