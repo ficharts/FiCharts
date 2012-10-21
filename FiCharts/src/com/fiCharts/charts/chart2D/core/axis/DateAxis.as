@@ -128,8 +128,8 @@ package com.fiCharts.charts.chart2D.core.axis
 				}
 			}
 
-			this.sourceMax = temMax;
-			this.sourceMin = temMin; 
+			this.preMax = temMax;
+			this.preMin = temMin; 
 				
 			this.label.layout = this.labelDisplay;
 			
@@ -144,17 +144,17 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 渲染之前调用；
 		 */		
-		override public function updateAxis():void
+		override public function beforeRender():void
 		{
 			if (changed)
 			{
 				//最小单位值
 				var minUintValue:Number = 0;
 				var lastValidUnits:String = units;
-				var minD:Date = new Date(sourceMax);
-				var maxD:Date = new Date(sourceMin);
-				var minMilli:Number = sourceMax;
-				var maxMilli:Number = sourceMin;
+				var minD:Date = new Date(preMax);
+				var maxD:Date = new Date(preMin);
+				var minMilli:Number = preMax;
+				var maxMilli:Number = preMin;
 				var units:String = "years";
 				var valueDis:Number;
 				var miniInternal:Number;
@@ -163,20 +163,20 @@ package com.fiCharts.charts.chart2D.core.axis
 				
 				while (units != null)
 				{
-					computedInterval = toMilli(1, units);
+					preInterval = toMilli(1, units);
 					
-					minD.setTime(sourceMin);
+					minD.setTime(preMin);
 					roundDateDown(minD, units);
 					minMilli = minD.getTime();
 					
-					maxD.setTime(sourceMax);
+					maxD.setTime(preMax);
 					roundDateUp(maxD, units);
 					maxMilli = maxD.getTime();
 					
 					valueDis = maxMilli - minMilli;// 临时差值；
 					miniInternal = toMilli(1, getMiniInternalUint(valueDis));
 					
-					if (computedInterval >= miniInternal)
+					if (preInterval >= miniInternal)
 					{
 						lastValidMin = minMilli;
 						lastValidMax = maxMilli;
@@ -245,7 +245,7 @@ package com.fiCharts.charts.chart2D.core.axis
 					 labelsData.push(labelData);
 				}
 				
-				unitSize = size / labelAmount;
+				unitSize = size / this.labelsData.length;
 			}
 		}
 		
@@ -273,23 +273,23 @@ package com.fiCharts.charts.chart2D.core.axis
 				return DateFormater.dateToString(DateFormater.stringToDate(value.toString(), this.input), this.output);
 			}
 			
-			if (valueDis > MILLISECONDS_IN_MINUTE && valueDis <= MILLISECONDS_IN_HOUR)
+			if (confirmedSourceValueRange > MILLISECONDS_IN_MINUTE && confirmedSourceValueRange <= MILLISECONDS_IN_HOUR)
 			{
 				return DateFormater.stringDateToMinuetString(String(value), this.input);
 			}
-			else if (valueDis > MILLISECONDS_IN_HOUR && valueDis <= MILLISECONDS_IN_DAY)
+			else if (confirmedSourceValueRange > MILLISECONDS_IN_HOUR && confirmedSourceValueRange <= MILLISECONDS_IN_DAY)
 			{
 				return DateFormater.stringDateToTimeString(String(value), this.input);
 			}
-			else if (valueDis > MILLISECONDS_IN_DAY && valueDis <= MILLISECONDS_IN_MONTH)
+			else if (confirmedSourceValueRange > MILLISECONDS_IN_DAY && confirmedSourceValueRange <= MILLISECONDS_IN_MONTH)
 			{
 				return DateFormater.stringDateToDayString(String(value), this.input);
 			}
-			else if (valueDis > MILLISECONDS_IN_MONTH && valueDis <= MILLISECONDS_IN_YEAR)
+			else if (confirmedSourceValueRange > MILLISECONDS_IN_MONTH && confirmedSourceValueRange <= MILLISECONDS_IN_YEAR)
 			{
 				return DateFormater.stringDateToMonthString(String(value), this.input);
 			}
-			else if (valueDis > MILLISECONDS_IN_YEAR)
+			else if (confirmedSourceValueRange > MILLISECONDS_IN_YEAR)
 			{
 				return DateFormater.stringDateToYearString(String(value), this.input);
 			}
@@ -353,7 +353,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			var position:Number;
 			var timeValue:Number = stringDateToDateTimer(value);
-			position = (timeValue - minimum) / valueDis * size;
+			position = (timeValue - minimum) / confirmedSourceValueRange * size;
 
 			if (this.inverse)
 				position = this.size - position;

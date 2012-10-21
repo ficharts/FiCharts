@@ -54,7 +54,21 @@ package com.fiCharts.utils.XMLConfigKit.style
 			textField.x = labelStyle.hPadding;
 			textField.y = labelStyle.vPadding;
 			
-			textField.width = textField.textWidth;
+			if (labelStyle.layout == LabelStyle.WRAP)
+			{
+				textField.wordWrap = true;
+				
+				if (maxLabelWidth - labelStyle.hPadding * 2 < minLabelWidth)
+					textField.width = minLabelWidth;
+				else
+					textField.width = maxLabelWidth - labelStyle.hPadding * 2;
+			}
+			else
+			{
+				textField.wordWrap = false
+				textField.width = textField.textWidth;
+			}
+			
 			textField.height = textField.textHeight;
 			textField.autoSize = TextFieldAutoSize.CENTER;
 			
@@ -65,6 +79,14 @@ package com.fiCharts.utils.XMLConfigKit.style
 			StyleManager.setShapeStyle(labelStyle, this.graphics, this.metaData);
 			this.graphics.drawRoundRect(0, 0, this.uiWidth, this.uiHeight, labelStyle.radius, labelStyle.radius);
 		}
+		
+		/**
+		 */		
+		public var maxLabelWidth:Number = 0;
+		
+		/**
+		 */		
+		private var minLabelWidth:Number = 15;
 		
 		/**
 		 * 相对于某点的布局, 默认居中
@@ -97,6 +119,16 @@ package com.fiCharts.utils.XMLConfigKit.style
 			{
 				this.y = y - this.uiHeight / 2;	
 			}
+		}
+		
+		override public function get width():Number
+		{
+			return uiWidth;
+		}
+		
+		override public function get height():Number
+		{
+			return uiHeight
 		}
 		
 		/**
@@ -144,9 +176,10 @@ package com.fiCharts.utils.XMLConfigKit.style
 		{
 			_metaData = value;
 		}
-
+		
 		/**
 		 */		
 		private var labelStyle:LabelStyle;
+		
 	}
 }

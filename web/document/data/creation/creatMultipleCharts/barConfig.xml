@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config title='2011年全球手机销量' xSuffix='亿部' precision='1'>
+    <axis>
+        <y type="field" title='厂商'/>
+        <x type="linear" title='销量'/>
+    </axis>
+    <series>
+        <bar xField='value' yField='label'/>
+    </series>
+    <data>
+        <set label='Nokia' value='417.1'/>
+        <set label='Samsung' value='329.4'/>
+        <set label='Apple' value='93.2'/>
+        <set label='LG' value='88.1'/>
+        <set label='ZTE' value='66.1'/>
+        <set label='Others' value='552.1'/>
+    </data>
+</config>
+

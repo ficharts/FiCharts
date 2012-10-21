@@ -2,10 +2,12 @@ package com.fiCharts.charts.chart2D.encry
 {
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
+	import com.fiCharts.charts.chart2D.core.series.DataIndexOffseter;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.core.series.SeriesDirectionControl;
 	import com.fiCharts.charts.common.ChartColorManager;
@@ -24,6 +26,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
+	import flash.geom.Rectangle;
 
 	/**
 	 * SeriesBase
@@ -39,6 +42,95 @@ package com.fiCharts.charts.chart2D.encry
 			
 			addChild(canvas);
 		}
+		
+		//---------------------------------------------------------------------
+		//
+		//  数据缩放控制， 序列数据缩放因数据类型而不同， 反映到不同类型的坐标轴上
+		//
+		// 一种是按照节点位置，一种是按照数据范围
+		//
+		//
+		//----------------------------------------------------------------------
+		
+		
+		/**
+		 */		
+		protected function dataResizedByIndex(evt:DataResizeEvent):void
+		{
+			dataOffsetter.minIndex = evt.start;
+			dataOffsetter.maxIndex = evt.end;
+			
+			dataOffsetter.offSet(0, itemRenderMaxIndex);
+			
+			this.layoutDataItems();
+			updataItemRendersLayout();
+		}
+		
+		/**
+		 * 
+		 * 前后各多延伸一个节点
+		 * 
+		 */		
+		protected function dataResizedByRange(evt:DataResizeEvent):void
+		{
+			dataOffsetter.minIndex = 0;
+			dataOffsetter.maxIndex = itemRenderMaxIndex;
+			
+			for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
+			{
+				if ((dataItemVOs[i].xValue) <= evt.start)
+				{
+					dataOffsetter.minIndex = i;
+				}
+				else if ((dataItemVOs[i].xValue) >= evt.end)
+				{
+					dataOffsetter.maxIndex = i;
+					break;
+				}
+				else
+				{
+					continue;
+				}
+			}
+			
+			dataOffsetter.offSet(0, itemRenderMaxIndex);
+			
+			this.layoutDataItems();
+			updataItemRendersLayout();
+		}
+		
+		/**
+		 * 
+		 * 数据缩放后更新数据范围内的数据结点位置
+		 * 
+		 */		
+		private function updataItemRendersLayout():void
+		{
+			var itemRender:ItemRenderBace;
+			for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
+			{
+				itemRender = this.itemRenders[i] as ItemRenderBace
+				if (i >= dataOffsetter.minIndex && i <= dataOffsetter.maxIndex)
+				{
+					itemRender.layout();
+					itemRender.visible = true;
+				}
+				else
+				{
+					itemRender.visible = false;
+				}
+			}
+			
+			return 
+			// 将数据范围内的  数值标签交给 主程序绘制
+			var dataResizeEvt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.RENDER_SIZED_VALUE_LABELS);
+			dataResizeEvt.sizedItemRenders =  this.itemRenders.slice(dataOffsetter.minIndex, dataOffsetter.maxIndex + 1);
+			this.dispatchEvent(dataResizeEvt);
+		}
+		
+		/**
+		 */		
+		protected var dataOffsetter:DataIndexOffseter = new DataIndexOffseter;
 		
 		/**
 		 */		
@@ -237,7 +329,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 
 		/**
-		 */
+		 */ 
 		protected var ifDataChanged:Boolean = false;
 		
 		/**
@@ -387,8 +479,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function layoutDataItems():void
 		{
-			for each (var item:SeriesDataItemVO in dataItemVOs)
+			var item:SeriesDataItemVO;
+			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
 			{
+				item = dataItemVOs[i];
 				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue);
 				item.dataItemY = item.y = (verticalAxis.valueToY(item.yValue));
 			}
@@ -529,6 +623,9 @@ package com.fiCharts.charts.chart2D.encry
 			_horizontalAxis = v;
 			_horizontalAxis.direction = AxisBase.HORIZONTAL_AXIS;
 			_horizontalAxis.metaData = this;
+			
+			_horizontalAxis.addEventListener(DataResizeEvent.RESIZE_BY_INDEX, dataResizedByIndex, false, 0, true);
+			_horizontalAxis.addEventListener(DataResizeEvent.RESIZE_BY_RANGE, dataResizedByRange, false, 0, true);
 		}
 
 		/**
@@ -639,7 +736,15 @@ package com.fiCharts.charts.chart2D.encry
 				verticalValues.push(seriesDataItem.yValue);
 				dataItemVOs.push(seriesDataItem);
 			}
+			
+			
+			dataOffsetter.maxIndex = itemRenderMaxIndex = dataItemVOs.length - 1;
 		}
+		
+		/**
+		 * 把节点总数存下来，后继节点渲染会频繁用于计算；
+		 */		
+		protected var itemRenderMaxIndex:uint;
 		
 		/**
 		 * 构建数据节点VO

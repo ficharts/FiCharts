@@ -1,5 +1,6 @@
 package com.fiCharts.charts.chart2D.line
 {
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
@@ -24,6 +25,24 @@ package com.fiCharts.charts.chart2D.line
 		public function LineSeries()
 		{
 			super();
+		}
+		
+		/**
+		 */		
+		override protected function dataResizedByIndex(evt:DataResizeEvent):void
+		{
+			super.dataResizedByIndex(evt);
+			
+			renderPartUIs();
+		}
+		
+		/**
+		 */		
+		override protected function dataResizedByRange(evt:DataResizeEvent):void
+		{
+			super.dataResizedByRange(evt);
+			
+			renderPartUIs();
 		}
 		
 		/**
@@ -59,6 +78,9 @@ package com.fiCharts.charts.chart2D.line
 			
 			if (this.ifSizeChanged || this.ifDataChanged)
 			{
+				states.tx = this.seriesWidth;
+				states.width = seriesWidth;
+				
 				renderPartUIs();
 				ifSizeChanged = ifDataChanged = false;
 			}
@@ -68,48 +90,60 @@ package com.fiCharts.charts.chart2D.line
 		 */		
 		protected function renderPartUIs():void
 		{
-			states.tx = this.seriesWidth;
-			states.width = seriesWidth;
+			// 不用选然道临界结点，而是把临界结点包含在内用于辅助渲染最靠近临界节点的节点
+			var startRenderIndex:uint = dataOffsetter.minIndex// + dataOffsetter.dataIndexOffset;
+			var endRenderIndex:uint = dataOffsetter.maxIndex// - dataOffsetter.dataIndexOffset;
 			
-			var length:uint = partUIs.length
-			for (var i:uint = 0; i < length; i ++)
+			for (var i:uint = i; i <= itemRenderMaxIndex; i ++)
 			{
-				if (i == 0)
+				if (startRenderIndex <= i && i <=  endRenderIndex)
 				{
-					partUIs[i].locX = partUIs[i].dataItem.x;
-					partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i].dataItem.x) / 2;
-				}
-				else if (i == length - 1)
-				{
-					partUIs[i].locX = partUIs[i - 1].dataItem.x + (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
-					partUIs[i].locWidth = (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
+					partUIs[i].visible = true;
+					
+					if (i == startRenderIndex)
+					{
+						partUIs[i].locX = partUIs[i].dataItem.x;
+						partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i].dataItem.x) / 2;
+					}
+					else if (i == endRenderIndex)
+					{
+						partUIs[i].locX = partUIs[i - 1].dataItem.x + (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
+						partUIs[i].locWidth = (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
+					}
+					else
+					{
+						partUIs[i].locX = partUIs[i - 1].dataItem.x + (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
+						partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
+					}
+					
+					partUIs[i].locHeight = this.verticalAxis.size;
+					partUIs[i].locY = - this.verticalAxis.size - this.baseLine;
+					
+					partUIs[i].renderIndex = i;
+					partUIs[i].render();
 				}
 				else
 				{
-					partUIs[i].locX = partUIs[i - 1].dataItem.x + (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
-					partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
+					partUIs[i].visible = false;
 				}
-				
-				partUIs[i].locHeight = this.verticalAxis.size;
-				partUIs[i].locY = - this.verticalAxis.size - this.baseLine;
-				
-				partUIs[i].render();
+						
 			}
 		}
 		
 		/**
+		 * 目前每个节点渲染3变，而且渲染的是整个序列的节点，需优化
 		 */		
-		public function renderPartUI(canvas:Shape, style:Style, metaData:Object):void
+		public function renderPartUI(canvas:Shape, style:Style, metaData:Object, renderIndex:uint):void
 		{
 			canvas.graphics.clear();
 			
 			StyleManager.setLineStyle(canvas.graphics, style.getBorder, style, metaData);
-			renderLine(canvas);
+			renderLine(canvas, 0, renderIndex);
 			
 			if (style.cover && style.cover.border)
 			{
 				StyleManager.setLineStyle(canvas.graphics, style.cover.border, style, metaData);
-				renderLine(canvas, style.cover.offset);
+				renderLine(canvas, style.cover.offset, renderIndex);
 			}
 			
 			StyleManager.setEffects(canvas, style, metaData);
@@ -122,19 +156,29 @@ package com.fiCharts.charts.chart2D.line
 		}
 		
 		/**
+		 * 每个节点的最终渲染都会调用到此方法
 		 */		
-		protected function renderLine(canvas:Shape, offset:Number = 0):void
+		protected function renderLine(canvas:Shape, offset:Number = 0, renderIndex:uint = 0):void
 		{
-			var firstX:Number = (dataItemVOs[0] as SeriesDataItemVO).x; 
-			var firstY:Number = (dataItemVOs[0] as SeriesDataItemVO).y - baseLine - offset;
+			var startIndex:uint, endIndex:uint;
+			
+			startIndex = dataOffsetter.offsetMin(renderIndex, 0);
+			endIndex = dataOffsetter.offsetMax(renderIndex, itemRenderMaxIndex);
+			
+			var firstX:Number = (dataItemVOs[startIndex] as SeriesDataItemVO).x; 
+			var firstY:Number = (dataItemVOs[startIndex] as SeriesDataItemVO).y - baseLine - offset;
+			
+			var item:SeriesDataItemVO;
+			var i:uint;
 			
 			if (this.step)// 渐进线段方式
 			{
 				canvas.graphics.moveTo(firstX, firstY);
 				
 				var stepY:Number = firstY;
-				for each (var item:SeriesDataItemVO in dataItemVOs)
+				for (i = startIndex; i <= endIndex; i ++)
 				{
+					item = dataItemVOs[i];
 					canvas.graphics.lineTo(item.x, stepY);
 					canvas.graphics.lineTo(item.x, item.y - baseLine - offset);
 					stepY = item.y - baseLine - offset;
@@ -145,11 +189,12 @@ package com.fiCharts.charts.chart2D.line
 				var point:Point = null;
 				var pointArr:Array = [];
 				
-				for (var i:int = 0; i < dataItemVOs.length; i++)
+				for (i = startIndex; i <= endIndex; i ++)
 				{
+					item = dataItemVOs[i];
 					point = new Point();
-					point.x = (dataItemVOs[i] as SeriesDataItemVO).x;
-					point.y = (dataItemVOs[i] as SeriesDataItemVO).y - baseLine - offset;
+					point.x = (item as SeriesDataItemVO).x;
+					point.y = (item as SeriesDataItemVO).y - baseLine - offset;
 					pointArr.push(point);
 				}
 				
@@ -160,8 +205,11 @@ package com.fiCharts.charts.chart2D.line
 			{
 				canvas.graphics.moveTo(firstX, firstY);
 				
-				for each (item in dataItemVOs)
+				for (i = startIndex; i <= endIndex; i ++)
+				{
+					item = dataItemVOs[i];
 					canvas.graphics.lineTo(item.x, item.y - baseLine - offset);
+				}
 			}
 		}
 		
@@ -190,6 +238,17 @@ package com.fiCharts.charts.chart2D.line
 		public function set smooth(value:Object):void
 		{
 			_ifSmooth = XMLVOMapper.boolean(value);
+			
+			
+			// 平滑趋势图至少需要5个数据采集点才能平滑过渡
+			if (_ifSmooth)
+			{
+				this.dataOffsetter.dataIndexOffset = 2;
+			}
+			else
+			{
+				this.dataOffsetter.dataIndexOffset = 1;
+			}
 		}
 		
 		/**

@@ -1,12 +1,13 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
-	import com.fiCharts.ui.text.Label;
-	import com.fiCharts.utils.MathUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
-	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 
 	/**
+	 * 
+	 * 线性坐标轴，数据线性分布，坐标位置根据数据线性关系分布
+	 * 
 	 */	
 	public class LinearAxis extends AxisBase
 	{
@@ -17,6 +18,33 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			super();
 		}
+		
+		
+		/**
+		 */		
+		override public function resizeData(start:Number, end:Number):void
+		{
+			var min:Number, max:Number;
+			min = start * this.sourceValueDis;
+			max = end * sourceValueDis;
+			
+			// 确定当前最值
+			this.preMaxMin(max, min);
+			this.confirmMaxMin();
+			
+			currentDataRange.min = this.minimum;
+			currentDataRange.max = this.maximum;
+			
+			// 
+			setFullSizeAndOffsize();
+			this.setCurrentLabelsIndexRange();
+			
+			changed = true;
+			
+			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
+				this.currentDataRange.min, currentDataRange.max));
+		}
+		
 		
 		/**
 		 */		
@@ -93,49 +121,92 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			sourceValues.sort(Array.NUMERIC);
 			
-			var temMin:Number;
-			var temMax:Number;
-			
 			if (!isNaN(assignedMinimum))
-				temMin = assignedMinimum;
+				sourceMin = assignedMinimum;
 			else
-				temMin = sourceValues.concat().shift();
+				sourceMin = Number(sourceValues[0]);
 			
 			if (!isNaN(assignedMaximum))
-				temMax = assignedMaximum;
+				sourceMax = assignedMaximum;
 			else
-				temMax = sourceValues.concat().pop();
+				sourceMax = Number(sourceValues[sourceValues.length - 1]);
 			
 			// 单值的情况；
 			if (sourceValues.length == 1)
-				temMin = temMax = sourceValues.concat().pop();
+				sourceMin = sourceMax = Number(sourceValues[0]);
 			
 			if (autoAdjust == false)
 			{
-				_maximum = temMax;
-				_minimum = temMin;
+				_maximum = sourceMax;
+				_minimum = sourceMin;
 					
 				this.changed = false;
 				return; 
 			}
 			
 			//基于零点优先于最值设置；
-			if (baseAtZero && temMin * temMax >= 0)
+			if (baseAtZero && sourceMin * sourceMax >= 0)
 			{
-				if (temMax > 0)
-					temMin = 0;
-				else if (temMax < 0)
-					temMax = 0;
+				if (sourceMax > 0)
+					sourceMin = 0;
+				else if (sourceMax < 0)
+					sourceMax = 0;
 			}
 			
-			var powerOfTen:Number = Math.floor(Math.log(Math.abs(temMax - temMin)) / Math.LN10);
+			sourceValueDis = sourceMax - sourceMin;
+			preMaxMin(sourceMax, sourceMin);
+			
+			super.dataUpdated();
+		}
+		
+		/**
+		 */		
+		protected var sourceValueDis:Number;
+		
+		/**
+		 * 正式渲染之前调用; 子数据范围渲染前不调用此方法
+		 */		
+		override public function beforeRender():void
+		{
+			if (changed)
+			{
+				confirmMaxMin();
+				
+				currentDataRange.min = sourceDataRange.min = this.minimum;
+				currentDataRange.max = sourceDataRange.max = this.maximum;
+				
+				//获得最值差，供后继频繁计算用
+				confirmedSourceValueRange = sourceDataRange.max - sourceDataRange.min;
+				
+				setFullSizeAndOffsize();
+				
+				this.createLabelsData();
+				setCurrentLabelsIndexRange();
+			}
+		}
+		
+		/**
+		 */		
+		private function setFullSizeAndOffsize():void
+		{
+			fullSize = this.size / (currentDataRange.max - currentDataRange.min) * confirmedSourceValueRange;
+			this.offsetSize = (currentDataRange.min - sourceDataRange.min) / confirmedSourceValueRange * fullSize;
+		}
+		
+		/**
+		 * 与判定最大最小值
+		 */		
+		private function preMaxMin(max:Number, min:Number):void
+		{
+			var preDataDis:Number = max - min;
+			var powerOfTen:Number = Math.floor(Math.log(Math.abs(preDataDis)) / Math.LN10);
 			var y_userInterval:Number;
 			
 			if (isNaN(_userInterval))
 			{
 				y_userInterval = Math.pow(10, powerOfTen);
 				
-				if (Math.abs(temMax - temMin) / y_userInterval < 4)
+				if (Math.abs(preDataDis) / y_userInterval < 4)
 				{
 					y_userInterval = y_userInterval / 5;
 				}
@@ -145,93 +216,149 @@ package com.fiCharts.charts.chart2D.core.axis
 				y_userInterval = _userInterval;
 			}
 			
-			sourceMax = _maximum = Math.round(temMax / y_userInterval) * y_userInterval == temMax ? temMax : (Math.floor(temMax / y_userInterval) + 1) * y_userInterval;
-			sourceMin = _minimum = Math.floor(temMin / y_userInterval) * y_userInterval;
+			_maximum = preMax = Math.round(max / y_userInterval) * y_userInterval == max ? max : (Math.floor(max / y_userInterval) + 1) * y_userInterval;
+			_minimum = preMin = Math.floor(min / y_userInterval) * y_userInterval;
 			
-			interval = computedInterval = y_userInterval;
+			preInterval = y_userInterval;
+		}
+		
+		/**
+		 * 核定，确定最大最小值
+		 */		
+		private function confirmMaxMin():void
+		{
+			var preValueDis:Number = preMax - preMin;
 			
-			super.dataUpdated();
+			//最小单位值
+			var minUintValue:Number = 0;
+			if (horiMinUintSize <= size)
+				minUintValue = Math.max(horiMinUintSize / size * preValueDis, preValueDis / maxDepartLineAmount);
+			else
+				minUintValue = preValueDis;
+			
+			var internalAmount:Number = preValueDis / this.preInterval;
+			for (var amoutInternal:uint = 1; amoutInternal <= internalAmount; amoutInternal++)
+			{
+				interval = preInterval * amoutInternal;
+				if (interval >= minUintValue && interval <= preValueDis)
+					break;
+			}
+			
+			// 调节恰到好处的最值，刚好满足均分 
+			if (preMin * preMax < 0)
+			{
+				_maximum = preMin + Math.ceil(preValueDis/ interval) * interval;
+				
+				if (ifExpend)
+				{
+					_maximum += interval;
+					_minimum = preMin - interval;
+				}
+				/*else
+				{
+				_maximum += interval / 2;
+				_minimum = sourceMin - interval / 2;
+				}*/
+			}
+			else if (preMax > 0)
+			{
+				_maximum = preMin + Math.ceil(preValueDis/ interval) * interval;
+				
+				if (ifExpend)
+					_maximum += interval;
+			}
+			else if (preMax == 0)
+			{
+				//_maximum = sourceMin + Math.ceil((sourceMax -  sourceMin)/ interval) * interval;
+				
+				_minimum = preMax - Math.ceil(preValueDis/ interval) * interval;
+				if (ifExpend)
+					_minimum -= interval;
+			}
+			else 
+			{
+				_minimum = preMax - Math.ceil(preValueDis/ interval) * interval;
+				
+				if (ifExpend)
+					_minimum -= interval;
+			}
+			
+		}
+		
+		/**
+		 * 生成标签数据，划定显示标签的范围
+		 */		
+		private function createLabelsData():void
+		{
+			var labelData:AxisLabelData;
+			labelsData = new Vector.<AxisLabelData>;
+			
+			//// Flash 中数字计算精度有偏差, 防止与最值及其相近的值蒙混过关
+			var maxValue:Number = this.sourceDataRange.max + interval - interval / 100000;
+			
+			// label数据每次重新构建
+			for (var i:Number = this.sourceDataRange.min; i < maxValue; i += interval)
+			{
+				labelData = new AxisLabelData();
+				labelData.value = i;
+				labelsData.push(labelData);
+			}
+			
+			horiLabelUIs.length = 0;
+			this.clearLabels()
 		}
 		
 		/**
 		 */		
-		protected var sourceMax:Number;
-		protected var sourceMin:Number;
-		
-		/**
-		 * 设置最小刻度值和分割数， 渲染之前调用;
-		 */		
-		override public function updateAxis():void
+		private function setCurrentLabelsIndexRange():void
 		{
-			if (changed)
+			var length:uint = this.labelsData.length;
+			
+			labelStartIndex = 0;
+			labelEndIndex = length - 1;
+			
+			for (var i:Number = 0; i < length; i ++)
 			{
-				//最小单位值
-				var minUintValue:Number = 0;
-				if (horiMinUintSize <= size)
-					minUintValue = Math.max(horiMinUintSize / size * valueDis, valueDis / maxDepartLineAmount);
+				if (this.currentDataRange.min >= Number(labelsData[i].value))
+				{
+					this.labelStartIndex = i;
+				}
+				else if (currentDataRange.max <= Number(labelsData[i].value))
+				{
+					this.labelEndIndex = i;
+					break;
+				}
 				else
-					minUintValue = valueDis;
-				
-				var internalAmount:Number = this.valueDis / this.computedInterval;
-				for (var amoutInternal:uint = 1; amoutInternal <= internalAmount; amoutInternal++)
 				{
-					interval = computedInterval * amoutInternal;
-					if (interval >= minUintValue && interval <= valueDis)
-						break;
-				}
-				
-				// 调节恰到好处的最值，刚好满足均分 
-				if (sourceMin * sourceMax < 0)
-				{
-					_maximum = sourceMin + Math.ceil((sourceMax -  sourceMin)/ interval) * interval;
-					
-					if (ifExpend)
-					{
-						_maximum += interval;
-						_minimum = sourceMin - interval;
-					}
-					/*else
-					{
-						_maximum += interval / 2;
-						_minimum = sourceMin - interval / 2;
-					}*/
-				}
-				else if (sourceMax > 0)
-				{
-					_maximum = sourceMin + Math.ceil((sourceMax -  sourceMin)/ interval) * interval;
-					
-					if (ifExpend)
-						_maximum += interval;
-				}
-				else if (sourceMax == 0)
-				{
-					//_maximum = sourceMin + Math.ceil((sourceMax -  sourceMin)/ interval) * interval;
-					
-					_minimum = sourceMax - Math.ceil((sourceMax -  sourceMin)/ interval) * interval;
-					if (ifExpend)
-						_minimum -= interval;
-				}
-				else 
-				{
-					_minimum = sourceMax - Math.ceil((sourceMax -  sourceMin)/ interval) * interval;
-					
-					if (ifExpend)
-						_minimum -= interval;
-				}
-				
-				var labelData:AxisLabelData;
-				labelsData = new Vector.<AxisLabelData>;
-				
-				//// Flash 中数字计算精度有偏差, 防止与最值及其相近的值蒙混过关
-				var maxValue:Number = _maximum + interval - interval / 100000;
-				for (var i:Number = _minimum; i < maxValue; i += interval)
-				{
-					labelData = new AxisLabelData();
-					labelData.value = i;
-					labelsData.push(labelData);
+					continue;
 				}
 			}
 		}
+			
+		
+		/**
+		 * 原始值的最大最小值
+		 */		
+		protected var sourceMax:Number = 0;
+		protected var sourceMin:Number = 0;
+		
+		/**
+		 * 违背核定的最值
+		 */		
+		protected var preMax:Number;
+		protected var preMin:Number;
+		
+		/**
+		 * 根据原始值核定后的最大最小值 
+		 */		
+		private var sourceDataRange:DataRange = new DataRange;
+		
+		
+		/**
+		 * 当前的数据范围(被核定后的) 
+		 */		
+		private var currentDataRange:DataRange = new DataRange;
+		
 		
 		/**
 		 * 再启用数值显示的时候需要增多一个数据单元格以便放得下数值显示；
@@ -280,12 +407,29 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			return _userInterval;
 		}
+		
+		/**
+		 *  An opposite value indicate labels distance.
+		 *  This value is from o to 1, for example, .1 indicate this axis will contain 10 labels.
+		 */
+		private var _interval:Number = .2;
+		
+		public function get interval():Number
+		{
+			return _interval;
+		}
+		
+		/**
+		 */
+		public function set interval(v:Number):void
+		{
+			_interval = v;
+		}
 
 		/**
-		 * 计算步长
-		 * (自动计算出的步长)
+		 * 初步计算得到的步长， 还需根据最小刻度尺寸才能计算出最终的步长  interval
 		 */
-		protected var computedInterval:Number;
+		protected var preInterval:Number;
 
 		/**
 		 *  Axis has it's own data model different from default data value.
@@ -308,16 +452,20 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			var position:Number;
 			
-			if (valueDis)
-				position = getValuePercent(value) * size;
+			if (confirmedSourceValueRange)
+				position = getValuePercent(value) * this.fullSize - offsetSize;
 			else
 				position = 0;
 			
 			if (this.inverse)
-				position = this.size - position;
+				position = this.fullSize - position;
 
 			return position;
 		}
+		
+		/**
+		 */		
+		private var offsetSize:Number = 0;
 		
 		/**
 		 */		
@@ -326,7 +474,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			if (value == null)
 				return 0;
 			else
-				return (Number(value) - minimum) / valueDis;
+				return (Number(value) - this.sourceDataRange.min) / confirmedSourceValueRange;
 		}
 
 		/**
@@ -361,10 +509,8 @@ package com.fiCharts.charts.chart2D.core.axis
 
 		/**
 		 */
-		protected function get valueDis():Number
-		{
-			return (maximum - minimum);
-		}
+		protected var confirmedSourceValueRange:Number
+			
 
 		/**
 		 */
@@ -392,24 +538,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		public function set maximum(v:Number):void
 		{
 			assignedMaximum = v;
-		}
-
-		/**
-		 *  An opposite value indicate labels distance.
-		 *  This value is from o to 1, for example, .1 indicate this axis will contain 10 labels.
-		 */
-		private var _interval:Number = .2;
-
-		public function get interval():Number
-		{
-			return _interval;
-		}
-
-		/**
-		 */
-		public function set interval(v:Number):void
-		{
-			_interval = v;
 		}
 
 		/**

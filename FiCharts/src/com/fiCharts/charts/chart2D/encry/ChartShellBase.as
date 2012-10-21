@@ -41,11 +41,18 @@ package com.fiCharts.charts.chart2D.encry
 	[Event(name="itemClicked", type = "com.fiCharts.charts.chart2D.core.events.FiChartsEvent")]
 	[Event(name="rendered", type = "com.fiCharts.charts.chart2D.core.events.FiChartsEvent")]
 
+	
 	/**
 	 * 这是所有图表的主程序基类，负责初始化过程，包含对外接口；
 	 */	
 	public class ChartShellBase extends Sprite
 	{
+		/**
+		 * 版本号 
+		 */	
+		public static const VARSION:String = "1.2.1 Beta";
+		
+		
 		/**
 		 */		
 		public static const MIN_SIZE:uint = 150;
@@ -453,7 +460,7 @@ package com.fiCharts.charts.chart2D.encry
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 				myContextMenu.customItems.push(item);
 				
-				item = new ContextMenuItem(languageConfig.version + " 1.2.0 Beta");
+				item = new ContextMenuItem(languageConfig.version + VARSION);
 				item.enabled = false;
 				myContextMenu.customItems.push(item);
 				
@@ -541,8 +548,6 @@ package com.fiCharts.charts.chart2D.encry
 				if (RexUtil.ifTextNull(_style) == false)
 					setStyleHandler(_style);
 				
-				ExternalUtil.call("FiCharts.ready", id);
-				
 				//如果配置了配置文件的路径，则直接加载；
 				if (RexUtil.ifTextNull(_configFileURL) == false)
 					requestConfigURL(_configFileURL);
@@ -588,6 +593,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			// 初始化过程完毕
 			this.dispatchEvent(new FiChartsEvent(FiChartsEvent.READY));
+			ExternalUtil.call("FiCharts.ready", id);
 		}
 		
 		/**

@@ -1,0 +1,43 @@
+<charts>
+	<chart title='趋势/曲面图'>
+		<item title='折线型' desc='' imgURL='gallery/line/normalLine.gif' demoURL='line/normalLine.xml'/>
+		<item title='曲线型' desc='' imgURL='./gallery/line/smooth.gif' demoURL='line/smoothLine.xml'/>
+		<item title='拐点型' desc='' imgURL='./gallery/line/step.gif' demoURL='line/stepLine.xml'/>
+		<item title='多序列' desc='' imgURL='./gallery/line/multiSeries.gif' demoURL='line/multiSeries.xml'/>
+		<item title='多轴' desc='' imgURL='./gallery/line/multiAxis.gif' demoURL='line/multiAxis.xml'/>
+		<item title='曲面(黑色风格)' desc='' imgURL='./gallery/area/area.gif' demoURL='area/area.xml' style='black'/>
+		<item title='曲面多轴(黑色风格)' desc='' imgURL='./gallery/area/multiAxis.gif' demoURL='area/multiAxis.xml' style='black'/>
+	</chart>
+
+	<chart title='柱状/条形图'>
+		<item title='柱状图' desc='' imgURL='./gallery/column/column.gif' demoURL='column/column.xml'/>
+		<item title='正负值柱图' desc='' imgURL='./gallery/column/fullData.gif' demoURL='column/fullData.xml'/>
+		<item title='多序列柱状图' desc='' imgURL='./gallery/column/multiSeries.gif' demoURL='column/multiSeries.xml'/>
+		<item title='多轴柱状图' desc='' imgURL='./gallery/column/multiAxis.gif' demoURL='column/multiAxis.xml'/>
+		<item title='条形图' desc='' imgURL='./gallery/bar/bar.gif' demoURL='bar/bar.xml'/>
+		<item title='正负值条形图' desc='' imgURL='./gallery/bar/fullData.gif' demoURL='bar/fullData.xml'/>
+		<item title='多序列条图' desc='' imgURL='./gallery/bar/multiSeries.gif' demoURL='bar/multiSeries.xml'/>
+	</chart>
+
+	<chart title='堆积图'>
+		<item title='柱状堆积' desc='' imgURL='./gallery/stacked/stackedColumn.gif' demoURL='stacked/stackedColumn.xml'/>
+		<item title='柱状堆积,正负值' desc='' imgURL='./gallery/stacked/stackColumnFullData.gif' demoURL='stacked/stackColumnFullData.xml'/>
+		<item title='100%堆积柱状图' desc='' imgURL='./gallery/stacked/stackPercentColumn.gif' demoURL='stacked/stackPercentColumn.xml'/>
+		<item title='条形堆积图' desc='' imgURL='./gallery/stacked/stackBar.gif' demoURL='stacked/stackBar.xml'/>
+		<item title='100%条形堆积图' desc='' imgURL='./gallery/stacked/stackPercentBar.gif' demoURL='stacked/stackPercentBar.xml'/>
+	</chart>
+
+	<chart title='散点/气泡图'>
+		<item title='散点图' desc='' imgURL='./gallery/marker/marker.gif' demoURL='marker/marker.xml'/>
+		<item title='多序列散点图' desc='' imgURL='./gallery/marker/multiSeries.gif' demoURL='marker/multiSeries.xml'/>
+		<item title='气泡图' desc='' imgURL='./gallery/bubble/bubble.gif' demoURL='bubble/bubble.xml'/>
+		<item title='多序列气泡图' desc='' imgURL='./gallery/bubble/multiSeries.gif' demoURL='bubble/multiSeries.xml'/>
+	</chart>
+
+	<chart title='混合图表'>
+		<item title='柱状与趋势' desc='' imgURL='./gallery/multiple/columnLine.gif' demoURL='multiple/columnLine.xml'/>
+		<item title='多轴下的多序列' desc='' imgURL='./gallery/multiple/multiAxis.gif' demoURL='multiple/multiAxis.xml'/>
+		<item title='混合型A' desc='' imgURL='./gallery/multiple/stackColumn.gif' demoURL='multiple/stackColumn.xml'/>
+		<item title='混合型B' desc='' imgURL='./gallery/multiple/bubbleColumnLine.gif' demoURL='multiple/bubbleColumnLine.xml'/>
+	</chart>
+</charts>

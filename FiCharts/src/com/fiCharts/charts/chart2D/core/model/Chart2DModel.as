@@ -82,6 +82,27 @@ package com.fiCharts.charts.chart2D.core.model
 		}
 		
 		
+		/**
+		 */		
+		private var _ifDataScalable:Boolean = false;
+
+		/**
+		 * 是否支持数据缩放，开启数据缩放后，在PC或者移动设备上
+		 * 
+		 * 会相应缩放操作而缩放数据，例如滚轮缩放或者触摸放大缩放 
+		 */
+		public function get ifDataScalable():Object
+		{
+			return _ifDataScalable;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set ifDataScalable(value:Object):void
+		{
+			_ifDataScalable = XMLVOMapper.boolean(value);;
+		}
 		
 		
 		//------------------------------

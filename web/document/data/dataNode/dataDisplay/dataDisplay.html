@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>数据显示</title>
+		<script type="text/javascript">
+			(function() {
+
+				$(function(){
+
+					var mainChart = new Chart2D({id: 'labelDisplayChart', width: '100%', height: 500, configFile: './data/dataNode/dataDisplay/labelDisplayCustom.xml'})
+
+					$.get("./data/dataNode/dataDisplay/labelDisplayCustom.xml", function(data) {
+						$('pre#labelDisplayConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+					$.get("./data/dataNode/dataDisplay/simpleLabelConfig.xml", function(data) {
+						$('pre#simpleLabelConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+				})
+
+			})()
+
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">数据显示</div>
+			<div id="content">
+				<p>图表中3处常会用到数据展示：信息提示，图例，节点值，他们都有默认值，默认无需设置。</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>类型</td>
+								<td>标签</td>
+								<td>默认开启/关闭</td>
+								<td>默认值</td>
+							</tr>
+							<tr>
+								<td>节点值</td>
+								<td>序列上的<span class='code'>label</span>标签</td>
+								<td>趋势，曲面，散点序列默认关闭，其他默认开启</td>
+								<td>通常为<span class='code'>${yLabel}</span>, 条形图为<span class='code'>${xLabel}</span>, 堆积图/气泡图中为<span class='code'>${zLabel}</span></td>
+							</tr>
+							<tr>
+								<td>工具提示</td>
+								<td>配置文件上的<span class='code'>tooltip</span>标签</td>
+								<td>开启</td>
+								<td>将序列明，<span class='code'>x,y,z</span>值等信息一起显示出来，空值略过</td>
+							</tr>
+							<tr>
+								<td>图例</td>
+								<td>配置文件上的<span class='code'>legend</span>标签</td>
+								<td>关闭</td>
+								<td><span class='code'>${seriesName}</span></td>
+							</tr>							
+						</tbody>
+					</table>
+				</div>
+				<p>工具提示与图例的开启/关闭需设置其<span class='code'>enable</span>为<span class='code'>true/false</span>; 节点值的开启与关闭需设置从序列上的<span class='code'>labelDisplay</span>为<span class='code'>none/normal</span>，取值都由<span class='code'>label</span>决定。以下面图表为例来看一下如何自定义数值显示：</p>
+				<div id='labelDisplayChart'></div>
+				<p>配置文件如下：</p>
+				<div class="codeWrapper"><pre id="labelDisplayConfig" class="prettyprint"></pre></div>
+				<p>柱状序列中的<span class='code'>label</span>定义了节点值为<span class='code'>y</span>值，并且给其四舍五入保留一位小数并注明单位(亿部)；开启了图例，图例节点值与序列节点值相同；工具提示包含<span class='code'>x</span>值与保留三位小数的<span class='code'>y</span>值。</p>
+				<p><span class='code'>CDATA</span>标签是XML文件中用来包含特殊字符的标签，特殊字符定义在<span class='code'>[]</span>中，<span class='code'>${}</span>表示此处引用数据源中的字段，以上3中信息提示数据源都是数据节点。紧随<span class='code'>${}</span>的<span class='code'>{}</span>表示对从数据源中获取的数据进行函数运算, <span class='code'>round:1</span>中<span class='code'>round</span>是四舍五入函数，参数为1， 保留一位小数。工具提示数据与其他略有不同，可包含<span class='code'>html</span>标签，以便更灵活的组织工具提示内容。本例中都是标准写法，其实节点值与图例<span class='code'>label</span>值也可以如下方式简写(工具提示因包含<span class='code'>html</span>换行标签，必须采用标准写法)：</p>
+				<div class="codeWrapper"><pre id="simpleLabelConfig" class="prettyprint"></pre></div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -17,7 +17,8 @@ package com.fiCharts.utils.XMLConfigKit.style
 		public static const VERTICAL:String = "vertical";
 		public static const ROTATION:String = "rotation";
 		public static const INNER:String = 'inner';
-		public static const NONE:String = "none"
+		public static const NONE:String = "none";
+		public static const WRAP:String = "wrap";
 		
 		/**
 		 */		

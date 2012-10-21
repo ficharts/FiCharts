@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>多序列图表</title>
+		<script type="text/javascript">
+			(function() {
+
+				$(function() {
+
+					new Chart2D({id: 'multipleColumns', width: '100%', height: 500, configFile: './data/type/multipleSeries/multipleColumns.xml'});
+					new Chart2D({id: 'multipleLines', width: '100%', height: 500, configFile: './data/type/multipleSeries/multipleLines.xml'});
+
+
+					$.get("./data/type/multipleSeries/multipleColumns.xml", function(data) {
+						$('pre#multipleColumnsConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+					$.get("./data/type/multipleSeries/multipleLines.xml", function(data) {
+						$('pre#multipleLinesConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+
+
+				})
+
+			})()
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">多序列图表</div>
+			<div id="content">
+				<p>当要对两组及以上数据对比分析时，多序列图表就派上了用场。下图是2011年度谷歌与百度中国区市场份额对比图：</p>
+				<p id='multipleColumns'></p>
+				<p>柱状图可以让数据对比强烈直观，谷歌文化虽大气，但不可小视百度的本土优势。上图的配置文件如下：</p>
+				<div class="codeWrapper"><pre id="multipleColumnsConfig" class="prettyprint"></pre></div>
+
+				<p>图表类型由配置文件定义，<span class="code">series</span>子节点定义了两个<span class="code">column</span>序列，得到两组柱状序列。<span class="code">series</span>子节点数决定序列数，节点名决定序列类型。</p>
+
+				<p>多序列图表与混合图表中常会用到图例(<span class="code">legend</span>)，默认图例是关闭的, 这里开启了图例(<span class="code">enable='true'</span>)。除了柱状图，趋势图，条形图，堆积图，散点及气泡图均支持多序列。如果我们要分析百度与谷歌中国区份额趋势，多维趋势图最合适，配置文件仅需小改一下：</p>
+
+				<div class="codeWrapper"><pre id="multipleLinesConfig" class="prettyprint"></pre></div>
+
+				<p><span class="code">column</span>改为<span class="code">line</span>, 趋势似乎很明朗：</p>
+				<div id="multipleLines"></div>
+				<p>多序列图表在多维数据对比分析时很有用，一对比谷歌又被比下去了，深表同情。</p>
+				
+			</div>
+		</div>
+	</body>
+</html>

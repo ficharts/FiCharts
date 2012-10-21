@@ -42,60 +42,100 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			if (changed)
 			{
-				clear(); 
-				
-				_ticks = new Vector.<Number>();
-				
 				var labelUI:DisplayObject;
 				var axisLabel:LabelUI;
-				var length:uint = labelAmount;
+				var length:uint = this.labelsData.length;
 				var valuePositon:Number;
 				
 				var labelX:Number;
 				var labelY:Number;
 				
-				//保证标签间距大于最小单元宽度， 防止标签重叠；
-				var addFactor:uint = 1;
-				var uintAmount:uint = labelAmount;
-				while (size > 0 && (this.size / uintAmount) < this.horiMinUintSize)
+				// 横向的最小间距不能小于Label的宽度， 这里要先获取这个宽度，从而决定单元间隔数
+				var i:uint;
+				if (horiLabelUIs.length == 0)
+					horiLabelUIs.length = length;
+				
+				// 动态创建label， 不重复创建
+				for (i = labelStartIndex; i <= labelEndIndex; i ++)
 				{
-					addFactor += 1;
-					uintAmount = labelAmount / addFactor;
+					if (this.enable)
+					{
+						if (horiLabelUIs[i] == null)
+						{
+							labelsData[i].label = this.getXLabel(labelsData[i].value);
+							labelsData[i].color = this.metaData.color;
+							
+							axisLabel = new LabelUI();
+							axisLabel.style = this.label;
+							axisLabel.metaData = labelsData[i];
+							
+							// 如果label换行显示，那么先以单元宽度为准
+							if (this.labelDisplay == LabelStyle.WRAP)
+								axisLabel.maxLabelWidth = this.unitSize;
+							
+							axisLabel.render();
+						
+							if (label.layout == LabelStyle.VERTICAL)
+							{
+								if (axisLabel.height > horiMinUintSize)
+									horiMinUintSize = axisLabel.height;
+							}
+							else
+							{
+								if (axisLabel.width > horiMinUintSize)
+									horiMinUintSize = axisLabel.width;
+							}
+							
+							//
+							labelUI = horiLabelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
+							labelUI.visible = false;
+							addChild(labelUI);
+							
+							axisLabel = null;
+						}
+						
+					}
+					
 				}
 				
-				for (var i:uint = 0; i < length; i += addFactor)
+				//保证标签间距大于最小单元宽度， 防止标签重叠；
+				var addFactor:uint = 1;
+				var uintAmount:uint = length;
+				while (this.fullSize > 0 && (this.fullSize / uintAmount) < this.horiMinUintSize)
+				{
+					addFactor += 1;
+					uintAmount = length / addFactor;
+				}
+				
+				// 先隐藏所有label
+				for (i = 0; i < length; i ++)
+				{
+					labelUI = horiLabelUIs[i];
+					if (labelUI && labelUI.visible)
+						labelUI.visible = false;
+				}
+				
+				// 布局和显示数据范围内的label
+				_ticks = new Vector.<Number>();
+				for (i = labelStartIndex; i <= labelEndIndex; i += addFactor)
 				{
 					valuePositon = valueToX(labelsData[i].value);
 					_ticks.push(valuePositon);
 					
 					if (this.enable)
 					{
-						labelsData[i].label = this.getXLabel(labelsData[i].value);
-						labelsData[i].color = this.metaData.color;
-							
-						axisLabel = new LabelUI();
-						axisLabel.style = this.label;
-						axisLabel.metaData = labelsData[i];
-						axisLabel.render();
-						labelUI = TextBitmapUtil.drawUI(axisLabel);
-						axisLabel = null;
+						labelUI = horiLabelUIs[i];
 						
 						if (label.layout == LabelStyle.ROTATION)
 						{
-							// 最小间隔不能小于Label宽度
-							if (labelUI.height > horiMinUintSize)
-								horiMinUintSize = labelUI.height;
-							
+							labelUI.rotation = 0;
 							labelX = - Math.cos(Math.PI / 4) * labelUI.width;
 							labelY = Math.sin(Math.PI / 4) * labelUI.width;
 							labelUI.rotation = - 45;
 						}
 						else if (label.layout == LabelStyle.VERTICAL)
 						{
-							// 最小间隔不能小于Label宽度
-							if (labelUI.height > horiMinUintSize)
-								horiMinUintSize = labelUI.height;
-							
+							labelUI.rotation = 0;
 							labelX = - labelUI.height / 2;
 							labelY = labelUI.width;
 							labelUI.rotation = - 90;
@@ -104,21 +144,18 @@ package com.fiCharts.charts.chart2D.core.axis
 						{
 							labelX = - labelUI.width / 2;
 							labelY = 0;
-							
-							// 最小间隔不能小于Label宽度
-							if (labelUI.width > horiMinUintSize)
-								horiMinUintSize = labelUI.width;
 						}
 						
 						labelUI.x = valuePositon + labelX;
+						
+						if (valuePositon >= 0 && valuePositon <= this.size)
+							labelUI.visible = true;
 						
 						if (this.position == 'bottom')
 							labelUI.y = label.margin + labelY;
 						else
 							labelUI.y = - label.margin - labelY - labelUI.height;
 						
-							
-						addChild(labelUI);
 					}
 				}
 				
@@ -133,6 +170,10 @@ package com.fiCharts.charts.chart2D.core.axis
 				changed = false;
 			}
 		}
+		
+		/**
+		 */		
+		protected var horiLabelUIs:Array = [];
 		
 		/**
 		 */		
@@ -157,13 +198,13 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			if (changed)
 			{
-				clear(); 
+				clearLabels(); 
 				
 				_ticks = new Vector.<Number>();
 				
 				var labelUI:DisplayObject;
 				var axisLabel:LabelUI;
-				var length:uint = labelAmount;
+				var length:uint = this.labelsData.length;
 				var valuePositon:Number;
 				
 				var labelX:Number;
@@ -173,14 +214,14 @@ package com.fiCharts.charts.chart2D.core.axis
 				
 				//保证标签间距大于最小单元宽度， 防止标签重叠；
 				var addFactor:uint = 1;
-				var uintAmount:uint = labelAmount;
+				var uintAmount:uint = length;
 				while (size > 0 && (this.size / uintAmount) < this.verticalMinUinitSize)
 				{
 					addFactor += 1;
-					uintAmount = labelAmount / addFactor;
+					uintAmount = length / addFactor;
 				}
 				
-				for (var i:uint = 0; i < length; i += addFactor)
+				for (var i:uint = labelStartIndex; i <= labelEndIndex; i += addFactor)
 				{
 					valuePositon = valueToY(labelsData[i].value);
 					_ticks.push(valuePositon);
@@ -324,27 +365,13 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 *  Clear labels.
 		 */		
-		protected function clear() : void
+		protected function clearLabels() : void
 		{
 			graphics.clear();
 			while ( numChildren > 0 )
 				removeChildAt( 0 );
 		}
 		
-		/**
-		 * @return 
-		 */		
-		public function get labelAmount() : uint
-		{
-			return labelsData.length;
-		}
-		
-		/**
-		 */		
-		public function redyToUpdateData():void
-		{
-			sourceValues = new Vector.<Object>;
-		}
 		
 		/**
 		 * 获取序列的数值范围，最值；
@@ -354,6 +381,13 @@ package com.fiCharts.charts.chart2D.core.axis
 			var seriesDataFeature:SeriesDataFeature = new SeriesDataFeature;
 			
 			return seriesDataFeature;
+		}
+		
+		/**
+		 */		
+		public function redyToUpdateData():void
+		{
+			sourceValues = new Vector.<Object>;
 		}
 		
 		/**
@@ -371,6 +405,15 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 * 尺寸更新后更新坐标轴相关属性；
+		 * 
+		 * 计算最大最小值，间隔刻度，label数据
+		 */
+		public function beforeRender():void
+		{
+		}
+		
+		/**
 		 */		
 		public function dataUpdated():void
 		{
@@ -385,12 +428,22 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 * 尺寸更新后更新坐标轴相关属性；
-		 */
-		public function updateAxis():void
+		 * 
+		 * @param from
+		 * @param to
+		 * 
+		 */		
+		public function resizeData(start:Number, end:Number):void
 		{
-			
 		}
+		
+		/**
+		 */		
+		protected var labelStartIndex:uint = 0;
+		
+		/**
+		 */		
+		protected var labelEndIndex:uint = 0;
 		
 		/**
 		 * 轴的创建， 尺寸， 数据改变此标识都会为真；
@@ -590,6 +643,12 @@ package com.fiCharts.charts.chart2D.core.axis
 		// 坐标轴公共属性
 		//
 		//------------------------------------------------
+		
+		
+		/**
+		 * 数据缩放时 由当前数据范围与原始数据范围比例反推出的理论长度
+		 */		
+		protected var fullSize:Number = 0;
 		
 		
 		/**

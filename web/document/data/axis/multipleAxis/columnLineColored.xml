@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config title="运营商非语音收入占比及语音业务收入" subTitle='2011年度' >
+    <legend enable="true"/>
+    <axis>
+        <x title="时间" type="field"/>
+        <y title="语音收入" type="linear" id="a">
+             <label>
+                 <format color='${color}'/>
+                 <text>${label}亿</text>
+             </label>  
+             <title>
+                 <format color='${color}'/>
+             </title>
+        </y>     
+        <y title="语音收入占比" type="linear" id="b">
+            <label>
+                 <format color='${color}'/>
+                 <text>${label}%</text>
+            </label>
+            <title>
+                 <format color='${color}'/>
+             </title>
+        </y>
+    </axis>
+    <series>
+         <column seriesName="语音" xField="label" yField="valueA" yAxis="a"/>
+        <line seriesName="非语音收入占比" xField="label" yField="valueB" yAxis="b">
+            <labelDisplay>normal</labelDisplay>
+            <valueLabel>
+                <format color='555555'/>
+            </valueLabel>
+        </line>
+    </series>
+    <data>
+        <item label="中国移动" valueA="3641.89" valueB="31"/>
+        <item label="中国电信" valueA="883.92" valueB="64"/>
+        <item label="中国联通" valueA="794.61" valueB="62"/>
+    </data>
+</config>

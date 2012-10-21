@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>ficharts介绍</title>
+	<script type="text/javascript">
+		(function() {
+
+			$(function(){
+
+				new Chart2D({id: 'fieldLinear', width: '100%', height: 500, configFile: './data/creation/firstCreat/columnConfig.xml'});
+				new Chart2D({id: 'dayDateChart', width: '100%', height: 500, configFile: './data/axis/type/dayDate.xml'});
+
+
+				$.get("./data/creation/firstCreat/columnConfig.xml", function(data) {
+					$('pre#fieldLineConfig').text($.xmlToString(data));
+					prettyPrint();
+				})
+
+				$.get("./data/axis/type/dayDate.xml", function(data) {
+					$('pre#dayDateConfig').text($.xmlToString(data));
+					prettyPrint();
+				})
+
+			})
+
+		})()
+	</script>
+</head>
+<body>
+	<div id="data">
+		<div id="title">坐标类型与属性</div>
+		<div id="content">
+			ficharts包含三种坐标类型：
+			<span class="code">field</span>
+			,
+			<span class="code">linear</span>
+			,
+			<span class="code">date</span>
+			, 分别对应区段，线性，时间类型。配置文件的
+			<span class="code">axis</span>
+			节点用来定义坐标轴，
+			<span class="code">x</span>
+			代表横轴，
+			<span class="code">y</span>
+			代表纵轴。
+			<p class="subTitle">坐标轴属性</p>
+			<p>3种坐标轴有着共同的基本属性：</p>
+			<div class="tableWrapper">
+				<table width="100%">
+					<tr class="tableHeader">
+						<td width="10%">属性名称</td>
+						<td width="12%">参数类型</td>
+						<td width="20%">取值范围</td>
+						<td>描述</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="code">title</span>
+						</td>
+						<td>
+							<span class="code">String</span>
+						</td>
+						<td>任意字符串</td>
+						<td>
+							标题，此坐标轴名称。
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<span class="code">type</span>
+						</td>
+						<td>
+							<span class="code">String</span>
+						</td>
+						<td>field, linear, date</td>
+						<td>
+							坐标轴类型，分别代表区段，线性，时间类型
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<span class="code">labelDisplay</span>
+						</td>
+						<td>
+							<span class="code">String</span>
+						</td>
+						<td>normal, rotation, vertical</td>
+						<td>
+							标签排版方式，默认为 <span class="code">normal</span>水平显示, 旋转倾斜为<span class="code">rotation</span>, 垂直显示为<span class="code">vertical</span>。
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<span class="code">inverse</span>
+						</td>
+						<td>
+							<span class="code">String</span>
+						</td>
+						<td>false, true</td>
+						<td>
+							反向坐标轴数值方向，默认为<span class="code">false</span>, <span class="code">x</span>轴数值从左向右，<span class="code">y</span>轴从下到上；设置为<span class="code">true</span>后数值排列反向。
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<span class="code">position</span>
+						</td>
+						<td>
+							<span class="code">String</span>
+						</td>
+						<td>top, bottom, left, right</td>
+						<td>
+							坐标轴位置，<span class="code">x</span>轴默认为<span class="code">bottom</span>; <span class="code">y</span>轴默认为<span class="code">left</span>。多坐标轴时默认左右/上下均衡分布坐标轴，通过定义此参数可明确定义坐标轴位置，再配合<span class="code">inverse</span>参数可达到坐标象限配置（我们默认看到的图表都在第一象限）。
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<span class="code">id</span>
+						</td>
+						<td>
+							<span class="code">String</span>
+						</td>
+						<td>任意字符串</td>
+						<td>
+							坐标轴唯一标识符，默认单对坐标轴(一个<span class="code">x</span>轴，一个<span class="code">y</span>轴)时无需定义，定义多坐标轴时会用到。<span class="code">id</span>值与序列中<span class="code">xAxis/yAxis</span>值关联，表示此序列的坐标轴(<span class="code">x/y</span>)为匹配<span class="code">id</span>的坐标轴。
+						</td>
+					</tr>
+
+
+					<tr>
+						<td>
+							<span class="code">enbale</span>
+						</td>
+						<td>
+							<span class="code">String</span>
+						</td>
+						<td>true, false</td>
+						<td>
+							是否显示坐标轴，默认为<span class="code">true</span>, 如果想看坐标轴裸奔就给它<span class="code">false</span>一下。
+						</td>
+					</tr>
+
+				</table>
+			</div>
+			<p>通常图表显示区域有限，坐标轴上的数值不能全部显示出来，默认会隐藏一些间隔刻度，调整<span class="code">labelDisplay</span>参数也不失为一种好的替补方法。</p>
+
+			<p class="subTitle">
+				<span class="code">field</span>， 区段坐标轴
+			</p>
+			<p>区段类型，如：A组，B组，C组...... 他们在坐标轴上占据相同的等分长度，大多数情况下图表的x轴都属于这种类型。</p>
+
+			<p class="subTitle">
+				<span class="code">linear</span>, 线性坐标轴
+			</p>
+			<p>线性类型，如1,5,8,13,20,34。 这些数据之间有着线性关系，在坐标轴上如同在标尺上一样排列，而线性坐标轴也有着自身特有属性：</p>
+			<div class="tableWrapper">
+				<table width="100%">
+					<tr class="tableHeader">
+						<td width="10%">属性名称</td>
+						<td width="12%">参数类型</td>
+						<td width="20%">取值范围</td>
+						<td>描述</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="code">minimum</span>
+						</td>
+						<td>
+							<span class="code">Number</span>
+						</td>
+						<td>数字</td>
+						<td>
+							坐标轴的最小刻度
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<span class="code">maximum</span>
+						</td>
+						<td>
+							<span class="code">Number</span>
+						</td>
+						<td>数字</td>
+						<td>
+							坐标轴的最大刻度
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<span class="code">baseAtZero</span>
+						</td>
+						<td>
+							<span class="code">String</span>
+						</td>
+						<td>true, false</td>
+						<td>
+							是否基于零刻度， 默认为<span class="code">true</span>。默认坐标刻度取值范围取决于数据范围，设置了最大最小值后取值范围为设定值。<span class="code">baseAtZero</span> 是个特例条件，强制坐标值基于坐标零点正/负向排列，例如一个取值范围是5到100的坐标轴，当<span class="code">baseAtZero</span>开启时取值范围最终为0到100。
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<span class="code">userInterval</span>
+						</td>
+						<td>
+							<span class="code">Number</span>
+						</td>
+						<td>正整数</td>
+						<td>
+							刻度步长，例如当前坐标刻度最小间隔为5， 当设置步长为2时，最小刻度为10。
+						</td>
+					</tr>
+
+				</table>
+			</div>
+
+			<p>下图是一个横轴为区段类型，纵轴为线性类型的图表：</p>
+			<div id="fieldLinear"></div>
+			<p>配置文件如下：</p>
+			<div class="codeWrapper"><pre id="fieldLineConfig" class="prettyprint"></pre></div>
+
+			<p class="subTitle">
+				<span class="code">date</span>, 时间坐标轴
+			</p>
+			<p>时间类型，如：2012-01，2012-03，2012-07。时间轴与线性轴类似，刻度呈线性分布；不同的是时间值不像数字一样易于计算，这些数据都是能够表示时间的字符串, 可以从年,月,日精确到时,分,秒。时间轴具有如下属性：</p>
+
+			<div class="tableWrapper">
+				<table width="100%">
+					<tr class="tableHeader">
+						<td width="12%">属性名称</td>
+						<td width="12%">参数类型</td>
+						<td width="20%">取值范围</td>
+						<td>描述</td>
+					</tr>
+					<tr>
+						<td>
+							<span class="code">input</span>
+						</td>
+						<td>
+							<span class="code">String</span>
+						</td>
+						<td>Y,M,D,h,m,s,任意字符</td>
+						<td>
+							时间数据构成格式，默认为
+							<span class="code">YYYY/MM/DD</span>。例如<span class="code">YYYY-MM-DD</span>规定了时间数据必须写成这种格式<span class="code">2012-02-25</span>。 Y代表年，M代表月，D代表天，h代表小时，m代表分，s代表秒，这些符号间连接字符不限，例如<span class="code">YYYY年MM月DD日</span>也符合。
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<span class="code">output</span>
+						</td>
+						<td>
+							<span class="code">String</span>
+						</td>
+						<td>Y,M,D,h,m,s,任意字符</td>
+						<td>
+							时间数据在图表上显示的格式，默认为<span class="code">YYYY/MM/DD</span>。格式规则同<span class="code">input</span>。							
+						</td>
+					</tr>
+
+				</table>
+			</div>
+			<p>下图是一张横轴为时间轴的图表：</p>
+			<div id="dayDateChart"></div>
+			<p>配置文件如下：</p>
+			<div class="codeWrapper"><pre id="dayDateConfig" class="prettyprint"></pre></div>
+			<p>上图中时间数据格式与显示格式不同，时间格式还可以包含时分秒甚至只包含其中的某一项，灵活应对格式风情万种的时间数据。</p>
+		</div>
+	</div>
+</body>
+</html>

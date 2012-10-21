@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>配置文件</title>
+		<script type="text/javascript">
+			$(function(){
+
+				
+			})
+
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">配置文件</div>
+			
+			<div id="content">
+				<p>下图是一份完整的配置文件</p>
+				<img src="./data/creation/chartData/config.png" alt="">
+				<p>
+					配置文件为XML格式，以<span class='code'>config</span>为根节点，其下包含坐标轴<span class='code'>axis</span>，序列<span class='code'>series</span>和非必须的数据<span class='code'>data</span>节点。为了让图表配置简单，<span class='code'>data</span>节点常被包含在配置文件中，这样仅需加载一份配置文件便可渲染出图表。配置文件也可与数据分离，动态更新数据或复用配置与数据文件。配置文件根节点上通常可以设置标题与副标题，除此以外还可设置其他特性：
+				</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>取值范围</td>
+								<td width='15%'>默认值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>title</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td>主标题</td>
+							</tr>
+							<tr>
+								<td><span class='code'>subTitle</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td>副标题</td>
+							</tr>
+							<tr>
+								<td><span class='code'>animation</span></td>
+								<td><span class='code'>true/false</span></td>
+								<td><span class='code'>true</span></td>
+								<td>初始动画，默认第一次渲染时有动画效果</td>
+							</tr>
+							<tr>
+								<td><span class='code'>fullScreen</span></td>
+								<td><span class='code'>true/false</span></td>
+								<td><span class='code'>true</span></td>
+								<td>开启后双击图表空白区域会全屏显示，再次双击或按下<span class='code'>Esc</span>键后推出退出全屏模式</td>
+							</tr>
+							<tr>
+								<td><span class='code'>xSuffix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>x</span>值的后缀</td>
+							</tr>
+							<tr>
+								<td><span class='code'>ySuffix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>y</span>值的后缀</td>
+							</tr>
+							<tr>
+								<td><span class='code'>zSuffix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>z</span>值的后缀, 堆积/气泡图中才会用到<span class='code'>z</span></td>
+							</tr>
+							<tr>
+								<td><span class='code'>xPrefix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>x</span>值的前缀</td>
+							</tr>	
+							<tr>
+								<td><span class='code'>yPrefix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>y</span>值的前缀</td>
+							</tr>	
+							<tr>
+								<td><span class='code'>zPrefix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>z</span>值的前缀, 堆积/气泡图中才会用到<span class='code'>z</span></td>
+							</tr>	
+
+							<tr>
+								<td><span class='code'>precision</span></td>
+								<td>非负整数</td>
+								<td>0</td>
+								<td>保留小数点位数，仅对数字类型数据有效</td>
+							</tr>	
+							<tr>
+								<td><span class='code'>useGrouping</span></td>
+								<td><span class='code'>true/false</span></td>
+								<td>false</td>
+								<td>是否群组方式显示数据，如数字<span class='code'>325,682</span>设置了<span class='code'>useGrouping</span>为<span class='code'>true</span>后显示为<span class='code'>325,682</span>，此特性在显示货币类型数据时会用到。</td>
+							</tr>	
+
+						</tbody>
+					</table>
+				</div>
+				<p>配置接口与图表数据下一节会详细介绍，序列与坐标轴部分请参见相关章节。</p>
+			</div>
+		</div>
+	</body>
+</html>

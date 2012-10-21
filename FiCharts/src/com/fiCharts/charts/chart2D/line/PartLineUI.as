@@ -21,6 +21,21 @@ package com.fiCharts.charts.chart2D.line
 		
 		/**
 		 */		
+		public function show():void
+		{
+			
+		}
+		
+		/**
+		 */		
+		public function hide():void
+		{
+			
+		}
+		
+		
+		/**
+		 */		
 		protected var _partUIRender:LineSeries;
 
 		/**
@@ -47,8 +62,17 @@ package com.fiCharts.charts.chart2D.line
 			maskUI.graphics.drawRect(locX, this.locY, this.locWidth, this.locHeight);
 			maskUI.graphics.endFill();
 			
-			partUIRender.renderPartUI(canvas, this.style, this.metaData);
+			partUIRender.renderPartUI(canvas, this.style, this.metaData, this.renderIndex);
 		}
+		
+		/**
+		 * 此节点在整个数据节点中的位置 
+		 * 
+		 * 当前正在被渲染的节点 ， 每个节点的渲染是以此节点为中心向两边
+		 * 
+		 * 各延伸一个节点
+		 */		
+		public var renderIndex:uint;
 		
 		/**
 		 */		

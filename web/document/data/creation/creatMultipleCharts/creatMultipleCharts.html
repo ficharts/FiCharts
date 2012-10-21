@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>创建多个图表</title>
+	<script type="text/javascript">			
+			(function()
+			{
+				$.get('./data/creation/creatMultipleCharts/demo.html', function(data) 
+				{
+
+					$("pre#multipleChartsCode").text($.xmlToString(data));
+
+					prettyPrint();
+				});
+
+				new Chart2D({
+						id : 'columnChart',
+						width : '100%',
+						height : 500,
+						configFile : './data/creation/firstCreat/columnConfig.xml'
+					});
+
+				new Chart2D({
+						id : 'barChart',
+						width : '100%',
+						height : 500,
+						configFile : './data/creation/creatMultipleCharts/barConfig.xml'
+					});
+				
+			})();
+	</script>
+</head>
+<body>
+	<div id="data">
+		<div id="title">创建多个图表</div>
+		<div id="content">
+			<p>下面我们将同时创建两个图表：柱状图和条形图，以此来说明如何在同一个页面中创建多个图表。</p>
+			<ul>
+				<li>
+					1.创建目录<span class="code">columnAndBar</span>并在其下创建两个图表配置文件
+					<span class="code">
+						<a href="./data/creation/firstCreat/columnConfig.xml" target="_blank">columnConfig.xml</a>
+						,
+						<a href="./data/creation/creatMultipleCharts/barConfig.xml" target="_blank">barConfig.xml</a>
+					</span>，他们分别定义了一个柱状图和条形图。
+				</li>
+				<li>
+					2.在<span class="code">columnAndBar</span>目录下创建一个HTML文件，命名为
+					<span class="code">columnAndBar.html</span>
+					, 内容如下：
+					<div class="codeWrapper"><pre id="multipleChartsCode" class="prettyprint"></pre></div>
+				</li>
+				<li>3.将ficharts文件包复制到<span class="code">columnAndBar</span>目录下</li>
+				<li>4.浏览器方式打开<span class="code">columnAndBar.html</span>,创建好的图表如下所示：</li>
+			</ul>
+
+			<div id="columnChart"></div>
+			<p></p>
+			<div id="barChart"></div>
+			<p>同一页面中创建多个图表无外乎多定义几个装载图表的<span class="code">div</span>, 分配好<span class="code">id</span>。这个<span class="code">id</span>是页面中用来区分不同元素的唯一标识，与图表实例名<span class="code">column/bar</span>不同，关系如下：<div class="codeWrapper"><pre class="prettyprint">document.getElementById("column") = FiCharts.getChartByID("column") = column;</pre></div></p>
+		</div>
+	</div>
+</body>
+</html>

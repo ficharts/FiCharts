@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>事件</title>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">事件</div>
+			<div id="content">
+				<p>每个图表实例都可通过<span class='code'>addEventListener(type, function)</span>方法添加监听事件，目前支持如下几种事件：</p>
+				<p class='subTitle'>FiCharts.event.READY</p>
+				<p>图表初始化完毕事件，实际上大多数属性接口调用都需要滞后处理，因为图表初始化完毕前所有接口都不会被真正调用，他们会被延期至初始化完毕后才正式调用。虽然图表内部会自动处理接口调用与初始化过程的关系，但建议用户最好在事件触发后再对图表进行其他操作。此事件对象属性如下：</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>type</span></td>
+								<td><span class='code'>ready</span></td>
+								<td>事件类型</td>
+							</tr>
+							<tr>
+								<td><span class='code'>target</span></td>
+								<td>图表自身</td>
+								<td>触发此事件的对象</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+				<p class='subTitle'>FiCharts.event.RENDERED</p>
+				<p>图表渲染完毕事件，分两种情况：图表加载配置/数据文件后自动渲染，渲染完毕触发此事件；调用渲染接口<span class='code'>render()</span>，渲染完毕触发此事件。</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>type</span></td>
+								<td><span class='code'>rendered</span></td>
+								<td>事件类型</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>target</span></td>
+								<td>图表自身</td>
+								<td>触发此事件的对象</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+
+				<p class='subTitle'>FiCharts.event.CONFIG_LOADED</p>
+				<p>配置文件加载完毕后触发此事件，仅限于<span class='code'>setConfigFile(filePath)</span>接口被调用后，且文件加载成功才会触发此事件。配置文件加载完毕也会同时触发<span class='code'>rendered</span>事件，但<span class='code'>CONFIG_LOADED</span>最后触发。</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>type</span></td>
+								<td><span class='code'>configLoaded</span></td>
+								<td>事件类型</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>target</span></td>
+								<td>图表自身</td>
+								<td>触发此事件的对象</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>data</span></td>
+								<td>configXML</td>
+								<td>配置文件</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+
+				<p class='subTitle'>FiCharts.event.DATA_LOADED</p>
+				<p>数据文件加载完毕后触发此事件，仅限于<span class='code'>setDataFile(filePath)</span>接口被调用后，且文件加载成功才会触发此事件。数据文件加载完毕也会同时触发<span class='code'>rendered</span>事件，但<span class='code'>DATA_LOADED</span>最后触发。</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>type</span></td>
+								<td><span class='code'>dataLoaded</span></td>
+								<td>事件类型</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>target</span></td>
+								<td>图表自身</td>
+								<td>触发此事件的对象</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>data</span></td>
+								<td>dataXML</td>
+								<td>数据文件</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+
+				<p class='subTitle'>FiCharts.event.ITEM_CLICKED</p>
+				<p>当图表中某个节点被鼠标点击后触发此事件，节点对象随事件传递出来，此事件通常用于数据钻取应用中。</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>type</span></td>
+								<td><span class='code'>itemClick</span></td>
+								<td>事件类型</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>target</span></td>
+								<td>图表自身</td>
+								<td>触发此事件的对象</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>data</span></td>
+								<td>数据节点对象</td>
+								<td>数据节点对象，包含此节点上的完整信息</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+
+				<p class='subTitle'>与事件相关的函数</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>函数</td>
+								<td width='25%'>参数</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>addEventListener</span></td>
+								<td><span class='code'>type, function</span></td>
+								<td>添加事件，例如: <span class='code'>chart.addEventListener('ready', function(e){...})</span></td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>removeEventListener</span></td>
+								<td>type, function</td>
+								<td>移除事件</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>onReady</span></td>
+								<td>function</td>
+								<td>添加<span class='code'>READY</span>事件</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>onConfigLoaded</span></td>
+								<td>function</td>
+								<td>添加<span class='code'>CONFIG_LOADED</span>事件</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>onDataLoaded</span></td>
+								<td>function</td>
+								<td>添加<span class='code'>DATA_LOADED</span>事件</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>onRendered</span></td>
+								<td>function</td>
+								<td>添加<span class='code'>RENDERED</span>事件</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>onClicked</span></td>
+								<td>function</td>
+								<td>添加<span class='code'>ITEM_CLICKED</span>事件</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+
+
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>www.ficharts.com</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script type="text/javascript" src="./ficharts/FiCharts.js">
+        </script>
+        <script type="text/javascript">
+            var mainChart = new Chart2D('main')
+            var detailChart;
+            mainChart.setConfigFile('mainData.xml');
+            
+            mainChart.onClicked(function(e){
+            	
+            	if (e.data.xLabel == "Apple"){
+                    if (typeof detailChart == 'undefined'){
+                        detailChart = new Chart2D('detail');
+                        detailChart.setConfigFile('detail.xml');
+                    }
+            	}
+            })
+            
+        </script>
+    </head>
+    <body>
+        <div id="main"></div>
+        <div id="detail"></div>
+    </body>
+</html>

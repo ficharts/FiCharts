@@ -64,7 +64,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		
 		/**
 		 */		
-		private var _substr:uint = 15;
+		private var _substr:uint = 30;
 
 		/**
 		 */

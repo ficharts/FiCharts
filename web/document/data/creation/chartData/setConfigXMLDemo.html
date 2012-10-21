@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>www.ficharts.com</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <script type="text/javascript" src="./ficharts/FiCharts.js">
+        </script>
+        <script type="text/javascript">
+            
+            var myChart = new Chart2D('myChart')
+            myChart.setSize(500, 500);
+
+            var configXML = '<config precision="1" title="2011年全球手机销量" ySuffix="亿部">' +
+                                '<axis>' +
+                                   ' <x title="厂商" type="field"/>' +
+                                    '<y title="销量" type="linear"/>' +
+                                '</axis>' +
+                                '<series>' +
+                                    '<column xField="label" yField="value"/>' +
+                                '</series>' +
+                                '<data>' +
+                                    '<set label="Nokia" value="417.1"/>' +
+                                    '<set label="Samsung" value="329.4"/>' +
+                                    '<set label="Apple" value="93.2"/>' +
+                                    '<set label="LG" value="88.1"/>' +
+                                    '<set label="ZTE" value="66.1"/>' +
+                                    '<set label="Others" value="552.1"/>' +
+                               ' </data>' +
+                            '</config>';
+
+            myChart.setConfigXML(configXML);
+            myChart.render();
+
+        </script>
+    </head>
+    <body>
+        <div id="myChart"/>
+    </body>
+</html>
