@@ -93,18 +93,45 @@ package com.fiCharts.charts.chart2D.encry
 		
 		
 		
-		//----------------------------------
+		//----------------------------------------------------------------------------------------
 		//
-		// 数据缩放
+		// 数据 缩放与滚动处理访方式类似，缩放过程中和滚动过程中的
 		//
-		//-----------------------------------
+		// 性能开销很大，需优化区别对待
+		//
+		//
+		//  完成缩放时：
+		//  1.坐标轴计算计算尺寸缩放关系，生成新label数据， label位置偏移式定位； 
+		//  2.序列整体渲染， 截图整体序列和渲染节点，数据标签，供后继滚动用
+		//  3.背景网格全数据渲染，仅范围内可见
+		//  4.label容器，背景网格容器位置清零
+		//
+		//  开始滚动时：
+		//  1.序列截图呈现
+		//  2.坐标label容器， 背景网格和截图一起鼠标一起移动；
+		//  
+		//
+		//  移动结束时：
+		//  1.坐标轴根据移动位置计算新的取值范围，从而得出新的位置偏移量
+		//  2.根据新的数据范围渲染序列等
+		//  3.移除序列截图
+		//  (移动过程中坐标轴的fullSize没有变，数据范围差值没有变，刻度数据没有变，仅是移动幻象而已)
+		//  (尺寸缩放过程中进渲染一次全序列，其他都是局部序列渲染) 
+		//--------------------------------------------------------------------------------------
 		
 		/**
 		 */		
 		private function initDataResizeContorl():void
 		{
 			 stage.addEventListener(MouseEvent.MOUSE_DOWN, startScrollHadler, false, 0, true);
-			 stage.addEventListener(MouseEvent.MOUSE_UP, endScrollHadler);
+			 stage.addEventListener(MouseEvent.MOUSE_UP, stopMoveHandler);
+		}
+		
+		/**
+		 */		
+		private function stopMoveHandler(evt:MouseEvent):void
+		{
+			stage.removeEventListener(MouseEvent.MOUSE_MOVE, scrollDataHandler);
 		}
 		
 		/**
@@ -114,14 +141,19 @@ package com.fiCharts.charts.chart2D.encry
 			currentPosition = evt.stageX;
 			fullSize = this.sizeX / (this.dataEnd - this.dataStart);
 				
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, dataRangeScrollHandler);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, scrollDataHandler);
 		}
 		
 		/**
 		 */		
 		private function endScrollHadler(evt:MouseEvent):void
 		{
-			stage.removeEventListener(MouseEvent.MOUSE_MOVE, dataRangeScrollHandler);
+			ifSrollingData = false;
+			
+			for each (var aixs:AxisBase in  hAxises)
+				aixs.dataScrolled();
+			
+			stage.removeEventListener(MouseEvent.MOUSE_UP, endScrollHadler);
 		}
 		
 		/**
@@ -130,12 +162,35 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private function dataRangeScrollHandler(evt:MouseEvent):void
+		private function scrollDataHandler(evt:MouseEvent):void
 		{
-			var offset:Number = - (evt.stageX - currentPosition) / fullSize;
-			resizeData(this.dataStart + offset, this.dataEnd + offset);
-			currentPosition = evt.stageX;
+			if (dataStart == 0 && dataEnd == 1) return;
+			
+			var offset:Number = evt.stageX - currentPosition; 
+			
+			// 只要有一次移动距离大于特定值就证明开始了滚动
+			if (ifSrollingData == false && Math.abs(offset) >= 3)
+			{
+				ifSrollingData = true;
+				stage.addEventListener(MouseEvent.MOUSE_UP, endScrollHadler);
+			}
+			
+			if (ifSrollingData)
+			{
+				//var offset:Number = - (evt.stageX - currentPosition) / fullSize;
+				scrollData(offset);
+				currentPosition = evt.stageX;
+				
+				evt.updateAfterEvent();
+			}
 		}
+		
+		/**
+		 * 不是鼠标按下后一移动就还是数据滚动，而是移动一小段距离后才
+		 * 
+		 * 正式开始滚动数据
+		 */		
+		private var ifSrollingData:Boolean = false;
 		
 		/**
 		 */		
@@ -149,7 +204,7 @@ package com.fiCharts.charts.chart2D.encry
 		 * @param endIndex
 		 * 
 		 */		
-		private function resizeData(startPercent:Number, endPercent:Number):void
+		private function dataResized(startPercent:Number, endPercent:Number):void
 		{
 			if( startPercent >= 0 && startPercent <= 1 && endPercent >= 0 && endPercent <= 1)
 			{
@@ -165,7 +220,7 @@ package com.fiCharts.charts.chart2D.encry
 				{
 					// 坐标轴会驱动序列按照节点位置或数据范围方式完成
 					// 数据缩放
-					aixs.resizeData(dataStart, dataEnd);
+					aixs.dataResized(dataStart, dataEnd);
 					aixs.renderHoriticalAxis();
 				}
 				
@@ -173,6 +228,17 @@ package com.fiCharts.charts.chart2D.encry
 				gridField.render(this.hAxises[0].ticks, this.vAxises[0].ticks, chartModel.gridField);
 			}
 			
+		}
+		
+		/**
+		 * 数据滚动的过程中序列是不渲染的，只是移动的截图
+		 */		
+		private function scrollData(offset:Number):void
+		{
+			for each (var aixs:AxisBase in  hAxises)
+				aixs.srcollingData(offset);
+			
+			//gridField
 		}
 		
 		/**
@@ -335,6 +401,9 @@ package com.fiCharts.charts.chart2D.encry
 				GC.run();
 				ifRenderable = false;
 			}
+			
+			if (chartModel.ifDataScalable)
+				this.dataResized(this.dataStart, this.dataEnd);
 		}
 		
 		/**
@@ -448,7 +517,7 @@ package com.fiCharts.charts.chart2D.encry
 				axis.beforeRender();
 				axis.renderHoriticalAxis();
 				
-				temOffset = axis.width - axis.size;
+				temOffset = axis.minUintSize;
 				if (temOffset > hAxisLabelOffset)
 					hAxisLabelOffset = temOffset;
 				
@@ -472,7 +541,7 @@ package com.fiCharts.charts.chart2D.encry
 				axis.beforeRender();
 				axis.renderVerticalAxis();
 				
-				temOffset = axis.height - axis.size
+				temOffset = axis.minUintSize;
 				if (temOffset > vAxisLabelOffset)
 					vAxisLabelOffset = temOffset;
 				
@@ -812,7 +881,7 @@ package com.fiCharts.charts.chart2D.encry
 				BitmapUtil.drawWithSize(this.seriesContainer, this.sizeX, this.sizeY)
 				
 				var pre:Number = new Date().getTime()
-				resizeData(0.3, 0.6);
+				dataResized(0.3, 0.4);
 				var end:Number = new Date().getTime();
 				
 				trace(end - pre);

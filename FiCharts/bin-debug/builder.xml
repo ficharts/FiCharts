@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="Ficharts Builder" basedir="." default="Release FiCharts">
+	<property name="FLEX_HOME" value="I:/flex_sdk_4.6" />
+	<property name="WORK_SPACE" value="I:/项目/ficharts/FiCharts" />
+	<property name="VER" value="1.2.1" />
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" /> 
+	
+	<!--发布-->
+	<target name="Release FiCharts" depends="fresh release dir,Release Chart2D,Release Pie2D,Release FiCharts.SWC">
+		
+		<copy overwrite="true" todir="${WORK_SPACE}/FiCharts/release">
+			<fileset dir="${WORK_SPACE}/FiCharts/src">
+				<include name="version.txt" />
+			</fileset>
+		</copy>
+		
+		<copy overwrite="true" todir="${WORK_SPACE}/FiCharts/release">
+			<fileset dir="${WORK_SPACE}/FiCharts/src">
+				<include name="about.txt"/>
+			</fileset>
+		</copy>
+		
+		<copy overwrite="true" todir="${WORK_SPACE}/FiCharts/release">
+			<fileset dir="${WORK_SPACE}/FiCharts/src">
+				<include name="FiCharts.js" />
+			</fileset>
+		</copy>
+		
+		<copy overwrite="true" todir="${WORK_SPACE}/FiCharts/release">
+			<fileset dir="${WORK_SPACE}/FiCharts/html-template">
+				<include name="index.template.html" />
+				<include name="chart2dData.xml" />
+				<include name="pieData.xml" />
+			</fileset>
+		</copy>
+		<rename src="${WORK_SPACE}/FiCharts/release/index.template.html" dest="${WORK_SPACE}/FiCharts/release/demo.html"/>
+		
+		<zip destfile="${WORK_SPACE}/FiCharts/release/FiCharts(${VER}).zip"
+		       basedir="${WORK_SPACE}/FiCharts/release"
+		       update="true"
+		 />
+			
+	</target>
+	
+	<target name="Release Chart2D">
+		<mxmlc file="${WORK_SPACE}/FiCharts/src/Chart2D.as" output="${WORK_SPACE}/FiCharts/release/Chart2D.swf" 
+			actionscript-file-encoding="UTF-8" keep-generated-actionscript="false" incremental="false"
+			static-link-runtime-shared-libraries="true">
+			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+			<source-path path-element="${FLEX_HOME}/frameworks"/>
+			<library-path dir="${WORK_SPACE}/FiCharts/libs" includes="*.swc" />
+			<library-path dir="${FLEX_HOME}/frameworks/libs" includes="framework.swc"/>
+			<compiler.debug>false</compiler.debug>
+		</mxmlc>
+	</target>
+	
+	<target name="Release Pie2D">
+			<mxmlc file="${WORK_SPACE}/FiCharts/src/Pie2D.as" output="${WORK_SPACE}/FiCharts/release/Pie2D.swf" 
+				actionscript-file-encoding="UTF-8" keep-generated-actionscript="false" incremental="false"
+				static-link-runtime-shared-libraries="true">
+				<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+				<source-path path-element="${FLEX_HOME}/frameworks"/>
+				<library-path dir="${WORK_SPACE}/FiCharts/libs" includes="*.swc" />
+				<library-path dir="${FLEX_HOME}/frameworks/libs" includes="framework.swc"/>
+				<compiler.debug>false</compiler.debug>
+			</mxmlc>
+		</target>
+	
+	<target name="Release FiCharts.SWC">
+        <compc 
+            output="${WORK_SPACE}/FiCharts/release/FiCharts.swc"
+            include-classes="Chart2D,Pie2D">
+            <source-path path-element="${basedir}/"/>
+        	<library-path dir="${WORK_SPACE}/FiCharts/libs" includes="*.swc" />
+        	<library-path dir="${FLEX_HOME}/frameworks/libs" includes="framework.swc"/>
+        </compc>
+    </target>
+	
+	<target name="fresh release dir" >
+		<delete dir="${WORK_SPACE}/FiCharts/release"/>
+		<mkdir dir="${WORK_SPACE}/FiCharts/release"/>
+	</target>
+
+</project>
