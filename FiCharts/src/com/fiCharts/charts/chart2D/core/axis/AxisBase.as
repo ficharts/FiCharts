@@ -1,5 +1,6 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -57,20 +58,20 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			if (this.direction == HORIZONTAL_AXIS)
 			{
-				currentLabelCanvasPos += offset;
+				currentScrollPos += offset;
 				
-				if (currentLabelCanvasPos <= offsetSize && currentLabelCanvasPos >= minScrollPos)
-					this.labelUIsCanvas.x = currentLabelCanvasPos;
-				else if (currentLabelCanvasPos > offsetSize)
-					this.labelUIsCanvas.x = currentLabelCanvasPos = offsetSize;
-				else if (currentLabelCanvasPos < minScrollPos)
-					this.labelUIsCanvas.x = currentLabelCanvasPos = minScrollPos;
+				if (currentScrollPos <= offsetSize && currentScrollPos >= minScrollPos)
+					this.labelUIsCanvas.x = currentScrollPos;
+				else if (currentScrollPos > offsetSize)
+					this.labelUIsCanvas.x = currentScrollPos = offsetSize;
+				else if (currentScrollPos < minScrollPos)
+					this.labelUIsCanvas.x = currentScrollPos = minScrollPos;
 			}
 		}
 		
 		/**
 		 */		
-		protected var currentLabelCanvasPos:Number = 0;
+		public var currentScrollPos:Number = 0;
 		
 		/**
 		 */		

@@ -18,13 +18,17 @@ package com.fiCharts.charts.chart2D.core.events
 		 * 渲染数据范围内的数值标签
 		 */		
 		public static const RENDER_SIZED_VALUE_LABELS:String = 'renderSizedValueLabels';
-			
+		
+		/**
+		 *  坐标轴是滚动的基准，驱动背景网格和序列截图的位置移动
+		 */		
+		public static const SCROLL_UIS:String = "scrollUIs"
 			
 		/**
 		 */			
 		public function DataResizeEvent(type:String, start:Number = 0, end:Number = 0)
 		{
-			super(type, false);
+			super(type, true);
 			
 			this.start = start;
 			this.end = end;

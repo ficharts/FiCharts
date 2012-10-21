@@ -33,7 +33,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			setFullSizeAndOffsize();
 			
 			minScrollPos =  offsetSize + size - this.fullSize;
-			this.labelUIsCanvas.x = currentLabelCanvasPos = 0;// 数据缩放后尺寸有了新的关系
+			this.labelUIsCanvas.x = currentScrollPos = 0;// 数据缩放后尺寸有了新的关系
 			this.unitSize = fullSize / this.labelsData.length;
 			
 			changed = true;

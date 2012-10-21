@@ -131,17 +131,21 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function stopMoveHandler(evt:MouseEvent):void
 		{
-			stage.removeEventListener(MouseEvent.MOUSE_MOVE, scrollDataHandler);
+			if(chartModel.ifDataScalable)
+				stage.removeEventListener(MouseEvent.MOUSE_MOVE, scrollDataHandler);
 		}
 		
 		/**
 		 */		
 		private function startScrollHadler(evt:MouseEvent):void
 		{
-			currentPosition = evt.stageX;
-			fullSize = this.sizeX / (this.dataEnd - this.dataStart);
+			if(chartModel.ifDataScalable)
+			{
+				currentPosition = evt.stageX;
+				fullSize = this.sizeX / (this.dataEnd - this.dataStart);
 				
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, scrollDataHandler);
+				stage.addEventListener(MouseEvent.MOUSE_MOVE, scrollDataHandler);
+			}
 		}
 		
 		/**
@@ -216,35 +220,35 @@ package com.fiCharts.charts.chart2D.encry
 				// 每次都会重新绘制   数值标签， 只有范围内的数值标签才会被渲染，其他都被清空掉；
 				this.clearValueLabels();
 				
-				for each (var aixs:AxisBase in  hAxises)
-				{
-					// 坐标轴会驱动序列按照节点位置或数据范围方式完成
-					// 数据缩放
-					aixs.dataResized(dataStart, dataEnd);
-					aixs.renderHoriticalAxis();
-				}
+				// 坐标轴会驱动序列按照节点位置或数据范围方式完成, 序列再驱动渲染节点等的更新
+				scrollBaseAxis.dataResized(dataStart, dataEnd);
+				scrollBaseAxis.renderHoriticalAxis();
 				
 				this.combileItemRender();
 				gridField.render(this.hAxises[0].ticks, this.vAxises[0].ticks, chartModel.gridField);
 			}
-			
 		}
+		
+		/**
+		 * 目前仅横向支持数据滚动
+		 */		
+		private var scrollBaseAxis:AxisBase;
 		
 		/**
 		 * 数据滚动的过程中序列是不渲染的，只是移动的截图
 		 */		
 		private function scrollData(offset:Number):void
 		{
-			for each (var aixs:AxisBase in  hAxises)
-				aixs.srcollingData(offset);
-			
-			//gridField
+			scrollBaseAxis.srcollingData(offset);
+			this.gridField.scrollHGrid(scrollBaseAxis.currentScrollPos);
 		}
 		
 		/**
+		 * 绘制序列的数值标签
 		 */		
 		private function drawResizeValueLabels(evt:DataResizeEvent):void
 		{
+			evt.stopPropagation();
 			this.drawValueLabels(evt.sizedItemRenders);
 		}
 		
@@ -285,7 +289,6 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			_customConfig = value;
 		}
-
 		
 		/**
 		 * 默认如果存在用户配置文件则后继的配置都要继承预先配置文件；
@@ -937,7 +940,6 @@ package com.fiCharts.charts.chart2D.encry
 				
 				gridField.y = topY;
 				
-				
 				drawMask(seriesMask);
 				drawMask(itemRendersMask);
 				
@@ -1282,7 +1284,13 @@ package com.fiCharts.charts.chart2D.encry
 						(seriesItem as BubbleSeries).radiusAxis = this.bubbleRadiusAxis;
 					}
 				}
+				
+				//目前仅横轴方向支持数据滚动和缩放，并且仅单轴支持
+				if (chartModel.ifDataScalable)
+					scrollBaseAxis = hAxises[0];
 			}
+			
+			
 			
 		}
 		
@@ -1299,8 +1307,6 @@ package com.fiCharts.charts.chart2D.encry
 				{
 					seriesItem.configed(this.chartModel.series.colorMananger);// 图表整体配置完毕， 可以开始子序列的定义了；					
 					seriesItem.dataProvider = this.dataXML;
-					seriesItem.addEventListener(DataResizeEvent.RENDER_SIZED_VALUE_LABELS, drawResizeValueLabels, false, 0, true);
-					
 					
 					if (chartModel.legend.enable)
 						legends = legends.concat(seriesItem.legendData);
@@ -1547,8 +1553,8 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_LEGEND_STYLE, updateLegendStyleHandler);
 			
 			this.addEventListener(ItemRenderEvent.UPDATE_VALUE_LABEL, updateValueLabelHandler, false, 0, true);
+			this.addEventListener(DataResizeEvent.RENDER_SIZED_VALUE_LABELS, drawResizeValueLabels, false, 0, true);
 		}
-		
 		
 		/**
 		 * @return 
