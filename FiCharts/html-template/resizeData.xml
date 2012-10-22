@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config precision="2" title="2011年全球手机销量" ySuffix="亿部" ifDataScalable='true'>
+    <axis>
+        <x title="厂商" type="linear" ifTickCenter="true"/>
+        <y title="销量" type="linear"/>
+    </axis>
+    <series>
+        <area xField="label" yField="value"/>
+    </series>
+    <gridField>
+    	<vGrid>
+    		<border color='E2E2E2' thikness='1'/>
+		</vGrid>
+    </gridField>
+    <data>
+        <set label="1" value="4.171"/>
+        <set label="5" value="3.294"/>
+        <set label="6" value="0.932"/>
+        <set label="10" value="0.881"/>
+        <set label="15" value="0.661"/>
+        <set label="30" value="5.521"/>
+        <set label="45" value="4.171"/>
+        <set label="50" value="3.294"/>
+        <set label="66" value="5.932"/>
+        <set label="80" value="1.881"/>
+        <set label="89" value="2.661"/>
+        <set label="100" value="5.521"/>
+        <set label="110" value="4.171"/>
+        <set label="115" value="3.294"/>
+        <set label="126" value="0.932"/>
+        <set label="130" value="0.881"/>
+        <set label="150" value="0.661"/>
+        <set label="160" value="5.521"/>
+        <set label="188" value="4.171"/>
+        <set label="200" value="3.294"/>
+        <set label="230" value="5.932"/>
+        <set label="245" value="1.881"/>
+        <set label="260" value="2.661"/>
+        <set label="280" value="5.521"/>
+    </data>
+</config>
