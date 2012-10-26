@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>数据节点介绍</title>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">数据节点介绍</div>
+			<div id="content">
+
+				<p>就像点构成线一样，姿态万千的图表也是由数据节点构成。图表初始化时，原始数据中每条数据都会映射为一个对象，称作“数据节点”，对象属性对应原始数据中的字段。数学中的点仅有<span class="code">x,y</span>坐标信息，图表中的数据节点不仅有<span class="code">x,y</span>值，还可包含颜色，信息提示等任意多个扩展属性，数据节点包含如下属性：</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width="20%">属性</td>
+								<td width="20%">类型</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class="code">xValue</span></td>
+								<td>String/Number</td>
+								<td>节点<span class="code">x</span>值</td>
+							</tr>
+							<tr>
+								<td><span class="code">yValue</span></td>
+								<td>String/Number</td>
+								<td>节点<span class="code">y</span>值</td>
+							</tr>
+							<tr>
+								<td><span class="code">zValue</span></td>
+								<td>String/Number</td>
+								<td>通常在气泡图，100%堆积图中才会用到，对应气泡图中的<span class="code">bubbleField</span>映射数据或者100%堆积图中自动计算而来的百分比值。</td>
+							</tr>
+							<tr>
+								<td><span class="code">color</span></td>
+								<td>uint</td>
+								<td>节点颜色，16进制颜色值</td>
+							</tr>
+							<tr>
+								<td><span class="code">seriesName</span></td>
+								<td>String</td>
+								<td>所属序列名称</td>
+							</tr>
+							<tr>
+								<td><span class="code">xDisplayName</span></td>
+								<td>String</td>
+								<td>对应<span class=“code”>x</span>轴标题</td>
+							</tr>
+							<tr>
+								<td><span class="code">yDisplayName</span></td>
+								<td>String</td>
+								<td>对应<span class=“code”>y</span>轴标题</td>
+							</tr>
+							<tr>
+								<td><span class="code">zDisplayName</span></td>
+								<td>String</td>
+								<td>气泡图，100%堆积图中才会用到，并通过序列<span class=“code”>zDisplayName</span>定义，<span class="code">z</span>维度名称</td>
+							</tr>
+							<tr>
+								<td><span class="code">xLabel</span></td>
+								<td>String</td>
+								<td><span class="code">xValue</span>添加前缀后缀后得到</td>
+							</tr>
+							<tr>
+								<td><span class="code">yLabel</span></td>
+								<td>String</td>
+								<td><span class="code">yValue</span>添加前缀后缀后得到</td>
+							</tr>
+							<tr>
+								<td><span class="code">zLabel</span></td>
+								<td>String</td>
+								<td><span class="code">zValue</span>添加前缀后缀后得到</td>
+							</tr>
+							<tr>
+								<td><span class="code">valueLabel</span></td>
+								<td>String</td>
+								<td>用于此节点的数值显示，通常等于<span class="code">yLabel</span>; 气泡图，百分百堆积图中等于<span class="code">zLabel</span>；条形图中等于<span class="code">xLabel</span></td>
+							</tr>
+							<tr>
+								<td><span class="code">tooltip</span></td>
+								<td>String</td>
+								<td>信息提示内容，由<span class="code">seriesName, xLabel, yLabel, zLabel, xDisplayName, yDisplayName, zDisplayName</span>拼装而来，全面显示此节点信息。</td>
+							</tr>
+							
+						</tbody>
+
+					</table>
+				</div>
+				<p>数据节点隶属于序列，是序列图形化显示的根本，也能反映此序列特性。例如，数据节点的<span class="code">xValue</span>值是根据序列<span class="code">xField</span>从原始数据中抽取；数据节点的<span class="code">seriesName</span>是所属序列的名称。</p>
+
+				<p class="subTitle">数据源</p>
+				<p>图表中数据显示需要数据源，例如：信息提示，<span class="code">y</span>值等。数据节点是最常用到的数据源，为了更好服务数据显示，数据节点会扩展一些新属性值，扩展属性包含三大类：</p>
+				<ul>
+					<li>1.原始数据，原始数据中除了必备的<span class="code">x,y</span>值外，可添加任意多个其他属性。</li>
+					<li>2.注入数据，节点颜色通常是由图表自动分配，然后将颜色值注入到数据节点中。</li>
+					<li>3.格式化数据，原始数据字段经过添加前缀后缀，拼接组合等格式化过程变成新的属性。</li>
+				</ul>
+				
+				<p>有了扩展属性您就无需再拼装常见的数据显示，直接从数据节点中获取便可。例如信息提示中包含序列名称，<span class="code">x,y</span>值，图表初始化时会将它们拼装好并赋给数据节点的<span class="code">tooltip</span>属性，显示时通过<span class="code">tooltip</span>便可获取。庆幸的是最后一步您都可以省略，因为<span class="code">tooltip</span>是信息提示默认值，<span class="code">ficharts</span>中常用到的数据显示都有默认值，除非他们不能满足你的要求，您再利用数据节点等数据源中的信息自由拼装，否则仅需选择开启或是关闭某项信息显示。</p>								
+
+				<p>数据源除了数据节点外，还有图例，坐标轴数据显示所用到的数据源。单序列下，图例的数据源就是此序列的数据节点，一个节点对应一个图例节点；多维序列或者多序列下序列自身就是图例的数据源，一个序列对应一个图例节点。坐标轴的数据源比较奇葩，是自动计算而来，每个刻度对应一个刻度节点，刻度节点作为数据源，包含刻度值<span class="code">value</span>和加了前后缀的<span class="code">label</span>及颜色, 颜色值为所属序列颜色。</p>
+
+				<p class="subTitle">数据源的使用</p>
+				<p>利用数据可以灵活定义数据显示与图表样式，从数据源中获取颜色指定给气泡图中的气泡，拼装数据字段更全面的信息提示，图表的灵活高级自定义正是因数据源而风采无限；在数据钻取中通过鼠标点击获取整个数据节点，有了详细全面的节点数据想怎么钻就怎么钻，有了数据您就是王者。</p>
+				<p>数据源中的数据不是一定要用到的，例如坐标轴颜色默认就不跟随数据源的<span class="code">color</span>，而是固定值，多坐标轴下颜色才更派的上用场。数据源是动，固定配置是静，合理结合两者，来去自如才是图表高级自定义的关键。</p>
+
+			</div>
+		</div>
+	</body>
+</html>

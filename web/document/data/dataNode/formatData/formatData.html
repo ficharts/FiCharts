@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>数据格式化</title>
+		<script type="text/javascript">
+			(function() {
+
+				$(function(){
+
+					var mainChart = new Chart2D({id: 'chart', width: '100%', height: 500, configFile: './data/dataNode/formatData/config.xml'})
+
+
+					$.get("./data/dataNode/formatData/config.xml", function(data) {
+						$('pre#config').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+
+					$.get("./data/dataNode/formatData/simpleConfig.xml", function(data) {
+						$('pre#simpleConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+				})
+
+			})()
+
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">数据格式化</div>
+			<div id="content">
+				<p>数据格式化指的是给原始数据添加前缀后缀，四舍五入小数点位，货币格式显示数据等。<span class='code'>ficharts</span>的数据格式化分全局和局部两种模式。</p>
+				<p class='subTitle'>全局格式化</p>
+				<p>配置文件中<span class='code'>dataFormatter</span>节点定义全局数据节点的格式：参数如下：</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>取值范围</td>
+								<td width='15%'>默认值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>xSuffix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>x</span>值的后缀</td>
+							</tr>
+							<tr>
+								<td><span class='code'>ySuffix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>y</span>值的后缀</td>
+							</tr>
+							<tr>
+								<td><span class='code'>zSuffix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>z</span>值的后缀, 堆积/气泡图中才会用到<span class='code'>z</span></td>
+							</tr>
+							<tr>
+								<td><span class='code'>xPrefix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>x</span>值的前缀</td>
+							</tr>	
+							<tr>
+								<td><span class='code'>yPrefix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>y</span>值的前缀</td>
+							</tr>	
+							<tr>
+								<td><span class='code'>zPrefix</span></td>
+								<td>任意字符</td>
+								<td>为空</td>
+								<td><span class='code'>z</span>值的前缀, 堆积/气泡图中才会用到<span class='code'>z</span></td>
+							</tr>	
+
+							<tr>
+								<td><span class='code'>precision</span></td>
+								<td>非负整数</td>
+								<td>0</td>
+								<td>保留小数点位数，仅对数字类型数据有效</td>
+							</tr>	
+							<tr>
+								<td><span class='code'>useGrouping</span></td>
+								<td><span class='code'>true/false</span></td>
+								<td>false</td>
+								<td>是否群组方式显示数据，如数字<span class='code'>325,682</span>设置了<span class='code'>useGrouping</span>为<span class='code'>true</span>后显示为<span class='code'>325,682</span>，此特性在显示货币类型数据时会用到。</td>
+							</tr>	
+
+						</tbody>
+					</table>
+				</div>
+				<p>全局格式化了数据后所有信息提示，包括坐标轴都会受益，都会被同步格式化，因为用于他们的默认数据都是经过<span class='code'>dataFormatter</span>格式化过，可谓一次设置，遍地开花。例如，数据节点会把格式化后的<span class='code'>xValue</span>值存在<span class='code'>xLbel</span>属性中，用到的地方默认以<span class='code'>xLabel</span>显示，省去了每个信息显示位置都需要格式化一遍数据的工作。聪明的您肯定在想：‘我要格式化局部数据咋办？’，好问题！</p>
+				<p class='subTitle'>局部格式化数据</p>
+				<p>局部格式化数据需用到动态函数(以动态函数标签<span class='code'>{}</span>包裹)和原数据引用(以原数据标签<span class='code'>${}</span>包裹)，<span class='code'>{}</span>紧随<span class='code'>${}</span>标签， 例如<span class='code'>${xValue}{round:2}</span>表示把数据源中的<span class='code'>xValue</span>以保留两位小数方式显示。元数据标签前后加上其他字符被包裹起来后就如同数据有了前缀后缀，如果有动态函数，元数据标签与动态函数标签必须紧密相连，中间不得插入任何内容。</p>
+
+				<p>请仔细体会一下下面的配置文件：</p>
+				<div class="codeWrapper"><pre id="config" class="prettyprint"></pre></div>
+				<p>全局格式化给<span class='code'>y</span>值加了后缀，并保留两位小数；节点值被局部格式化，仅保留1为小数。</p>
+				<div id='chart'></div>
+				<p>全局数据格式化也可直接在配置文件的根节点定义，而且与在<span class='code'>dataFormatter</span>中定义方式相同：</p>
+				<div class="codeWrapper"><pre id="simpleConfig" class="prettyprint"></pre></div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>数据钻取</title>
+		<script type="text/javascript">
+			(function() {
+
+				$(function(){
+
+					var mainChart = new Chart2D({id: 'main', width: '100%', height: 500, configFile: './data/dataNode/dataInteraction/mainData.xml'})
+					var detailChart;
+
+					mainChart.onClicked(function(e){
+
+						if (e.data.xLabel == "Apple"){
+							if (typeof detailChart == 'undefined'){
+								detailChart = new Chart2D({id: 'detail', width: '100%', height: 500});
+								detailChart.setConfigFile('./data/dataNode/dataInteraction/detail.xml');
+							}
+							
+						}
+
+					});
+
+					$.get("./data/dataNode/dataInteraction/demo.html", function(data) {
+						$('pre#demo').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+
+					$.get("./data/dataNode/dataInteraction/mainData.xml", function(data) {
+						$('pre#mainConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+
+					$.get("./data/dataNode/dataInteraction/detail.xml", function(data) {
+						$('pre#subConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+
+				})
+
+			})()
+
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">数据钻取</div>
+			<div id="content">
+				<p>数据钻取是为了层层深入，更详细的查看数据，前提是要有完整数据，其次是鼠标交互对钻取的支持。展示方式分刷新图表自身数据，开启新图表和刷新附属图表数据。钻取过程是当鼠标点击某数据点时，<span class="code">html</span>页面捕捉到此事件，根据数据节点信息刷新图表配置和数据，得到与数据节点相关的更详细图表。先来看个例子：</p>
+				<div id="main"></div>
+				<p></p>
+				<div id="detail"></div>
+				<p>上图是2011年度全球手机销量信息，想进一步了解<span class="code">Apple</span>公司<span class="code">iPhone</span>每季度销量，点击<span class="code">Apple</span>的柱体(左起第3个柱体), 下方出现<span classs="code">iPnone</span>季度销量信息。样例代码如下：</p>
+				<div class="codeWrapper"><pre id="demo" class="prettyprint"></pre></div>
+				<p>先创建主图表，添加鼠标点击事件<span class="code">onClicked</span>, 事件对象的<span class="code">data</span>属性是节点对象, 仅当<span class="code">Apple</span>节点点击后才创建副表。主副表配置文件如下：</p>
+				<div class="codeWrapper"><pre id="mainConfig" class="prettyprint"></pre></div>
+				<div class="codeWrapper"><pre id="subConfig" class="prettyprint"></pre></div>
+			</div>
+		</div>
+	</body>
+</html>

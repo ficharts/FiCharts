@@ -19,10 +19,45 @@ package com.fiCharts.charts.chart2D.core.axis
 			super();
 		}
 		
+		/**
+		 * 
+		 */		
+		override public function dataResized(start:Number, end:Number):void
+		{
+			// 由数据关系推出尺寸关系
+			getCurrentDataRange(start, end);
+			
+			// 数据缩放时才重新创建label数据, 数据范围决定label数据
+			createLabelsData();
+			
+			setFullSizeAndOffsize();
+			
+			minScrollPos =  offsetSize + size - this.fullSize;
+			this.labelUIsCanvas.x = currentScrollPos = 0;// 数据缩放后尺寸有了新的关系
+			this.unitSize = fullSize / this.labelsData.length;
+			
+			changed = true;
+			
+			// 每次数据缩放时整个序列被渲染，用来产生截图用于后继数据滚动
+			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
+				this.sourceDataRange.min, sourceDataRange.max));
+		}
 		
 		/**
+		 * 滚动结束后，渲染数据范围内的序列
 		 */		
-		override public function resizeData(start:Number, end:Number):void
+		override public function dataScrolled():void
+		{
+			
+		}
+		
+		/**
+		 * 
+		 * @param start
+		 * @param end
+		 * 
+		 */		
+		private function getCurrentDataRange(start:Number, end:Number):void
 		{
 			var min:Number, max:Number;
 			min = start * this.sourceValueDis;
@@ -34,17 +69,38 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			currentDataRange.min = this.minimum;
 			currentDataRange.max = this.maximum;
-			
-			// 
-			setFullSizeAndOffsize();
-			this.setCurrentLabelsIndexRange();
-			
-			changed = true;
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
-				this.currentDataRange.min, currentDataRange.max));
 		}
 		
+		/**
+		 * 正式渲染之前调用; 子数据范围渲染前不调用此方法
+		 */		
+		override public function beforeRender():void
+		{
+			if (changed)
+			{
+				preMaxMin(sourceMax, sourceMin);
+				confirmMaxMin();
+				
+				currentDataRange.min = sourceDataRange.min = this.minimum;
+				currentDataRange.max = sourceDataRange.max = this.maximum;
+				
+				//获得最值差，供后继频繁计算用
+				confirmedSourceValueRange = sourceDataRange.max - sourceDataRange.min;
+				
+				this.createLabelsData();
+				setFullSizeAndOffsize();
+				
+			}
+		}
+		
+		/**
+		 * 每次数据缩放后续重新计算尺寸关系，滚动结束后的当前数据范围数据渲染也需重设尺寸关系
+		 */		
+		private function setFullSizeAndOffsize():void
+		{
+			fullSize = this.size / (currentDataRange.max - currentDataRange.min) * confirmedSourceValueRange;
+			this.offsetSize = (currentDataRange.min - sourceDataRange.min) / confirmedSourceValueRange * fullSize;
+		}
 		
 		/**
 		 */		
@@ -154,7 +210,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			}
 			
 			sourceValueDis = sourceMax - sourceMin;
-			preMaxMin(sourceMax, sourceMin);
 			
 			super.dataUpdated();
 		}
@@ -162,36 +217,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 */		
 		protected var sourceValueDis:Number;
-		
-		/**
-		 * 正式渲染之前调用; 子数据范围渲染前不调用此方法
-		 */		
-		override public function beforeRender():void
-		{
-			if (changed)
-			{
-				confirmMaxMin();
-				
-				currentDataRange.min = sourceDataRange.min = this.minimum;
-				currentDataRange.max = sourceDataRange.max = this.maximum;
-				
-				//获得最值差，供后继频繁计算用
-				confirmedSourceValueRange = sourceDataRange.max - sourceDataRange.min;
-				
-				setFullSizeAndOffsize();
-				
-				this.createLabelsData();
-				setCurrentLabelsIndexRange();
-			}
-		}
-		
-		/**
-		 */		
-		private function setFullSizeAndOffsize():void
-		{
-			fullSize = this.size / (currentDataRange.max - currentDataRange.min) * confirmedSourceValueRange;
-			this.offsetSize = (currentDataRange.min - sourceDataRange.min) / confirmedSourceValueRange * fullSize;
-		}
 		
 		/**
 		 * 与判定最大最小值
@@ -231,8 +256,8 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			//最小单位值
 			var minUintValue:Number = 0;
-			if (horiMinUintSize <= size)
-				minUintValue = Math.max(horiMinUintSize / size * preValueDis, preValueDis / maxDepartLineAmount);
+			if (minUintSize <= size)
+				minUintValue = Math.max(minUintSize / size * preValueDis, preValueDis / maxDepartLineAmount);
 			else
 				minUintValue = preValueDis;
 			
@@ -286,7 +311,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 * 生成标签数据，划定显示标签的范围
+		 * 根据原始值和当前数据范围的数据间隔生成新label数据
 		 */		
 		private function createLabelsData():void
 		{
@@ -296,7 +321,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			//// Flash 中数字计算精度有偏差, 防止与最值及其相近的值蒙混过关
 			var maxValue:Number = this.sourceDataRange.max + interval - interval / 100000;
 			
-			// label数据每次重新构建
+			// internal 会随当前数值范围而变， 数据缩放时需重新计算labelData
 			for (var i:Number = this.sourceDataRange.min; i < maxValue; i += interval)
 			{
 				labelData = new AxisLabelData();
@@ -304,12 +329,12 @@ package com.fiCharts.charts.chart2D.core.axis
 				labelsData.push(labelData);
 			}
 			
-			horiLabelUIs.length = 0;
+			labelUIs.length = 0;
 			this.clearLabels()
 		}
 		
 		/**
-		 */		
+		 * 
 		private function setCurrentLabelsIndexRange():void
 		{
 			var length:uint = this.labelsData.length;
@@ -334,7 +359,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				}
 			}
 		}
-			
+		*/		
 		
 		/**
 		 * 原始值的最大最小值
@@ -462,10 +487,6 @@ package com.fiCharts.charts.chart2D.core.axis
 
 			return position;
 		}
-		
-		/**
-		 */		
-		private var offsetSize:Number = 0;
 		
 		/**
 		 */		

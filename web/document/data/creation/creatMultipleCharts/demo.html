@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>创建多个图表</title>
+    <script type="text/javascript" src="./ficharts/FiCharts.js">
+    </script>
+    <script type="text/javascript">
+            (function(){
+                var column = new Chart2D({
+                    id: 'columnChart',
+                    width: '100%',
+                    height: 500,
+                    configFile: './columnConfig.xml'
+                });
+                
+                var bar = new Chart2D({
+                    id: 'barChart',
+                    width: '100%',
+                    height: 500,
+                    configFile: './barConfig.xml'
+                });
+                
+            })();
+            
+        </script>
+</head>
+<body>
+    <div id="columnChart"></div>
+    <div id="barChart"></div>
+</body>
+</html>

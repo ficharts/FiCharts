@@ -1,5 +1,6 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -10,8 +11,11 @@ package com.fiCharts.charts.chart2D.core.axis
 	import com.fiCharts.utils.graphic.TextBitmapUtil;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
+	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
 
 	/**
@@ -33,15 +37,69 @@ package com.fiCharts.charts.chart2D.core.axis
 		public function AxisBase()
 		{
 			this.mouseChildren = this.mouseEnabled = false;
+			this.addChild(labelUIsCanvas);
+			addChild(labelsMask);
+			labelUIsCanvas.mask = labelsMask;
+		}
+		
+		
+		/**
+		 * 数据缩放后调用
+		 */		
+		public function dataResized(start:Number, end:Number):void
+		{
 			
 		}
 		
 		/**
+		 * 数据滚动过程中，仅是改变label容器的位置
+		 */		
+		public function srcollingData(offset:Number):void
+		{
+			if (this.direction == HORIZONTAL_AXIS)
+			{
+				currentScrollPos += offset;
+				
+				if (currentScrollPos <= offsetSize && currentScrollPos >= minScrollPos)
+					this.labelUIsCanvas.x = currentScrollPos;
+				else if (currentScrollPos > offsetSize)
+					this.labelUIsCanvas.x = currentScrollPos = offsetSize;
+				else if (currentScrollPos < minScrollPos)
+					this.labelUIsCanvas.x = currentScrollPos = minScrollPos;
+			}
+		}
+		
+		/**
+		 */		
+		public var currentScrollPos:Number = 0;
+		
+		/**
+		 */		
+		protected var offsetSize:Number = 0;
+		
+		/**
+		 */		
+		protected var minScrollPos:Number = 0;
+		
+		
+		/**
+		 * 滚动结束后，渲染数据范围内的序列
+		 */		
+		public function dataScrolled():void
+		{
+			
+		}
+		
+		
+		/**
+		 * 对于每此数据缩放，坐标轴仅需绘制一次，子数据的滚动只是移动label容器的位置而已
 		 */		
 		public function renderHoriticalAxis():void
 		{
 			if (changed)
 			{
+				this.labelsMask.graphics.clear();
+				
 				var labelUI:DisplayObject;
 				var axisLabel:LabelUI;
 				var length:uint = this.labelsData.length;
@@ -52,48 +110,39 @@ package com.fiCharts.charts.chart2D.core.axis
 				
 				// 横向的最小间距不能小于Label的宽度， 这里要先获取这个宽度，从而决定单元间隔数
 				var i:uint;
-				if (horiLabelUIs.length == 0)
-					horiLabelUIs.length = length;
-				
-				// 动态创建label， 不重复创建
-				for (i = labelStartIndex; i <= labelEndIndex; i ++)
+				for (i = 0; i < length; i ++)
 				{
 					if (this.enable)
 					{
-						if (horiLabelUIs[i] == null)
-						{
-							labelsData[i].label = this.getXLabel(labelsData[i].value);
-							labelsData[i].color = this.metaData.color;
-							
-							axisLabel = new LabelUI();
-							axisLabel.style = this.label;
-							axisLabel.metaData = labelsData[i];
-							
-							// 如果label换行显示，那么先以单元宽度为准
-							if (this.labelDisplay == LabelStyle.WRAP)
-								axisLabel.maxLabelWidth = this.unitSize;
-							
-							axisLabel.render();
+						labelsData[i].label = this.getXLabel(labelsData[i].value);
+						labelsData[i].color = this.metaData.color;
 						
-							if (label.layout == LabelStyle.VERTICAL)
-							{
-								if (axisLabel.height > horiMinUintSize)
-									horiMinUintSize = axisLabel.height;
-							}
-							else
-							{
-								if (axisLabel.width > horiMinUintSize)
-									horiMinUintSize = axisLabel.width;
-							}
-							
-							//
-							labelUI = horiLabelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
-							labelUI.visible = false;
-							addChild(labelUI);
-							
-							axisLabel = null;
+						axisLabel = new LabelUI();
+						axisLabel.style = this.label;
+						axisLabel.metaData = labelsData[i];
+						
+						// 如果label换行显示，那么先以单元宽度为准
+						if (this.labelDisplay == LabelStyle.WRAP)
+							axisLabel.maxLabelWidth = this.unitSize;
+						
+						axisLabel.render();
+					
+						if (label.layout == LabelStyle.VERTICAL)
+						{
+							if (axisLabel.height > minUintSize)
+								minUintSize = axisLabel.height;
+						}
+						else
+						{
+							if (axisLabel.width > minUintSize)
+								minUintSize = axisLabel.width;
 						}
 						
+						// 这里的labelUI可考虑用bitmap data绘制来优化渲染
+						labelUI = labelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
+						labelUIsCanvas.addChild(labelUI);
+						
+						axisLabel = null;
 					}
 					
 				}
@@ -101,30 +150,22 @@ package com.fiCharts.charts.chart2D.core.axis
 				//保证标签间距大于最小单元宽度， 防止标签重叠；
 				var addFactor:uint = 1;
 				var uintAmount:uint = length;
-				while (this.fullSize > 0 && (this.fullSize / uintAmount) < this.horiMinUintSize)
+				while (this.fullSize > 0 && (this.fullSize / uintAmount) < this.minUintSize)
 				{
 					addFactor += 1;
 					uintAmount = length / addFactor;
 				}
 				
-				// 先隐藏所有label
-				for (i = 0; i < length; i ++)
-				{
-					labelUI = horiLabelUIs[i];
-					if (labelUI && labelUI.visible)
-						labelUI.visible = false;
-				}
-				
 				// 布局和显示数据范围内的label
 				_ticks = new Vector.<Number>();
-				for (i = labelStartIndex; i <= labelEndIndex; i += addFactor)
+				for (i = 0; i < length; i += addFactor)
 				{
 					valuePositon = valueToX(labelsData[i].value);
 					_ticks.push(valuePositon);
 					
 					if (this.enable)
 					{
-						labelUI = horiLabelUIs[i];
+						labelUI = labelUIs[i];
 						
 						if (label.layout == LabelStyle.ROTATION)
 						{
@@ -148,14 +189,10 @@ package com.fiCharts.charts.chart2D.core.axis
 						
 						labelUI.x = valuePositon + labelX;
 						
-						if (valuePositon >= 0 && valuePositon <= this.size)
-							labelUI.visible = true;
-						
 						if (this.position == 'bottom')
 							labelUI.y = label.margin + labelY;
 						else
 							labelUI.y = - label.margin - labelY - labelUI.height;
-						
 					}
 				}
 				
@@ -167,13 +204,27 @@ package com.fiCharts.charts.chart2D.core.axis
 				if (enable && this.tickMark.enable)
 					drawHoriTicks();
 				
+				this.labelsMask.graphics.beginFill(0);
+				this.labelsMask.graphics.drawRect(- minUintSize / 2, 0, 
+					this.size + this.minUintSize, this.labelUIsCanvas.height);
+				labelsMask.graphics.endFill();
+				
 				changed = false;
 			}
 		}
 		
 		/**
 		 */		
-		protected var horiLabelUIs:Array = [];
+		private var labelsMask:Shape = new Shape;
+		
+		/**
+		 */		
+		protected var labelUIs:Array = [];
+		
+		/**
+		 * label的容器用来数据缩放时整体移动label，辅助遮罩效果
+		 */		
+		protected var labelUIsCanvas:Sprite = new Sprite;
 		
 		/**
 		 */		
@@ -183,14 +234,11 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 * 最小单元格高度
-		 * (小于等于这个高度的时候将不再压缩轴)
+		 * 
+		 * 这个值有可能比uinitSize要大，取决于label的尺寸
+		 * 
 		 */
-		protected var horiMinUintSize:uint = 10;
-		
-		/**
-		 */		
-		protected var verticalMinUinitSize:uint = 15;
+		public var minUintSize:uint = 10;
 		
 		/**
 		 */		
@@ -198,7 +246,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			if (changed)
 			{
-				clearLabels(); 
+				this.labelsMask.graphics.clear();
 				
 				_ticks = new Vector.<Number>();
 				
@@ -210,33 +258,56 @@ package com.fiCharts.charts.chart2D.core.axis
 				var labelX:Number;
 				var labelY:Number;
 				
-				var axisLabelFormat:TextFormat = label.getTextFormat(metaData);
-				
-				//保证标签间距大于最小单元宽度， 防止标签重叠；
-				var addFactor:uint = 1;
-				var uintAmount:uint = length;
-				while (size > 0 && (this.size / uintAmount) < this.verticalMinUinitSize)
+				var i:uint;
+				for (i = 0; i < length; i ++)
 				{
-					addFactor += 1;
-					uintAmount = length / addFactor;
-				}
-				
-				for (var i:uint = labelStartIndex; i <= labelEndIndex; i += addFactor)
-				{
-					valuePositon = valueToY(labelsData[i].value);
-					_ticks.push(valuePositon);
-					
-					if (enable)
+					if (this.enable)
 					{
-						labelsData[i].label = this.getYLabel(labelsData[i].value);
+						labelsData[i].label = this.getXLabel(labelsData[i].value);
 						labelsData[i].color = this.metaData.color;
 						
 						axisLabel = new LabelUI();
 						axisLabel.style = this.label;
 						axisLabel.metaData = labelsData[i];
 						axisLabel.render();
-						labelUI = TextBitmapUtil.drawUI(axisLabel);
+						
+						if (label.layout == LabelStyle.ROTATION)
+						{
+							if (axisLabel.width > minUintSize)
+								minUintSize = axisLabel.width;
+						}
+						else
+						{
+							if (axisLabel.height > minUintSize)
+								minUintSize = axisLabel.height;
+						}
+						
+						// 这里的labelUI可考虑用bitmap data绘制来优化渲染
+						labelUI = labelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
+						labelUIsCanvas.addChild(labelUI);
+						
 						axisLabel = null;
+					}
+					
+				}
+				
+				//保证标签间距大于最小单元宽度， 防止标签重叠；
+				var addFactor:uint = 1;
+				var uintAmount:uint = length;
+				while (fullSize > 0 && (this.fullSize / uintAmount) < this.minUintSize)
+				{
+					addFactor += 1;
+					uintAmount = length / addFactor;
+				}
+				
+				for (i = 0; i < length; i += addFactor)
+				{
+					valuePositon = valueToY(labelsData[i].value);
+					_ticks.push(valuePositon);
+					
+					if (enable)
+					{
+						labelUI = labelUIs[i];
 						
 						if (label.layout == LabelStyle.ROTATION)
 						{
@@ -260,7 +331,6 @@ package com.fiCharts.charts.chart2D.core.axis
 							labelUI.x = label.margin;
 						
 						labelUI.y = valuePositon + labelY;
-						addChild(labelUI);
 					}
 				}
 				
@@ -272,10 +342,16 @@ package com.fiCharts.charts.chart2D.core.axis
 				if (enable && tickMark.enable)
 					drawVertiTicks();
 				
+				this.labelsMask.graphics.beginFill(0);
+				this.labelsMask.graphics.drawRect(0, minUintSize / 2, - this.labelUIsCanvas.width, - this.size - this.minUintSize);
+				labelsMask.graphics.endFill();
+				
 				changed = false;
 			}
 		}
 		
+		/**
+		 */		
 		protected function adjustVertiTicks():void
 		{
 		}
@@ -285,16 +361,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		protected function drawHoriTicks():void
 		{
 			// 绘制刻度线
-			StyleManager.setLineStyle(graphics, tickMark);
+			StyleManager.setLineStyle(this.labelUIsCanvas.graphics, tickMark);
 			
 			for (var i:uint = 1; i < ticks.length - 1; i ++)
 			{
-				graphics.moveTo(ticks[i], 0);
+				labelUIsCanvas.graphics.moveTo(ticks[i], 0);
 				
 				if (position == 'bottom')
-					graphics.lineTo(ticks[i], tickMark.size);
+					labelUIsCanvas.graphics.lineTo(ticks[i], tickMark.size);
 				else
-					graphics.lineTo(ticks[i], - tickMark.size);
+					labelUIsCanvas.graphics.lineTo(ticks[i], - tickMark.size);
 			}
 		}
 		
@@ -303,15 +379,15 @@ package com.fiCharts.charts.chart2D.core.axis
 		protected function drawVertiTicks():void
 		{
 			// 绘制刻度线
-			StyleManager.setLineStyle(graphics, tickMark);
+			StyleManager.setLineStyle(labelUIsCanvas.graphics, tickMark);
 			
 			for (var i:uint = 1; i < ticks.length - 1; i ++)
 			{
-				graphics.moveTo(0, ticks[i]);
+				labelUIsCanvas.graphics.moveTo(0, ticks[i]);
 				if (position == "left")
-					graphics.lineTo(- tickMark.size, ticks[i]);
+					labelUIsCanvas.graphics.lineTo(- tickMark.size, ticks[i]);
 				else
-					graphics.lineTo(tickMark.size, ticks[i]);
+					labelUIsCanvas.graphics.lineTo(tickMark.size, ticks[i]);
 			}
 		}
 		
@@ -319,9 +395,11 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		protected function createHoriticalTitle():void
 		{
+			if(titleLabel.parent)
+				this.removeChild(titleLabel);
+			
 			if (title.text.value)
 			{
-				var titleLabel:LabelUI = new LabelUI();
 				titleLabel.style = title;
 				titleLabel.metaData = this.metaData;
 				titleLabel.render();
@@ -333,23 +411,32 @@ package com.fiCharts.charts.chart2D.core.axis
 				else
 					titleLabel.y = - height - title.margin - titleLabel.height;
 				
-				addChild(titleLabel);
+				this.addChild(titleLabel);
 			}
 		}
 		
 		/**
 		 */		
+		private var titleLabel:LabelUI = new LabelUI;
+		
+		/**
+		 */		
+		private var titileBitmap:Bitmap;
+		
+		/**
+		 */		
 		protected function createVerticalTitle():void
 		{
+			if(titileBitmap && titileBitmap.parent)
+				this.removeChild(titileBitmap);
+			
 			if (title.text.value)
 			{
-				var titleLabel:LabelUI = new LabelUI();
 				titleLabel.metaData = this.metaData;
 				titleLabel.style = title;
 				titleLabel.render();
 				
-				var titileBitmap:Bitmap = TextBitmapUtil.drawUI(titleLabel);
-				titleLabel = null;
+				titileBitmap = TextBitmapUtil.drawUI(titleLabel);
 				titileBitmap.rotation =  - 90;
 				
 				if(this.position == "left")
@@ -367,9 +454,9 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		protected function clearLabels() : void
 		{
-			graphics.clear();
-			while ( numChildren > 0 )
-				removeChildAt( 0 );
+			this.labelUIsCanvas.graphics.clear();
+			while (labelUIsCanvas.numChildren > 0)
+				labelUIsCanvas.removeChildAt(0);
 		}
 		
 		
@@ -425,16 +512,6 @@ package com.fiCharts.charts.chart2D.core.axis
 				label.enable = true;
 			
 			changed = true;
-		}
-		
-		/**
-		 * 
-		 * @param from
-		 * @param to
-		 * 
-		 */		
-		public function resizeData(start:Number, end:Number):void
-		{
 		}
 		
 		/**

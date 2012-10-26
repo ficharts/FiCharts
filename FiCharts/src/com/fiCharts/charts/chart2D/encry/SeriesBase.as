@@ -57,6 +57,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function dataResizedByIndex(evt:DataResizeEvent):void
 		{
+			evt.stopPropagation();
+			
 			dataOffsetter.minIndex = evt.start;
 			dataOffsetter.maxIndex = evt.end;
 			
@@ -73,6 +75,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function dataResizedByRange(evt:DataResizeEvent):void
 		{
+			evt.stopPropagation();
+			
 			dataOffsetter.minIndex = 0;
 			dataOffsetter.maxIndex = itemRenderMaxIndex;
 			

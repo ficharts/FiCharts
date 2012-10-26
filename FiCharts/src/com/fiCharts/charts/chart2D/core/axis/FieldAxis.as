@@ -21,7 +21,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 字符类型数据节点均匀分布， 根据位置就可划定数值范围
 		 */		
-		override public function resizeData(start:Number, end:Number):void
+		override public function dataResized(start:Number, end:Number):void
 		{
 			var len:uint = this.sourceValues.length - 1;
 			

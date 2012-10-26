@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config precision="1" title="百度，谷歌中国市场份额趋势" subTitle='2011年度' ySuffix="%">
+    <legend enable="true"/>
+    <axis>
+        <x title="时间" type="field"/>
+        <y title="份额" type="linear"/>
+    </axis>
+    <series>
+        <line seriesName="百度" xField="label" yField="valueA"/>
+        <line seriesName="谷歌" xField="label" yField="valueB"/>
+    </series>
+    <data>
+        <item label="2011Q1" valueA="75.3" valueB="18.4"/>
+        <item label="2011Q2" valueA="80.2" valueB="14.1"/>
+        <item label="2011Q3" valueA="81.9" valueB="13.3"/>
+        <item label="2011Q4" valueA="83.6" valueB="11.1"/>
+    </data>
+</config>

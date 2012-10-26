@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>ficharts介绍</title>
+	<link href="../js/prettify/prettify.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="../js/prettify/prettify.js"></script>
+	<script type="text/javascript">
+			(function() {
+				$(function() {
+
+					$("#columnTag").text('<column xField="label" yField="value"/>');
+					prettyPrint();
+				})
+			})();
+
+		</script>
+</head>
+<body>
+	<div id="data">
+		<div id="title">图表类型与序列</div>
+		<div id="content">
+			<p>
+				<span class="code">Chart2D.swf</span>核心程序负责创建目前<span class="code">ficharts</span>所包含的所有图表，以后的2D图表类型会从Chart2D扩展。与其他图表不同的是: <span class="code">ficharts</span>的图表类型不是一种图表对应一个<span class="code">swf</span>文件，而是配置文件决定图表类型。所以Chart2D可以被看做是一个2D图表集，可渲染出各种类型的2D图表。
+			</p>
+			<div class="codeWrapper">
+				<pre id="columnTag" class="prettyprint"></pre>
+			</div>
+			<p>
+				这句代码定义了一个柱状图序列，注意节点名
+				<span class="code">column</span>
+				代表序列类型，除此之外可以用到的序列明如下：
+			</p>
+			<div class="tableWrapper">
+				<table width="100%">
+					<tbody>
+						<tr class="tableHeader">
+							<td width="30%">标签</td>
+							<td>所代表序列类型</td>
+						</tr>
+						<tr>
+							<td><span class="code">line</span></td>
+							<td>趋势图</td>
+						</tr>
+						<tr>
+							<td><span class="code">column</span></td>
+							<td>柱状图</td>
+						</tr>
+						<tr>
+							<td><span class="code">bar</span></td>
+							<td>条形图</td>
+						</tr>
+						<tr>
+							<td><span class="code">area</span></td>
+							<td>区域图</td>
+						</tr>
+						<tr>
+							<td><span class="code">marker</span></td>
+							<td>散点图</td>
+						</tr>
+						<tr>
+							<td><span class="code">bubble</span></td>
+							<td>气泡图</td>
+						</tr>
+						<tr>
+							<td><span class="code">stackedColumn</span></td>
+							<td>堆积柱状图</td>
+						</tr>
+						<tr>
+							<td><span class="code">stackedPercentColumn</span></td>
+							<td>百分百堆积柱状图</td>
+						</tr>
+						<tr>
+							<td><span class="code">stackedBar</span></td>
+							<td>堆积条形图</td>
+						</tr>
+						<tr>
+							<td><span class="code">stackedPercentBar</span></td>
+							<td>百分百堆积条形图</td>
+						</tr>
+						<tr>
+							<td><span class="code">stack</span></td>
+							<td>堆积图中的一个子序列</td>
+						</tr>
+					</tbody>
+
+				</table>
+			</div>
+
+			<p>
+				这些是迄今为止ficharts可以创建出的图表序列类型, 也代表了可创建的图表种类，千变万化的图表类型其实就是这些不同序列的有机组合。一个
+				<span class="code">column</span>
+				序列构建的是柱状图，两个以上则是多维柱状图，再加一个
+				<span class="code">line</span>
+				就成了混合图表。
+					所有这些序列有着公共属性，也有特有属性。
+			</p>
+			<p class="subTitle">序列共有属性</p> 
+			<div class="tableWrapper">
+				<table width="100%">
+				<tr class="tableHeader">
+					<td width="10%">属性名称</td>
+					<td width="12%">参数类型</td>
+					<td width="20%">取值范围</td>
+					<td>描述</td>
+				</tr>
+				<tr>
+					<td><span class="code">xField</span></td>
+					<td><span class="code">String</span></td>
+					<td>任意字符串</td>
+					<td>
+						序列的x数据字段，一条数据记录中包含多个字段，这些数据可被多个序列采用，但单个序列通常仅需要两个字段的数据：<span class="code">x,y</span>字段，
+						<span class="code">xField</span>
+						定义了每条数据记录中用于此序列的x字段
+					</td>
+				</tr>
+				<tr>
+					<td><span class="code">yField</span></td>
+					<td><span class="code">String</span></td>
+					<td>任意字符串</td>
+					<td>
+						序列的y数据字段，一条数据记录中包含多个字段，但序列通常仅需要两个字段的数据：<span class="code">x,y</span>字段，
+						<span class="code">yField</span>
+						定义了每条数据记录中用于此序列的y字段
+					</td>
+				</tr>
+				<tr>
+					<td><span class="code">colorField</span></td>
+					<td><span class="code">String</span></td>
+					<td>
+						<span class="code">null</span>
+						/任意字符串
+					</td>
+					<td>
+						序列的颜色数据字段，与属性
+						<span class="code">color</span>
+						不同的是颜色字段会影响到序列中每个数据节点的颜色，序列会根据颜色字段从数据记录中提取每个节点的颜色。默认为
+						<span class="code">null</span>
+						，系统自动分配节点颜色
+					</td>
+				</tr>
+				<tr>
+					<td><span class="code">seriesName</span></td>
+					<td><span class="code">String</span></td>
+					<td>
+						<span class="code">null</span>
+						/任意字符串
+					</td>
+					<td>序列名称，多序列或者混合图表时用以区分不同序列。会在图例，工具提示中用到。</td>
+				</tr>
+				<tr>
+					<td><span class="code">color</span></td>
+					<td><span class="code">String</span></td>
+					<td>
+						<span class="code">null/hex</span>颜色值，例如
+						<span class="code">#FF0000</span>
+						，颜色值中的
+						<span class="code">#</span>
+						可省略
+					</td>
+					<td>序列颜色，用来区分不同序列。默认系统会对每条序列自动分配颜色，如果要强调某条序列可以通过此属性设置序列专有颜色。</td>
+				</tr>
+				<tr>
+					<td><span class="code">xAxis</span></td>
+					<td><span class="code">String</span></td>
+					<td><span class="code">null</span>/任意字符</td>
+					<td>序列<span class="code">x</span>轴的<span class="code">id</span>, 默认系统自动分配坐标轴，当定义多坐标轴时需要制定序列以那个轴为自己的x轴。</td>
+				</tr>
+				<tr>
+					<td><span class="code">yAxis</span></td>
+					<td><span class="code">String</span></td>
+					<td><span class="code">null</span>/任意字符</td>
+					<td>序列<span class="code">y</span>轴的<span class="code">id</span>, 默认系统自动分配坐标轴，当定义多坐标轴时需要制定序列以那个轴为自己的<span class="code">y</span>轴。</td>
+				</tr>
+				<tr>
+					<td><span class="code">singleColor</span></td>
+					<td><span class="code">String</span></td>
+					<td><span class="code">true/false</span></td>
+					<td>
+						单个序列下，序列中节点是否采用相同颜色，默认
+						<span class="code">true</span>
+						, 整个序列的颜色都是统一的。例如在柱状图中如果设置为
+						<span class="code">false</span>
+						时每个柱体颜色均由系统分配。但在多序列时此属性无效，每条序列颜色独立统一。
+					</td>
+				</tr>
+				<tr>
+					<td><span class="code">labelDisplay</span></td>
+					<td><span class="code">String</span></td>
+					<td><span class="code">normal/vertical/inner/none</span></td>
+					<td>
+						数值显示方式，<span class="code">none</span>为不显示，<span class="code">vertical</span>为垂直方式显示。不同序列默认参数不同，对于柱状图和条形图<span class="code">normal</span>表示在柱体外部显示，<span class="code">innner</span>表示在柱体内部显示。
+					</td>
+				</tr>
+			</table>
+			</div>
+			
+			<p>
+				除了这些共有属性外，有些序列有着自身专有属性，本章节中仅涉及常用到的属性，序列详细的样式<span class="code">XML API</span>后继章节会另作阐述。
+			</p>
+
+			<p class="subTitle">
+				<span class="code">line/area</span>
+				序列特有属性
+			</p>
+			<div class="tableWrapper">
+				<table width="100%">
+					<tr class="tableHeader">
+						<td width="12%">属性名称</td>
+						<td width="12%">参数类型</td>
+						<td width="12%">取值范围</td>
+						<td>描述</td>
+					</tr>
+					<tr>
+						<td><span class="code">smooth</span></td>
+						<td><span class="code">String</span></td>
+						<td><span class="code">false/true</span></td>
+						<td>
+							默认趋势图以折线方式绘制，此属性设置为
+							<span class="code">true</span>
+							后折线会变成光滑曲线。
+						</td>
+					</tr>
+					<tr>
+						<td><span class="code">step</span></td>
+						<td><span class="code">String</span></td>
+						<td><span class="code">false/true</span></td>
+						<td>
+							默认趋势图以折线方式绘制，此属性设置为
+							<span class="code">true</span>
+							后折线会变成阶梯线，优先级高于
+							<span class="code">smooth</span>
+							。
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p class="subTitle">
+				<span class="code">column/bar</span>
+				序列特有属性
+			</p>
+			<div class="tableWrapper">
+				<table width="100%">
+					<tr class="tableHeader">
+						<td width="12%">属性名称</td>
+						<td width="12%">参数类型</td>
+						<td width="12%">取值范围</td>
+						<td>描述</td>
+					</tr>
+					<tr>
+						<td><span class="code">maxItemSize</span></td>
+						<td><span class="code">Number</span></td>
+						<td>正数</td>
+						<td>默认<span class="code">100</span>像素, 单个柱体的最大宽度/单个条形图的最大高度</td>
+					</tr>
+				</table>
+			</div>
+			
+			<p class="subTitle">
+				<span class="code">bubble</span>
+				序列特有属性
+			</p>
+			<div class="tableWrapper">
+				<table width="100%">
+				<tr class="tableHeader">
+					<td width="12%">属性名称</td>
+					<td width="12%">参数类型</td>
+					<td width="25%">取值范围</td>
+					<td>描述</td>
+				</tr>
+				<tr>
+					<td><span class="code">bubbleField</span></td>
+					<td><span class="code">String</span></td>
+					<td>任意字符串</td>
+					<td>此字段值会影响到气泡的大小</td>
+				</tr>
+				<tr>
+					<td><span class="code">maxRadius</span></td>
+					<td><span class="code">Number</span></td>
+					<td>
+						正数, 大于
+						<span class="code">minRadius</span>
+					</td>
+					<td>气泡半径的最大值, 默认为50</td>
+				</tr>
+				<tr>
+					<td><span class="code">minRadius</span></td>
+					<td><span class="code">Number</span></td>
+					<td>
+						正数,小于
+						<span class="code">maxRadius</span>
+					</td>
+					<td>气泡半径的最小值, 默认为5</td>
+				</tr>
+			</table>
+			</div>
+			
+			<p class="explain">
+				目前2D图表仅差饼图就可以满足绝大部分应用场景，我们会加快进度，争取短时间内发布饼图，让<span class="code">ficharts圆满的为用户效劳。</span>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>图表尺寸</title>
+		<script type="text/javascript">
+			(function()
+			{
+				$.get('./data/creation/chartSize/demo.html', function(data) 
+				{
+					$("pre#demoCode").text($.xmlToString(data));
+					prettyPrint();
+				});
+
+
+				new Chart2D({
+						id : 'chartA',
+						width : '100%',
+						height : 500,
+						configFile : './data/creation/firstCreat/columnConfig.xml'
+					});
+
+
+				new Chart2D({
+						id : 'chartB',
+						width : 500,
+						height : 500,
+						configFile : './data/creation/firstCreat/columnConfig.xml'
+					});
+
+
+				new Chart2D({
+						id : 'chartC',
+						width : 400,
+						height : 400,
+						configFile : './data/creation/firstCreat/columnConfig.xml'
+					});
+
+				
+			})();
+
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">图表尺寸</div>
+			<div id="content">
+				<p>ficharts即可以如水一样填满各式容器，又可如冰一样任您雕琢：</p>
+				<ul>
+					<li>1.自适应容器尺寸，定义了宽高为100%的图表尺寸会随容器自由伸缩；</li>
+					<li>2.双击图表背景空余区域时全屏显示；</li>
+					<li>3.灵活的尺寸定义接口；</li>
+				</ul>
+				<p>一起来看个样例, 代码如下：</p>
+				<div class="codeWrapper"><pre id="demoCode" class="prettyprint"></pre></div>
+				<p>
+					配置文件<a href="./data/creation/firstCreat/columnConfig.xml" target="_blank"><span class="code">columnConfig.xml</span></a>,
+					<span class="code">chartA</span>通过构造函数传递参数方式创建，宽度100%自适应；<span class="code">chartB</span>通过方法<span class="code">setSize(width, height)</span>设置宽高；<span class="code">chartC</span>通过属性<span class="code">width</span>和<span class="code">height</span>设置宽高。注意宽高值的参数类型：纯数字型(<span class="code">500</span>)或者字符串型(<span class="code">‘100%’</span>)。
+				</p>
+				<p>
+					图表如下：
+				</p>
+				<p id="chartA"></p>
+				<p></p>
+				<div id="chartB"></div>
+				<p></p>
+				<div id="chartC"></div>
+				<p>
+					现在您可以双击图表背景区域试试看，豁然开朗。
+				</p>
+			</div>
+		</div>
+	</body>
+</html>
+<html>

@@ -1,0 +1,24 @@
+<config title='2011-2012年度CPI走势图' subTitle='(此数据为统计局公布，仅供参考)'>
+    <dataFormatter precision='2' ySuffix='%'/>
+    <axis>
+        <x type="field" title='月份' labelDisplay="vertical"/>
+        <y type="linear" title='CPI指数'/>
+    </axis>
+    <series>
+        <line seriesName='CPI指数' xField='label' yField='value'/>
+    </series>
+    <data>
+        <set label='2011年1月' value='4.9'/>
+        <set label='2011年2月' value='5.4'/>
+        <set label='2011年3月' value='5.3'/>
+        <set label='2011年4月' value='5.5'/>
+        <set label='2011年5月' value='6.4'/>
+        <set label='2011年6月' value='6.5'/>
+        <set label='2011年7月' value='6.2'/>
+        <set label='2011年8月' value='6.1'/>
+        <set label='2011年9月' value='5.5'/>
+        <set label='2011年10月' value='4.2'/>
+        <set label='2011年12月' value='4.1'/>
+        <set label='2012年1月' value='4.5'/>
+    </data>
+</config>

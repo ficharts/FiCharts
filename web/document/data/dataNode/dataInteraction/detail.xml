@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config precision="2" title="2011 iPhone销量" ySuffix="亿部">
+    <axis>
+        <x title="季度" type="field"/>
+        <y title="销量" type="linear"/>
+    </axis>
+    <series>
+        <column xField="label" yField="value"/>
+    </series>
+    <data>
+        <set label="Q1" value="0.21"/>
+        <set label="Q2" value="0.18"/>
+        <set label="Q3" value="0.20"/>
+        <set label="Q4" value="0.37"/>
+    </data>
+</config>

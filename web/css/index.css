@@ -1,0 +1,55 @@
+
+#adv {
+	width: 940px;
+	margin: 10px 0 0px 0;
+}
+
+
+.quickLink {
+	width: 260px;
+	height: 174px;
+	background: url("../images/frameBG.png") no-repeat 0 0 scroll;
+	float: left;
+	margin-right: 10px;
+}
+
+.quickLink img {
+	
+}
+
+.linkBox {
+	margin-left: 80px;
+	margin-top: 25px;
+}
+
+.linkBox a.label {
+
+	text-decoration: none;
+    display: block;
+	margin: 5px 0 0 0;
+	width: 100px;
+	text-align: center;
+	color: #888;
+	text-shadow: 0 1px 0 #FFFFFF;
+
+}
+
+.linkBox a.label:hover {
+
+	color: #0088cc;
+}
+
+#links {
+	margin-left: 90px;
+	margin-bottom: 50px;
+	padding: 0px;
+	width: 820px;
+	height: 174px;
+	margin-top: 5px;
+}
+
+#version {
+
+	font-size: 12px;
+
+}

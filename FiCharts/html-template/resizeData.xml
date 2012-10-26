@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<config precision="2" title="2011年全球手机销量" ySuffix="亿部" ifDataScalable='true'>
+<config precision="2" title="2011年全球手机销量" ySuffix="亿部">
     <axis>
-        <x title="厂商" type="linear" ifTickCenter="true"/>
+        <x title="厂商" type="field" ifTickCenter="true"/>
         <y title="销量" type="linear"/>
     </axis>
     <series>
@@ -12,6 +11,7 @@
     		<border color='E2E2E2' thikness='1'/>
 		</vGrid>
     </gridField>
+    <dataScale enable='true' start="200" end="260"/>
     <data>
         <set label="1" value="4.171"/>
         <set label="5" value="3.294"/>
@@ -36,6 +36,6 @@
         <set label="230" value="5.932"/>
         <set label="245" value="1.881"/>
         <set label="260" value="2.661"/>
-        <set label="280" value="5.521"/>
+        <set label="278" value="5.521"/>
     </data>
 </config>

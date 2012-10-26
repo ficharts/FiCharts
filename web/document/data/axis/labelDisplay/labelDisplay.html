@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>坐标数值显示</title>
+		<script type="text/javascript">
+			(function() {
+
+				$(function(){
+
+					new Chart2D({id: 'normalLabelChart', width: '100%', height: 500, configFile: './data/axis/labelDisplay/normalLabel.xml'});
+					new Chart2D({id: 'rotationLabelChart', width: '100%', height: 500, configFile: './data/axis/labelDisplay/rotationLabel.xml'});
+					new Chart2D({id: 'verticalLabelChart', width: '100%', height: 500, configFile: './data/axis/labelDisplay/verticalLabel.xml'});
+
+
+					$.get("./data/axis/labelDisplay/rotationLabel.xml", function(data) {
+						$('pre#rotationLabelConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+					$.get("./data/axis/labelDisplay/verticalLabel.xml", function(data) {
+						$('pre#verticalLabelConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+				})
+
+		})()
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">坐标数值显示</div>
+			<div id="content">
+				<p>当坐标轴横轴上的<span class="code">label</span>排列不下但又想都显示出来时，可通过设置坐标轴<span class="code">labelDisplay</span>属性解决。下图中的横轴<span class="code">label</span>因图表宽度有限部分月份没有显示出来：</p>
+				<div id="normalLabelChart"></div>
+				<p>有两种方式可以让<span class="code">label</span>完整显示，先看第一种：</p>
+				<div id="rotationLabelChart"></div>
+				<p>配置文件中横轴的<span class="code">labelDisplay</span>为<span class="code">rotation</span>, 旋转45度：</p>
+				<div class="codeWrapper"><pre id="rotationLabelConfig" class="prettyprint"></pre></div>
+				<p>第二种旋转更给力，垂直显示：</p>
+				<div id="verticalLabelChart"></div>
+				<p>配置文件如下:</p>
+				<div class="codeWrapper"><pre id="verticalLabelConfig" class="prettyprint"></pre></div>
+				<p>旋转和垂直坐标轴<span class="code">label</span>可让其更多显示，但不容易辨识。</p>
+			</div>
+			
+		</div>
+	</body>
+</html>

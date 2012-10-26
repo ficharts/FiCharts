@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>多坐标轴</title>
+		<script type="text/javascript">
+			(function() {
+
+			$(function(){
+
+				new Chart2D({id: 'twoAxisChart', width: '100%', height: 500, configFile: './data/type/multipleChart/columnLine.xml'});
+				new Chart2D({id: 'twoAxisColoredChart', width: '100%', height: 500, configFile: './data/axis/multipleAxis/columnLineColored.xml'});
+				
+
+				$.get("./data/type/multipleChart/columnLine.xml", function(data) {
+					$('pre#towAxisChartConfig').text($.xmlToString(data));
+					prettyPrint();
+				})
+
+
+				$.get("./data/axis/multipleAxis/columnLineColored.xml", function(data) {
+					$('pre#colorAxisConfig').text($.xmlToString(data));
+					prettyPrint();
+				})
+
+			})
+
+		})()
+
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">多坐标轴</div>
+			<div id="content">
+				<p>当数据纬度不同或者范围相差很大时需用到多个坐标轴，图表默认仅有一对<span class="code">x,y</span>，初始化时自动赋给序列，无需设置<span class="code">id</span>及序列的<span class="code">xAxis/yAxis</span>并匹配两者。多坐标轴时需将坐标轴<span class="code">id</span>与序列<span class="code">xAxis/yAxis</span>匹配，理论上坐标轴数量支持无限个。在未设置坐标轴位置时，横轴一下一上交替排列；纵轴一左一右交替排列。例如当有三个纵轴时，默认左边两个，右边一个。</p>
+				<p>下图是数据纬度不同的双坐标轴图表：</p>
+				<div id="twoAxisChart"></div>
+				<p>配置文件如下：</p>
+				<div class="codeWrapper"><pre id="towAxisChartConfig" class="prettyprint"></pre></div>
+				<p>两个<span class="code">y</span>轴<span class="code">a,b</span>分别匹配了一个柱状序列和线状序列，接下来我们变个魔术，给坐标轴上个色，直观匹配序列：</p>
+				<div id="twoAxisColoredChart"></div>
+				<p>图形化表达数据关系简单高效，给坐标轴加上颜色，和谐多了。配置文件中设置了<span class="code">y</span>轴<span class="code">label</span>和<span class="code">title</span>的字体颜色，<span class="code">${color}</span>值为序列颜色：</p>
+				<div class="codeWrapper"><pre id="colorAxisConfig" class="prettyprint"></pre></div>
+			</div>
+		</div>
+	</body>
+</html>

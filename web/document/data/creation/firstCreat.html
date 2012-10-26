@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript">
+			(function() 
+			{
+				$(this).ready(function() 
+				{
+					var configXML;
+					var html;
+
+
+					$.get("./data/creation/firstCreat/columnConfig.xml", function(data) 
+					{
+					
+						if( typeof data == 'string')
+						{
+						
+							configXML = $.stringToXML(data);
+							$("pre#dataXML").text(data);
+
+						}
+						else
+						{
+							configXML = data;
+							$("pre#dataXML").text($.xmlToString(data));
+						}
+	
+						$("pre#axis").text($.xmlToString(configXML.getElementsByTagName("series")[0]));
+						$("pre#series").text($.xmlToString(configXML.getElementsByTagName("series")[0]));
+						$("pre#data").text($.xmlToString(configXML.getElementsByTagName("data")[0]));
+
+						prettyPrint();
+					});
+
+					$.get('./data/creation/firstCreat/demo.html', function(data) 
+					{
+
+						if( typeof data == 'string')
+						{
+							html = $.stringToXML(data);
+							$("pre#htmlCode").text(data);
+						}
+						else
+						{
+							html = data;
+							$("pre#htmlCode").text($.xmlToString(data));
+						}							
+
+						$("#jsFile").text($.xmlToString(html.getElementsByTagName("script")[0]));
+
+						prettyPrint();
+					});
+
+					$.get('./data/creation/firstCreat/sampleCodeDemo.html', function(data) 
+					{
+						$("pre#sampleCode").text($.xmlToString(data));
+						
+						prettyPrint();
+					});
+
+					$("#firstConfigLine").text('<config title="2011年全球手机销量" ySuffix="亿部" precision="1">');
+					$("#chartDiv").text('<div id="fisrtChart"/>');
+
+					new Chart2D(
+					{
+						id : 'firstChartDemo',
+						width : '100%',
+						height : 500,
+						configFile : './data/creation/firstCreat/columnConfig.xml'
+					});
+				})
+			})();
+
+		</script>
+	<title>ficharts介绍</title>
+</head>
+<body>
+	<div id="data">
+		<div id="title">创建第一个图表</div>
+		<div id="content">
+			<p>现在让我们一起用ficharts来创建一个柱状图，通过以下几个简单步骤您就可以看到一个鲜活的图表：</p>
+			<ul>
+				<li>
+					1.新建文件夹:
+					<span class="code">fisrtExample</span>；
+				</li>
+				<li>
+					2.复制<span class="code">ficharts文件包</span>到<span class="code">fisrtExample</span>文件夹下，文件包从下载文件解压而来，是一个名为<span class="code">ficharts</span>的文件夹，包含<span class="code">Chart2D.swf, FiCharts.js</span>两个文件。
+				</li>
+				<li>
+					3.在相同目录下创建一个名称为
+					<span class="code">config.xml</span>
+					的XML文件,内容如下：
+				</li>
+				<li>
+					<div class="codeWrapper">
+						<pre id="dataXML" class="prettyprint"></pre>
+					</div>
+				</li>
+				<li>
+					4.在相同目录下创建一个
+					<span class="code">sales.html</span>
+					文件，代码如下：
+				</li>
+				<li>
+					<div class="codeWrapper">
+						<pre id="htmlCode" class="prettyprint lang-html"></pre>
+					</div>
+				</li>
+			</ul>
+			<p>
+				从浏览器中打开
+				<span class="code">sales.html</span>
+				您将会看到如下惊喜：
+			</p>
+			<div id="firstChartDemo"></div>
+			<p class="explain">
+				默认本地Flash是不能加载数据的，要确保是在服务器环境下运行或者设置Flash安全沙箱，允许加载制定路径下的文件, 安全沙箱设置方法：
+				<br/>
+				打开 C:\Windows\System32\Macromed\Flash\FlashPlayerTrust 目录， 有时FlashPlayerTrust需要自行创建。用记事本创建一个扩展名为cfg 的文件， 写入FiCharts当前文件路径，如D:\ficharts。
+			</p>
+			<p class="explain">
+				FiCharts的运行需要
+				<span class="code">FlashPlayer 10.0.0</span>
+				及以上版本的支持，到此
+				<a href=" http://get.adobe.com/cn/flashplayer/?promoid=BUIGP" target="_blank">下载</a>
+				更新至最新版本。
+			</p>
+			<p class="subTitle">图表构成文件：</p>
+			<ul>
+				<li> <b><span class="code">Chart2D.swf:</span></b> 
+					核心Flash程序，目前ficharts支持的2D图表都是由其渲染出来，配置数据不同，图表类型不同，看到的风景也不同。
+				</li>
+				<li> <b><span class="code">FiCharts.js:</span></b> 
+					JavaScript文件 ,方便图表在网页中集成, 通常图表创建与接口调用都只需与其打交道，只要正确引入了
+					<span class="code">FiCharts.js</span>
+					文件并保证其与
+					<span class="code">Chart2D.swf</span>
+					在相同目录下即可。和<span class="code">FiCharts.js</span>搞好关系，一切尽由您掌控。
+				</li>
+				<li>
+					<b>
+						<span class="code">config.xml:</span>
+					</b>
+					完整的图表配置文件，包含图表定义与数据。定义了标题，xy轴，图表类型，
+					<span class="code">data</span>
+					部分是数据。图表的姿态万千正式由于配置文件的大同小异,
+					<span class="code">data</span>
+					部分也可以抽离出来通过专门的数据接口传入，这样就可以实现图表定义与数据分离，甚至可以动态更新图表数据。
+				</li>
+				<li>
+					<b>
+						<span class="code">sales.html:</span>
+					</b>
+					图表展示页面，这里创建了图表。
+				</li>
+			</ul>
+			<p class="subTitle">配置文件：</p>
+			<div class="codeWrapper">
+				<pre id="firstConfigLine" class="prettyprint"></pre>
+			</div>
+			<p>
+				<span class="code">config</span>
+				表示这是一个图表配置文件，
+				<span class="code">tile</span>
+				定义了标题，
+				<span class="code">ySuffix</span>
+				定义了Y值得后缀，
+				<span class="code">precision</span>
+				定义了数值小数点位数为1。
+			</p>
+			<br/>
+			<div class="codeWrapper">
+				<pre id="axis" class="prettyprint"></pre>
+			</div>
+			<p>
+				<span class="code">axis</span>
+				部分定义了坐标轴，x 轴是字符类型， y 轴是数字类型， 并且定义了两个轴的标题，一个图表至少要包含一个x和一个y轴。
+			</p>
+			<br/>
+			<div class="codeWrapper">
+				<pre id="series" class="prettyprint"></pre>
+			</div>
+			<p>
+				<span class="code">series</span>
+				部分定义序列，此处定义了一个单序列柱状图，
+				<span class="code">xField="value"</span>
+				表示把每条数据记录中
+				<span class="code">value</span>
+				字段值作为x值，同理
+				<span class="code">yField</span>
+				定义了y值的字段名。
+			</p>
+			<br/>
+			<div class="codeWrapper">
+				<pre id="data" class="prettyprint"></pre>
+			</div>
+			<p>
+				<span class="code">data</span>
+				部分是数据定义，节点名称和字段名称不限，但要保证字段名称与序列的字段名对应。
+			</p>
+			<!--p class="explain">ficharts图表定义在很大程度上借鉴了Flex框架下的图表定义，使用过Flex图表的用户会更容易上手。</p-->
+			<p>图表定义包含3大部分：坐标轴，序列，数据。坐标轴与序列必须要定义，数据可以不包含在配置文件中通过数据接口单独加载。</p>
+			<p class="subTitle">网页中的javascript集成：</p>
+			<p>
+				首先确保
+				<span class="code">FiCharts.js</span>
+				被加载：
+			</p>
+			<div class="codeWrapper">
+				<pre id="jsFile" class="prettyprint"></pre>
+			</div>
+			<p>
+				<span class="code">src</span>
+				是
+				<span class="code">FiCharts.js</span>
+				相对于当前页面的路径，您不用关心源文件
+				<span class="code">Chart2D.swf</span>
+				位于哪里，通常都是与
+				<span class="code">FiCharts.js</span>
+				打交道，其会自动加载对应的swf文件到页面上，实现所有接口调用。
+			</p>
+			<div class="codeWrapper">
+				<pre class="prettyprint">var myChart = new Chart2D('fisrtChart')</pre>
+			</div>
+			<p>
+				创建一个2D图表，id为
+				<span class="code">fisrtChart</span>
+				，每个新创建的图表需定义id，与页面中div的id对应，表示图表将在此div上被渲染出来。如果div标签不合您口味，大可改为p等其他html元素标签，反正其最终会被替换为Flash特有标签object，id永远与您携手，标签只是过往云烟。
+			</p>
+			<div class="codeWrapper">
+				<pre id="chartDiv" class="prettyprint"></pre>
+			</div>
+			<br/>
+			<div class="codeWrapper">
+				<pre class="prettyprint">myChart.setSize(500, 500);</pre>
+			</div>
+			<p>设置图表的宽高。</p>
+			<div class="codeWrapper">
+				<pre class="prettyprint">myChart.setConfigFile('config.xml');</pre>
+			</div>
+			<p>
+				设置图表配置文件，图表会在页面初始化完毕后加载配置文件，加载成功后自动渲染。至此一个图表被创建好了，上面的代码还可以换个写法，简化一下：
+			</p>
+			<div class="codeWrapper">
+				<pre id="sampleCode" class="prettyprint"></pre>
+			</div>
+			<p>
+				与之前不同的是所有参数是在创建图表时以对象方式传递进去的，定义了ID，宽高和配置文件，这些参数位置可以互换，确保标示符正确即可。
+			</p>
+		</div>
+	</div>
+</body>
+</html>

@@ -32,6 +32,20 @@ package com.fiCharts.charts.chart2D.core.backgound
 			addChild(border);
 			
 		}
+		
+		/**
+		 */		
+		public function scrollHGrid(pos:Number):void
+		{
+			verticalGrid.x = pos;
+		}
+		
+		/**
+		 */		
+		public function scrollVGrid(pos:Number):void
+		{
+			horizontalGrid.y = pos;
+		}
 
 		/**
 		 *  Draw series BG.

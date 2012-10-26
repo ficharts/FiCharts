@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>ficharts介绍</title>
+		<script type="text/javascript">
+			(function() {
+
+				$(function(){
+
+					new Chart2D({id: 'quadrantChart', width: '100%', height: 500, configFile: './data/axis/quadrant/quadrant.xml'})
+
+					$.get("./data/axis/quadrant/quadrant.xml", function(data) {
+						$('pre#quadrantConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+
+				})
+
+			})()
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">坐标象限</div>
+			<div id="content">
+				<p>大多数情况下图表仅需在第一象限显示，但也通过坐标轴<span class="code">position</span>与<span class="code">inverse</span>属性配合使用，灵活定义坐标象限。下图是一张反应一挖井队工作进展趋势图，为了更直观展示日期与井深关系，第4象限绘图更合适：</p>
+				<div id="quadrantChart"></div>
+				<p>图表配置文件如下：</p>
+				<div class="codeWrapper"><pre id="quadrantConfig" class="prettyprint"></pre></div>
+				<p><span class="code">x</span>轴移上去，<span class="code">y</span>轴方向颠倒一下，大功告成。</p>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>数据与配置接口</title>
+		<script type="text/javascript">
+			$(function(){
+
+				$.get("./data/creation/chartData/configFileDemo.html", function(data){
+
+					$('pre#configFileDemo').text($.xmlToString(data));
+					prettyPrint();
+				});
+
+				$.get("./data/creation/chartData/setConfigFileDemo.html", function(data){
+
+					$('pre#setConfigFileDemo').text($.xmlToString(data));
+					prettyPrint();
+				});
+
+
+				$.get("./data/creation/chartData/setConfigXMLDemo.html", function(data){
+
+					$('pre#setConfigXMLDemo').text($.xmlToString(data));
+					prettyPrint();
+				});
+
+
+				$.get("./data/creation/chartData/setDataFileDemo.html", function(data){
+
+					$('pre#setDataFileDemo').text($.xmlToString(data));
+					prettyPrint();
+				});
+
+				$.get("./data/creation/chartData/setDataXMLDemo.html", function(data){
+
+					$('pre#setDataXMLDemo').text($.xmlToString(data));
+					prettyPrint();
+				});
+
+				$.get("./data/creation/chartData/setConfigFile&setDataFileDemo.html", function(data){
+
+					$('pre#setConfigFile_setDataFileDemo').text($.xmlToString(data));
+					prettyPrint();
+				});
+
+				$.get("./data/creation/chartData/setJsonDataDemo.html", function(data){
+
+					$('pre#jsonData').text($.xmlToString(data));
+					prettyPrint();
+				});
+
+			})
+
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">数据与配置接口</div>
+			
+			<div id="content">
+				<p>下图是包含数据的配置文件</p>
+				<img src="./data/creation/chartData/config.png" alt="">
+				<p>
+				图表配置与数据是有区别的，配置文件定义了图表类型，标题，坐标轴等特性；数据仅仅是数据，为了方便数据传递，可以将数据嵌入在配置文件中一次加载并渲染；分离配置与数据可以更灵活的定义图表。<span class="code">ficharts</span>配置文件目前仅支持<span class="code">XML</span>字符串类型，数据支持<span class="code">XML</span>字符串与<span class="code">Json</span>两种类型, 近十种接口调用方式设置图表数据，选择您所喜欢的，适合您所需要的，阵容如下：
+				</p>
+				<p class="subTitle"><span class="code">configFile</span>：从构造函数传递配置文件路径</p>
+				
+				<div class="codeWrapper"><pre id="configFileDemo" class="prettyprint"></pre></div>
+				<p><span class="code">configFile</span>把配置文件的路径告诉给<span class="code">ficharts</span>，如果这是一个完整的配置文件（包含数据），加载完成后图表自动渲染。</p>
+
+				<p class="subTitle"><span class="code">setConfigFile</span>: 函数方式传递配置文件路径</p>
+				<div class="codeWrapper"><pre id="setConfigFileDemo" class="prettyprint"></pre></div>
+				<p>相信不用多讲，与前面类似，换个方式而已，看到这些代码会让您再次确信自己是个聪明人。</p>
+
+				<p class="subTitle"><span class="code">setConfigXML</span>: 设置配置XML</p>
+				<div class="codeWrapper"><pre id="setConfigXMLDemo" class="prettyprint"></pre></div>
+				<p>与之前不同的是这是直接将整个配置文件传递给<span class="code">ficharts</span>, 然后主动调用渲染函数<span class="code">render</span>。</p>
+
+				<p class="subTitle"><span class="code">setDataXML</span>: 设置数据XML</p>
+				<div class="codeWrapper"><pre id="setDataXMLDemo" class="prettyprint"></pre></div>
+				<p>这是您看到的首次数据同配置文件的分离，有没有动态更新图表数据的冲动？</p>
+
+				<p class="subTitle"><span class="code">setDataFile</span>: 设置数据文件路径</p>
+				<div class="codeWrapper"><pre id="setDataFileDemo" class="prettyprint"></pre></div>
+				<p>这里与之前有点小变化，多了一个初始化事件处理:<span class="code">onReady</span>。数据文件接口调用必须在图表初始化完成后或者配置文件加载完毕后方可调用，数据加载成功后自动渲染图表。听起来有点绕，其实也就是上膛(<span class="code">setConfigXML</span>)，预备（<span class="code">onReay</span>），发射（<span class="code">setDataFile</span>）的节奏。</p>
+
+				<p class="subTitle"><span class="code">setConfigFile</span>携手<span class="code">setDataFile</span></p>
+				<div class="codeWrapper"><pre id="setConfigFile_setDataFileDemo" class="prettyprint"></pre></div>
+				<p>数据与配置被分离到了两个独立文件，数据文件是在配置文件加载完毕后加载的。</p>
+
+				<p class="subTitle"><span class="code">setJsonData</span>:传递<span class="code">Json</span>数据</p>
+				<div class="codeWrapper"><pre id="jsonData" class="prettyprint"></pre></div>
+				<p>轻量级的<span class="code">Json</span>数据比<span class="code">XML</span>更加高效。</p>
+
+				<p>至此，常见数据接口我们逐一而过，相信您已运筹帷幄，小结升华一下：<span class="code">ficharts</span>是靠数据混的，数据不同展现不同，您有多种数据传递接口可选，以上列出的并非所有，<span class="code">setConfigFile</span>也可以是带有参数的服务端地址。让他们继续眉来眼去吧，您暂需小息一下了。</p>
+
+			</div>
+		</div>
+	</body>
+</html>

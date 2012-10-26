@@ -1,0 +1,93 @@
+
+#leftContent {
+	width: 170px;
+	float: left;
+}
+
+#leftNav {
+  width: 150px;
+  border: 1px solid #DDDDDD;
+  border-radius: 5px;
+  margin: 10px 0px 10px 0;
+  padding: 10px 10px 50px 10px;
+  background: none no-repeat #FFFFFF;
+}
+
+#leftNav ul {
+	padding: 0px;
+	margin: 0px;
+}
+
+#content a {
+	color: #0088cc;
+    text-decoration: none;
+}
+
+#content a:hover {
+	 color: #205F82;
+}
+
+#leftNav ul a {
+    display: block;
+    color: #0088cc;
+    text-decoration: none;
+    padding: 5px 0 5px 15px;
+    text-align: start;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+#leftNav ul.subNav a {
+	margin-left: 15px;
+}
+
+
+span.plus {
+    display: block;
+    float: left;
+    margin-left: -15px;
+    text-align: center;
+    width: 15px;
+    font-weight: bold;
+}
+
+#leftNav ul a:hover {
+	  background: #EEEEEE;
+    border-bottom: 1px solid #DDDDDD;
+    color: #192839;
+    text-shadow: 0 1px 0 #FFFFFF;
+}
+
+#leftNav ul li.currentArticle a {
+	  background: #EEEEEE;
+    border-bottom: 1px solid #DDDDDD;
+    color: #192839;
+    text-shadow: 0 1px 0 #FFFFFF;
+}
+
+#docContent {
+	width: 720px;
+	margin: 10px 0px 10px 0;
+	padding: 10px 20px 40px 20px;
+	border: 1px solid #EEEEEE;
+	border-radius: 5px;
+	float: right;
+	background: none no-repeat #FFFFFF;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+#docContent p {
+	text-indent: 0px;
+}
+
+#docContent ul {
+	padding-left: 0px;
+}
+
+#title {
+	font-size: 20px;
+	border-bottom: 1px dashed #DDDDDD;
+  padding-bottom: 10px;
+  font-weight: bold;
+}
+
+

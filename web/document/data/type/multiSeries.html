@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>多序列图表</title>
+		<script type="text/javascript">
+			(function() {
+
+				$(function() {
+					$.get("./data/type/multipleSeries/multipleColumns.xml", function(data) {
+						alert(data)
+						$("pre#multipleColumnsConfig").text($.xmlToString(data));
+					})
+
+
+
+				})
+
+			})()
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">多序列图表</div>
+			<div id="multipleColumn"></div>
+			<div id="content">
+				当要对两组及以上数据对比分析时，多序列图表就派上了用场。下面是谷歌与百度中国区市场份额对比图：
+				<div class="codeWrapper"><pre id="multipleColumnsConfig" class="prettyprint"></pre></div>
+			</div>
+		</div>
+	</body>
+</html>

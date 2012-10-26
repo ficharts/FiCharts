@@ -20,14 +20,21 @@ package com.fiCharts.utils.graphic
 		 */		
 		public static function drawUI(target:DisplayObject):Bitmap
 		{
+			var bmp:Bitmap = new Bitmap(getUIBmd(target), PixelSnapping.ALWAYS, true);
+			
+			return bmp;
+		}
+		
+		/**
+		 */		
+		public static function getUIBmd(target:DisplayObject):BitmapData
+		{
 			var bw:Number = target.width;
 			var bh:Number = target.height;
 			var myBitmapData:BitmapData = new BitmapData(bw, bh, true, 0xFFFFFF);
 			myBitmapData.draw(target, null, null, null, null, true);
 			
-			var bmp:Bitmap = new Bitmap(myBitmapData, PixelSnapping.ALWAYS, true);
-			
-			return bmp;
+			return myBitmapData;
 		}
 
 		/**

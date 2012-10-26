@@ -1,0 +1,50 @@
+.chart-shot {
+
+	border: 0px solid #444;
+	width: 195px;
+	height: 140px;
+	float: left;
+	margin-right: 10px;
+	margin-left: 10px;
+	margin-bottom: 20px;
+	background-color: #FFFFFF;
+	padding: 6px;
+	position: relative;
+	border-radius: 5px;
+
+	
+}
+
+.chart-over {
+	top: 6px;
+	left: 6px;
+	overflow: hidden;
+	position: absolute;
+	/*position: static/relative/absolute/fixed;*/
+	width: 184px;
+	height: 128px;
+	padding: 6px;
+
+
+	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.8);
+    color: #888888;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+a.chart-over strong {
+    color: #444444;
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.2;
+    margin: 0 0 4px;
+}
+
+.chart-link {
+
+	position: static;
+	display: inline;
+}
+
+

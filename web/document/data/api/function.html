@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>方法</title>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">方法</div>
+			<div id="content">
+				<p class='subTitle'>构造函数</p>
+				<p>图表创建从构造函数开始，目前<span class='code'>ficharts</span>中所有图表创建源自<span class='code'>Chart2D</span>，是的<span class='code'>2D</span>图表，也是经常会用到的图表类型。未来<span class='code'>ficharts</span>发展的一是把 <span class='code'>2D</span>图表先做精，做全，其次是开辟<span class='code'>Chart3D</span>等新篇章。</p>
+				<p><span class='code'>Chart2D</span>构造函数只接受一个参数, 通常是一个对象，包含如下属性：</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>参数</td>
+								<td width='15%'>取值范围</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>id</span></td>
+								<td>任意字符串</td>
+								<td>必要参数，图表<span class='code'>id</span>, 页面加载后，以此<span class='code'>id</span>为标示的页面元素会被替换为图表对象，<span class='code'>id</span>保留。页面元素通常是<span class='code'>div</span>标签，也可换作其他。</td>
+							</tr>
+							<tr>
+								<td><span class='code'>width</span></td>
+								<td>数字(500)或者百分比(<span class='code'>'100%'</span>)</td>
+								<td>图表宽度</td>
+							</tr>
+							<tr>
+								<td><span class='code'>height</span></td>
+								<td>数字(500)或者百分比(<span class='code'>'100%'</span>)</td>
+								<td>图表高度</td>
+							</tr>
+						
+							<tr>
+								<td><span class='code'>style</span></td>
+								<td><span class='code'>white/black</span></td>
+								<td>图表样式，决定图表整体视觉风格，默认为<span class='code'>white</span></td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>configFile</span></td>
+								<td>任意字符串</td>
+								<td>图表配置文件路径， 图表初始化时自动加载配置文件，并且加载成功自动渲染</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<p>例如<span class='code'>New Chart2D({id: 'myChart', width: '100%', height: 500})</span>定义了一个<span class='code'>id</span>为<span class='code'>myChart</span>, 宽度占满容器且高度为<span class='code'>500</span>像素的<span class='code'>2D</span>类型图表。如果构造函数仅包含一个字符串类型的参数，它既是图表<span class='code'>id</span>。</p>
+
+				<p class='subTitle'>实例函数</p>
+				<p>图表创建好了便可以调用如下方法，操控图表行为和属性：</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>函数</td>
+								<td width='15%'>参数</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>setSize</span></td>
+								<td>width, height</td>
+								<td>设置图表的宽高</td>
+							</tr>
+							<tr>
+								<td><span class='code'>setConfigXML</span></td>
+								<td>XML</td>
+								<td>配置文件， XML格式的字符串</td>
+							</tr>
+							<tr>
+								<td><span class='code'>setDataXML</span></td>
+								<td>XML</td>
+								<td>图表数据，XML类型的字符串</td>
+							</tr>
+						
+							<tr>
+								<td><span class='code'>setStyle</span></td>
+								<td><span class='code'>white/black</span></td>
+								<td>图表样式，决定图表整体视觉风格。当初始化完毕后调用此方法只是改变样式配置文件， 如果需要看到效果还需要调用 render()方法</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>setConfigFile</span></td>
+								<td>url</td>
+								<td>图表配置文件路径， 图表初始化时自动加载配置文件，并且加载成功自动渲染</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>setDataFile</span></td>
+								<td>url</td>
+								<td>图表数据文件路径， 初始化完毕并且配置文件已经被加载后才可以调用此方法</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>setJsonData</span></td>
+								<td>json</td>
+								<td>json格式的图表数据</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>render</span></td>
+								<td>null</td>
+								<td>渲染图表</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+	</body>
+</html>
