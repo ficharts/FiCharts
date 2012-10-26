@@ -94,7 +94,7 @@ package com.fiCharts.charts.chart2D.line
 			var startRenderIndex:uint = dataOffsetter.minIndex// + dataOffsetter.dataIndexOffset;
 			var endRenderIndex:uint = dataOffsetter.maxIndex// - dataOffsetter.dataIndexOffset;
 			
-			for (var i:uint = i; i <= itemRenderMaxIndex; i ++)
+			for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
 			{
 				if (startRenderIndex <= i && i <=  endRenderIndex)
 				{

@@ -2,6 +2,7 @@ package com.fiCharts.utils.graphic
 {
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
+	import flash.geom.Matrix;
 
 	public class BitmapUtil
 	{
@@ -22,10 +23,10 @@ package com.fiCharts.utils.graphic
 		
 		/**
 		 */		
-		public static function drawWithSize(target:DisplayObject, width:Number, height:Number):BitmapData
+		public static function drawWithSize(target:DisplayObject, width:Number, height:Number, mar:Matrix = null):BitmapData
 		{
 			var myBitmapData:BitmapData = new BitmapData(width, height, true, 0xFFFFFF);
-			myBitmapData.draw(target, null, null, null, null, false);
+			myBitmapData.draw(target, mar, null, null, null, true);
 			
 			return myBitmapData;
 		}

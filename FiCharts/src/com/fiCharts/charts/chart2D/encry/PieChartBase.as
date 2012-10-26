@@ -36,6 +36,20 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 */		
+		public function scaleData(from:Object, to:Object):void
+		{
+			
+		}
+		
+		/**
+		 */		
+		public function setDataScalable(value:Boolean):void
+		{
+			
+		}
+			
+		/**
 		 * 创建序列
 		 */		
 		private function createSeriesHandler(value:Vector.<PieSeries>):void

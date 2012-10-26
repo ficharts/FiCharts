@@ -30,6 +30,8 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	import flash.system.Capabilities;
+	import flash.system.Security;
+	import flash.system.SecurityDomain;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	import flash.utils.ByteArray;
@@ -110,6 +112,70 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 */		
 		protected var customConfig:XML;
+		
+		
+		/**
+		 */		
+		private var _ifDataScalable:Boolean = false;
+
+		/**
+		 */
+		public function get ifDataScalable():Boolean
+		{
+			return _ifDataScalable;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set ifDataScalable(value:Boolean):void
+		{
+			_ifDataScalable = value;
+			
+			if (ifReady)
+				chart.setDataScalable(_ifDataScalable);
+			else
+				ifDataScalableChanged = true;
+		}
+		
+		/**
+		 */		
+		private var ifDataScalableChanged:Boolean = false;
+		
+		/**
+		 * 
+		 * 根据数据范围缩放图表
+		 * 
+		 * @param valueFrom
+		 * @param valueTo
+		 * 
+		 */		
+		public function scaleData(valueFrom:Object, valueTo:Object):void
+		{
+			if (ifReady)
+			{
+				chart.scaleData(valueFrom, valueTo);
+			}
+			else
+			{
+				dataScaleForm = valueFrom;
+				dataScaleTo = valueTo;
+				ifScaleDataChanged = true;
+			}
+		}
+		
+		/**
+		 */		
+		private var ifScaleDataChanged:Boolean = false;
+		
+		/**
+		 */		
+		private var dataScaleForm:Object;
+		
+		/**
+		 */		
+		private var dataScaleTo:Object;
+		
 		
 		
 		/**
@@ -204,6 +270,50 @@ package com.fiCharts.charts.chart2D.encry
 				ifPreRender = true;
 			}
 		}
+		
+		
+		/**
+		 */		
+		override public function get width():Number
+		{
+			return _width;
+		}
+		
+		/**
+		 */		
+		private var _width:Number = ChartShellBase.MIN_SIZE;
+		
+		/**
+		 */		
+		override public function set width(value:Number):void
+		{
+			if (ifReady)
+				chart.chartWidth = _width = value;
+			else
+				_width = value;
+		}
+		
+		/**
+		 */		
+		override public function get height():Number
+		{
+			return _height;
+		}
+		
+		/**
+		 */		
+		override public function set height(value:Number):void
+		{
+			if (ifReady)
+				chart.chartHeight = _height = value;
+			else
+				_height = value;
+		}
+		
+		private var _height:Number = ChartShellBase.MIN_SIZE;
+		
+		
+		
 		
 		
 		
@@ -356,6 +466,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		protected function init():void
 		{
+			Security.allowDomain("*");
+			
 			initLanguage();
 			
 			if (OS.isDesktopSystem)
@@ -537,6 +649,8 @@ package com.fiCharts.charts.chart2D.encry
 			// 初始化完毕后提示无数据
 			updateInfoLabel(noDataInfo);
 			
+			resizeChart();
+			
 			if (OS.isDesktopSystem)
 			{
 				//
@@ -551,6 +665,8 @@ package com.fiCharts.charts.chart2D.encry
 				//如果配置了配置文件的路径，则直接加载；
 				if (RexUtil.ifTextNull(_configFileURL) == false)
 					requestConfigURL(_configFileURL);
+				
+				ExternalUtil.call("FiCharts.ready", id);
 			}
 			
 			// 
@@ -559,7 +675,6 @@ package com.fiCharts.charts.chart2D.encry
 			//
 			//
 			ifReady = true;
-			resizeChart();
 			
 			if (this.ifConfigChanged)
 			{
@@ -585,6 +700,18 @@ package com.fiCharts.charts.chart2D.encry
 				ifPreRender = false;
 			}
 			
+			if (ifDataScalableChanged)
+			{
+				this.chart.setDataScalable(this.ifDataScalable);
+				ifDataScalableChanged = false;
+			}
+			
+			if (this.ifScaleDataChanged && this.ifDataScalable)
+			{
+				this.scaleData(this.dataScaleTo, dataScaleTo);
+				ifScaleDataChanged = false;
+			}
+			
 			if (this.ifConfigFileURLChanged)
 			{
 				this.setConfigFileURL(this._configFileURL);
@@ -593,7 +720,6 @@ package com.fiCharts.charts.chart2D.encry
 			
 			// 初始化过程完毕
 			this.dispatchEvent(new FiChartsEvent(FiChartsEvent.READY));
-			ExternalUtil.call("FiCharts.ready", id);
 		}
 		
 		/**
@@ -621,46 +747,6 @@ package com.fiCharts.charts.chart2D.encry
 		//
 		//---------------------------------------------------
 		
-		
-		/**
-		 */		
-		override public function get width():Number
-		{
-			return _width;
-		}
-		
-		/**
-		 */		
-		private var _width:Number = ChartShellBase.MIN_SIZE;
-		
-		/**
-		 */		
-		override public function set width(value:Number):void
-		{
-			if (ifReady)
-				chart.chartWidth = _width = value;
-			else
-				_width = value;
-		}
-		
-		/**
-		 */		
-		override public function get height():Number
-		{
-			return _height;
-		}
-		
-		/**
-		 */		
-		override public function set height(value:Number):void
-		{
-			if (ifReady)
-				chart.chartHeight = _height = value;
-			else
-				_height = value;
-		}
-		
-		private var _height:Number = ChartShellBase.MIN_SIZE;
 		
 		/**
 		 */		

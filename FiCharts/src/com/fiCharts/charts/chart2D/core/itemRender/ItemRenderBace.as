@@ -266,7 +266,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 			if (this.tooltip.enable)
 			{
 				var location:Point = new Point(itemVO.dataItemX, itemVO.dataItemY);
-				toolTipsHolder.location = this.parent.localToGlobal(location);
+				toolTipsHolder.location = this.parent.parent.localToGlobal(location);
 				this.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.SHOW_TOOL_TIPS, toolTipsHolder));
 			}
 		}

@@ -37,6 +37,8 @@ package com.fiCharts.charts.chart2D.encry
 	{
 		public function ChartProxy()
 		{
+			XMLVOLib.registerCustomClasses(<dataScale path='com.fiCharts.charts.chart2D.core.model.DataScale'/>);
+			
 			ChartBGStyle;
 			XMLVOLib.registerCustomClasses(<chartBG path='com.fiCharts.charts.chart2D.core.model.ChartBGStyle'/>);
 			

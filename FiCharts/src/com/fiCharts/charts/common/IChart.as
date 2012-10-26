@@ -23,6 +23,21 @@ package com.fiCharts.charts.common
 		function setCustomStyle(value:XML):void;
 		
 		/**
+		 * 
+		 * 动态进行数据缩放的对外接口, 用于Flash/AIR等类型的项目中， web用配置文件方式处理数据缩放
+		 * 
+		 * @param startValue
+		 * @param endValue
+		 * 
+		 */		
+		function scaleData(startValue:Object, endValue:Object):void
+			
+		/**
+		 *  是否开启尺寸缩放，默认关闭，开启后缩放控制，接口调用才能生效
+		 */			
+		function setDataScalable(value:Boolean):void;
+		
+		/**
 		 * 设置图表的配置文件， 通常图表的配置文件包含了数据；也可以只传递配置信息，然后调用 dataXML 接口传递数据；
 		 */		
 		function set configXML(value:XML):void;

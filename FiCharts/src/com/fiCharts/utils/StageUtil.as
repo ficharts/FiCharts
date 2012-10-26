@@ -59,7 +59,7 @@ package com.fiCharts.utils
 		 */		
 		private static function initResizeHandler(evt:Event):void
 		{
-			if (container.stage.stageWidth > 0)
+			if (container && container.stage.stageWidth >= 0)
 			{
 				container.stage.removeEventListener(Event.RESIZE, initResizeHandler);
 				ready();

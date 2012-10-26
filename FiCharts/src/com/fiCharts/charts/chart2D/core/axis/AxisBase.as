@@ -42,6 +42,43 @@ package com.fiCharts.charts.chart2D.core.axis
 			labelUIsCanvas.mask = labelsMask;
 		}
 		
+		/**
+		 * 根据数据的比例范围渲染基于此坐标轴的序列
+		 */		
+		public function renderSeries(start:Number, end:Number):void
+		{
+			
+		}
+		
+		/**
+		 * 根据原始数据得到其在总数据中的百分比位置，用来做尺寸缩放
+		 */		
+		public function getDataPercent(value:Object):Number
+		{
+			return 0;
+		}
+		
+		/**
+		 */		
+		public function posToPercent(pos:Number):Number
+		{
+			return 0;
+		}
+		
+		/**
+		 * 将百分比位置信息转换为真正的位置数值
+		 */		
+		public function percentToPos(per:Number):Number
+		{
+			return 0;
+		}
+		
+		/**
+		 * 滚动结束后，渲染数据范围内的序列
+		 */		
+		public function dataScrolled(dataRange:DataRange):void
+		{
+		}
 		
 		/**
 		 * 数据缩放后调用
@@ -74,22 +111,13 @@ package com.fiCharts.charts.chart2D.core.axis
 		public var currentScrollPos:Number = 0;
 		
 		/**
+		 * 坐标原点的尺寸偏移量
 		 */		
-		protected var offsetSize:Number = 0;
+		public var offsetSize:Number = 0;
 		
 		/**
 		 */		
 		protected var minScrollPos:Number = 0;
-		
-		
-		/**
-		 * 滚动结束后，渲染数据范围内的序列
-		 */		
-		public function dataScrolled():void
-		{
-			
-		}
-		
 		
 		/**
 		 * 对于每此数据缩放，坐标轴仅需绘制一次，子数据的滚动只是移动label容器的位置而已
@@ -98,6 +126,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			if (changed)
 			{
+				this.clearLabels();
+				
 				this.labelsMask.graphics.clear();
 				
 				var labelUI:DisplayObject;
@@ -140,8 +170,6 @@ package com.fiCharts.charts.chart2D.core.axis
 						
 						// 这里的labelUI可考虑用bitmap data绘制来优化渲染
 						labelUI = labelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
-						labelUIsCanvas.addChild(labelUI);
-						
 						axisLabel = null;
 					}
 					
@@ -188,11 +216,12 @@ package com.fiCharts.charts.chart2D.core.axis
 						}
 						
 						labelUI.x = valuePositon + labelX;
-						
 						if (this.position == 'bottom')
 							labelUI.y = label.margin + labelY;
 						else
 							labelUI.y = - label.margin - labelY - labelUI.height;
+						
+						labelUIsCanvas.addChild(labelUI);
 					}
 				}
 				
@@ -246,6 +275,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			if (changed)
 			{
+				this.clearLabels();
+				
 				this.labelsMask.graphics.clear();
 				
 				_ticks = new Vector.<Number>();
@@ -284,8 +315,6 @@ package com.fiCharts.charts.chart2D.core.axis
 						
 						// 这里的labelUI可考虑用bitmap data绘制来优化渲染
 						labelUI = labelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
-						labelUIsCanvas.addChild(labelUI);
-						
 						axisLabel = null;
 					}
 					
@@ -331,6 +360,8 @@ package com.fiCharts.charts.chart2D.core.axis
 							labelUI.x = label.margin;
 						
 						labelUI.y = valuePositon + labelY;
+						
+						labelUIsCanvas.addChild(labelUI);
 					}
 				}
 				
@@ -454,6 +485,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		protected function clearLabels() : void
 		{
+			labelUIs.length = 0;
+			
 			this.labelUIsCanvas.graphics.clear();
 			while (labelUIsCanvas.numChildren > 0)
 				labelUIsCanvas.removeChildAt(0);
@@ -476,6 +509,21 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			sourceValues = new Vector.<Object>;
 		}
+		
+		/**
+		 */
+		protected var confirmedSourceValueRange:Number
+		
+		/**
+		 * 根据原始值核定后的最大最小值 
+		 */		
+		protected var sourceDataRange:DataRange = new DataRange;
+		
+		
+		/**
+		 * 当前的数据范围(被核定后的) 
+		 */		
+		protected var currentDataRange:DataRange = new DataRange;
 		
 		/**
 		 * 轴标签数据
@@ -513,14 +561,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			changed = true;
 		}
-		
-		/**
-		 */		
-		protected var labelStartIndex:uint = 0;
-		
-		/**
-		 */		
-		protected var labelEndIndex:uint = 0;
 		
 		/**
 		 * 轴的创建， 尺寸， 数据改变此标识都会为真；
@@ -577,7 +617,9 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 *  Width of every item.
+		 *  标准单元格尺寸，为显示尺寸内，显示的数据范围除以单元数据而来
+		 * 
+		 *  因为label可能会很长，label间距为单元刻度的倍数
 		 */
 		private var _uintSize:Number;
 		
@@ -726,7 +768,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		 * 数据缩放时 由当前数据范围与原始数据范围比例反推出的理论长度
 		 */		
 		protected var fullSize:Number = 0;
-		
 		
 		/**
 		 * 是否显示/渲染坐标轴； 

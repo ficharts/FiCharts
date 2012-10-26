@@ -20,48 +20,91 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 * 
+		 */		
+		override public function percentToPos(per:Number):Number
+		{
+			return this.valueToX(this.confirmedSourceValueRange * per + this.sourceDataRange.min);
+		}
+		
+		/**
+		 */		
+		override public function posToPercent(pos:Number):Number
+		{
+			var perc:Number;
+			var position:Number = pos;
+			
+			if (this.inverse)
+				position = this.fullSize - position;
+			
+			perc = (offsetSize + position - this.currentScrollPos) / fullSize;
+			
+			return perc;
+		}
+		
+		/**
+		 */		
+		override public function getDataPercent(value:Object):Number
+		{
+			return this.getValuePercent(value)
+		}
+		
+		/**
+		 * 滚动结束后，渲染数据范围内的序列，数据范围根据滚动位置计算
+		 */		
+		override public function dataScrolled(dataRange:DataRange):void
+		{
+			var offPerc:Number = this.currentScrollPos / this.fullSize;
+			var min:Number = this.currentDataRange.min - offPerc * this.sourceValueDis;
+			var max:Number = currentDataRange.max - offPerc * sourceValueDis;
+			
+			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
+				min, max));
+			
+			dataRange.min = getDataPercent(min);
+			dataRange.max = getDataPercent(max);
+		}
+		
+		/**
+		 * 主要是为了生成label数据和确定位置偏移，单元间距
 		 */		
 		override public function dataResized(start:Number, end:Number):void
 		{
-			// 由数据关系推出尺寸关系
 			getCurrentDataRange(start, end);
 			
 			// 数据缩放时才重新创建label数据, 数据范围决定label数据
 			createLabelsData();
-			
 			setFullSizeAndOffsize();
 			
-			minScrollPos =  offsetSize + size - this.fullSize;
+			minScrollPos = offsetSize + size - this.fullSize;
 			this.labelUIsCanvas.x = currentScrollPos = 0;// 数据缩放后尺寸有了新的关系
 			this.unitSize = fullSize / this.labelsData.length;
 			
-			changed = true;
-			
-			// 每次数据缩放时整个序列被渲染，用来产生截图用于后继数据滚动
 			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
-				this.sourceDataRange.min, sourceDataRange.max));
-		}
-		
-		/**
-		 * 滚动结束后，渲染数据范围内的序列
-		 */		
-		override public function dataScrolled():void
-		{
+				this.currentDataRange.min, this.currentDataRange.max));
 			
+			changed = true;
 		}
 		
 		/**
-		 * 
-		 * @param start
-		 * @param end
-		 * 
+		 */		
+		override public function renderSeries(start:Number, end:Number):void
+		{
+			var min:Number, max:Number;
+			min = start * this.sourceValueDis + this.sourceMin;
+			max = end * sourceValueDis + this.sourceMin;
+			
+			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
+				min, max));
+		}
+		
+		/**
+		 * 根据数值百分比区间，计算出当前取值范围
 		 */		
 		private function getCurrentDataRange(start:Number, end:Number):void
 		{
 			var min:Number, max:Number;
-			min = start * this.sourceValueDis;
-			max = end * sourceValueDis;
+			min = start * this.sourceValueDis + this.sourceMin;
+			max = end * sourceValueDis + this.sourceMin;
 			
 			// 确定当前最值
 			this.preMaxMin(max, min);
@@ -328,9 +371,6 @@ package com.fiCharts.charts.chart2D.core.axis
 				labelData.value = i;
 				labelsData.push(labelData);
 			}
-			
-			labelUIs.length = 0;
-			this.clearLabels()
 		}
 		
 		/**
@@ -374,18 +414,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		protected var preMin:Number;
 		
 		/**
-		 * 根据原始值核定后的最大最小值 
-		 */		
-		private var sourceDataRange:DataRange = new DataRange;
-		
-		
-		/**
-		 * 当前的数据范围(被核定后的) 
-		 */		
-		private var currentDataRange:DataRange = new DataRange;
-		
-		
-		/**
 		 * 再启用数值显示的时候需要增多一个数据单元格以便放得下数值显示；
 		 */		
 		private var _ifExpend:Boolean = false;
@@ -404,7 +432,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			_ifExpend = value;
 		}
-
 
 		/**
 		 * temp value
@@ -457,28 +484,13 @@ package com.fiCharts.charts.chart2D.core.axis
 		protected var preInterval:Number;
 
 		/**
-		 *  Axis has it's own data model different from default data value.
-		 *  For example, date axis's axis data format is Number,
-		 *  but it's data value is String like '2009-01-01'.
-		 */
-		protected function axisValueToX(value:Object):Number
-		{
-			return axisValueToSize(value);
-		}
-
-		protected function axisValueToY(value:Object):Number
-		{
-			return - axisValueToSize(value);
-		}
-		
-		/**
 		 */
 		protected function axisValueToSize(value:Object):Number
 		{
 			var position:Number;
 			
 			if (confirmedSourceValueRange)
-				position = getValuePercent(value) * this.fullSize - offsetSize;
+				position = getValuePercent(value) * this.fullSize - offsetSize + this.currentScrollPos;
 			else
 				position = 0;
 			
@@ -504,14 +516,14 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */
 		override public function valueToX(value:Object):Number
 		{
-			return axisValueToX(value);
+			return axisValueToSize(value);
 		}
 
 		/**
 		 */
 		override public function valueToY(value:Object):Number
 		{
-			return axisValueToY(value);
+			return - axisValueToSize(value);
 		}
 		
 		/**
@@ -527,11 +539,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			return AxisBase.LINER_AXIS;
 		}
-
-		/**
-		 */
-		protected var confirmedSourceValueRange:Number
-			
 
 		/**
 		 */

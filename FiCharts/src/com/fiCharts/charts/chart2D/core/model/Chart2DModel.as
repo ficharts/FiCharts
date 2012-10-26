@@ -90,18 +90,22 @@ package com.fiCharts.charts.chart2D.core.model
 		 * 是否支持数据缩放，开启数据缩放后，在PC或者移动设备上
 		 * 
 		 * 会相应缩放操作而缩放数据，例如滚轮缩放或者触摸放大缩放 
+		 */		
+		private var _dataScale:DataScale
+
+		/**
 		 */
-		public function get ifDataScalable():Object
+		public function get dataScale():DataScale
 		{
-			return _ifDataScalable;
+			return _dataScale;
 		}
 
 		/**
 		 * @private
 		 */
-		public function set ifDataScalable(value:Object):void
+		public function set dataScale(value:DataScale):void
 		{
-			_ifDataScalable = XMLVOMapper.boolean(value);;
+			_dataScale = value;
 		}
 		
 		
