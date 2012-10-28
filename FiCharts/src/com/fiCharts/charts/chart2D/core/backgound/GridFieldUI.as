@@ -159,7 +159,7 @@ package com.fiCharts.charts.chart2D.core.backgound
 				verticalGrid.graphics.lineTo(lineX, style.height);
 			}
 			
-			StyleManager.setEffects(horizontalGrid, style.hGrid);
+			StyleManager.setEffects(verticalGrid, style.vGrid);
 		}
 		
 		/**

@@ -303,7 +303,6 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		{
 			x = _itemVO.dataItemX;
 			y = _itemVO.dataItemY;
-			
 			if (this.valueLabel.enable)
 			{
 				if(valueLabelUI == null)

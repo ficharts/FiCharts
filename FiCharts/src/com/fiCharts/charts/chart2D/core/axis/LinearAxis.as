@@ -240,6 +240,9 @@ package com.fiCharts.charts.chart2D.core.axis
 				_minimum = sourceMin;
 					
 				this.changed = false;
+				
+				// 气泡图的控制气泡大小的轴无需渲染，原始刻度间距即为确认的间距
+				confirmedSourceValueRange = _maximum - _minimum;
 				return; 
 			}
 			
@@ -253,7 +256,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			}
 			
 			sourceValueDis = sourceMax - sourceMin;
-			
 			super.dataUpdated();
 		}
 		
@@ -371,6 +373,9 @@ package com.fiCharts.charts.chart2D.core.axis
 				labelData.value = i;
 				labelsData.push(labelData);
 			}
+			
+			labelUIs.length = 0;
+			clearLabels();
 		}
 		
 		/**

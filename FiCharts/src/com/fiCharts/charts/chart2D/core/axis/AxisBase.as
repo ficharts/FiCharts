@@ -144,6 +144,8 @@ package com.fiCharts.charts.chart2D.core.axis
 				{
 					if (this.enable)
 					{
+						if (labelUIs[i]) continue;
+							
 						labelsData[i].label = this.getXLabel(labelsData[i].value);
 						labelsData[i].color = this.metaData.color;
 						
@@ -294,6 +296,8 @@ package com.fiCharts.charts.chart2D.core.axis
 				{
 					if (this.enable)
 					{
+						if (labelUIs[i]) continue;
+						
 						labelsData[i].label = this.getXLabel(labelsData[i].value);
 						labelsData[i].color = this.metaData.color;
 						
@@ -485,8 +489,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		protected function clearLabels() : void
 		{
-			labelUIs.length = 0;
-			
 			this.labelUIsCanvas.graphics.clear();
 			while (labelUIsCanvas.numChildren > 0)
 				labelUIsCanvas.removeChildAt(0);

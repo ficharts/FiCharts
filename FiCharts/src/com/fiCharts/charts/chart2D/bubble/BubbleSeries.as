@@ -1,6 +1,7 @@
 package com.fiCharts.charts.chart2D.bubble
 {
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
@@ -16,6 +17,24 @@ package com.fiCharts.charts.chart2D.bubble
 		public function BubbleSeries()
 		{
 			super();
+		}
+		
+		/**
+		 */		
+		override protected function dataResizedByIndex(evt:DataResizeEvent):void
+		{
+			super.dataResizedByIndex(evt);
+			
+			updataItemRendersLayout();
+		}
+		
+		/**
+		 */		
+		override protected function dataResizedByRange(evt:DataResizeEvent):void
+		{
+			super.dataResizedByRange(evt);
+			
+			updataItemRendersLayout();
 		}
 		
 		/**
@@ -37,8 +56,10 @@ package com.fiCharts.charts.chart2D.bubble
 		 */		
 		override protected function layoutDataItems():void
 		{
-			for each (var item:SeriesDataItemVO in dataItemVOs)
+			var item:SeriesDataItemVO;
+			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
 			{
+				item = dataItemVOs[i];
 				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue);
 				item.dataItemY =  (verticalAxis.valueToY(item.yValue));
 				item.y = item.dataItemY - this.baseLine;
@@ -58,6 +79,7 @@ package com.fiCharts.charts.chart2D.bubble
 		{
 			this.canvas.graphics.clear();	
 			canvas.graphics.beginFill(0, 0);
+			
 			for each (var item:SeriesDataItemVO in this.dataItemVOs)
 				canvas.graphics.drawCircle(item.x, item.y, item.z);
 		}
@@ -234,6 +256,8 @@ package com.fiCharts.charts.chart2D.bubble
 				
 				dataItemVOs.push(seriesDataItem);
 			}
+			
+			dataOffsetter.maxIndex = itemRenderMaxIndex = dataItemVOs.length - 1;
 		}
 		
 		/**

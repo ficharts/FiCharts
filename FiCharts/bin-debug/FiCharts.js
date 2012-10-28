@@ -412,6 +412,8 @@
 		    
 		    this.ifReady = true;
 		    
+		    this.swf = doc.getElementById(this.id);
+		    
 			if (this.ifConfigChanged) {
 				this.setConfigXML(this.configXML);
 				this.ifConfigChanged = false;
@@ -437,6 +439,7 @@
 			
 			if (this.ifConfigFileChanged)
 				this.setConfigFile(this.configFile);
+			
 		};
 		
 		that.configLoaded = function(value) {
@@ -576,8 +579,8 @@
 		
 		var that = chartBase();
 		that.constructor = function(arg) {
-			init(this, arg);
 			this.swfURL = getSWFURL(Chart2D.swfURL);
+			init(this, arg);
 		};
 		
 		return that;
@@ -627,9 +630,50 @@
 	            params.wmode = "transparent";
 				
 				flashvars.style = chart.style; // 此时SWF还未初始化， style 作为参数传入；
+				
+				// IE 下执行generateSWF时图表已经完成初始化，但 chart.swf还未被赋值，所以
+				//
+				// 需在ready方法中再次赋值swf，以保证对swf的方法调用成功
 				chart.swf = generateSWF(attributes, params, flashvars);
+				
+				registerMouseWheelEvt(chart.swf);
+				
 			})
 	};
+	
+	function registerMouseWheelEvt(target){
+		
+		var isFF = function(){
+			return navigator.userAgent.indexOf("Firefox") != -1;
+		}
+		
+		var onMouseWheel = function(){
+			var event = window.event || arguments[0];
+			if (isFF()){
+				target.onWebmousewheel(event.detail);
+				event.preventDefault();
+			}else{
+				target.onWebmousewheel(event.wheelDelta);
+				event.returnValue = false; 
+			}
+		}
+		
+		target.onmouseover = function(){
+			if (isFF()){
+				doc.addEventListener('DOMMouseScroll', onMouseWheel, false);
+			}else{
+				doc.onmousewheel = onMouseWheel;
+			}
+		}
+		
+		target.onmouseout = function(){
+			if (isFF()){
+				doc.removeEventListener('DOMMouseScroll', onMouseWheel, false);
+			}else{
+				doc.onmousewheel = null;
+			}
+		}
+	}
 	
 	
 	//------------------------------------------------

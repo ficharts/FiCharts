@@ -1,5 +1,6 @@
 package com.fiCharts.charts.chart2D.marker
 {
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
@@ -19,6 +20,24 @@ package com.fiCharts.charts.chart2D.marker
 		public function MarkerSeries()
 		{
 			super();
+		}
+		
+		/**
+		 */		
+		override protected function dataResizedByIndex(evt:DataResizeEvent):void
+		{
+			super.dataResizedByIndex(evt);
+			
+			updataItemRendersLayout();
+		}
+		
+		/**
+		 */		
+		override protected function dataResizedByRange(evt:DataResizeEvent):void
+		{
+			super.dataResizedByRange(evt);
+			
+			updataItemRendersLayout();
 		}
 		
 		/**
@@ -49,17 +68,20 @@ package com.fiCharts.charts.chart2D.marker
 		{
 			this.canvas.graphics.clear();	
 			canvas.graphics.beginFill(0, 0);
+			
 			for each (var item:SeriesDataItemVO in this.dataItemVOs)
-			canvas.graphics.drawCircle(item.x, item.y, 10);// TODO
+				canvas.graphics.drawCircle(item.x, item.y, 10);// TODO
 		}
 		
 		/**
 		 * 更新数据节点的布局信息；
 		 */		
 		override protected function layoutDataItems():void
-		{
-			for each (var item:SeriesDataItemVO in dataItemVOs)
-			{
+		{   
+			var item:SeriesDataItemVO;
+			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
+			{	
+				item = dataItemVOs[i];
 				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue);
 				item.dataItemY = (verticalAxis.valueToY(item.yValue));
 				item.offset = this.baseLine;

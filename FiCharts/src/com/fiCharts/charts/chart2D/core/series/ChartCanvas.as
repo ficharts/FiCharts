@@ -45,6 +45,7 @@ package com.fiCharts.charts.chart2D.core.series
 		}
 		
 		/**
+		 * 每次序列渲染之前需先清空数值标签
 		 */		
 		public function clearValuelabels():void
 		{

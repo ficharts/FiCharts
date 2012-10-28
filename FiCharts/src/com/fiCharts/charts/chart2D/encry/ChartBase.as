@@ -178,7 +178,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			if(chartModel.dataScale.enable)
 			{
-				var percent:Number = stage.mouseX / this.stage.stageWidth;
+				var percent:Number = this.mouseX / this.chartWidth;
 				var dis:Number = this.currentDataRange.max - this.currentDataRange.min;
 				
 				var targetPer:Number = this.currentDataRange.min + dis * percent;
@@ -271,8 +271,7 @@ package com.fiCharts.charts.chart2D.encry
 			{
 				scrollData(offset);
 				currentPosition = evt.stageX;
-				
-				evt.updateAfterEvent();
+				//evt.updateAfterEvent();
 			}
 		}
 		
@@ -281,13 +280,13 @@ package com.fiCharts.charts.chart2D.encry
 		private function endScrollHadler(evt:MouseEvent):void
 		{
 			ifSrollingData = false;
+			
+			this.chartCanvas.clearValuelabels();
 			scrollBaseAxis.dataScrolled(this.currentDataRange);
 			
 			chartCanvas.visible = true;
 			scrollImgRender.visible = false;
 			this.chartCanvas.mouseChildren = chartCanvas.mouseEnabled = true;
-			
-			var scrollPerc:Number = scrollBaseAxis.posToPercent(scrollBaseAxis.currentScrollPos);
 			
 			stage.removeEventListener(MouseEvent.MOUSE_UP, endScrollHadler);
 		}
@@ -410,6 +409,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			if (drawStart == 1) return;
 			
+			this.chartCanvas.clearValuelabels();
 			scrollBaseAxis.renderSeries(drawStart, drawEnd);
 			
 			var startPos:Number = scrollBaseAxis.percentToPos(drawStart);
@@ -426,7 +426,7 @@ package com.fiCharts.charts.chart2D.encry
 			matr.ty = sizeY;
 			
 			var myBitmapData:BitmapData = new BitmapData(posDis, sizeY, true, 0xFFFFFF);
-			myBitmapData.draw(chartCanvas, matr, null, null, null, true);
+			myBitmapData.draw(chartCanvas, matr, null, null, null, false);
 			
 			this.chartCanvas.mask = chartMask;
 			this.chartMask.visible = true;

@@ -52,7 +52,7 @@ package com.fiCharts.charts.chart2D.core
 		 */		
 		public function draw(bmd:BitmapData, matr:Matrix, w:Number, h:Number):void
 		{
-			canvas.graphics.beginBitmapFill(bmd, matr, false, true);
+			canvas.graphics.beginBitmapFill(bmd, matr, false, false);
 			canvas.graphics.drawRect(matr.tx, matr.ty, w, h);
 			
 			if (matr.tx < this.startPos)

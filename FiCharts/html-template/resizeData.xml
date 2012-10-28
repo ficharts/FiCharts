@@ -1,22 +1,40 @@
 <config precision="2" title="2011年全球手机销量" ySuffix="亿部">
     <axis>
-        <x title="厂商" type="field" ifTickCenter="true"/>
+        <x title="厂商" type="field" ifTickCenter="false"/>
         <y title="销量" type="linear"/>
     </axis>
     <series>
-        <area xField="label" yField="value"/>
+        <!--marker xField="label" yField="value"/-->
+		<stackedColumn>
+            <stack seriesName="产品A"  xField='label' yField='valueA'/>
+            <stack seriesName="产品B"  xField='label' yField='valueB'/>
+            <stack seriesName="产品C"  xField='label' yField='valueC'/>
+        </stackedColumn>
     </series>
     <gridField>
     	<vGrid>
     		<border color='E2E2E2' thikness='1'/>
 		</vGrid>
     </gridField>
-    <dataScale enable='true' start="200" end="260"/>
+    <dataScale enable='true' start="3月" end="9月"/>
     <data>
+    	<set label='1月' valueC='279' valueA='400' valueB='536'/>
+        <set label='2月' valueC='410' valueA='300' valueB='253'/>
+        <set label='3月' valueC='325' valueA='250' valueB='358'/>
+        <set label='4月' valueC='572' valueA='100' valueB='400'/>
+        <set label='5月' valueC='629' valueA='300' valueB='358'/>
+        <set label='6月' valueC='710' valueA='400' valueB='368'/>
+        <set label='7月' valueC='489' valueA='600' valueB='357'/>
+        <set label='8月' valueC='635' valueA='800' valueB='852'/>
+        <set label='9月' valueC='750' valueA='600' valueB='654'/>
+        <set label='10月' valueC='600' valueA='400' valueB='348'/>
+        <set label='11月' valueC='760' valueA='350' valueB='135'/>
+        <set label='12月' valueC='950' valueA='300' valueB='658'/>
+        <!--set label='12' value='950' radius='30'/>
         <set label="1" value="4.171"/>
-        <set label="5" value="3.294"/>
+        <set label="2" value="3.294"/>
         <set label="6" value="0.932"/>
-        <set label="10" value="0.881"/>
+        <set label="7" value="0.881"/>
         <set label="15" value="0.661"/>
         <set label="30" value="5.521"/>
         <set label="45" value="4.171"/>
@@ -36,6 +54,6 @@
         <set label="230" value="5.932"/>
         <set label="245" value="1.881"/>
         <set label="260" value="2.661"/>
-        <set label="278" value="5.521"/>
+        <set label="278" value="5.521"/-->
     </data>
 </config>

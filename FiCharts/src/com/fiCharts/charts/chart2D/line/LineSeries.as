@@ -34,6 +34,7 @@ package com.fiCharts.charts.chart2D.line
 			super.dataResizedByIndex(evt);
 			
 			renderPartUIs();
+			updataItemRendersLayout();
 		}
 		
 		/**
@@ -43,6 +44,7 @@ package com.fiCharts.charts.chart2D.line
 			super.dataResizedByRange(evt);
 			
 			renderPartUIs();
+			updataItemRendersLayout();
 		}
 		
 		/**

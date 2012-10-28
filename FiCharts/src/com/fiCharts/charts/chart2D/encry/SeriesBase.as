@@ -26,7 +26,6 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
-	import flash.geom.Rectangle;
 
 	/**
 	 * SeriesBase
@@ -65,7 +64,6 @@ package com.fiCharts.charts.chart2D.encry
 			dataOffsetter.offSet(0, itemRenderMaxIndex);
 			
 			this.layoutDataItems();
-			updataItemRendersLayout();
 		}
 		
 		/**
@@ -100,7 +98,6 @@ package com.fiCharts.charts.chart2D.encry
 			dataOffsetter.offSet(0, itemRenderMaxIndex);
 			
 			this.layoutDataItems();
-			updataItemRendersLayout();
 		}
 		
 		/**
@@ -108,12 +105,12 @@ package com.fiCharts.charts.chart2D.encry
 		 * 数据缩放后更新数据范围内的数据结点位置
 		 * 
 		 */		
-		private function updataItemRendersLayout():void
+		protected function updataItemRendersLayout():void
 		{
 			var itemRender:ItemRenderBace;
 			for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
 			{
-				itemRender = this.itemRenders[i] as ItemRenderBace
+				itemRender = this.itemRenders[i] as ItemRenderBace;
 				if (i >= dataOffsetter.minIndex && i <= dataOffsetter.maxIndex)
 				{
 					itemRender.layout();
@@ -125,7 +122,6 @@ package com.fiCharts.charts.chart2D.encry
 				}
 			}
 			
-			return 
 			// 将数据范围内的  数值标签交给 主程序绘制
 			var dataResizeEvt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.RENDER_SIZED_VALUE_LABELS);
 			dataResizeEvt.sizedItemRenders =  this.itemRenders.slice(dataOffsetter.minIndex, dataOffsetter.maxIndex + 1);
@@ -329,6 +325,8 @@ package com.fiCharts.charts.chart2D.encry
 				this.applyDataFeature();
 				layoutDataItems();
 				renderChart();
+				
+				ifDataChanged = false;
 			}
 		}
 

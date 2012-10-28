@@ -61,11 +61,14 @@ package com.fiCharts.charts.chart2D.core.axis
 			var min:Number = Math.floor(this.currentDataRange.min - offPerc * confirmedSourceValueRange);
 			var max:Number = Math.ceil(currentDataRange.max - offPerc * confirmedSourceValueRange);
 			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_INDEX, 
-				min, max));
+			if (min < 0) min = 0;
+			if (max > this.sourceDataRange.max) max = sourceDataRange.max;
 			
 			dataRange.min = min / confirmedSourceValueRange;
 			dataRange.max = max / confirmedSourceValueRange;
+			
+			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_INDEX, 
+				min, max));
 		}
 		
 		/**
@@ -74,7 +77,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		override public function dataResized(start:Number, end:Number):void
 		{
 			getCurrentDataRange(start, end);
-			createLabelsData();
 			setFullSizeAndOffsize();
 			
 			minScrollPos = offsetSize + size - this.fullSize;
@@ -140,7 +142,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		override protected function valueToSize(value:Object):Number
 		{
 			var result:Number = unitSize * .5 + 
-				(sourceValues.indexOf(value.toString()) - this.sourceDataRange.min) * unitSize
+				sourceValues.indexOf(value.toString()) * this.unitSize
 				 - this.offsetSize + this.currentScrollPos;
 			
 			if (inverse)
@@ -155,8 +157,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			if (ifTickCenter)
 			{
-				ticks.unshift(0);
-				ticks.push(size);
+				ticks.unshift(this.currentScrollPos - this.offsetSize);
+				ticks.push(this.fullSize + this.currentScrollPos - this.offsetSize);
 			}
 			else
 			{
@@ -165,7 +167,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				else
 					ticks.forEach(shiftLeft);
 				
-				ticks.push(size);
+				ticks.push(this.currentScrollPos - this.offsetSize + fullSize);
 			}
 		}
 		
@@ -307,6 +309,9 @@ package com.fiCharts.charts.chart2D.core.axis
 				labelData.value = value;
 				labelsData.push(labelData);
 			}
+			
+			labelUIs.length = 0;
+			clearLabels();
 		}
 		
 	}
