@@ -23,10 +23,11 @@ package com.fiCharts.charts.chart2D.core.backgound
 			super();
 			
 			this.mouseChildren = this.mouseEnabled = false;
-			horizontalGrid.mask = hGridMask;
-			verticalGrid.mask =  vGridMask
-			addChild(horizontalGrid);
-			addChild(verticalGrid);
+			
+			vGrid.mask = hGridMask;
+			hGrid.mask =  vGridMask
+			addChild(vGrid);
+			addChild(hGrid);
 			addChild(vGridMask);
 			addChild(hGridMask);
 			addChild(border);
@@ -34,27 +35,28 @@ package com.fiCharts.charts.chart2D.core.backgound
 		}
 		
 		/**
+		 * 大范围背景网格的移动很耗性能
 		 */		
 		public function scrollHGrid(pos:Number):void
 		{
-			verticalGrid.x = pos;
+			hGrid.x = pos;
 		}
 		
 		/**
 		 */		
 		public function scrollVGrid(pos:Number):void
 		{
-			horizontalGrid.y = pos;
+			vGrid.y = pos;
 		}
-
+		
 		/**
 		 *  Draw series BG.
 		 */
 		public function render(horiTicks:Vector.<Number>, vertiTicks:Vector.<Number>, 
 							   style:GridFieldStyle):void
 		{
-			drawHorizontalGidLine(vertiTicks, style);
-			drawVerticalGidLine(horiTicks, style);
+			drawVGidLine(vertiTicks, style);
+			drawHGidLine(horiTicks, style);
 			
 			graphics.clear();
 			StyleManager.setFillStyle(graphics, style);
@@ -90,14 +92,14 @@ package com.fiCharts.charts.chart2D.core.backgound
 		/**
 		 * 绘制横向分隔条
 		 */
-		public function drawHorizontalGidLine(ticks:Vector.<Number>, style:GridFieldStyle):void
+		public function drawVGidLine(ticks:Vector.<Number>, style:GridFieldStyle):void
 		{
 			var i:uint;
 			var departs:int = ticks.length - 1;
 			var lineY:Number;
 			var partHeight:Number = style.height / departs;
 			
-			horizontalGrid.graphics.clear();
+			vGrid.graphics.clear();
 			
 			// 绘制填充
 			for (i = 0; i <= departs; i++)
@@ -106,66 +108,70 @@ package com.fiCharts.charts.chart2D.core.backgound
 				
 				if (i % 2 != 0 && i <= departs)
 				{
-					horizontalGrid.graphics.lineStyle(0, 0, 0);
-					StyleManager.setFillStyle(horizontalGrid.graphics, style.hGrid);
-					horizontalGrid.graphics.drawRect(0, lineY, style.width, partHeight);
-					horizontalGrid.graphics.endFill();
+					vGrid.graphics.lineStyle(0, 0, 0);
+					StyleManager.setFillStyle(vGrid.graphics, style.hGrid);
+					vGrid.graphics.drawRect(0, lineY, style.width, partHeight);
+					vGrid.graphics.endFill();
 				}
 			}
 			
 			// 绘制网格
-			StyleManager.setLineStyle(horizontalGrid.graphics, style.hGrid.getBorder);
+			StyleManager.setLineStyle(vGrid.graphics, style.hGrid.getBorder);
 			for (i = 0; i <= departs; i++)
 			{
 				lineY = style.height + ticks[i];
 				
-				horizontalGrid.graphics.moveTo(0, lineY);
-				horizontalGrid.graphics.lineTo(style.width, lineY);
+				vGrid.graphics.moveTo(0, lineY);
+				vGrid.graphics.lineTo(style.width, lineY);
 			}
 			
-			StyleManager.setEffects(horizontalGrid, style.hGrid);
+			StyleManager.setEffects(vGrid, style.hGrid);
 		}
 
 		/**
 		 * 绘制纵向分隔条
 		 */
-		public function drawVerticalGidLine(ticks:Vector.<Number>, style:GridFieldStyle):void
+		public function drawHGidLine(ticks:Vector.<Number>, style:GridFieldStyle):void
 		{
+			hGrid.cacheAsBitmap = false;
+			
 			var i:uint;
 			var departs:uint = ticks.length - 1;
 			var partLength:Number = style.width / departs;
 			var lineX:Number;
 			
-			verticalGrid.graphics.clear();
+			hGrid.graphics.clear();
 			for (i = 0; i <= departs; i++)
 			{
 				lineX = ticks[i];
 				
 				if (i % 2 != 0 && i <= departs)
 				{
-					verticalGrid.graphics.lineStyle(0, 0, 0);
-					StyleManager.setFillStyle(verticalGrid.graphics, style.vGrid);
-					verticalGrid.graphics.drawRect(lineX, 0, partLength, style.height);
-					verticalGrid.graphics.endFill();
+					hGrid.graphics.lineStyle(0, 0, 0);
+					StyleManager.setFillStyle(hGrid.graphics, style.vGrid);
+					hGrid.graphics.drawRect(lineX, 0, partLength, style.height);
+					hGrid.graphics.endFill();
 				}
 			}
 			
-			StyleManager.setLineStyle(verticalGrid.graphics, style.vGrid.getBorder);
+			StyleManager.setLineStyle(hGrid.graphics, style.vGrid.getBorder);
 			for (i = 0; i <= departs; i++)
 			{
 				lineX = ticks[i];
 				
-				verticalGrid.graphics.moveTo(lineX, 0);
-				verticalGrid.graphics.lineTo(lineX, style.height);
+				hGrid.graphics.moveTo(lineX, 0);
+				hGrid.graphics.lineTo(lineX, style.height);
 			}
 			
-			StyleManager.setEffects(verticalGrid, style.vGrid);
+			StyleManager.setEffects(hGrid, style.vGrid);
+			
+			hGrid.cacheAsBitmap = true;
 		}
 		
 		/**
 		 */		
-		private var horizontalGrid:Shape = new Shape();
-		private var verticalGrid:Shape = new Shape();
+		private var vGrid:Shape = new Shape();
+		private var hGrid:Shape = new Shape();
 		private var vGridMask:Shape = new Shape;
 		private var hGridMask:Shape = new Shape;
 		private var border:Shape = new Shape;

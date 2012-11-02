@@ -38,6 +38,11 @@ package com.fiCharts.charts.common
 		function setDataScalable(value:Boolean):void;
 		
 		/**
+		 * 判断图表是否支持数据缩放 ，此方法供JS调用，不然会影响网页的滚动
+		 */		
+		function ifDataScalable():Boolean
+		
+		/**
 		 * 设置图表的配置文件， 通常图表的配置文件包含了数据；也可以只传递配置信息，然后调用 dataXML 接口传递数据；
 		 */		
 		function set configXML(value:XML):void;

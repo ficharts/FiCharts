@@ -43,6 +43,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.system.GC;
+	import com.fiCharts.utils.system.OS;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -51,11 +52,16 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.display.Sprite;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
+	import flash.events.GestureEvent;
+	import flash.events.GesturePhase;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.events.TransformGestureEvent;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.text.TextField;
+	import flash.ui.Multitouch;
 	import flash.utils.Timer;
 	
 	/**
@@ -139,6 +145,13 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
+		public function ifDataScalable():Boolean
+		{
+			return chartModel.dataScale.enable;
+		}
+		
+		/**
+		 */		
 		public function setDataScalable(value:Boolean):void
 		{
 			chartModel.dataScale.enable = value;
@@ -164,12 +177,51 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function initDataResizeContorl():void
 		{
+			/*if (OS.isDesktopSystem == false)
+				this.mouseChildren = this.mouseEnabled = false;*/
+				
 			 stage.addEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler, false, 0, true);
 			 stage.addEventListener(MouseEvent.MOUSE_UP, stopMoveHandler);
 			 stage.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
 			 
 			 ExternalUtil.addCallback("onWebmousewheel", onWebMouseWheel);
+			 
+			 stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, mobileZoomHandler, false, 0, true);
 		}
+		
+		/**
+		 */		
+		private function mobileZoomHandler(evt:TransformGestureEvent):void
+		{
+			if(chartModel.dataScale.enable)
+			{
+				if (evt.phase == GesturePhase.BEGIN)
+				{
+					/*chartCanvas.visible = chartCanvas.mouseChildren = chartCanvas.mouseEnabled = false;
+					this.scrollImgRender.visible = true;
+					
+					firstDraw();*/
+					zoomScale = 1;
+				}
+				else if (evt.phase == GesturePhase.END)
+				{
+					/*chartCanvas.visible = chartCanvas.mouseChildren = chartCanvas.mouseEnabled = true;
+					this.scrollImgRender.visible = false;*/
+					
+					var ifZoomIn:Boolean = (zoomScale - 1) > 0 ? true : false; 
+					resizeChartOnGesture(0.5, ifZoomIn, Math.abs(zoomScale - 1));
+				}
+				else
+				{
+					zoomScale = zoomScale * evt.scaleX;
+				}
+			}
+			
+		}
+		
+		/**
+		 */		
+		private var zoomScale:Number; 
 		
 		/**
 		 * 网页中的Flash无法接受滚轮，需要先屏蔽web中的滚轮事件，将滚动值传给Flash
@@ -179,47 +231,58 @@ package com.fiCharts.charts.chart2D.encry
 			if(chartModel.dataScale.enable)
 			{
 				var percent:Number = this.mouseX / this.chartWidth;
-				var dis:Number = this.currentDataRange.max - this.currentDataRange.min;
+				var ifZoomIn:Boolean = value > 0 ? true : false; 
 				
-				var targetPer:Number = this.currentDataRange.min + dis * percent;
-				var newStart:Number, newEnd:Number;
-				var zoomPer:Number = dis * chartModel.dataScale.zoomScale;
-				var minZoom:Number = zoomPer * targetPer;
-				var maxZoom:Number = zoomPer - minZoom;
-				
-				if (value > 0) // 放大
-				{
-					if (dis <= 1 / chartModel.dataScale.maxScale) return;
-					
-					newStart = this.currentDataRange.min + minZoom
-					newEnd = this.currentDataRange.max - maxZoom
-				}
-				else// 缩小
-				{
-					newStart = this.currentDataRange.min - minZoom;
-					newEnd = this.currentDataRange.max + maxZoom
-					
-					if (newStart < 0 && newEnd <= 1)
-					{
-						newEnd += zoomPer;
-						newStart = 0;
-					}
-					else if (newEnd > 1 && newStart >= 0)
-					{
-						newStart -= zoomPer;
-						newEnd = 1;
-					}
-				}
-				
-				if (newStart < 0)
-					newStart = 0;
-				
-				if (newEnd > 1)
-					newEnd = 1;
-				
-				this.dataResized(newStart, newEnd);
-				
+				resizeChartOnGesture(percent, ifZoomIn, chartModel.dataScale.zoomScale);
 			}
+		}
+		
+		/**
+		 * percent 代表触控位置
+		 * 
+		 * scale 是缩放的倍数
+		 */		
+		private function resizeChartOnGesture(percent:Number, ifZoomIn:Boolean, scale:Number):void
+		{
+			var dis:Number = this.currentDataRange.max - this.currentDataRange.min;
+			
+			var targetPer:Number = this.currentDataRange.min + dis * percent;
+			var newStart:Number, newEnd:Number;
+			var zoomPer:Number = dis * scale;
+			var minZoom:Number = zoomPer * targetPer;
+			var maxZoom:Number = zoomPer - minZoom;
+			
+			if (ifZoomIn > 0) // 放大
+			{
+				if (dis <= 1 / chartModel.dataScale.maxScale) return;
+				
+				newStart = this.currentDataRange.min + minZoom
+				newEnd = this.currentDataRange.max - maxZoom
+			}
+			else// 缩小
+			{
+				newStart = this.currentDataRange.min - minZoom;
+				newEnd = this.currentDataRange.max + maxZoom
+				
+				if (newStart < 0 && newEnd <= 1)
+				{
+					newEnd += zoomPer;
+					newStart = 0;
+				}
+				else if (newEnd > 1 && newStart >= 0)
+				{
+					newStart -= zoomPer;
+					newEnd = 1;
+				}
+			}
+			
+			if (newStart < 0)
+				newStart = 0;
+			
+			if (newEnd > 1)
+				newEnd = 1;
+			
+			this.dataResized(newStart, newEnd);
 		}
 		
 		/**
@@ -256,28 +319,36 @@ package com.fiCharts.charts.chart2D.encry
 			
 			var offset:Number = evt.stageX - currentPosition; 
 			
-			// 只要有一次移动距离大于特定值就证明开始了滚动
-			if (ifSrollingData == false && Math.abs(offset) >= 3)
-			{
-				ifSrollingData = true;
-				stage.addEventListener(MouseEvent.MOUSE_UP, endScrollHadler);
-				chartCanvas.visible = chartCanvas.mouseChildren = chartCanvas.mouseEnabled = false;
-				this.scrollImgRender.visible = true;
-				
-				firstDraw();
-			}
-			
 			if (ifSrollingData)
 			{
 				scrollData(offset);
 				currentPosition = evt.stageX;
-				//evt.updateAfterEvent();
+			}
+			else
+			{
+				// 只要有一次移动距离大于特定值就证明开始了滚动
+				if (OS.isDesktopSystem && Math.abs(offset) >= 3)
+					startScroll();
+				else
+					startScroll();
 			}
 		}
 		
 		/**
 		 */		
-		private function endScrollHadler(evt:MouseEvent):void
+		private function startScroll():void
+		{
+			ifSrollingData = true;
+			stage.addEventListener(MouseEvent.MOUSE_UP, willEndScrollHadler);
+			chartCanvas.visible = chartCanvas.mouseChildren = chartCanvas.mouseEnabled = false;
+			this.scrollImgRender.visible = true;
+			
+			firstDraw();
+		}
+		
+		/**
+		 */		
+		private function willEndScrollHadler(evt:MouseEvent):void
 		{
 			ifSrollingData = false;
 			
@@ -288,7 +359,7 @@ package com.fiCharts.charts.chart2D.encry
 			scrollImgRender.visible = false;
 			this.chartCanvas.mouseChildren = chartCanvas.mouseEnabled = true;
 			
-			stage.removeEventListener(MouseEvent.MOUSE_UP, endScrollHadler);
+			stage.removeEventListener(MouseEvent.MOUSE_UP, willEndScrollHadler);
 		}
 		
 		/**
@@ -296,7 +367,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function scrollData(offset:Number):void
 		{
-			scrollBaseAxis.srcollingData(offset);
+			scrollBaseAxis.scrollingData(offset);
 			
 			this.gridField.scrollHGrid(scrollBaseAxis.currentScrollPos);
 			this.scrollImgRender.scroll(scrollBaseAxis.currentScrollPos);
@@ -321,7 +392,6 @@ package com.fiCharts.charts.chart2D.encry
 				
 				renderSeriesForDraw(start, end);
 			}
-			
 		}
 		
 		/**
@@ -344,7 +414,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function dataResized(startPercent:Number, endPercent:Number):void
 		{
-			if( startPercent >= 0 && startPercent <= 1 && endPercent >= 0 && endPercent <= 1)
+			if(endPercent > startPercent && startPercent >= 0 && startPercent <= 1 && endPercent >= 0 && endPercent <= 1)
 			{
 				currentDataRange.min = startPercent;
 				currentDataRange.max = endPercent;
@@ -355,9 +425,9 @@ package com.fiCharts.charts.chart2D.encry
 				// 坐标轴会驱动序列按照节点位置或数据范围方式完成, 序列再驱动渲染节点等的更新
 				scrollBaseAxis.dataResized(currentDataRange.min, currentDataRange.max);
 				scrollBaseAxis.renderHoriticalAxis();
+				gridField.drawHGidLine(scrollBaseAxis.ticks, chartModel.gridField);
 				
 				this.combileItemRender();
-				gridField.render(this.hAxises[0].ticks, this.vAxises[0].ticks, chartModel.gridField);
 				
 				if (this.chartModel.dataScale.enable && scrollImgRender  == null)
 				{
@@ -567,6 +637,13 @@ package com.fiCharts.charts.chart2D.encry
 		private var ifSourceDataChanged:Boolean = false;
 		
 		
+		
+		
+		
+		
+		
+		
+		
 		//----------------------------------------------
 		//
 		// 	Render the chart.
@@ -574,37 +651,66 @@ package com.fiCharts.charts.chart2D.encry
 		//-----------------------------------------------
 
 		/**
-		 *  When do first render, use this method.
+		 *  
 		 */
 		public function render():void
 		{
 			if (configXML && this.dataXML && chartModel.series.length)
-				ifRenderable = true;
-			
+			{
+				// 为避免重复渲染，这里做了严格的限制条件，
+				if(this.ifSizeChanged || this.ifSourceDataChanged 
+					|| chartModel.axis.changed || chartModel.series.changed) 
+				{
+					preConfig();
+					preLayout();
+					checkRender();
+					
+					ifSizeChanged = false;
+				}
+			}
+		}
+		
+		/**
+		 * 
+		 * 坐标轴，标题，图例渲染后才有尺寸，图表外围的间距才能确定下来，从而图表区域才能确定
+		 * 
+		 * 所以要先渲染这些元素，知道周围间距被调节的合适了才正式渲染序列，进行位置摆放和后继的工作
+		 * 
+		 */		
+		private function checkRender():void
+		{
 			this.vAxisLabelOffset = this.hAxisLabelOffset = 0;
+			preRender();
+			this.ifNeedRefectorLayout = false;
 			
-			renderStart();
-			
-			// 初次渲染时坐标轴尺寸渲染后会变，需要重新调整布局再渲染；
 			if(isLayoutUpdated())
 			{
-				renderStart();
-				renderEnd();
-			}
-			else
-			{
-				renderEnd();
+				checkRender();
+				return;
 			}
 			
+			coreRender();
+			renderEnd();
+		}
+		
+		/**
+		 * 预渲染项，其尺寸会影响图表的尺寸布局
+		 */		
+		private function preRender():void
+		{
+			renderTitle();
+			renderAxis();
+			renderLegend();
 		}
 		
 		/**
 		 */		
-		private function renderStart():void
+		private function coreRender():void
 		{
-			preLayout();
-			preRender();
-			coreRender();
+			renderSeries();
+			renderBG();
+			drawMask(chartMask);
+			layoutElementsPos(); 
 		}
 		
 		/**
@@ -629,81 +735,38 @@ package com.fiCharts.charts.chart2D.encry
 			
 			//openFlash();
 			GC.run();
-			ifRenderable = false;
 		}
 		
 		/**
+		 * 设置坐标轴序列关系, 定义序列，坐标轴(图例的数据)
 		 */		
-		private var ifRenderable:Boolean = false;// TODO
-		
-		/**
-		 */		
-		private function preRender():void
+		private function preConfig():void
 		{
-			if (ifRenderable)
-			{
-				configSeriesAxis();
-				configSeriesData();
-				updateAxisData();
-			}
+			configSeriesAxis();
+			configSeriesAndLegendData();
+			updateAxisData();
 		}
 		
-		/**
-		 * 预先刷新
-		 */		
-		private function preLayout():void
-		{
-			leftSpace = temLeftSpace;
-			rightSpace = temRightSpace;
-			
-			topSpace = temTopSpace;
-			bottomSpace = temBottomSpace;
-			
-			updateSizeY();
-			updateSizeX();
-		}
-			
-		/**
-		 *  This is the true method to render.
-		 */
-		protected function coreRender():void
-		{
-			if (ifRenderable)
-			{
-				renderTitle();
-				renderAxis();
-				renderSeries();
-				renderBG();
-				
-				if (legendPanel && chartModel.legend.enable)
-					legendPanel.render();
-				
-				layoutChart(); 
-			}
-		}
-
 		/**
 		 */
 		private function renderBG():void
 		{
-			if (ifLayoutChanged)
-			{
-				chartModel.chartBG.width = chartWidth;
-				chartModel.chartBG.height = chartHeight;
-				
-				chartModel.gridField.width = sizeX;
-				chartModel.gridField.height = sizeY;
-			}
+			chartModel.chartBG.width = chartWidth;
+			chartModel.chartBG.height = chartHeight;
+			
+			chartModel.gridField.width = sizeX;
+			chartModel.gridField.height = sizeY;
 			
 			gridField.render(this.hAxises[0].ticks, this.vAxises[0].ticks, chartModel.gridField);
 			chartBG.render(chartModel.chartBG);
 		}
 
 		/**
+		 * 配置驱动下的Label渲染时可能 sizeX 还未被设定，所以此时不渲染标题
 		 */		
 		private function renderTitle():void
 		{
-			if (ifRenderable)
+			if (this.sizeX >= 0)
 			{
 				title.boxWidth = this.sizeX;
 				title.render();
@@ -714,13 +777,26 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 
+		 */		
+		private function renderLegend():void
+		{
+			if (legendPanel && chartModel.legend.enable)
+			{
+				legendPanel.panelWidth = this.chartWidth - legendPanel.style.hMargin * 2;
+				legendPanel.render();
+			}
+		}
+		
+		/**
 		 *  Draw axisLabels.
 		 */
 		private function renderAxis():void
 		{
 			var axis:AxisBase;
 			var temOffset:Number = 0;
-			if (ifLayoutChanged || this.chartModel.axis.changed)
+			
+			if (this.ifSizeChanged || this.chartModel.axis.changed)
 			{
 				for each (axis in hAxises)
 				{
@@ -744,7 +820,9 @@ package com.fiCharts.charts.chart2D.encry
 				axis.renderHoriticalAxis();
 				
 				temOffset = axis.minUintSize;
-				if (temOffset > hAxisLabelOffset)
+				
+				// 防止坐标轴边沿label无法完全显示，这个值会作用在左右间距上，给边缘label留够空间
+				if (temOffset != hAxisLabelOffset)
 					hAxisLabelOffset = temOffset;
 				
 				if (axis.position == 'bottom')
@@ -768,7 +846,7 @@ package com.fiCharts.charts.chart2D.encry
 				axis.renderVerticalAxis();
 				
 				temOffset = axis.minUintSize;
-				if (temOffset > vAxisLabelOffset)
+				if (temOffset != vAxisLabelOffset)
 					vAxisLabelOffset = temOffset;
 				
 				if (axis.position == 'left')
@@ -832,15 +910,21 @@ package com.fiCharts.charts.chart2D.encry
 				leftOffBubblesItemRender();// 调节显示列表深度；
 				for each (itemRender in itemRenders)
 				{
-					itemRender.render();
-					this.chartCanvas.addItemRender(itemRender);
+					if (itemRender)
+					{
+						itemRender.render();
+						this.chartCanvas.addItemRender(itemRender);
+					}
 				}
 				
 				chartModel.series.changed = ifSourceDataChanged = false;
 			}
 			
 			for each (itemRender in itemRenders)
-				itemRender.layout();
+			{
+				if (itemRender)
+					itemRender.layout();
+			}
 				
 			combileItemRender();
 			
@@ -869,6 +953,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			for each (var itemRender:ItemRenderBace in renders)
 			{
+				if (itemRender == null) continue;
 				if (itemRender.valueLabel.enable == false) continue;
 				
 				px = itemRender.x + itemRender.valueLabelUI.x;
@@ -1115,30 +1200,36 @@ package com.fiCharts.charts.chart2D.encry
 		//
 		//---------------------------------
 		
+		/**
+		 * 计算原始尺寸和位置基点
+		 */		
+		private function preLayout():void
+		{
+			leftSpace = temLeftSpace;
+			rightSpace = temRightSpace;
+			
+			topSpace = temTopSpace;
+			bottomSpace = temBottomSpace;
+			
+			updateXYSize();
+		}
 		
 		/**
-		 * Set items' position and size.
+		 * 设置各个元素的位置
 		 */
-		private function layoutChart():void
+		private function layoutElementsPos():void
 		{
-			if (ifLayoutChanged)
+			this.chartMask.x = chartCanvas.x = gridField.x = originX;
+			this.chartMask.y = chartCanvas.y = originY; 
+				
+			if (scrollImgRender)
 			{
-				this.chartMask.x = chartCanvas.x = gridField.x = originX;
-				this.chartMask.y = chartCanvas.y = originY; 
-					
-				if (scrollImgRender)
-				{
-					scrollImgRender.x = originX;
-					scrollImgRender.y = originY;
-				}
-				
-				gridField.y = topY;
-				
-				drawMask(chartMask);
-				
-				layoutLegendPanel();
-				ifLayoutChanged = false;
+				scrollImgRender.x = originX;
+				scrollImgRender.y = originY;
 			}
+			
+			gridField.y = topY;
+			layoutLegendPanel();
 		}
 		
 		/**
@@ -1167,73 +1258,92 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 
+		 * 只要动态计算的边距大于现有值，就采用动态边距
+		 * 
+		 * 最后还要根据坐标轴布局方式调节一下边距，以便坐标轴边缘
+		 * 
+		 * 字段能够完全显示下
 		 */		
 		private function isLayoutUpdated():Boolean
 		{
 			if (temBottomSpace > bottomSpace) 
 			{
 				bottomSpace = temBottomSpace;
-				updateSizeY();
+				ifNeedRefectorLayout = true;
 			}
 			
 			if (temTopSpace > topSpace)
 			{
 				topSpace = temTopSpace;
-				updateSizeY();
+				ifNeedRefectorLayout = true;
 			}
 			
-			if (temLeftSpace > leftSpace || temLeftSpace < hAxisLabelOffset / 2) 
+			if (temLeftSpace > leftSpace) 
 			{
 				leftSpace = temLeftSpace;
-				updateSizeX();
+				ifNeedRefectorLayout = true;
 			}
 			
-			if (temRightSpace > rightSpace || temRightSpace < hAxisLabelOffset / 2)
+			if (temRightSpace > rightSpace) 
 			{
 				rightSpace = temRightSpace;
-				updateSizeX();
+				ifNeedRefectorLayout = true;
 			}
 			
-			return this.ifLayoutChanged;
-		}
-		
-		/**
-		 */		
-		private function updateSizeX():void
-		{
-			if (hAxisLabelOffset > 0)
+			
+			// 仅左侧有坐标轴, 右侧要和谐一下间距
+			if (leftAxisContainer.numChildren && !rightAxisContainer.numChildren)
 			{
-				// 仅左侧有坐标轴
-				if (leftAxisContainer.numChildren && !rightAxisContainer.numChildren)
-					rightSpace += hAxisLabelOffset / 2;
-				else if (!leftAxisContainer.numChildren && rightAxisContainer.numChildren) // 右侧坐标轴
-					leftSpace += hAxisLabelOffset / 2;
+				if (rightSpace < hAxisLabelOffset / 2)
+				{
+					rightSpace = hAxisLabelOffset / 2;
+					ifNeedRefectorLayout = true;
+				}
+			}
 				
-				// 左右皆有坐标轴的情况下无需调节尺寸， 两侧空隙挺宽敞的， 不用考虑Label的越界太多.
+			//仅右侧有坐标轴，左侧要和谐一下间距
+			if (!leftAxisContainer.numChildren && rightAxisContainer.numChildren)
+			{
+				if (leftSpace < hAxisLabelOffset / 2)
+				{
+					leftSpace = hAxisLabelOffset / 2;
+					ifNeedRefectorLayout = true;
+				}
 			}
 			
-			sizeX = chartWidth - this.leftSpace - this.rightSpace;
+			//仅底部有坐标轴
+			if (bottomAxisContainer.numChildren && !topAxisContainer.numChildren)
+			{
+				if(topSpace < vAxisLabelOffset / 2)
+				{
+					topSpace = vAxisLabelOffset / 2; 
+					ifNeedRefectorLayout = true;
+				}
+			}
+				
+			//仅顶部有坐标轴
+			if (!bottomAxisContainer.numChildren && topAxisContainer.numChildren)
+			{
+				if (bottomSpace < vAxisLabelOffset / 2)
+				{
+					bottomSpace = vAxisLabelOffset / 2;
+					ifNeedRefectorLayout = true;
+				}
+			}
 			
-			if (legendPanel)
-				legendPanel.panelWidth = this.chartWidth - legendPanel.style.hMargin * 2;
+			if (ifNeedRefectorLayout)
+				updateXYSize();
 			
-			ifLayoutChanged = true; 
+			return this.ifNeedRefectorLayout;
 		}
 		
 		/**
 		 */		
-		private function updateSizeY():void
+		private function updateXYSize():void
 		{
-			if (vAxisLabelOffset > 0)
-			{
-				if (bottomAxisContainer.numChildren && !topAxisContainer.numChildren)
-					topSpace += vAxisLabelOffset / 2;
-				else if (!bottomAxisContainer.numChildren && topAxisContainer.numChildren)
-					bottomSpace += vAxisLabelOffset / 2;
-			}
-			
+			sizeX = chartWidth - this.leftSpace - this.rightSpace;
 			sizeY = chartHeight - this.bottomSpace - this.topSpace;
-			ifLayoutChanged = true;
 		}
 		
 		/**
@@ -1302,7 +1412,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private var ifLayoutChanged:Boolean = false;
+		private var ifNeedRefectorLayout:Boolean = false;
 		
 		/**
 		 */		
@@ -1327,6 +1437,8 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			chartWidth = w;
 			chartHeight = h;
+			
+			ifSizeChanged = true;
 		}
 		
 		/**
@@ -1339,8 +1451,16 @@ package com.fiCharts.charts.chart2D.encry
 		public function set chartWidth(value:Number):void
 		{
 			if (_chartWidth != value)
+			{
 				_chartWidth = value;
+				ifSizeChanged = true;
+			}
 		}
+		
+		/**
+		 * 
+		 */		
+		private var ifSizeChanged:Boolean = false;
 		
 		/**
 		 */
@@ -1354,7 +1474,10 @@ package com.fiCharts.charts.chart2D.encry
 		public function set chartHeight(value:Number):void
 		{
 			if (_chartHeight != value)
+			{
 				_chartHeight = value;
+				ifSizeChanged = true;				
+			}
 		}
 		
 		
@@ -1476,17 +1599,22 @@ package com.fiCharts.charts.chart2D.encry
 				
 				//目前仅横轴方向支持数据滚动和缩放，并且仅单轴支持
 				if(chartModel.dataScale.enable)
+				{
 					scrollBaseAxis = hAxises[0];
+					
+					if (scrollBaseAxis is LinearAxis)
+						(scrollBaseAxis as LinearAxis).baseAtZero = false;
+						
+					scrollBaseAxis.scrollBarStyle = this.chartModel.scrollBar;					
+				}
 			}
-			
-			
 			
 		}
 		
 		/**
 		 * 序列或者原始数据改变时更新序列数据， 更新图例数据；
 		 */		
-		private function configSeriesData():void
+		private function configSeriesAndLegendData():void
 		{
 			var legends:Vector.<LegendVO> = new Vector.<LegendVO>();
 			

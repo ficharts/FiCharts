@@ -4,6 +4,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
+	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -48,8 +49,6 @@ package com.fiCharts.utils.XMLConfigKit.style
 			this.visible = labelStyle.enable;
 				
 			StyleManager.setLabelUIText(this, this.metaData);
-			textField.text = text;
-			textField.setTextFormat(labelStyle.getTextFormat(metaData));
 			
 			textField.x = labelStyle.hPadding;
 			textField.y = labelStyle.vPadding;
@@ -62,16 +61,21 @@ package com.fiCharts.utils.XMLConfigKit.style
 					textField.width = minLabelWidth;
 				else
 					textField.width = maxLabelWidth - labelStyle.hPadding * 2;
+				
+				textField.text = text;
+				textField.setTextFormat(labelStyle.getTextFormat(metaData));
 			}
 			else
 			{
 				textField.wordWrap = false
+				textField.text = text;
+				textField.setTextFormat(labelStyle.getTextFormat(metaData));
+				
 				textField.width = textField.textWidth;
+				textField.height = textField.textHeight;
 			}
 			
-			textField.height = textField.textHeight;
 			textField.autoSize = TextFieldAutoSize.CENTER;
-			
 			StyleManager.setEffects(textField, labelStyle.text as Text, metaData);
 			
 			// 绘制背景
@@ -132,6 +136,9 @@ package com.fiCharts.utils.XMLConfigKit.style
 		}
 		
 		/**
+		 * 用textWidth是为了防止当换行显示时，maxLabelWidth 过大， 这时要截取此Label的图时右侧
+		 * 
+		 * 将有一部分空白，为了避免截取多余的空白区域这用textWidth靠谱一些，不能用width
 		 */		
 		private function get uiWidth():Number
 		{
@@ -139,10 +146,12 @@ package com.fiCharts.utils.XMLConfigKit.style
 		}
 		
 		/**
+		 * 换行后 textField 的高度不等于 textHeight 和 区域的Bound高度， 鄙视一下adobe
 		 */		
 		private function get uiHeight():Number
 		{
-			return textField.textHeight + labelStyle.vPadding * 2;
+			
+			return textField.height + labelStyle.vPadding * 2;
 		}
 		
 		/**

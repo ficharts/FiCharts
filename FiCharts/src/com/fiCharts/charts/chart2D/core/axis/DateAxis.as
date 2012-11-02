@@ -1,5 +1,6 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -24,6 +25,39 @@ package com.fiCharts.charts.chart2D.core.axis
 			dayP = "day";
 			monthP = "month";
 			fullYearP = "fullYear";         
+		}
+		
+		/**
+		 */		
+		override public function percentToPos(per:Number):Number
+		{
+			var position:Number;
+			
+			if (confirmedSourceValueRange)
+				position = per * this.fullSize - offsetSize + this.currentScrollPos;
+			else
+				position = 0;
+			
+			if (this.inverse)
+				position = this.fullSize - position;
+			
+			return position;
+		}
+		
+		/**
+		 * 滚动结束后，渲染数据范围内的序列，数据范围根据滚动位置计算
+		 */		
+		override public function dataScrolled(dataRange:DataRange):void
+		{
+			var offPerc:Number = this.currentScrollPos / this.fullSize;
+			var min:Number = this.currentDataRange.min - offPerc * this.sourceValueDis;
+			var max:Number = currentDataRange.max - offPerc * sourceValueDis;
+			
+			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
+				min, max));
+			
+			dataRange.min = (min - this.sourceDataRange.min) / this.confirmedSourceValueRange;
+			dataRange.max = (max - this.sourceDataRange.min) / this.confirmedSourceValueRange;
 		}
 		
 		/**
@@ -66,7 +100,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			_output = value;
 		}
 
-		
 		/**
 		 * 将传进来的字符串转化为时间对象，然后再将时间对象转化为毫秒数值；
 		 */
@@ -93,44 +126,39 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 */
+		 */		
 		override public function dataUpdated():void
 		{
 			sourceValues.sort(Array.NUMERIC);
 			
-			var temMin:Number;
-			var temMax:Number;
-
 			if (!isNaN(assignedMinimum))
-				temMin = assignedMinimum;
+				sourceMin = assignedMinimum;
+			else
+				sourceMin = Number(sourceValues[0]);
 			
 			if (!isNaN(assignedMaximum))
-				temMax = assignedMaximum;
-
-			// 没有设置最大最小值时则从系统数据获取；
-			var autoGen:Boolean = isNaN(assignedMinimum) || isNaN(assignedMaximum);
-
-			if (autoGen)
+				sourceMax = assignedMaximum;
+			else
+				sourceMax = Number(sourceValues[sourceValues.length - 1]);
+			
+			// 单值的情况；
+			if (sourceValues.length == 1)
+				sourceMin = sourceMax = Number(sourceValues[0]);
+			
+			if (autoAdjust == false)
 			{
-				// 单值的情况；
-				if (sourceValues.length == 1)
-				{
-					temMin = temMax = sourceValues.pop();
-					if (temMax > 0)
-						temMin = 0;
-					else if (temMax < 0)
-						temMax = 0;
-				}
-				else // 多值的情况
-				{
-					temMin = sourceValues.shift();
-					temMax = sourceValues.pop();
-				}
-			}
-
-			this.preMax = temMax;
-			this.preMin = temMin; 
+				_maximum = sourceMax;
+				_minimum = sourceMin;
 				
+				this.changed = false;
+				
+				// 气泡图的控制气泡大小的轴无需渲染，原始刻度间距即为确认的间距
+				confirmedSourceValueRange = _maximum - _minimum;
+				return; 
+			}
+			
+			sourceValueDis = sourceMax - sourceMin;
+			
 			this.label.layout = this.labelDisplay;
 			
 			if (label.layout == LabelStyle.NONE)
@@ -142,112 +170,131 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 * 渲染之前调用；
 		 */		
-		override public function beforeRender():void
+		override protected function createLabelsData():void
 		{
-			if (changed)
+			labelsData = new Vector.<AxisLabelData>;
+			var labelValue:String;
+			
+			var startDate:Date = new Date();
+			var currenDate:Date = new Date;
+			var labelData:AxisLabelData;
+			
+			startDate.setTime(this.sourceDataRange.min);
+			
+			for (var i:uint = 0; i < uintAmount; i ++)
 			{
-				//最小单位值
-				var minUintValue:Number = 0;
-				var lastValidUnits:String = units;
-				var minD:Date = new Date(preMax);
-				var maxD:Date = new Date(preMin);
-				var minMilli:Number = preMax;
-				var maxMilli:Number = preMin;
-				var units:String = "years";
-				var valueDis:Number;
-				var miniInternal:Number;
-				var lastValidMin:Number;
-				var lastValidMax:Number;
-				
-				while (units != null)
+				labelData = new AxisLabelData;
+				currenDate.setTime(this.sourceDataRange.min);
+				switch (lastValidUnits)
 				{
-					preInterval = toMilli(1, units);
-					
-					minD.setTime(preMin);
-					roundDateDown(minD, units);
-					minMilli = minD.getTime();
-					
-					maxD.setTime(preMax);
-					roundDateUp(maxD, units);
-					maxMilli = maxD.getTime();
-					
-					valueDis = maxMilli - minMilli;// 临时差值；
-					miniInternal = toMilli(1, getMiniInternalUint(valueDis));
-					
-					if (preInterval >= miniInternal)
+					case "seconds":
 					{
-						lastValidMin = minMilli;
-						lastValidMax = maxMilli;
-						lastValidUnits = units;
-					}
-					else
-					{
+						currenDate.setSeconds(startDate.getSeconds() + i)
 						break;
 					}
-						
-					units = UNIT_PROGRESSION[units];
+					case "hours":
+					{
+						currenDate.setHours(startDate.getHours()+ i)
+						break;
+					}
+					case "days":
+					{
+						currenDate.setDate(startDate.getDate()+ i)
+						break;
+					}
+					case "minutes":
+					{
+						currenDate.setMinutes(startDate.getMinutes()+ i)
+						break;
+					}
+					case "years":   
+					{
+						currenDate.setFullYear(startDate.getFullYear()+ i)
+						break;
+					}
+					case 'months':
+					{
+						currenDate.setMonth(startDate.getMonth()+ i)
+						break;
+					}
 				}
 				
-				_minimum  = lastValidMin;
-				_maximum = lastValidMax;
-				interval = toMilli(1, lastValidUnits);
-				
-				labelsData = new Vector.<AxisLabelData>;
-				var labelValue:String;
-				var uintAmount:uint = Math.ceil(valueDis / interval) + 1;
-				var startDate:Date = new Date();
-				var currenDate:Date = new Date;
-				var labelData:AxisLabelData;
-				
-				startDate.setTime(_minimum);
-				
-				for (var i:uint = 0; i < uintAmount; i ++)
-				{
-					labelData = new AxisLabelData;
-					currenDate.setTime(_minimum);
-					 switch (lastValidUnits)
-					 {
-						 case "seconds":
-						 {
-							currenDate.setSeconds(startDate.getSeconds() + i)
-							break;
-						 }
-						 case "hours":
-						 {
-							currenDate.setHours(startDate.getHours()+ i)
-							break;
-						 }
-						 case "days":
-						 {
-							 currenDate.setDate(startDate.getDate()+ i)
-							 break;
-						 }
-						 case "minutes":
-						 {
-							 currenDate.setMinutes(startDate.getMinutes()+ i)
-							 break;
-						 }
-						 case "years":   
-						 {
-							currenDate.setFullYear(startDate.getFullYear()+ i)
-							break;
-						 }
-						 case 'months':
-						 {
-							 currenDate.setMonth(startDate.getMonth()+ i)
-							 break;
-						 }
-					 }
-					 
-					 labelData.value = dateTimerToLabel(currenDate);
-					 labelsData.push(labelData);
-				}
-				
-				unitSize = size / this.labelsData.length;
+				labelData.value = dateTimerToLabel(currenDate);
+				labelsData.push(labelData);
 			}
+			
+			labelUIs.length = 0;
+			clearLabels();
 		}
+		
+		/**
+		 */		
+		override protected function preMaxMin(max:Number, min:Number):void
+		{
+			//最小单位值
+			var minUintValue:Number = 0;
+			var minD:Date = new Date(max);
+			var maxD:Date = new Date(min);
+			var minMilli:Number = preMax;
+			var maxMilli:Number = preMin;
+			var units:String = "years";
+			var valueDis:Number;
+			var miniInternal:Number;
+			var lastValidMin:Number;
+			var lastValidMax:Number;
+			lastValidUnits = units;
+			
+			while (units != null)
+			{
+				preInterval = toMilli(1, units);
+				
+				minD.setTime(min);
+				roundDateDown(minD, units);
+				minMilli = minD.getTime();
+				
+				maxD.setTime(max);
+				roundDateUp(maxD, units);
+				maxMilli = maxD.getTime();
+				
+				valueDis = maxMilli - minMilli;// 临时差值；
+				miniInternal = toMilli(1, getMiniInternalUint(valueDis));
+				
+				if (preInterval >= miniInternal)
+				{
+					lastValidMin = minMilli;
+					lastValidMax = maxMilli;
+					lastValidUnits = units;
+				}
+				else
+				{
+					break;
+				}
+				
+				units = UNIT_PROGRESSION[units];
+			}
+			
+			_minimum  = lastValidMin;
+			_maximum = lastValidMax;
+			
+			interval = toMilli(1, lastValidUnits);
+		}
+		
+		/**
+		 * 核定，确定最大最小值
+		 */		
+		override protected function confirmMaxMin():void
+		{
+			uintAmount = Math.ceil(this.sourceValueDis / interval) + 1;
+		}
+		
+		/**
+		 */		
+		private var uintAmount:uint;
+		
+		/**
+		 */		
+		private var lastValidUnits:String;
 		
 		/**
 		 */		
@@ -334,31 +381,13 @@ package com.fiCharts.charts.chart2D.core.axis
 		private var miniUnitCount:uint = 2;
 		
 		/**
-		 */
-		override public function valueToX(value:Object):Number
-		{
-			return valueToSize(value);
-		}
-
-		/**
 		 */		
-		override public function valueToY(value:Object):Number
+		override protected function getValuePercent(value:Object):Number
 		{
-			return - valueToSize(value);
-		}
-		
-		/**
-		 */
-		override protected function valueToSize(value:Object):Number
-		{
-			var position:Number;
-			var timeValue:Number = stringDateToDateTimer(value);
-			position = (timeValue - minimum) / confirmedSourceValueRange * size;
-
-			if (this.inverse)
-				position = this.size - position;
-				
-			return position;
+			if (value == null)
+				return 0;
+			else
+				return (stringDateToDateTimer(value) - this.sourceDataRange.min) / confirmedSourceValueRange;
 		}
 		
 		/**

@@ -13,10 +13,14 @@ package com.fiCharts.charts.chart2D.line
 	import com.fiCharts.utils.graphic.CubicBezier;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
+	import flash.display.DisplayObject;
+	import flash.display.Graphics;
 	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.geom.Point;
 
 	/**
+	 * 趋势图序列
 	 */	
 	public class LineSeries extends SeriesBase implements IDirectionSeries
 	{
@@ -28,12 +32,44 @@ package com.fiCharts.charts.chart2D.line
 		}
 		
 		/**
+		 * 线条的渲染模式， 简单型和复杂型， 默认是复杂型 default;
+		 * 
+		 * 简单型， simple 则每个节点不单独渲染，单个节点无法响应交互动作，但是渲染效率较高
+		 * 
+		 * 大数据量时建议采用simple类型
+		 */		
+		private var _type:String = 'default';
+
+		/**
+		 */
+		public function get renderType():String
+		{
+			return _type;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set renderType(value:String):void
+		{
+			_type = value;
+		}
+
+		/**
 		 */		
 		override protected function dataResizedByIndex(evt:DataResizeEvent):void
 		{
 			super.dataResizedByIndex(evt);
 			
-			renderPartUIs();
+			if (renderType == 'simple')
+			{
+				renderWholeLine(dataOffsetter.minIndex, dataOffsetter.maxIndex);
+			}
+			else
+			{
+				renderPartUIs();
+			}
+			
 			updataItemRendersLayout();
 		}
 		
@@ -43,7 +79,15 @@ package com.fiCharts.charts.chart2D.line
 		{
 			super.dataResizedByRange(evt);
 			
-			renderPartUIs();
+			if (renderType == 'simple')
+			{
+				renderWholeLine(dataOffsetter.minIndex, dataOffsetter.maxIndex);
+			}
+			else
+			{
+				renderPartUIs();
+			}
+			
 			updataItemRendersLayout();
 		}
 		
@@ -60,32 +104,50 @@ package com.fiCharts.charts.chart2D.line
 		 */
 		override protected function renderChart():void
 		{
-			if (ifDataChanged)
+			if (renderType == 'simple')
 			{
-				while (canvas.numChildren)
-					canvas.removeChildAt(0);
-				
-				var linePartUI:PartLineUI;
-				partUIs = new Vector.<PartLineUI>;
-				for each (var itemDataVO:SeriesDataItemVO in dataItemVOs)
+				if (this.ifSizeChanged || this.ifDataChanged)
 				{
-					linePartUI = new PartLineUI(itemDataVO);
-					linePartUI.partUIRender = this;
-					linePartUI.states = this.states;
-					linePartUI.metaData = itemDataVO.metaData;
-					canvas.addChild(linePartUI);
-					partUIs.push(linePartUI);
+					
+					states.tx = this.seriesWidth;
+					states.width = seriesWidth;
+					
+					this.style = this.states.getNormal;
+					
+					renderWholeLine(dataOffsetter.minIndex, dataOffsetter.maxIndex);
+					ifSizeChanged = ifDataChanged = false;
+				}
+			}
+			else
+			{
+				if (ifDataChanged)
+				{
+					while (canvas.numChildren)
+						canvas.removeChildAt(0);
+					
+					var linePartUI:PartLineUI;
+					partUIs = new Vector.<PartLineUI>;
+					for each (var itemDataVO:SeriesDataItemVO in dataItemVOs)
+					{
+						linePartUI = new PartLineUI(itemDataVO);
+						linePartUI.partUIRender = this;
+						linePartUI.states = this.states;
+						linePartUI.metaData = itemDataVO.metaData;
+						canvas.addChild(linePartUI);
+						partUIs.push(linePartUI);
+					}
+				}
+				
+				if (this.ifSizeChanged || this.ifDataChanged)
+				{
+					states.tx = this.seriesWidth;
+					states.width = seriesWidth;
+					
+					renderPartUIs();
+					ifSizeChanged = ifDataChanged = false;
 				}
 			}
 			
-			if (this.ifSizeChanged || this.ifDataChanged)
-			{
-				states.tx = this.seriesWidth;
-				states.width = seriesWidth;
-				
-				renderPartUIs();
-				ifSizeChanged = ifDataChanged = false;
-			}
 		}
 		
 		/**
@@ -133,22 +195,42 @@ package com.fiCharts.charts.chart2D.line
 		}
 		
 		/**
-		 * 目前每个节点渲染3变，而且渲染的是整个序列的节点，需优化
+		 * 每个节点渲染的是包括自身在内的临近几个节点
 		 */		
 		public function renderPartUI(canvas:Shape, style:Style, metaData:Object, renderIndex:uint):void
 		{
 			canvas.graphics.clear();
 			
 			StyleManager.setLineStyle(canvas.graphics, style.getBorder, style, metaData);
-			renderLine(canvas, 0, renderIndex);
+			renderPartLine(canvas, 0, renderIndex);
 			
 			if (style.cover && style.cover.border)
 			{
 				StyleManager.setLineStyle(canvas.graphics, style.cover.border, style, metaData);
-				renderLine(canvas, style.cover.offset, renderIndex);
+				renderPartLine(canvas, style.cover.offset, renderIndex);
 			}
 			
 			StyleManager.setEffects(canvas, style, metaData);
+		}
+		
+		/**
+		 * 
+		 * 一次渲染所有节点，此方法用在 simple 类型的的序列中, 最简单方式的渲染，但性能最好
+		 */		
+		protected function renderWholeLine(startIndex:uint, endIndex:uint):void
+		{
+			canvas.graphics.clear();
+			
+			StyleManager.setLineStyle(canvas.graphics, style.getBorder, style, this);
+			this.renderSimleLine(canvas.graphics, startIndex, endIndex, 0);
+			
+			/*if (style.cover && style.cover.border)
+			{
+				StyleManager.setLineStyle(canvas.graphics, style.cover.border, style, this);
+				this.renderSimleLine(canvas.graphics, startIndex, endIndex, style.cover.offset);
+			}*/
+			
+			//StyleManager.setEffects(canvas, style);
 		}
 		
 		/**
@@ -160,13 +242,20 @@ package com.fiCharts.charts.chart2D.line
 		/**
 		 * 每个节点的最终渲染都会调用到此方法
 		 */		
-		protected function renderLine(canvas:Shape, offset:Number = 0, renderIndex:uint = 0):void
+		protected function renderPartLine(canvas:Shape, offset:Number = 0, renderIndex:uint = 0):void
 		{
 			var startIndex:uint, endIndex:uint;
 			
 			startIndex = dataOffsetter.offsetMin(renderIndex, 0);
 			endIndex = dataOffsetter.offsetMax(renderIndex, itemRenderMaxIndex);
 			
+			renderSimleLine(canvas.graphics, startIndex, endIndex, offset);
+		}
+		
+		/**
+		 */		
+		protected function renderSimleLine(canvas:Graphics, startIndex:uint, endIndex:uint, offset:uint = 0):void
+		{
 			var firstX:Number = (dataItemVOs[startIndex] as SeriesDataItemVO).x; 
 			var firstY:Number = (dataItemVOs[startIndex] as SeriesDataItemVO).y - baseLine - offset;
 			
@@ -175,14 +264,14 @@ package com.fiCharts.charts.chart2D.line
 			
 			if (this.step)// 渐进线段方式
 			{
-				canvas.graphics.moveTo(firstX, firstY);
+				canvas.moveTo(firstX, firstY);
 				
 				var stepY:Number = firstY;
 				for (i = startIndex; i <= endIndex; i ++)
 				{
 					item = dataItemVOs[i];
-					canvas.graphics.lineTo(item.x, stepY);
-					canvas.graphics.lineTo(item.x, item.y - baseLine - offset);
+					canvas.lineTo(item.x, stepY);
+					canvas.lineTo(item.x, item.y - baseLine - offset);
 					stepY = item.y - baseLine - offset;
 				}
 			}
@@ -201,16 +290,16 @@ package com.fiCharts.charts.chart2D.line
 				}
 				
 				//绘制贝塞尔曲线
-				CubicBezier.curveThroughPoints(canvas.graphics, pointArr);
+				CubicBezier.curveThroughPoints(canvas, pointArr);
 			}
 			else //线段连接方式
 			{
-				canvas.graphics.moveTo(firstX, firstY);
+				canvas.moveTo(firstX, firstY);
 				
 				for (i = startIndex; i <= endIndex; i ++)
 				{
 					item = dataItemVOs[i];
-					canvas.graphics.lineTo(item.x, item.y - baseLine - offset);
+					canvas.lineTo(item.x, item.y - baseLine - offset);
 				}
 			}
 		}

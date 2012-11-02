@@ -85,7 +85,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_INDEX, 
 				currentDataRange.min, currentDataRange.max));
 			
-			changed = true;
+			super.dataResized(start, end);
 		}
 		
 		/**

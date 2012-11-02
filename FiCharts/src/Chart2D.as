@@ -11,7 +11,7 @@ package
 	import mx.core.ByteArrayAsset;
 	
 	/**
-	 * 2D图表主程序
+	 * 2D图表主程序，用此类可以构建柱状图，趋势图，堆积图，混合图表等。
 	 */	
 	public class Chart2D extends ChartShellBase
 	{

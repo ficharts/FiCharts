@@ -37,6 +37,13 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
+		public function ifDataScalable():Boolean
+		{
+			return false;
+		}
+		
+		/**
+		 */		
 		public function scaleData(from:Object, to:Object):void
 		{
 			

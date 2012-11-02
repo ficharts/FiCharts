@@ -1,24 +1,22 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
+	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
 	import com.fiCharts.utils.graphic.StyleManager;
 	import com.fiCharts.utils.graphic.TextBitmapUtil;
 	
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.display.Sprite;
-	import flash.geom.Rectangle;
-	import flash.text.TextFormat;
 
 	/**
+	 * 坐标轴的基类，主要负责绘制坐标轴，具体计算都由不同类型的轴负责
 	 */	
 	public class AxisBase extends Sprite 
 	{
@@ -85,13 +83,19 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function dataResized(start:Number, end:Number):void
 		{
+			var startPerc:Number = (currentDataRange.min - this.sourceDataRange.min) / this.confirmedSourceValueRange;
+			var endPerc:Number = (currentDataRange.max - this.sourceDataRange.min) / this.confirmedSourceValueRange;
 			
+			drawScrollBar(startPerc, endPerc);
+			//generateTicksForBGRender(startPerc, endPerc);
+			
+			changed = true;
 		}
 		
 		/**
 		 * 数据滚动过程中，仅是改变label容器的位置
 		 */		
-		public function srcollingData(offset:Number):void
+		public function scrollingData(offset:Number):void
 		{
 			if (this.direction == HORIZONTAL_AXIS)
 			{
@@ -104,7 +108,54 @@ package com.fiCharts.charts.chart2D.core.axis
 				else if (currentScrollPos < minScrollPos)
 					this.labelUIsCanvas.x = currentScrollPos = minScrollPos;
 			}
+			
+			var perc:Number = currentScrollPos / this.fullSize;
+			var startPerc:Number = (currentDataRange.min - this.sourceDataRange.min) / confirmedSourceValueRange - perc;
+			var endPerc:Number = (currentDataRange.max - this.sourceDataRange.min) / confirmedSourceValueRange - perc;
+			
+			drawScrollBar(startPerc, endPerc);
+			//generateTicksForBGRender(startPerc, endPerc);
 		}
+		
+		/**
+		 */		
+		private function generateTicksForBGRender(startPerc:Number, endPerc:Number):void
+		{
+			if (ticksForBGRender == null)
+				ticksForBGRender = new Vector.<Number>;
+				
+			var startPos:Number = percentToPos(startPerc);
+			var endPos:Number = percentToPos(endPerc);
+			
+			ticksForBGRender.length = 0;
+			for each(var i:Number in this.ticks)
+			{
+				if (i >= startPos && i <= endPos)
+					ticksForBGRender.push(i);
+			}
+		}
+		
+		/**
+		 */		
+		public var ticksForBGRender:Vector.<Number>;
+		
+		/**
+		 */		
+		protected function drawScrollBar(startPerc:Number, endPerc:Number):void
+		{
+			this.graphics.clear();
+			
+			if (startPerc == 0 && endPerc == 1) return;// 数据完全显示时，滚动条没必要显示
+				
+			StyleManager.setShapeStyle(this.scrollBarStyle, this.graphics);
+			this.graphics.drawRoundRect(startPerc * this.size, label.margin / 2, 
+				size * (endPerc - startPerc), scrollBarStyle.height, scrollBarStyle.radius, scrollBarStyle.radius);
+		}
+		
+		/**
+		 * 滚动条的样式
+		 */		
+		public var scrollBarStyle:Style;
 		
 		/**
 		 */		
@@ -127,7 +178,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			if (changed)
 			{
 				this.clearLabels();
-				
+				this.labelUIsCanvas.cacheAsBitmap = false;
 				this.labelsMask.graphics.clear();
 				
 				var labelUI:DisplayObject;
@@ -140,39 +191,49 @@ package com.fiCharts.charts.chart2D.core.axis
 				
 				// 横向的最小间距不能小于Label的宽度， 这里要先获取这个宽度，从而决定单元间隔数
 				var i:uint;
+				minUintSize = 10;//轴的尺寸刷新后 minUintSize 会重新计算，避免之前的大尺寸和谐掉后继的小尺寸
 				for (i = 0; i < length; i ++)
 				{
 					if (this.enable)
 					{
-						if (labelUIs[i]) continue;
+						labelUI = labelUIs[i];
+						if (labelUI == null)
+						{
+							labelsData[i].label = this.getXLabel(labelsData[i].value);
+							labelsData[i].color = this.metaData.color;
 							
-						labelsData[i].label = this.getXLabel(labelsData[i].value);
-						labelsData[i].color = this.metaData.color;
-						
-						axisLabel = new LabelUI();
-						axisLabel.style = this.label;
-						axisLabel.metaData = labelsData[i];
-						
-						// 如果label换行显示，那么先以单元宽度为准
-						if (this.labelDisplay == LabelStyle.WRAP)
-							axisLabel.maxLabelWidth = this.unitSize;
-						
-						axisLabel.render();
-					
+							axisLabel = new LabelUI();
+							axisLabel.style = this.label;
+							axisLabel.metaData = labelsData[i];
+							
+							// 如果label换行显示，那么先以单元宽度为准
+							if (this.labelDisplay == LabelStyle.WRAP)
+								axisLabel.maxLabelWidth = this.unitSize;
+							
+							axisLabel.render();
+							
+							// 这里的labelUI可考虑用bitmap data绘制来优化渲染
+							labelUI = labelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
+							axisLabel = null;
+						}
+							
+						// 线性轴的label UI 每次渲染创建时都需要重新计算  minUintSize ，因为每次的Label都是重新生成的
 						if (label.layout == LabelStyle.VERTICAL)
 						{
-							if (axisLabel.height > minUintSize)
-								minUintSize = axisLabel.height;
+							if (labelUI.height > minUintSize)
+								minUintSize = labelUI.height;
+						}
+						else if (label.layout == LabelStyle.ROTATION)
+						{
+							if (labelUI.width * 0.5 > minUintSize)
+								minUintSize = labelUI.width * 0.5;
 						}
 						else
 						{
-							if (axisLabel.width > minUintSize)
-								minUintSize = axisLabel.width;
+							if (labelUI.width > minUintSize)
+								minUintSize = labelUI.width;
 						}
 						
-						// 这里的labelUI可考虑用bitmap data绘制来优化渲染
-						labelUI = labelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
-						axisLabel = null;
 					}
 					
 				}
@@ -218,6 +279,7 @@ package com.fiCharts.charts.chart2D.core.axis
 						}
 						
 						labelUI.x = valuePositon + labelX;
+						
 						if (this.position == 'bottom')
 							labelUI.y = label.margin + labelY;
 						else
@@ -227,6 +289,19 @@ package com.fiCharts.charts.chart2D.core.axis
 					}
 				}
 				
+				this.labelsMask.graphics.beginFill(0);
+				if (this.position == 'bottom')
+				{
+					this.labelsMask.graphics.drawRect(- minUintSize / 2, 0, 
+						this.size + this.minUintSize, this.labelUIsCanvas.height);
+				}
+				else
+				{
+					this.labelsMask.graphics.drawRect(- minUintSize / 2, - this.labelUIsCanvas.height, 
+						this.size + this.minUintSize, this.labelUIsCanvas.height);
+				}
+				labelsMask.graphics.endFill();
+				
 				if (enable)
 					createHoriticalTitle();
 				
@@ -235,11 +310,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				if (enable && this.tickMark.enable)
 					drawHoriTicks();
 				
-				this.labelsMask.graphics.beginFill(0);
-				this.labelsMask.graphics.drawRect(- minUintSize / 2, 0, 
-					this.size + this.minUintSize, this.labelUIsCanvas.height);
-				labelsMask.graphics.endFill();
-				
+				this.labelUIsCanvas.cacheAsBitmap = true;
 				changed = false;
 			}
 		}
@@ -269,7 +340,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 * 这个值有可能比uinitSize要大，取决于label的尺寸
 		 * 
 		 */
-		public var minUintSize:uint = 10;
+		public var minUintSize:Number = 10;
 		
 		/**
 		 */		
@@ -292,6 +363,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				var labelY:Number;
 				
 				var i:uint;
+				minUintSize = 10;
 				for (i = 0; i < length; i ++)
 				{
 					if (this.enable)
@@ -369,6 +441,20 @@ package com.fiCharts.charts.chart2D.core.axis
 					}
 				}
 				
+				
+				this.labelsMask.graphics.beginFill(0);
+				if (position == "left")
+				{
+					this.labelsMask.graphics.drawRect(0, minUintSize / 2, 
+						- this.labelUIsCanvas.width - 2, - this.size - this.minUintSize);
+				}
+				else
+				{
+					this.labelsMask.graphics.drawRect(0, minUintSize / 2, 
+						 this.labelUIsCanvas.width + 2, - this.size - this.minUintSize);
+				}
+				labelsMask.graphics.endFill();
+				
 				if (enable)
 					createVerticalTitle();
 				
@@ -376,10 +462,6 @@ package com.fiCharts.charts.chart2D.core.axis
 				
 				if (enable && tickMark.enable)
 					drawVertiTicks();
-				
-				this.labelsMask.graphics.beginFill(0);
-				this.labelsMask.graphics.drawRect(0, minUintSize / 2, - this.labelUIsCanvas.width, - this.size - this.minUintSize);
-				labelsMask.graphics.endFill();
 				
 				changed = false;
 			}

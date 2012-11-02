@@ -54,8 +54,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		override public function dataScrolled(dataRange:DataRange):void
 		{
 			var offPerc:Number = this.currentScrollPos / this.fullSize;
-			var min:Number = this.currentDataRange.min - offPerc * this.sourceValueDis;
-			var max:Number = currentDataRange.max - offPerc * sourceValueDis;
+			var min:Number = this.currentDataRange.min - offPerc * this.confirmedSourceValueRange;
+			var max:Number = currentDataRange.max - offPerc * this.confirmedSourceValueRange;
 			
 			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
 				min, max));
@@ -77,12 +77,11 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			minScrollPos = offsetSize + size - this.fullSize;
 			this.labelUIsCanvas.x = currentScrollPos = 0;// 数据缩放后尺寸有了新的关系
-			this.unitSize = fullSize / this.labelsData.length;
 			
 			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
 				this.currentDataRange.min, this.currentDataRange.max));
 			
-			changed = true;
+			super.dataResized(start, end);
 		}
 		
 		/**
@@ -90,8 +89,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		override public function renderSeries(start:Number, end:Number):void
 		{
 			var min:Number, max:Number;
-			min = start * this.sourceValueDis + this.sourceMin;
-			max = end * sourceValueDis + this.sourceMin;
+			min = start * this.confirmedSourceValueRange + this.sourceDataRange.min;
+			max = end * confirmedSourceValueRange + this.sourceDataRange.min;
 			
 			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
 				min, max));
@@ -143,6 +142,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			fullSize = this.size / (currentDataRange.max - currentDataRange.min) * confirmedSourceValueRange;
 			this.offsetSize = (currentDataRange.min - sourceDataRange.min) / confirmedSourceValueRange * fullSize;
+			this.unitSize = fullSize / this.labelsData.length;
 		}
 		
 		/**
@@ -266,7 +266,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 与判定最大最小值
 		 */		
-		private function preMaxMin(max:Number, min:Number):void
+		protected function preMaxMin(max:Number, min:Number):void
 		{
 			var preDataDis:Number = max - min;
 			var powerOfTen:Number = Math.floor(Math.log(Math.abs(preDataDis)) / Math.LN10);
@@ -295,7 +295,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 核定，确定最大最小值
 		 */		
-		private function confirmMaxMin():void
+		protected function confirmMaxMin():void
 		{
 			var preValueDis:Number = preMax - preMin;
 			
@@ -358,7 +358,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 根据原始值和当前数据范围的数据间隔生成新label数据
 		 */		
-		private function createLabelsData():void
+		protected function createLabelsData():void
 		{
 			var labelData:AxisLabelData;
 			labelsData = new Vector.<AxisLabelData>;
@@ -489,8 +489,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		protected var preInterval:Number;
 
 		/**
-		 */
-		protected function axisValueToSize(value:Object):Number
+		 */		
+		override protected function valueToSize(value:Object):Number
 		{
 			var position:Number;
 			
@@ -501,13 +501,13 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			if (this.inverse)
 				position = this.fullSize - position;
-
+			
 			return position;
 		}
 		
 		/**
 		 */		
-		private function getValuePercent(value:Object):Number
+		protected function getValuePercent(value:Object):Number
 		{
 			if (value == null)
 				return 0;
@@ -521,14 +521,14 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */
 		override public function valueToX(value:Object):Number
 		{
-			return axisValueToSize(value);
+			return valueToSize(value);
 		}
 
 		/**
 		 */
 		override public function valueToY(value:Object):Number
 		{
-			return - axisValueToSize(value);
+			return - valueToSize(value);
 		}
 		
 		/**

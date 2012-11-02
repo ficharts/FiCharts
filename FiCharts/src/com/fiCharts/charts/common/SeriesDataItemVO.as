@@ -11,6 +11,21 @@ package com.fiCharts.charts.common
 		}
 		
 		/**
+		 * 数据在元数据中的位置
+		 */		
+		private var _index:uint = 0;
+		
+		public function get index():uint
+		{
+			return _index;
+		}
+		
+		public function set index(value:uint):void
+		{
+			_index = value;
+		}
+		
+		/**
 		 * 原始数据节点， 从XML数据映射而来；
 		 */		
 		private var _dataItem : Object;

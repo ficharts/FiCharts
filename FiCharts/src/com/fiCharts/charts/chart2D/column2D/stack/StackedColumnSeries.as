@@ -3,6 +3,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	import com.fiCharts.charts.chart2D.column2D.Column2DUI;
 	import com.fiCharts.charts.chart2D.column2D.ColumnSeries2D;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.common.ChartColorManager;
@@ -24,6 +25,54 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		public function StackedColumnSeries()
 		{
 			super();
+		}
+		
+		/**
+		 */		
+		override protected function dataResizedByIndex(evt:DataResizeEvent):void
+		{
+			evt.stopPropagation();
+			
+			dataOffsetter.minIndex = evt.start;
+			dataOffsetter.maxIndex = evt.end;
+			
+			dataOffsetter.offSet(0, itemRenderMaxIndex);
+			
+			layoutDataItems();
+			layoutColumnUIs();
+			updataItemRendersLayout();
+		}
+		
+		/**
+		 * 
+		 * 数据缩放后更新数据范围内的数据结点位置
+		 * 
+		 */		
+		override protected function updataItemRendersLayout():void
+		{
+			var itemRender:ItemRenderBace;
+			var rendersForLabel:Array = [];
+			for each(itemRender in this.itemRenders)
+			{
+				itemRender 
+				
+				if (itemRender.itemVO.index >= dataOffsetter.minIndex && 
+					itemRender.itemVO.index <= dataOffsetter.maxIndex)
+				{
+					itemRender.layout();
+					itemRender.visible = true;
+					rendersForLabel.push(itemRender);
+				}
+				else
+				{
+					itemRender.visible = false;
+				}
+			}
+			
+			// 将数据范围内的  数值标签交给 主程序绘制
+			var dataResizeEvt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.RENDER_SIZED_VALUE_LABELS);
+			dataResizeEvt.sizedItemRenders =  rendersForLabel;
+			this.dispatchEvent(dataResizeEvt);
 		}
 		
 		/**
@@ -73,12 +122,23 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		 */		
 		override protected function layoutColumnUIs():void
 		{
+			var index:uint;
 			for each (var columnUI:Column2DUI in this.columnUIs)
 			{
-				columnUI.x = columnUI.dataItem.x - partColumnWidth / 2;
-				columnUI.y = verticalAxis.valueToY((columnUI.dataItem as StackedSeriesDataItem).startValue) - baseLine;
-				setColumnUISize(columnUI);
-				columnUI.render();
+				index = (columnUI.dataItem as StackedSeriesDataItem).index;
+				
+				if (index >= dataOffsetter.minIndex && index <= dataOffsetter.maxIndex)
+				{
+					columnUI.x = columnUI.dataItem.x - partColumnWidth / 2;
+					columnUI.y = columnUI.dataItem.y//verticalAxis.valueToY((columnUI.dataItem as StackedSeriesDataItem).startValue) - baseLine;
+					setColumnUISize(columnUI);
+					columnUI.render();
+					columnUI.visible = true;
+				}
+				else
+				{
+					columnUI.visible = false;
+				}
 			}
 		}
 		
@@ -107,25 +167,31 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			adjustColumnWidth();
 			
 			var item:SeriesDataItemVO;
-			for each (item in dataItemVOs)
+			for each(item in this.dataItemVOs)
 			{
-				item.x = horizontalAxis.valueToX(item.xValue) - columnGoupWidth / 2 +
-					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
-				item.dataItemX = item.x;
-				
-				// 数据节点的坐标系与渲染节点不同， 两者相差 值为 baseLine
-				item.y = verticalAxis.valueToY((item as StackedSeriesDataItem).startValue) - baseLine;
-				item.dataItemY = verticalAxis.valueToY((item as StackedSeriesDataItem).endValue);
-				item.offset = baseLine;
+				if(item.index >= dataOffsetter.minIndex && item.index <= dataOffsetter.maxIndex)
+				{
+					item.x = horizontalAxis.valueToX(item.xValue) - columnGoupWidth / 2 +
+						this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
+					item.dataItemX = item.x;
+					
+					// 数据节点的坐标系与渲染节点不同， 两者相差 值为 baseLine
+					item.y = verticalAxis.valueToY((item as StackedSeriesDataItem).startValue) - baseLine;
+					item.dataItemY = verticalAxis.valueToY((item as StackedSeriesDataItem).endValue);
+					item.offset = baseLine;
+				}
 			}
 			
-			for each (item in this.fullDataItems)
+			if(fullDataItems == null) return;//百分百堆积图没有总数据节点
+			
+			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
 			{
+				item = fullDataItems[i];
+				
 				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
 				
 				item.y = item.dataItemY = verticalAxis.valueToY(item.yValue);
-			 
 			}
 		}
 		
@@ -207,9 +273,11 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				positiveValue = negativeValue = 0;
 				for each (stack in stacks)
 				{
-					xValue = stack.dataItemVOs[i].xValue;
-					yValue = Number(stack.dataItemVOs[i].yValue);
 					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataItem);
+					stackedSeriesDataItem.index = i;
+					
+					xValue = stackedSeriesDataItem.xValue;
+					yValue = Number(stackedSeriesDataItem.yValue);
 					
 					if (yValue >= 0)
 					{
@@ -233,6 +301,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				if (this.valueLabel.enable)
 				{
 					combleSeriesDataItem = new SeriesDataItemVO();
+					combleSeriesDataItem.index = i;
 					combleSeriesDataItem.metaData = new Object;
 					
 					combleSeriesDataItem.xValue = xValue;
@@ -257,6 +326,8 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				verticalValues.push(positiveValue);
 				verticalValues.push(negativeValue);
 			}
+			
+			dataOffsetter.maxIndex = itemRenderMaxIndex = length - 1;
 		}
 		
 		/**

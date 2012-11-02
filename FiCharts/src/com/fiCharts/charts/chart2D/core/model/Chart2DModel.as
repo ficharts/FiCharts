@@ -5,6 +5,7 @@ package com.fiCharts.charts.chart2D.core.model
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	
 	/**
 	 */
@@ -80,7 +81,6 @@ package com.fiCharts.charts.chart2D.core.model
 		public function Chart2DModel()
 		{
 		}
-		
 		
 		/**
 		 */		
@@ -437,6 +437,24 @@ package com.fiCharts.charts.chart2D.core.model
 		{
 			_gridField = value;
 		}
+		
+		/**
+		 */		
+		private var _scrollBar:Style;
 
+		/**
+		 */
+		public function get scrollBar():Style
+		{
+			return _scrollBar;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set scrollBar(value:Style):void
+		{
+			_scrollBar = value;
+		}
 	}
 }

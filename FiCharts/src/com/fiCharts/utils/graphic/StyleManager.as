@@ -12,6 +12,7 @@ package com.fiCharts.utils.graphic
 	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Cover;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Fill;
+	import com.fiCharts.utils.system.OS;
 	
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
@@ -88,6 +89,10 @@ package com.fiCharts.utils.graphic
 		 */		
 		public static function setEffects(target:DisplayObject, effectable:IEffectable, metaData:Object = null):void
 		{
+			// 移动平台下为了提升性能，去除一些滤镜效果
+			/*if (OS.isDesktopSystem == false)
+				return;*/ 
+			
 			if (effectable.effects)
 			{
 				var filters:Array = [];

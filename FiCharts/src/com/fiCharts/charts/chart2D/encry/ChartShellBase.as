@@ -10,6 +10,8 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.csv.CSVLoader;
+	import com.fiCharts.utils.csv.CSVParseEvent;
 	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.layout.LayoutManager;
 	import com.fiCharts.utils.net.URLService;
@@ -119,6 +121,7 @@ package com.fiCharts.charts.chart2D.encry
 		private var _ifDataScalable:Boolean = false;
 
 		/**
+		 * 是否开启数据缩放，开启后<code>scaleData</code>方法才会生效
 		 */
 		public function get ifDataScalable():Boolean
 		{
@@ -146,8 +149,8 @@ package com.fiCharts.charts.chart2D.encry
 		 * 
 		 * 根据数据范围缩放图表
 		 * 
-		 * @param valueFrom
-		 * @param valueTo
+		 * @param valueFrom 数据范围的起点值
+		 * @param valueTo   数据范围的终点值 
 		 * 
 		 */		
 		public function scaleData(valueFrom:Object, valueTo:Object):void
@@ -235,7 +238,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		public function setDataFile(value:String):void
+		public function setDataFileURL(value:String):void
 		{
 			requestDataURL(value);
 		}
@@ -407,8 +410,21 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function requestCSVData(value:String):void
 		{
-			
+			csvLoader = new CSVLoader;
+			csvLoader.addEventListener(CSVParseEvent.PARSE_COMPLETE, csvDataLoaded, false, 0, true);
+			csvLoader.columnNames = ['label', 'value']
+			csvLoader.loadCVS(value);
 		}
+		
+		/**
+		 */		
+		private function csvDataLoaded(evt:CSVParseEvent):void
+		{
+		}
+		
+		/**
+		 */		
+		private var csvLoader:CSVLoader 
 		
 		/**
 		 */		
@@ -466,7 +482,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		protected function init():void
 		{
-			Security.allowDomain("*");
+			if (OS.isDesktopSystem)
+				Security.allowDomain("*");
 			
 			initLanguage();
 			
@@ -603,6 +620,8 @@ package com.fiCharts.charts.chart2D.encry
 		//-----------------------------------------------------
 		protected function initInterfaces():void
 		{
+			ExternalUtil.addCallback("ifDataScalable", ifChartDataScalable);
+			
 			ExternalUtil.addCallback("setConfigXML", setConfigXMLHandler);
 			ExternalUtil.addCallback("setConfigFile", requestConfigURL);
 			
@@ -625,6 +644,13 @@ package com.fiCharts.charts.chart2D.encry
 			this.noDataInfo = stage.loaderInfo.parameters['noDataInfo'];
 			this.loadingDataInfo = stage.loaderInfo.parameters['loadingDataInfo'];
 			this.loadingDataErrorInfo = stage.loaderInfo.parameters['loadingDataErrorInfo'];
+		}
+		
+		/**
+		 */		
+		private function ifChartDataScalable():Boolean
+		{
+			return chart.ifDataScalable();
 		}
 		
 		
@@ -780,7 +806,6 @@ package com.fiCharts.charts.chart2D.encry
 				chart.chartHeight = _height;
 			}
 		}
-		
 		
 		/**
 		 */		

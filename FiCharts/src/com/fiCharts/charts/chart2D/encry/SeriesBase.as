@@ -107,25 +107,28 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function updataItemRendersLayout():void
 		{
-			var itemRender:ItemRenderBace;
-			for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
+			if (ifHasItemRender)
 			{
-				itemRender = this.itemRenders[i] as ItemRenderBace;
-				if (i >= dataOffsetter.minIndex && i <= dataOffsetter.maxIndex)
+				var itemRender:ItemRenderBace;
+				for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
 				{
-					itemRender.layout();
-					itemRender.visible = true;
+					itemRender = this.itemRenders[i] as ItemRenderBace;
+					if (i >= dataOffsetter.minIndex && i <= dataOffsetter.maxIndex)
+					{
+						itemRender.layout();
+						itemRender.visible = true;
+					}
+					else
+					{
+						itemRender.visible = false;
+					}
 				}
-				else
-				{
-					itemRender.visible = false;
-				}
+				
+				// 将数据范围内的  数值标签交给 主程序绘制
+				var dataResizeEvt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.RENDER_SIZED_VALUE_LABELS);
+				dataResizeEvt.sizedItemRenders =  this.itemRenders.slice(dataOffsetter.minIndex, dataOffsetter.maxIndex + 1);
+				this.dispatchEvent(dataResizeEvt);
 			}
-			
-			// 将数据范围内的  数值标签交给 主程序绘制
-			var dataResizeEvt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.RENDER_SIZED_VALUE_LABELS);
-			dataResizeEvt.sizedItemRenders =  this.itemRenders.slice(dataOffsetter.minIndex, dataOffsetter.maxIndex + 1);
-			this.dispatchEvent(dataResizeEvt);
 		}
 		
 		/**
@@ -317,7 +320,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function renderSeries():void
 		{
-			if (ifDataChanged)
+			if (ifHasItemRender && ifDataChanged)
 				createItemRenders();
 			
 			if (ifDataChanged || ifSizeChanged)
@@ -415,6 +418,10 @@ package com.fiCharts.charts.chart2D.encry
 			for each (var item:SeriesDataItemVO in dataItemVOs)
 				initItemRender(itemRender, item);
 		}
+		
+		/**
+		 */		
+		public var ifHasItemRender:Boolean = false;
 		
 		/**
 		 * 构造节点渲染器
@@ -610,7 +617,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private var _horizontalAxis:AxisBase;
+		protected var _horizontalAxis:AxisBase;
 
 		public function get horizontalAxis():AxisBase
 		{

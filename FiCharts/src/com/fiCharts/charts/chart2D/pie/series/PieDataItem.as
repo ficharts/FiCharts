@@ -75,38 +75,5 @@ package com.fiCharts.charts.chart2D.pie.series
 			_endAngle = value;
 		}
 
-		/**
-		 */		
-		private var _percent:Number = 0;
-
-		/**
-		 */
-		public function get percent():Number
-		{
-			return _percent;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set percent(value:Number):void
-		{
-			_percent = value;
-		}
-
-		/**
-		 */		
-		private var _percentLabel:String = '';
-
-		public function get percentLabel():String
-		{
-			return _percentLabel;
-		}
-
-		public function set percentLabel(value:String):void
-		{
-			_percentLabel = value;
-		}
-
 	}
 }

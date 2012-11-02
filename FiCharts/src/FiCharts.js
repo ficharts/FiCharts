@@ -645,21 +645,26 @@
 		
 		var isFF = function(){
 			return navigator.userAgent.indexOf("Firefox") != -1;
-		}
+		}();
 		
 		var onMouseWheel = function(){
-			var event = window.event || arguments[0];
-			if (isFF()){
-				target.onWebmousewheel(event.detail);
-				event.preventDefault();
-			}else{
-				target.onWebmousewheel(event.wheelDelta);
-				event.returnValue = false; 
+			
+			if (target.ifDataScalable()){
+				
+				var event = window.event || arguments[0];
+				
+				if (isFF){
+					target.onWebmousewheel(event.detail);
+					event.preventDefault();
+				}else{
+					target.onWebmousewheel(event.wheelDelta);
+					event.returnValue = false; 
+				}
 			}
 		}
 		
 		target.onmouseover = function(){
-			if (isFF()){
+			if (isFF){
 				doc.addEventListener('DOMMouseScroll', onMouseWheel, false);
 			}else{
 				doc.onmousewheel = onMouseWheel;
@@ -667,7 +672,7 @@
 		}
 		
 		target.onmouseout = function(){
-			if (isFF()){
+			if (isFF){
 				doc.removeEventListener('DOMMouseScroll', onMouseWheel, false);
 			}else{
 				doc.onmousewheel = null;

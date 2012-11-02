@@ -9,7 +9,7 @@ package
 	import flash.utils.ByteArray;
 	
 	/**
-	 * 2D 饼状图
+	 * 此类仅用于构建 2D 饼状图
 	 */	
 	public class Pie2D extends ChartShellBase
 	{

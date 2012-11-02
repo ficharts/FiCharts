@@ -72,6 +72,7 @@ package com.fiCharts.charts.chart2D.core
 			
 			endPos = 0;
 			startPos = 0;
+			_scale = 1;
 		}
 		
 		/**
@@ -85,7 +86,18 @@ package com.fiCharts.charts.chart2D.core
 		 */		
 		public function scale(value:Number):void
 		{
-			
+			_scale = _scale * value;
 		}
+		
+		/**
+		 */		
+		public function getScale():Number
+		{
+			return _scale;
+		}
+		
+		/**
+		 */		
+		private var _scale:Number = 1;
 	}
 }

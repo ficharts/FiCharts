@@ -268,7 +268,7 @@ package com.fiCharts.charts.chart2D.pie.series
 					seriesDataItem.color = chartColorManager.chartColor;
 				
 				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, 
-					['label', 'value', 'xLabel', 'yLabel', 'color', 'percent', 'percentLabel']);
+					['label', 'value', 'xLabel', 'yLabel', 'color']);
 				
 				dataSum += Number(seriesDataItem.value);
 				dataItemVOs.push(seriesDataItem);
@@ -278,20 +278,21 @@ package com.fiCharts.charts.chart2D.pie.series
 			 
 			for each (seriesDataItem in dataItemVOs)
 			{
-				seriesDataItem.percent = Number(seriesDataItem.value) / dataSum * 100;
-				seriesDataItem.percentLabel = MathUtil.round(seriesDataItem.percent, 2) + '%';
+				seriesDataItem.zValue = Number(seriesDataItem.value) / dataSum * 100;
+				seriesDataItem.zLabel = MathUtil.round(Number(seriesDataItem.zValue), 2) + '%';
+				
 				seriesDataItem.startRad = startRad;
-				partRad = seriesDataItem.percent / 100 * Math.PI * 2;
+				partRad = Number(seriesDataItem.zValue) / 100 * Math.PI * 2;
 				seriesDataItem.endRad = startRad + partRad;
 				startRad += partRad;
 					
-				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, ['percent', 'percentLabel']);
+				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, ['zValue', 'zLabel']);
 				
 				// 默认数值标签的元数据内容
 				seriesDataItem.metaData.valueLabel = seriesDataItem.xLabel;
 				
 				// 默认tooltip
-				seriesDataItem.metaData.tooltip = seriesDataItem.yLabel + "," + seriesDataItem.percentLabel;
+				seriesDataItem.metaData.tooltip = seriesDataItem.yLabel + "," + seriesDataItem.zLabel;
 			}
 			
 			ifDataChanged = true;

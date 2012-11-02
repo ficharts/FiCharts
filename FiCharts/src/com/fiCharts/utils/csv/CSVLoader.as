@@ -82,6 +82,14 @@ package com.fiCharts.utils.csv
 		}
 		
 		/**
+		 */		
+		public var baseNodeName:String = 'data';
+		
+		/**
+		 */		
+		public var rowName:String = 'set';
+		
+		/**
 		 * @param evt
 		 */		
 		private function loadedHandler( evt : Event ) : void
@@ -103,13 +111,13 @@ package com.fiCharts.utils.csv
 				}
 			}
 			
-			var resultXML : XML = <csvData>
-								  </csvData>
+			var resultXML : XML = <{baseNodeName}>
+								  </{baseNodeName}>
 				
 			for each ( var rowArray : Array in rowsData )
 			{
-				var xmlNode : XML = <row>
-									</row>
+				var xmlNode : XML = <{rowName}>
+									</{rowName}>
 					
 				var length : uint = rowArray.length;
 				for ( var i : uint = 0; i < length; i ++ )

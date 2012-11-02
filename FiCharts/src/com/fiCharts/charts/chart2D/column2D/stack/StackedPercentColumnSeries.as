@@ -79,7 +79,6 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			dataItemVOs = new Vector.<SeriesDataItemVO>
 			horizontalValues = new Vector.<Object>;
 			verticalValues = new Vector.<Object>;
-			fullDataItems = new Vector.<SeriesDataItemVO>;
 			
 			// 将子序列的数据节点合并到一起；
 			for each (stack in stacks)
@@ -95,6 +94,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				for each (stack in stacks) // 求和
 				{
 					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataItem;
+					seriesDataItem.index = i;
 					xValue = seriesDataItem.xValue;
 					yValue = Number(seriesDataItem.yValue);
 					fullValue += yValue;
@@ -122,6 +122,8 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				horizontalValues.push(xValue);
 				verticalValues.push(positiveValue / fullValue * 100);
 			}
+			
+			dataOffsetter.maxIndex = itemRenderMaxIndex = length - 1;
 		}
 		
 		/**
