@@ -12,15 +12,12 @@
         </style>
         <script type="text/javascript">
         	
-            //var chart2D = new Pie2D({id: 'chart2D_div', width: '100%', height: '50%', style: 'white'});
-           // chart2D.setConfigFile('pieData.xml');
+            var chart2D = new Chart2D({id: 'chart2D_div', width: '100%', height: '100%', style: 'white'});
+            chart2D.setConfigFile('data.xml');
             
-            var chart2D = new Chart2D({id: 'pie2D_div', width: '100%', height: '100%', style: 'white'});
-            chart2D.setConfigFile('chart2dData.xml');
         </script>
     </head>
     <body>
         <div id="chart2D_div"></div>
-        <div id="pie2D_div"></div>
     </body>
 </html>
