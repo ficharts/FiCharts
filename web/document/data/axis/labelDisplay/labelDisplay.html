@@ -12,7 +12,7 @@
 					new Chart2D({id: 'normalLabelChart', width: '100%', height: 500, configFile: './data/axis/labelDisplay/normalLabel.xml'});
 					new Chart2D({id: 'rotationLabelChart', width: '100%', height: 500, configFile: './data/axis/labelDisplay/rotationLabel.xml'});
 					new Chart2D({id: 'verticalLabelChart', width: '100%', height: 500, configFile: './data/axis/labelDisplay/verticalLabel.xml'});
-
+					new Chart2D({id: 'wrapLabelChart', width: '100%', height: 500, configFile: './data/axis/labelDisplay/wrapLabel.xml'});
 
 					$.get("./data/axis/labelDisplay/rotationLabel.xml", function(data) {
 						$('pre#rotationLabelConfig').text($.xmlToString(data));
@@ -21,6 +21,11 @@
 
 					$.get("./data/axis/labelDisplay/verticalLabel.xml", function(data) {
 						$('pre#verticalLabelConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+					$.get("./data/axis/labelDisplay/wrapLabel.xml", function(data) {
+						$('pre#wrapLabelConfig').text($.xmlToString(data));
 						prettyPrint();
 					})
 
@@ -33,9 +38,9 @@
 		<div id="data">
 			<div id="title">坐标数值显示</div>
 			<div id="content">
-				<p>当坐标轴横轴上的<span class="code">label</span>排列不下但又想都显示出来时，可通过设置坐标轴<span class="code">labelDisplay</span>属性解决。下图中的横轴<span class="code">label</span>因图表宽度有限部分月份没有显示出来：</p>
+				<p>当图表宽度较小，坐标轴横轴上的<span class="code">label</span>排列不下但又想都显示出来时，可通过设置坐标轴<span class="code">labelDisplay</span>属性解决。下图中的横轴<span class="code">label</span>因图表宽度有限部分月份没有显示出来：</p>
 				<div id="normalLabelChart"></div>
-				<p>有两种方式可以让<span class="code">label</span>完整显示，先看第一种：</p>
+				<p>有三种方式可以让<span class="code">label</span>完整显示，先看第一种：</p>
 				<div id="rotationLabelChart"></div>
 				<p>配置文件中横轴的<span class="code">labelDisplay</span>为<span class="code">rotation</span>, 旋转45度：</p>
 				<div class="codeWrapper"><pre id="rotationLabelConfig" class="prettyprint"></pre></div>
@@ -44,6 +49,12 @@
 				<p>配置文件如下:</p>
 				<div class="codeWrapper"><pre id="verticalLabelConfig" class="prettyprint"></pre></div>
 				<p>旋转和垂直坐标轴<span class="code">label</span>可让其更多显示，但不容易辨识。</p>
+
+				<p>第三种是将坐标值换行显示：</p>
+				<div id="wrapLabelChart"></div>
+				<p>配置文件如下:</p>
+				<div class="codeWrapper"><pre id="wrapLabelConfig" class="prettyprint"></pre></div>
+			
 			</div>
 			
 		</div>

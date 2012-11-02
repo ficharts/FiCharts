@@ -32,7 +32,7 @@
 							<tr>
 								<td><span class="code">zValue</span></td>
 								<td>String/Number</td>
-								<td>通常在气泡图，100%堆积图中才会用到，对应气泡图中的<span class="code">bubbleField</span>映射数据或者100%堆积图中自动计算而来的百分比值。</td>
+								<td>通常在气泡图，100%堆积图和饼状图中才会用到，气泡图中为<span class="code">bubbleField</span>映射数据；百分百堆积图和饼图中为相对于总数据的百分比。</td>
 							</tr>
 							<tr>
 								<td><span class="code">color</span></td>
@@ -72,17 +72,17 @@
 							<tr>
 								<td><span class="code">zLabel</span></td>
 								<td>String</td>
-								<td><span class="code">zValue</span>添加前缀后缀后得到</td>
+								<td><span class="code">zValue</span>百分百堆积图和饼图中为<span class="code">zValue%</span>号</td>
 							</tr>
 							<tr>
 								<td><span class="code">valueLabel</span></td>
 								<td>String</td>
-								<td>用于此节点的数值显示，通常等于<span class="code">yLabel</span>; 气泡图，百分百堆积图中等于<span class="code">zLabel</span>；条形图中等于<span class="code">xLabel</span></td>
+								<td>用于此节点的数值显示，通常等于<span class="code">yLabel</span>; 气泡图，百分百堆积图中等于<span class="code">zLabel</span>；条形图中等于<span class="code">xLabel</span>;饼图中等于<span class="code">xLabel</span></td>
 							</tr>
 							<tr>
 								<td><span class="code">tooltip</span></td>
 								<td>String</td>
-								<td>信息提示内容，由<span class="code">seriesName, xLabel, yLabel, zLabel, xDisplayName, yDisplayName, zDisplayName</span>拼装而来，全面显示此节点信息。</td>
+								<td>信息提示内容，由<span class="code">seriesName, xLabel, yLabel, zLabel, xDisplayName, yDisplayName, zDisplayName</span>等拼装而来，全面显示此节点信息。</td>
 							</tr>
 							
 						</tbody>

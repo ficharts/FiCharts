@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>数据缩放</title>
+		<script type="text/javascript">
+			(function()
+			{
+				$.get('./data/dataResize/data.xml', function(data) 
+				{
+					$("pre#demoCode").text($.xmlToString(data));
+					prettyPrint();
+				});
+
+
+				new Chart2D({
+						id : 'chartA',
+						width : '100%',
+						height : 500,
+						configFile : './data/dataResize/data.xml'
+					});
+
+				new Chart2D({
+						id : 'chartB',
+						width : '100%',
+						height : 500,
+						configFile : './data/dataResize/dataS.xml'
+					});
+
+
+			
+
+				
+			})();
+
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">数据缩放</div>
+			<div id="content">
+				<p>当有大量数据需要在同一个图表中显示时需用到数据缩放，这样既可以看到整体数据走向，又可以看到具体的细节。<span class="code">FiCharts</span>的数据缩放可以支持到除饼图以外的所有图表类型，甚至混合图表；交互方式非常简单：鼠标滚轮控制缩放，鼠标拖拽即可滚动数据，双击图表背景区域切换到全屏模式下会让体验更加完美，移动设备上则利用多点触摸手势完成一些列缩放操作。
+				
+
+
+
+				<p>一起来看个样例:</p>
+				<p id="chartA"></p>
+
+				<p>配置文件如下：</p>
+				<div class="codeWrapper"><pre id="demoCode" class="prettyprint"></pre></div>
+				<p>其中有个<span class="coce">dataScale</span>节点，定义数据缩放的各项参数，其说明文档如下：</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>取值范围</td>
+								<td width='15%'>默认值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>enable</span></td>
+								<td><span class='code'>true/false</span></td>
+								<td>false</td>
+								<td>是否开启数据缩放，必须开启方可数据缩放</td>
+							</tr>
+							<tr>
+								<td><span class='code'>start</span></td>
+								<td>字符/数字</td>
+								<td>为空</td>
+								<td>数据缩放的起点，不能超出总数据范围</td>
+							</tr>
+							<tr>
+								<td><span class='code'>end</span></td>
+								<td>字符/数字</td>
+								<td>为空</td>
+								<td>数据缩放的终点，不能超出总的数据范围</td>
+							</tr>
+							<tr>
+								<td><span class='code'>maxScale</span></td>
+								<td>大于1的数</td>
+								<td>10</td>
+								<td>鼠标滚轮缩放控制时，图表的最大放大倍数</td>
+							</tr>
+							<tr>
+								<td><span class='code'>zoomScale</span></td>
+								<td>0到1</td>
+								<td>0.2</td>
+								<td>鼠标滚轮缩放控制时，每次缩放的倍数</td>
+							</tr>
+							
+
+						</tbody>
+					</table>
+
+
+				</div>
+
+				<p>大数据的缩放对渲染性能要求很高，<span class='code'>ficharts</span>提供了简化渲染的机制，目前，趋势图和区域图都支持简单渲染模式。通过设置序列的属性<span class='code'>renderType='simple'</span>实现，该渲染模式是整个图表一次渲染完成，剔除一切滤镜效果，所以图表视觉效果略简单并且节点区域无法接收交互动作。效果如下：</p>
+
+				<p id="chartB"></p>
+
+				<p>任何时候您想启用此模式都可以，虽然他多用于大数据量情况。</p>
+			</div>
+		</div>
+	</body>
+</html>
+<html>

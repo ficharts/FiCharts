@@ -7,8 +7,15 @@
 
         var congfigURL = request('url')
         var style = request('style');
+        var type = request('type');
 
-        var myChart = new Chart2D({id: 'chart', width: '100%', height: '99%', configFile: congfigURL});
+        var myChart;
+
+        if (type && type == 'pie'){
+             myChart = new Pie2D({id: 'chart', width: '100%', height: '99%', configFile: congfigURL});
+        }else{
+            myChart = new Chart2D({id: 'chart', width: '100%', height: '99%', configFile: congfigURL});
+        }
 
         if (typeof style !== 'undefined')
             myChart.setStyle(style);

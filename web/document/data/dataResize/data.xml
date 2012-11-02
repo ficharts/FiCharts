@@ -1,0 +1,57 @@
+<config precision="2" title="数据缩放">
+	<axis>
+		<x title="A" type="linear"/>
+		<y title="B" type="linear"/>
+	</axis>
+	<series>
+		<area xField="label" yField="value"/>
+	</series>
+	<dataScale enable='true' start="3" end="50"/>
+	<data>
+		<set label="1" value="4.171"/>
+		<set label="2" value="3.294"/>
+		<set label="6" value="0.932"/>
+		<set label="7" value="0.881"/>
+		<set label="15" value="0.661"/>
+		<set label="30" value="5.521"/>
+		<set label="45" value="4.171"/>
+		<set label="50" value="3.294"/>
+		<set label="66" value="5.932"/>
+		<set label="80" value="1.881"/>
+		<set label="89" value="2.661"/>
+		<set label="100" value="5.521"/>
+		<set label="110" value="4.171"/>
+		<set label="115" value="3.294"/>
+		<set label="126" value="0.932"/>
+		<set label="130" value="0.881"/>
+		<set label="150" value="0.661"/>
+		<set label="160" value="5.521"/>
+		<set label="160.5" value="4.171"/>
+		<set label="200" value="3.294"/>
+		<set label="230" value="5.932"/>
+		<set label="245" value="1.881"/>
+		<set label="260" value="2.661"/>
+		<set label="278" value="5.521"/>
+		<set label="300" value="0.881"/>
+		<set label="301" value="0.661"/>
+		<set label="305" value="5.521"/>
+		<set label="310" value="4.171"/>
+		<set label="315" value="3.294"/>
+		<set label="315.5" value="5.932"/>
+		<set label="320" value="1.881"/>
+		<set label="330" value="2.661"/>
+		<set label="335" value="5.521"/>
+		<set label="336" value="4.171"/>
+		<set label="340" value="3.294"/>
+		<set label="350" value="0.932"/>
+		<set label="355" value="0.881"/>
+		<set label="356" value="0.661"/>
+		<set label="360" value="5.521"/>
+		<set label="366" value="4.171"/>
+		<set label="368" value="3.294"/>
+		<set label="370" value="5.932"/>
+		<set label="382" value="2.661"/>
+		<set label="383" value="5.521"/>
+		<set label="384" value="1.881"/>		
+	</data>
+</config>

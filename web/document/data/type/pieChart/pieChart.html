@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>饼图</title>
+		<script type="text/javascript">
+			(function() {
+				$(function() {
+					new Pie2D({id: 'pieDemo', width: '100%', height: 500, configFile: './data/type/pieChart/pie.xml'});
+
+					$.get("./data/type/pieChart/pie.xml", function(data) {
+						$('pre#pieConfig').text($.xmlToString(data));
+						prettyPrint();
+					})
+
+					$.get('./data/type/pieChart/demo.html', function(data) 
+					{
+
+						if( typeof data == 'string')
+						{
+							html = $.stringToXML(data);
+							$("pre#htmlCode").text(data);
+						}
+						else
+						{
+							html = data;
+							$("pre#htmlCode").text($.xmlToString(data));
+						}							
+
+						prettyPrint();
+					});
+
+				})
+
+			})()
+
+		</script>
+	</head>
+	<body>
+		<div id="data">
+			<div id="title">饼图</div>
+			<div id="content">
+				<p>饼图通常用于直观表示事物的构成份额，如下图：</p>
+				
+				<div id="pieDemo"></div>
+				<p>他是如何构建的呢？和其他类型的图表类似，但更简单。目前饼图仅支持单序列，所以无需定义序列，字段也有默认值<span class="code">label</span>和<span class="code">value</span>。构建代码如下：</p>
+				<div class="codeWrapper">
+					<pre id="htmlCode" class="prettyprint lang-html"></pre>
+				</div>
+				<p>配置文件如下：</p>
+				<div class="codeWrapper"><pre id="pieConfig" class="prettyprint"></pre></div>
+				<p>看到没？<span class="code">Chart2D</span>换成了<span class="code">Pie2D</span>, 配置文件省去了<span class="code">series</span>定义，数据由默认两个字段构成。可以说，饼图是最好构建的图表。</p>
+			</div>
+		</div>
+	</body>
+</html>

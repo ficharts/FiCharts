@@ -22,7 +22,7 @@
 		<div id="title">图表类型与序列</div>
 		<div id="content">
 			<p>
-				<span class="code">Chart2D.swf</span>核心程序负责创建目前<span class="code">ficharts</span>所包含的所有图表，以后的2D图表类型会从Chart2D扩展。与其他图表不同的是: <span class="code">ficharts</span>的图表类型不是一种图表对应一个<span class="code">swf</span>文件，而是配置文件决定图表类型。所以Chart2D可以被看做是一个2D图表集，可渲染出各种类型的2D图表。
+				创建图表的类有<span class="code">Chart2D</span>和<span class="code">Pie2D</span>两个。<span class="code">Pie2D</span>仅用来构建2D饼状图；其他图表均由<span class="code">Chart2D</span>构建，配置文件决定具体的图表类型。
 			</p>
 			<div class="codeWrapper">
 				<pre id="columnTag" class="prettyprint"></pre>
@@ -296,10 +296,6 @@
 				</tr>
 			</table>
 			</div>
-			
-			<p class="explain">
-				目前2D图表仅差饼图就可以满足绝大部分应用场景，我们会加快进度，争取短时间内发布饼图，让<span class="code">ficharts圆满的为用户效劳。</span>
-			</p>
 		</div>
 	</div>
 </body>
