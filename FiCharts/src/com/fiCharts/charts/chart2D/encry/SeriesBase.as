@@ -421,7 +421,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		public var ifHasItemRender:Boolean = false;
+		public var ifHasItemRender:Boolean = true;
 		
 		/**
 		 * 构造节点渲染器

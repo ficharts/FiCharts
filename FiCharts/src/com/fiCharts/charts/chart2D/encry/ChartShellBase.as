@@ -54,7 +54,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 版本号 
 		 */	
-		public static const VARSION:String = "1.2.1 Beta";
+		public static const VARSION:String = "1.2.2 Beta";
 		
 		
 		/**

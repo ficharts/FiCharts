@@ -13,10 +13,8 @@ package com.fiCharts.charts.chart2D.line
 	import com.fiCharts.utils.graphic.CubicBezier;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
-	import flash.display.DisplayObject;
 	import flash.display.Graphics;
 	import flash.display.Shape;
-	import flash.display.Sprite;
 	import flash.geom.Point;
 
 	/**

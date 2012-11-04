@@ -36,12 +36,9 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.ui.toolTips.ToolTipsManager;
 	import com.fiCharts.ui.toolTips.TooltipDataItem;
 	import com.fiCharts.utils.ExternalUtil;
-	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
-	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
-	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.system.GC;
 	import com.fiCharts.utils.system.OS;
 	
@@ -52,16 +49,11 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.display.Sprite;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
-	import flash.events.GestureEvent;
 	import flash.events.GesturePhase;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.events.TransformGestureEvent;
 	import flash.geom.Matrix;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.text.TextField;
-	import flash.ui.Multitouch;
 	import flash.utils.Timer;
 	
 	/**
@@ -674,7 +666,7 @@ package com.fiCharts.charts.chart2D.encry
 		 * 
 		 * 坐标轴，标题，图例渲染后才有尺寸，图表外围的间距才能确定下来，从而图表区域才能确定
 		 * 
-		 * 所以要先渲染这些元素，知道周围间距被调节的合适了才正式渲染序列，进行位置摆放和后继的工作
+		 * 所以要先渲染这些元素，直到周围间距被调节的合适了才正式渲染序列，进行位置摆放和后继的工作
 		 * 
 		 */		
 		private function checkRender():void
@@ -683,6 +675,8 @@ package com.fiCharts.charts.chart2D.encry
 			preRender();
 			this.ifNeedRefectorLayout = false;
 			
+			// 这里不停的调整图表区域的尺寸，直到合适才正式
+			// 渲染序列，结束图表渲染
 			if(isLayoutUpdated())
 			{
 				checkRender();

@@ -42,6 +42,11 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 * 根据数据的比例范围渲染基于此坐标轴的序列
+		 * 
+		 * 对于大数据量观看整体图表时，没必要把每个点都渲染出来，而是根据合适的单位距离内的点密度
+		 * 
+		 * 来渲染;
+		 * 
 		 */		
 		public function renderSeries(start:Number, end:Number):void
 		{
@@ -169,6 +174,39 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 */		
 		protected var minScrollPos:Number = 0;
+		
+		/**
+		 * 每次渲染或者数据缩放后需重新计算尺寸关系
+		 */		
+		protected function setFullSizeAndOffsize():void
+		{
+			fullSize = this.size / (currentDataRange.max - currentDataRange.min) * confirmedSourceValueRange;
+			this.offsetSize = (currentDataRange.min - sourceDataRange.min) / confirmedSourceValueRange * fullSize;
+			this.unitSize = fullSize / this.labelsData.length;
+			minScrollPos = offsetSize + size - this.fullSize;
+			
+			var currentRate:Number = this.sourceValues.length / this.fullSize;
+		}
+		
+		/**
+		 * 大数据量时，当前数据密度大于最大值，节点渲染需间隔进行
+		 * 
+		 * 此数值为间隔率
+		 */		
+		private var dataRate:uint;
+		
+		/**
+		 * 数据的最大渲染密度， 大数据量时无需每个节点都渲染，为了提升性能，采集一定
+		 * 
+		 * 密度下的节点即可 . 只需要渲染部分节点的话， 就没必要全部创建节点UI和itemRender等对象
+		 * 
+		 * 那么序列的尺寸缩放或者数据缩放时也需要动态创建未被创建的对象，每次序列渲染前都需要知道 自己的
+		 * 
+		 * 数据间隔率； 所以，动态创建的itemrender要动态添加到主场景中，不是之前的全部节点一次发总给主场景；数值标签也是只有需要渲染的节点的
+		 * 
+		 * 才会比发送至主场景；
+		 */		
+		private var maxDataPerSize:uint;
 		
 		/**
 		 * 对于每此数据缩放，坐标轴仅需绘制一次，子数据的滚动只是移动label容器的位置而已

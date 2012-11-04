@@ -190,7 +190,7 @@ package com.fiCharts.charts.chart2D.encry
 				seriesItem.x = centerX;
 				seriesItem.y = conterY;
 				seriesItem.radius = pieRadius * percent;
-				//seriesItem.alpha = percent;
+				seriesItem.alpha = percent;
 				seriesItem.rotation = 360 * percent;
 				seriesItem.render();
 			}

@@ -1,5 +1,4 @@
 
-
 1.ficharts开源免费，基于MIT协议，可用于任何项目（包括商业类）
 
 2.使用时请附带此协议，ficharts版权终归ficharts项目组所有

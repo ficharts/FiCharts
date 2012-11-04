@@ -48,6 +48,7 @@ package com.fiCharts.charts.chart2D.column2D
 		protected function layoutInnerLabel():void
 		{
 			var temHeight:Number = Math.abs(columnDataItem.height)
+			//var temWidth:Number = Math.abs(valueLabelUI.width);
 			var temX:Number;
 			var temY:Number;
 			valueLabelUI.rotation = 0;
@@ -61,7 +62,8 @@ package com.fiCharts.charts.chart2D.column2D
 				else
 					temY = this.style.radius + valueLabelUI.height;
 				
-				if (temHeight < valueLabelUI.height)
+				// 当柱体的高度和宽度都无法容下label时，隐藏他
+				if (temHeight < valueLabelUI.height /*|| columnDataItem.width < temWidth*/)
 					valueLabelUI.visible = false;
 				else
 					valueLabelUI.visible = true;

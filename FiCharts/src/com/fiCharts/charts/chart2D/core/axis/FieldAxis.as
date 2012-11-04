@@ -79,7 +79,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			getCurrentDataRange(start, end);
 			setFullSizeAndOffsize();
 			
-			minScrollPos = offsetSize + size - this.fullSize;
 			this.labelUIsCanvas.x = currentScrollPos = 0;// 数据缩放后尺寸有了新的关系
 			
 			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_INDEX, 
@@ -286,15 +285,6 @@ package com.fiCharts.charts.chart2D.core.axis
 				createLabelsData();
 				setFullSizeAndOffsize();
 			}
-		}
-		
-		/**
-		 */		
-		private function setFullSizeAndOffsize():void
-		{
-			fullSize = this.size / (currentDataRange.max - currentDataRange.min) * confirmedSourceValueRange;
-			this.offsetSize = (currentDataRange.min - sourceDataRange.min) / confirmedSourceValueRange * fullSize;
-			unitSize = fullSize / this.labelsData.length;
 		}
 		
 		/**

@@ -3,12 +3,7 @@ package
 	import com.fiCharts.charts.chart2D.encry.ChartBase;
 	import com.fiCharts.charts.chart2D.encry.ChartShellBase;
 	
-	import flash.events.Event;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
-	
-	import mx.core.ByteArrayAsset;
 	
 	/**
 	 * 2D图表主程序，用此类可以构建柱状图，趋势图，堆积图，混合图表等。

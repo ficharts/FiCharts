@@ -117,9 +117,16 @@ package com.fiCharts.charts.chart2D.pie.series
 			if (ifSizeChanged)
 			{
 				valueLabelUI.layout(radius * 0.8 * Math.cos(midRad), - radius * 0.8 * Math.sin(midRad));
+				if (valueLabelUI.width > radius)
+					valueLabelUI.visible = false;
+				else
+					valueLabelUI.visible = true;
+				
 				ifSizeChanged = false;
 			}
 		}
+		
+		
 		
 		/**
 		 */		
