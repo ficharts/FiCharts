@@ -20,10 +20,10 @@
 	</chart>
 
 	<chart title='饼状图'>
-		<item title='默认' desc='' imgURL='./gallery/stacked/stackedColumn.gif' demoURL='pie/default.xml' type='pie'/>
-		<item title='有图例' desc='' imgURL='./gallery/stacked/stackColumnFullData.gif' demoURL='pie/legend.xml' type='pie'/>
-		<item title='改变了数值显示' desc='' imgURL='./gallery/stacked/stackPercentColumn.gif' demoURL='pie/configLabel.xml' type='pie'/>
-		<item title='黑色系' desc='' imgURL='./gallery/stacked/stackBar.gif' demoURL='pie/black.xml' type='pie' style='black'/>
+		<item title='默认' desc='' imgURL='./gallery/pie/default.png' demoURL='pie/default.xml' type='pie'/>
+		<item title='有图例' desc='' imgURL='./gallery/pie/legend.png' demoURL='pie/legend.xml' type='pie'/>
+		<item title='改变了数值显示' desc='' imgURL='./gallery/pie/configLabel.png' demoURL='pie/configLabel.xml' type='pie'/>
+		<item title='黑色系' desc='' imgURL='./gallery/pie/black.png' demoURL='pie/black.xml' type='pie' style='black'/>
 	</chart>
 
 	<chart title='堆积图'>
