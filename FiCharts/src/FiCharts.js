@@ -278,7 +278,9 @@
 		chart.message.loadingData = FiCharts.message.loadingData;
 		chart.message.loadingDataError = FiCharts.message.loadingDataError;
 		
-		chart.ifConfigChanged = chart.ifDataChanged = chart.ifNeedRender = chart.ifConfigFileChanged = chart.ifReady = this.styleChanged = false;
+		chart.ifConfigChanged = chart.ifDataChanged = chart.ifNeedRender = false;
+		chart.ifConfigFileChanged = chart.ifReady = chart.styleChanged = chart.ifCSVFileChanged = false;
+			
 	};
 	
 	
@@ -328,6 +330,8 @@
 			this.message = null;
 			this.style = null;
 			this.swf = null;
+			this.csvFields = null;
+			this.csvFile = null;
 			
 			removeSWF(this.id);
 		};
@@ -417,6 +421,13 @@
 			if (this.ifConfigChanged) {
 				this.setConfigXML(this.configXML);
 				this.ifConfigChanged = false;
+				
+				//仅设置了配置XML，然后添加csv数据；
+				//如果设置了配置文件就必须等到配置文件加载完毕后才能加载csv数据
+				if (this.ifCSVFileChanged && ifConfigFileChanged == false){
+				    this.setCSVFile(this.csvFile, this.csvFields)
+				    this.ifCSVFileChanged = false;
+				}
 			}
 			
 			if (this.ifDataChanged) {
@@ -437,12 +448,19 @@
 			
 			this.dispatchEvent({type: FiCharts.event.READY, target: this});
 			
-			if (this.ifConfigFileChanged)
+			if (this.ifConfigFileChanged){
 				this.setConfigFile(this.configFile);
-			
+			}
 		};
 		
 		that.configLoaded = function(value) {
+			
+			// 配置文件加载完毕后判断是否有 csv 数据
+			if (this.ifCSVFileChanged){
+			    this.setCSVFile(this.csvFile, this.csvFields)
+			    this.ifCSVFileChanged = false;
+			}
+			
 			this.configXML = value
 			this.dispatchEvent({type: FiCharts.event.CONFIG_LOADED, target: this, data: this.configXML});
 		};
@@ -529,6 +547,18 @@
 			
 			return this;
 		};
+		
+		that.setCSVFile = function(path, fields){
+			if (this.ifReady)
+				this.swf.setCSVFile(path, fields);
+			else
+			    this.ifCSVFileChanged = true;
+			
+			this.csvFile = path;
+			this.csvFields = fields;
+			
+			return this;
+		}
 		
 		// 当初始化完毕后调用此方法只是改变样式配置文件， 如果需要看到效果还需要调用 render()方法；
 		that.setStyle = function(value) {

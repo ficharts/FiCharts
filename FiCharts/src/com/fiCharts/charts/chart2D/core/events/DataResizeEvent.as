@@ -2,37 +2,63 @@ package com.fiCharts.charts.chart2D.core.events
 {
 	import flash.events.Event;
 	
+	/**
+	 */	
 	public class DataResizeEvent extends Event
 	{
 		/**
+		 * 数据滚动时需隐藏tips 
+		 */		
+		public static const HIDE_TIPS:String = "hideTips";
+		
+		/**
+		 * 根据数据计算出toolips节点 
+		 */		
+		public static const UPDATE_TOOLTIPS_BY_DATA:String = "updateTooltipsByData"
+		
+		/**
 		 *  根据数据位置缩放图表，用于均匀分部的字符型数据节点
 		 */		
-		public static const RESIZE_BY_INDEX:String = "resizeByIndex";
+		public static const GET_SERIES_DATA_INDEX_BY_INDEXS:String = "getSeriesDataIndexByIndexs";
 		
 		/**
-		 * 根据数据大小范围缩放图表， 用于数字类型的数据节点；
+		 * 根据数据大小范围划定序列数据节点的位置范围，为序列和坐标轴（Y轴）渲染做好准备
 		 */		
-		public static const RESIZE_BY_RANGE:String = "resizeByRange";
+		public static const GET_SERIES_DATA_INDEX_RANGE_BY_DATA:String = "getSeriesDataIndexRangeByData";
 		
 		/**
-		 * 渲染数据范围内的数值标签
+		 * 渲染序列 
 		 */		
-		public static const RENDER_SIZED_VALUE_LABELS:String = 'renderSizedValueLabels';
+		public static const RENDER_SERIES:String = "renderSeries";
+		
+		/**
+		 * 渲染坐标轴
+		 */			
+		public static const UPDATE_Y_AXIS_DATA_RANGE:String = "updateYAxisDataRange";
 		
 		/**
 		 *  坐标轴是滚动的基准，驱动背景网格和序列截图的位置移动
 		 */		
-		public static const SCROLL_UIS:String = "scrollUIs"
+		public static const RATE_SERIES_DATA_ITEMS:String = "rateSeriesDataItems"
 			
 		/**
 		 */			
-		public function DataResizeEvent(type:String, start:Number = 0, end:Number = 0)
+		public function DataResizeEvent(type:String, start:Number = 0, end:Number = 0, step:uint = 1)
 		{
 			super(type, true);
 			
 			this.start = start;
 			this.end = end;
+			this.step = step;
 		}
+		
+		/**
+		 */		
+		public var data:Number = 0;
+		
+		/**
+		 */		
+		public var step:uint = 0;
 		
 		/**
 		 */		
@@ -42,8 +68,5 @@ package com.fiCharts.charts.chart2D.core.events
 		 */		
 		public var end:Number = 0;
 		
-		/**
-		 */		
-		public var sizedItemRenders:Array;
 	}
 }

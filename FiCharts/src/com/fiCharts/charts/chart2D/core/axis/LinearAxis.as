@@ -1,8 +1,11 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
+	import com.fiCharts.utils.ArrayUtil;
+	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	
+	import flash.display.BitmapData;
 
 	/**
 	 * 
@@ -20,121 +23,22 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 * 原始数据序列化后的间距
 		 */		
-		override public function percentToPos(per:Number):Number
+		internal  var confirmedSourceValueDis:Number = 0;
+		
+		/**
+		 */		
+		override internal function getNormalPatter():IAxisPattern
 		{
-			return this.valueToX(this.confirmedSourceValueRange * per + this.sourceDataRange.min);
+			return new LinearAxis_Normal(this);
 		}
 		
 		/**
 		 */		
-		override public function posToPercent(pos:Number):Number
+		override internal function getDataScalePattern():IAxisPattern
 		{
-			var perc:Number;
-			var position:Number = pos;
-			
-			if (this.inverse)
-				position = this.fullSize - position;
-			
-			perc = (offsetSize + position - this.currentScrollPos) / fullSize;
-			
-			return perc;
-		}
-		
-		/**
-		 */		
-		override public function getDataPercent(value:Object):Number
-		{
-			return this.getValuePercent(value)
-		}
-		
-		/**
-		 * 滚动结束后，渲染数据范围内的序列，数据范围根据滚动位置计算
-		 */		
-		override public function dataScrolled(dataRange:DataRange):void
-		{
-			var offPerc:Number = this.currentScrollPos / this.fullSize;
-			var min:Number = this.currentDataRange.min - offPerc * this.confirmedSourceValueRange;
-			var max:Number = currentDataRange.max - offPerc * this.confirmedSourceValueRange;
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
-				min, max));
-			
-			dataRange.min = getDataPercent(min);
-			dataRange.max = getDataPercent(max);
-		}
-		
-		/**
-		 * 主要是为了生成label数据和确定位置偏移，单元间距
-		 */		
-		override public function dataResized(start:Number, end:Number):void
-		{
-			getCurrentDataRange(start, end);
-			
-			// 数据缩放时才重新创建label数据, 数据范围决定label数据
-			createLabelsData();
-			setFullSizeAndOffsize();
-			
-			this.labelUIsCanvas.x = currentScrollPos = 0;// 数据缩放后尺寸有了新的关系
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
-				this.currentDataRange.min, this.currentDataRange.max));
-			
-			super.dataResized(start, end);
-		}
-		
-		/**
-		 */		
-		override public function renderSeries(start:Number, end:Number):void
-		{
-			var min:Number, max:Number;
-			min = start * this.confirmedSourceValueRange + this.sourceDataRange.min;
-			max = end * confirmedSourceValueRange + this.sourceDataRange.min;
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
-				min, max));
-		}
-		
-		/**
-		 * 根据数值百分比区间，计算出当前取值范围
-		 */		
-		private function getCurrentDataRange(start:Number, end:Number):void
-		{
-			/*var min:Number, max:Number;
-			min = start * this.sourceValueDis + this.sourceMin;
-			max = end * sourceValueDis + this.sourceMin;
-			
-			// 确定当前最值
-			this.preMaxMin(max, min);
-			this.confirmMaxMin();*/
-			
-			/*currentDataRange.min = this.minimum;
-			currentDataRange.max = this.maximum;*/
-			
-			currentDataRange.min = this.sourceDataRange.min + this.confirmedSourceValueRange * start;
-			currentDataRange.max = this.sourceDataRange.min + this.confirmedSourceValueRange * end;
-		}
-		
-		/**
-		 * 正式渲染之前调用; 子数据范围渲染前不调用此方法
-		 */		
-		override public function beforeRender():void
-		{
-			if (changed)
-			{
-				preMaxMin(sourceMax, sourceMin);
-				confirmMaxMin();
-				
-				currentDataRange.min = sourceDataRange.min = this.minimum;
-				currentDataRange.max = sourceDataRange.max = this.maximum;
-				
-				//获得最值差，供后继频繁计算用
-				confirmedSourceValueRange = sourceDataRange.max - sourceDataRange.min;
-				
-				this.createLabelsData();
-				setFullSizeAndOffsize();
-				
-			}
+			return new LinearAxis_DataScale(this);
 		}
 		
 		/**
@@ -160,7 +64,12 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */
 		override public function pushValues(values:Vector.<Object>):void
 		{
-			sourceValues = sourceValues.concat(values);
+			var item:Number, i:uint = 0;
+			for each (item in values)
+			{
+				sourceValues[i] = item;
+				i ++;				
+			}
 		}
 		
 		/**
@@ -210,6 +119,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		override public function dataUpdated():void
 		{
+			ArrayUtil.removeDubItem(sourceValues);
 			sourceValues.sort(Array.NUMERIC);
 			
 			if (!isNaN(assignedMinimum))
@@ -234,33 +144,51 @@ package com.fiCharts.charts.chart2D.core.axis
 				this.changed = false;
 				
 				// 气泡图的控制气泡大小的轴无需渲染，原始刻度间距即为确认的间距
-				confirmedSourceValueRange = _maximum - _minimum;
+				sourceValueDis = _maximum - _minimum;
 				return; 
 			}
 			
 			//基于零点优先于最值设置；
-			if (baseAtZero && sourceMin * sourceMax >= 0)
-			{
-				if (sourceMax > 0)
-					sourceMin = 0;
-				else if (sourceMax < 0)
-					sourceMax = 0;
-				else if (sourceMin == 0 && sourceMax == 0)
-					sourceMax = 100;
-			}
+			baseZero();
 			
 			sourceValueDis = sourceMax - sourceMin;
+			
 			super.dataUpdated();
 		}
 		
 		/**
+		 * 根据全局数据范围创建刻度数据
+		 * 
+		 * 不同模式的坐标轴数据都是通过这里构建
 		 */		
-		protected var sourceValueDis:Number;
+		internal function createLabelsData(max:Number, min:Number):void
+		{
+			var labelData:AxisLabelData;
+			labelVOes.length = labelUIs.length = labelValues.length = 0;
+			
+			//// Flash 中数字计算精度有偏差, 防止与最值及其相近的值蒙混过关
+			var maxValue:Number = max + interval - interval / 100000;
+			var j:uint = 0;
+			// internal 会随当前数值范围而变， 数据缩放时需重新计算labelData
+			for (var i:Number = min; i < maxValue; i += interval)
+			{
+				labelData = new AxisLabelData();
+				labelData.value = i;
+				labelVOes[j] = labelData;
+				labelValues[j] = i;
+				
+				j ++;
+			}
+		}
+		
+		/**
+		 */		
+		internal var labelValues:Array = [];
 		
 		/**
 		 * 与判定最大最小值
 		 */		
-		protected function preMaxMin(max:Number, min:Number):void
+		internal function preMaxMin(max:Number, min:Number):void
 		{
 			var preDataDis:Number = max - min;
 			var powerOfTen:Number = Math.floor(Math.log(Math.abs(preDataDis)) / Math.LN10);
@@ -289,14 +217,14 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 核定，确定最大最小值
 		 */		
-		protected function confirmMaxMin():void
+		internal function confirmMaxMin(axisLen:Number):void
 		{
 			var preValueDis:Number = preMax - preMin;
 			
 			//最小单位值
 			var minUintValue:Number = 0;
 			if (minUintSize <= size)
-				minUintValue = Math.max(minUintSize / size * preValueDis, preValueDis / maxDepartLineAmount);
+				minUintValue = Math.max(minUintSize / axisLen * preValueDis, preValueDis / maxDepartLineAmount);
 			else
 				minUintValue = preValueDis;
 			
@@ -350,61 +278,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 * 根据原始值和当前数据范围的数据间隔生成新label数据
+		 * 原始数据间距
 		 */		
-		protected function createLabelsData():void
-		{
-			var labelData:AxisLabelData;
-			labelsData = new Vector.<AxisLabelData>;
-			
-			//// Flash 中数字计算精度有偏差, 防止与最值及其相近的值蒙混过关
-			var maxValue:Number = this.sourceDataRange.max + interval - interval / 100000;
-			
-			// internal 会随当前数值范围而变， 数据缩放时需重新计算labelData
-			for (var i:Number = this.sourceDataRange.min; i < maxValue; i += interval)
-			{
-				labelData = new AxisLabelData();
-				labelData.value = i;
-				labelsData.push(labelData);
-			}
-			
-			labelUIs.length = 0;
-			clearLabels();
-		}
+		internal var sourceValueDis:Number;
 		
 		/**
 		 * 
-		private function setCurrentLabelsIndexRange():void
-		{
-			var length:uint = this.labelsData.length;
-			
-			labelStartIndex = 0;
-			labelEndIndex = length - 1;
-			
-			for (var i:Number = 0; i < length; i ++)
-			{
-				if (this.currentDataRange.min >= Number(labelsData[i].value))
-				{
-					this.labelStartIndex = i;
-				}
-				else if (currentDataRange.max <= Number(labelsData[i].value))
-				{
-					this.labelEndIndex = i;
-					break;
-				}
-				else
-				{
-					continue;
-				}
-			}
-		}
-		*/		
-		
-		/**
 		 * 原始值的最大最小值
 		 */		
-		protected var sourceMax:Number = 0;
-		protected var sourceMin:Number = 0;
+		internal var sourceMax:Number = 0;
+		internal var sourceMin:Number = 0;
 		
 		/**
 		 * 违背核定的最值
@@ -484,52 +367,32 @@ package com.fiCharts.charts.chart2D.core.axis
 
 		/**
 		 */		
-		override protected function valueToSize(value:Object):Number
+		override protected function valueToSize(value:Object, index:uint):Number
 		{
-			var position:Number;
-			
-			if (confirmedSourceValueRange)
-				position = getValuePercent(value) * this.fullSize - offsetSize + this.currentScrollPos;
-			else
-				position = 0;
-			
-			if (this.inverse)
-				position = this.fullSize - position;
-			
-			return position;
+			return this.curPattern.valueToSize(value, index);
 		}
 		
-		/**
-		 */		
-		protected function getValuePercent(value:Object):Number
-		{
-			if (value == null)
-				return 0;
-			else
-				return (Number(value) - this.sourceDataRange.min) / confirmedSourceValueRange;
-		}
-
 		/**
 		 * @param value
 		 * @return
 		 */
-		override public function valueToX(value:Object):Number
+		override public function valueToX(value:Object, index:uint):Number
 		{
-			return valueToSize(value);
+			return valueToSize(value, index);
 		}
 
 		/**
 		 */
 		override public function valueToY(value:Object):Number
 		{
-			return - valueToSize(value);
+			return - valueToSize(value, NaN);
 		}
 		
 		/**
 		 */		
 		override public function valueToZ(value:Object):Number
 		{
-			return this.getValuePercent(value);
+			return this.getDataPercent(value);
 		}
 
 		/**
@@ -579,6 +442,172 @@ package com.fiCharts.charts.chart2D.core.axis
 		public function set baseAtZero(v:Object):void
 		{
 			_baseAtZero = XMLVOMapper.boolean(v);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/*********************************************************
+		 * 
+		 * 
+		 * 
+		 * Y轴数据动态刷新处理
+		 * 
+		 * 
+		 * 
+		 ********************************************************/		
+		
+		override public function redayToUpdataYData():void
+		{
+			yScrollData.length = 0;
+		}
+		
+		/**
+		 */		
+		private var yScrollData:Array = [];
+		
+		/**
+		 * 
+		 */		
+		override public function pushYData(value:Vector.<Object>):void
+		{
+			var item:Object, i:Number = 0;
+			for each(item in value)
+			{
+				yScrollData[i] = item;
+				i ++
+			}
+		}
+		
+		/**
+		 */		
+		override public function yDataUpdated():void
+		{
+			// 剔除重复数据，从小大大排序
+			ArrayUtil.removeDubItem(yScrollData);
+			yScrollData.sort(Array.NUMERIC);
+			
+			var min:Number = yScrollData.shift();
+			var max:Number = yScrollData.pop();
+			
+			// 更大的数据范围
+			if (max > this.maximum || min < this.minimum)
+			{
+				_updateYData(min, max);
+			}
+			else if ((maximum - minimum) / (max - min) > 3)
+			{
+				_updateYData(min, max);
+			}
+		}
+		
+		/**
+		 */		
+		private function _updateYData(min:Number, max:Number):void
+		{
+			changed = true;
+			
+			sourceMax = max;
+			sourceMin = min;
+			
+			baseZero();
+			
+			preMaxMin(sourceMax, sourceMin);
+			confirmMaxMin(size);
+			
+			//获得最值差，供后继频繁计算用
+			confirmedSourceValueDis = maximum - minimum;
+			
+			appendLabelData();
+			unitSize = size / labelVOes.length;
+		}
+		
+		/**
+		 * 
+		 * 数据缩放时，y轴动态刷新的labelUI构建很耗费性能，要将这些已经被构建
+		 * 
+		 * 了的labelUI保存下来复用，降低性能开销；
+		 * 
+		 * 已经被构建了的labelVO和UI存储在统一地方，用的时候从中取出来即可
+		 * 
+		 */		
+		private function appendLabelData():void
+		{
+			var labelData:AxisLabelData;
+			labelVOes.length = labelUIs.length = 0;
+			
+			//// Flash 中数字计算精度有偏差, 防止与最值及其相近的值蒙混过关
+			var maxValue:Number = maximum + interval - interval / 100000;
+			var j:uint = 0, i:Number;
+			var len:uint = sourceLabelVOs.length;
+			// internal 会随当前数值范围而变， 数据缩放时需重新计算labelData
+			for (i = minimum; i < maxValue; i += interval)
+			{
+				labelData = null;
+				for (j = 0; j < len; j ++)
+				{
+					if (sourceLabelVOs[j].value == i)
+					{
+						labelData = sourceLabelVOs[j];
+						
+						labelVOes.push(labelData);
+						labelUIs.push(sourceLabelUIs[j]);
+						break;
+					}
+				}
+				
+				if (labelData)
+				{
+					continue;
+				}
+				else
+				{// 
+					labelData = new AxisLabelData();
+					labelData.value = i;
+					labelVOes.push(labelData);
+					labelUIs.push(null);
+				}
+			}
+		}
+		
+		/**
+		 */		
+		override protected function restoreLabel(vo:AxisLabelData, ui:BitmapData):void
+		{
+			sourceLabelVOs.push(vo);
+			sourceLabelUIs.push(ui);
+		}
+		
+		/**
+		 */		
+		internal var sourceLabelVOs:Vector.<AxisLabelData>;
+		
+		/**
+		 */		
+		internal var sourceLabelUIs:Array;
+		
+		/**
+		 */		
+		private function baseZero():void
+		{
+			if (baseAtZero && sourceMin * sourceMax >= 0)
+			{
+				if (sourceMax > 0)
+					sourceMin = 0;
+				else if (sourceMax < 0)
+					sourceMax = 0;
+				else if (sourceMin == 0 && sourceMax == 0)
+					sourceMax = 100;
+			}
 		}
 	}
 }

@@ -2,6 +2,8 @@ package com.fiCharts.charts.chart2D.bar.stack
 {
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnItemRender;
 	
+	/**
+	 */	
 	public class StackedBarItemRender extends StackedColumnItemRender
 	{
 		public function StackedBarItemRender(visible:Boolean = false)

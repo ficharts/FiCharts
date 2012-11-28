@@ -11,9 +11,9 @@ package com.fiCharts.charts.chart2D.core.itemRender
 	{
 		public function ItemRenderProxy(ifVisible:Boolean = true)
 		{
-			this.hitArea = canvas;
+			//this.hitArea = canvas;
 			
-			canvas.mouseEnabled = false;
+			//canvas.mouseEnabled = false;
 			canvas.visible = ifVisible;
 			addChild(canvas);
 		}

@@ -68,7 +68,7 @@ package com.fiCharts.utils.format
 		
 		/**
 		 */		
-		private static function formatTime(value:Number):String
+		public static function formatTime(value:Number):String
 		{
 			if (value < 10)
 				return "0" + value.toString();
@@ -78,7 +78,7 @@ package com.fiCharts.utils.format
 		
 		/**
 		 */		
-		public static function stringToDate(valueString:String, inputFormat:String):Date
+		public static function stringToDate(valueString:String, inputFormat:String, date:Date = null):Date
 		{
 			var mask:String
 			var temp:String;
@@ -170,7 +170,22 @@ package com.fiCharts.utils.format
 			if (yearString.length == 2 && yearNum < 70)
 				yearNum+=2000;
 			
-			var newDate:Date = new Date(yearNum, monthNum - 1, dayNum, hourNum, minNum, secondNum);
+			
+			var newDate:Date;
+			
+			if (date)
+				newDate = date;
+			else
+				newDate = new Date();
+			
+			
+			
+			newDate.fullYear = yearNum;
+			newDate.month =  monthNum - 1;
+			newDate.date = dayNum;
+			newDate.hours = hourNum;
+			newDate.minutes = minNum;
+			newDate.seconds = secondNum;
 			
 			if (dayNum != newDate.getDate() || (monthNum - 1) != newDate.getMonth())
 				return null;

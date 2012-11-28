@@ -7,6 +7,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.common.language.LanguageConfig;
 	import com.fiCharts.ui.text.Label;
 	import com.fiCharts.utils.ExternalUtil;
+	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -19,7 +20,6 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.system.OS;
 	
 	import flash.display.DisplayObject;
-	import flash.display.NativeMenu;
 	import flash.display.Sprite;
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
@@ -31,9 +31,7 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-	import flash.system.Capabilities;
 	import flash.system.Security;
-	import flash.system.SecurityDomain;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	import flash.utils.ByteArray;
@@ -408,11 +406,13 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private function requestCSVData(value:String):void
+		private function requestCSVData(value:String, columns:Array):void
 		{
+			updateInfoLabel(loadingDataInfo);
+			
 			csvLoader = new CSVLoader;
 			csvLoader.addEventListener(CSVParseEvent.PARSE_COMPLETE, csvDataLoaded, false, 0, true);
-			csvLoader.columnNames = ['label', 'value']
+			csvLoader.columnNames = columns;
 			csvLoader.loadCVS(value);
 		}
 		
@@ -420,6 +420,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function csvDataLoaded(evt:CSVParseEvent):void
 		{
+			chart.dataVOes = evt.parsedVOes;
+			renderHandler();
+			ExternalUtil.call("FiCharts.csvFileLoaded", id);
+			
 		}
 		
 		/**
@@ -585,6 +589,24 @@ package com.fiCharts.charts.chart2D.encry
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, saveImageHandler);
 				myContextMenu.customItems.push(item);
 				
+				item = new ContextMenuItem("@关注");
+				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(evt:Event):void{
+					flash.net.navigateToURL(new URLRequest('http://weibo.com/u/2431448684'), '_blank');
+				});
+				myContextMenu.customItems.push(item);
+				
+				item = new ContextMenuItem("文档");
+				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(evt:Event):void{
+					flash.net.navigateToURL(new URLRequest('http://www.ficharts.com/document/document.html'), '_blank');
+				});
+				myContextMenu.customItems.push(item);
+				
+				item = new ContextMenuItem("样例");
+				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(evt:Event):void{
+					flash.net.navigateToURL(new URLRequest('http://www.ficharts.com/chartCenter/chartGallery.html'), '_blank');
+				});
+				myContextMenu.customItems.push(item);
+				
 				item = new ContextMenuItem(languageConfig.about + " FiCharts");
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 				myContextMenu.customItems.push(item);
@@ -598,12 +620,20 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 保存图片
 		 */		
-		private function saveImageHandler(evt:Event):void
+		public function saveImage():void
 		{
 			var imageByteArray:ByteArray = PNGEncoder.encode(BitmapUtil.draw(this));
 			var file:FileReference = new FileReference();
 			file.save(imageByteArray, 'fichart.png');
+		}
+		
+		/**
+		 */		
+		private function saveImageHandler(evt:Event):void
+		{
+			saveImage();
 		}
 		
 		/**
@@ -631,8 +661,9 @@ package com.fiCharts.charts.chart2D.encry
 			ExternalUtil.addCallback("setDataXML", getXMLDataHandler);
 			ExternalUtil.addCallback("setDataFile", requestDataURL);
 			
-			ExternalUtil.addCallback("setCSVData", requestCSVData);
+			ExternalUtil.addCallback("setCSVFile", requestCSVData);
 			ExternalUtil.addCallback("render", renderHandler);
+			ExternalUtil.addCallback("saveImage", saveImage);
 			
 			// Flash的初始化参数配置
 			_configFileURL = stage.loaderInfo.parameters['configFile'];
@@ -666,6 +697,12 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function lauchApp():void
 		{
+			// 桌面环境下图表默认自适应舞台，移动平台下需手动设置
+			if (OS.isDesktopSystem)
+				ifAutoResizeToStage = true;
+			else
+				ifAutoResizeToStage = false;
+			
 			createChart();
 			stage.addEventListener(Event.RESIZE, resizeHandler, false, 0, true);
 			

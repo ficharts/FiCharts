@@ -78,7 +78,7 @@ package com.fiCharts.charts.chart2D.bubble
 		
 		/**
 		 */		
-		override protected function get zTipLabel():String
+		override public function get zTipLabel():String
 		{
 			var bubbleTip:String;
 			bubbleTip = itemVO.zLabel;

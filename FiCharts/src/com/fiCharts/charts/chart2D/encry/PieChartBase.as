@@ -37,6 +37,25 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
+		private var _dataVOes:Vector.<Object>;
+		
+		/**
+		 */
+		public function get dataVOes():Vector.<Object>
+		{
+			return _dataVOes;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set dataVOes(value:Vector.<Object>):void
+		{
+			_dataVOes = value;
+		}
+		
+		/**
+		 */		
 		public function ifDataScalable():Boolean
 		{
 			return false;

@@ -87,6 +87,7 @@ package com.fiCharts.ui.toolTips
 		{
 			_locked = XMLVOMapper.boolean(value);
 		}
+		
 
 	}
 }

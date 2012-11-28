@@ -9,12 +9,16 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
 	import com.fiCharts.charts.chart2D.core.series.DataIndexOffseter;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
+	import com.fiCharts.charts.chart2D.core.series.ISeriesRenderPattern;
 	import com.fiCharts.charts.chart2D.core.series.SeriesDirectionControl;
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
+	import com.fiCharts.ui.toolTips.ToolTipHolder;
+	import com.fiCharts.ui.toolTips.TooltipDataItem;
 	import com.fiCharts.ui.toolTips.TooltipStyle;
+	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -25,10 +29,11 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
+	import flash.display.Shape;
 	import flash.display.Sprite;
 
 	/**
-	 * SeriesBase
+	 * 序列的基类
 	 */	
 	public class SeriesBase extends Sprite implements IDirectionSeries, IEditableObject, IStyleStatesUI
 	{
@@ -42,15 +47,157 @@ package com.fiCharts.charts.chart2D.encry
 			addChild(canvas);
 		}
 		
+		
+		
+		//--------------------------------------------------------------------------
+		//
+		//  
+		// 渲染模式的状态控制，有经典模式和数据缩放两种模式， 每种序列需重写自己的一对渲染
+		// 
+		// 模式；
+		//
+		//---------------------------------------------------------------------------
+		
+		
+		/**
+		 */		
+		public function toClassicPattern():void
+		{
+			if (curRenderPattern)
+				curRenderPattern.toClassicPattern();
+			else
+				curRenderPattern = getClassicPattern();
+			
+			if (simpleDataRender && simpleDataRender.parent)
+			{
+				this.removeChild(simpleDataRender)
+				simpleDataRender = null;
+			}
+			
+			if (tipItem)
+			{
+				tipItem.distory();
+				tipItem = null;
+			}
+		}
+		
+		/**
+		 */		
+		public function toSimplePattern():void
+		{
+			if (curRenderPattern)
+				curRenderPattern.toSimplePattern();
+			else
+				curRenderPattern = getSimplePattern();
+			
+			if (simpleDataRender == null)
+			{
+				simpleDataRender = new Shape;
+				simpleDataRender.graphics.clear();
+				
+				var style:Style = dataRender.states.normal as Style;
+				StyleManager.drawCircle(simpleDataRender, style, this);
+				this.addChild(simpleDataRender);
+			}
+			
+			if (tipItem == null)
+			{
+				tipItem = new TooltipDataItem;
+				tipItem.style = this.tooltip;
+			}
+		}
+		
+		/**
+		 */		
+		protected function getClassicPattern():ISeriesRenderPattern
+		{
+			return null;
+		}
+		
+		/**
+		 */		
+		protected function getSimplePattern():ISeriesRenderPattern
+		{
+			return null;
+		}
+		
+		/**
+		 */		
+		public var curRenderPattern:ISeriesRenderPattern;
+		public var classicPattern:ISeriesRenderPattern;
+		public var simplePattern:ISeriesRenderPattern;
+		
+		
+		
+		
+		//--------------------------------------------------------
+		//
+		//
+		// 数据缩放下的信息提示控制
+		//
+		//
+		//-------------------------------------------------------
+		
+		/**
+		 */		
+		private function hideTips(evt:DataResizeEvent):void
+		{
+			simpleDataRender.visible = false;
+		}
+		
+		/**
+		 */		
+		private function updateTipByData(evt:DataResizeEvent):void
+		{
+			var i:uint;
+			var curData:Number = 0;
+			var minDis:Number = evt.end - evt.start;
+			var index:int = - 1; 
+			
+			for (i = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
+			{
+				curData = horValues[i];
+				
+				if (curData > evt.start && curData < evt.end)
+				{
+					if (Math.abs(evt.data - curData) < minDis)
+					{
+						minDis = Math.abs(evt.data - curData);
+						index = i;
+					}
+				}
+			}
+			
+			if (index >= 0)
+			{
+				var item:SeriesDataItemVO = this.dataItemVOs[index];
+				simpleDataRender.x = item.x;
+				simpleDataRender.y = item.y;
+				
+				if (simpleDataRender.visible == false)
+					simpleDataRender.visible = true;
+				
+				tipItem.metaData = item.metaData;
+			}
+		}
+		
+		/**
+		 */		
+		private var simpleDataRender:Shape;
+		
+		/**
+		 * 数据缩放时的信息提示数据节点， 每个序列仅有一个节点
+		 */		
+		public var tipItem:TooltipDataItem;
+		
+		
 		//---------------------------------------------------------------------
 		//
 		//  数据缩放控制， 序列数据缩放因数据类型而不同， 反映到不同类型的坐标轴上
 		//
 		// 一种是按照节点位置，一种是按照数据范围
 		//
-		//
 		//----------------------------------------------------------------------
-		
 		
 		/**
 		 */		
@@ -60,10 +207,9 @@ package com.fiCharts.charts.chart2D.encry
 			
 			dataOffsetter.minIndex = evt.start;
 			dataOffsetter.maxIndex = evt.end;
+			dataOffsetter.offSet(0, maxDataItemIndex);
 			
-			dataOffsetter.offSet(0, itemRenderMaxIndex);
-			
-			this.layoutDataItems();
+			scrollYValues = this.verValues.slice(dataOffsetter.minIndex, dataOffsetter.maxIndex + 1);
 		}
 		
 		/**
@@ -76,72 +222,60 @@ package com.fiCharts.charts.chart2D.encry
 			evt.stopPropagation();
 			
 			dataOffsetter.minIndex = 0;
-			dataOffsetter.maxIndex = itemRenderMaxIndex;
+			dataOffsetter.maxIndex = maxDataItemIndex;
 			
-			for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
-			{
-				if ((dataItemVOs[i].xValue) <= evt.start)
-				{
-					dataOffsetter.minIndex = i;
-				}
-				else if ((dataItemVOs[i].xValue) >= evt.end)
-				{
-					dataOffsetter.maxIndex = i;
-					break;
-				}
-				else
-				{
-					continue;
-				}
-			}
+			dataOffsetter.getDataIndexRange(evt.start, evt.end, horValues);
+			dataOffsetter.offSet(0, maxDataItemIndex);
 			
-			dataOffsetter.offSet(0, itemRenderMaxIndex);
-			
-			this.layoutDataItems();
+			scrollYValues = this.verValues.slice(dataOffsetter.minIndex, dataOffsetter.maxIndex + 1);
 		}
 		
 		/**
-		 * 
-		 * 数据缩放后更新数据范围内的数据结点位置
-		 * 
+		 * 用于为动态渲染的Y轴提供数据
 		 */		
-		protected function updataItemRendersLayout():void
+		public var scrollYValues:Vector.<Object>;
+		
+		/**
+		 * 这些值是数据筛分时构建， 用来辅助划定数值序号范围；
+		 */		
+		private var horValues:Array = [];
+		
+		/**
+		 * 这些值是数据筛分时构建， 用来辅助刷新Y轴数据
+		 */		
+		private var verValues:Vector.<Object> = new Vector.<Object>;
+		
+		/**
+		 */		
+		private function renderScaledData(evt:DataResizeEvent):void
 		{
-			if (ifHasItemRender)
-			{
-				var itemRender:ItemRenderBace;
-				for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
-				{
-					itemRender = this.itemRenders[i] as ItemRenderBace;
-					if (i >= dataOffsetter.minIndex && i <= dataOffsetter.maxIndex)
-					{
-						itemRender.layout();
-						itemRender.visible = true;
-					}
-					else
-					{
-						itemRender.visible = false;
-					}
-				}
-				
-				// 将数据范围内的  数值标签交给 主程序绘制
-				var dataResizeEvt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.RENDER_SIZED_VALUE_LABELS);
-				dataResizeEvt.sizedItemRenders =  this.itemRenders.slice(dataOffsetter.minIndex, dataOffsetter.maxIndex + 1);
-				this.dispatchEvent(dataResizeEvt);
-			}
+			this.curRenderPattern.renderScaledData();
 		}
 		
 		/**
 		 */		
-		protected var dataOffsetter:DataIndexOffseter = new DataIndexOffseter;
+		public var dataOffsetter:DataIndexOffseter = new DataIndexOffseter;
 		
 		/**
+		 *  创建渲染节点并渲染图表序列；
+		 * 
+		 *  创建渲染节点  > 布局数据节点  > 渲染图表  > 渲染 渲染节点
 		 */		
 		public function render():void
 		{
-			
+			this.curRenderPattern.render();
 		}
 		
+		/**
+		 * 图表图形绘制
+		 */
+		protected function draw():void
+		{
+			// To override.
+		}
+		
+		/**
+		 */		
 		public function normalHandler():void
 		{
 			
@@ -243,7 +377,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 绘制图表的画布或者存放图表元素的容器;
 		 */		
-		protected var canvas:Sprite = new Sprite;
+		public var canvas:Sprite = new Sprite;
 
 		
 		//---------------------------------------------
@@ -252,7 +386,7 @@ package com.fiCharts.charts.chart2D.encry
 		//
 		//---------------------------------------------
 		
-		protected function applyDataFeature():void
+		public function applyDataFeature():void
 		{
 			this.directionControl.dataFeature = this.verticalAxis.getSeriesDataFeature(
 				this.verticalValues.concat());
@@ -290,7 +424,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		protected function get baseLine():Number
+		public function get baseLine():Number
 		{
 			return directionControl.baseLine;
 		}
@@ -306,49 +440,14 @@ package com.fiCharts.charts.chart2D.encry
 			return this.verticalAxis;
 		}
 
-		
-		//-------------------------------------------
-		//
-		// 图表渲染
-		//
-		//--------------------------------------------
-		
-		/**
-		 * 创建渲染节点并渲染图表序列；
-		 * 
-		 *  创建渲染节点  > 布局数据节点  > 渲染图表  > 渲染 渲染节点
-		 */
-		public function renderSeries():void
-		{
-			if (ifHasItemRender && ifDataChanged)
-				createItemRenders();
-			
-			if (ifDataChanged || ifSizeChanged)
-			{
-				this.applyDataFeature();
-				layoutDataItems();
-				renderChart();
-				
-				ifDataChanged = false;
-			}
-		}
-
 		/**
 		 */ 
-		protected var ifDataChanged:Boolean = false;
+		public var ifDataChanged:Boolean = false;
 		
 		/**
 		 */		
-		protected var ifSizeChanged:Boolean = false;
+		public var ifSizeChanged:Boolean = false;
 
-		/**
-		 * Render chart content.
-		 */
-		protected function renderChart():void
-		{
-			// To override.
-		}
-		
 		/**
 		 *  动画渲染时传入动画进度百分比， 各序列执行自己的动画方式；
 		 */		
@@ -412,16 +511,12 @@ package com.fiCharts.charts.chart2D.encry
 		 * 
 		 * 渲染节点的颜色默认为数据节点的颜色，其他属性均继承于序列的渲染器配置属性；
 		 */
-		protected function createItemRenders():void
+		public function createItemRenders():void
 		{
 			itemRenders = [];
 			for each (var item:SeriesDataItemVO in dataItemVOs)
 				initItemRender(itemRender, item);
 		}
-		
-		/**
-		 */		
-		public var ifHasItemRender:Boolean = true;
 		
 		/**
 		 * 构造节点渲染器
@@ -446,8 +541,40 @@ package com.fiCharts.charts.chart2D.encry
 			itemRender.dataRender = this.dataRender;
 			itemRender.tooltip = this.tooltip;
 			
+			initTipString(item, getXTip(item), 
+				getYTip(item), getZTip(item), itemRender.isHorizontal);
+			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
+		}
+		
+		/**
+		 * 给数据节点的元数据设置tooltip字段值
+		 */		
+		protected function initTipString(itemVO:SeriesDataItemVO, 
+									   xTipLabel:String, yTipLabel:String, zTipLabel:String,
+									   isHorizontal:Boolean = false):void
+		{
+			var fullTip:String;
+			var xTip:String = xTipLabel;
+			var yTip:String = yTipLabel;
+			var zTip:String = zTipLabel;
+			
+			if (itemVO.xDisplayName && itemVO.xDisplayName != '')
+				xTip = itemVO.xDisplayName + ':' + xTip;
+			
+			if (itemVO.yDisplayName && itemVO.yDisplayName != '')
+				yTip = itemVO.yDisplayName + ':' + yTip;
+			
+			if (isHorizontal)
+				fullTip = yTip + '<br>' + xTip + zTip;
+			else
+				fullTip = xTip + '<br>' + yTip + zTip;
+			
+			if (itemVO.seriesName && itemVO.seriesName != '')
+				fullTip = itemVO.seriesName + '<br>' + fullTip;
+			
+			itemVO.metaData.tooltip = fullTip;
 		}
 		
 		/**
@@ -486,15 +613,17 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 更新数据节点的布局信息；
 		 */		
-		protected function layoutDataItems():void
+		public function layoutDataItems(startIndex:int, endIndex:int, step:uint = 1):void
 		{
 			var item:SeriesDataItemVO;
-			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
+			var i:uint = 0;
+			for (i = startIndex; i <= endIndex; i +=step)
 			{
 				item = dataItemVOs[i];
-				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue);
-				item.dataItemY = item.y = (verticalAxis.valueToY(item.yValue));
+				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, i);
+				item.dataItemY = item.y = (verticalAxis.valueToY(item.yVerifyValue));
 			}
+			
 		}
 		
 		/**
@@ -534,6 +663,14 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			horizontalAxis.pushValues(horizontalValues.concat());
 			verticalAxis.pushValues(verticalValues.concat());
+		}
+		
+		/**
+		 * 仅为数据缩放/滚动过程中的Y轴动态更新提供数据
+		 */		
+		public function updateYAxisValueForScroll():void
+		{
+			verticalAxis.pushYData(scrollYValues);
 		}
 		
 		/**
@@ -633,8 +770,15 @@ package com.fiCharts.charts.chart2D.encry
 			_horizontalAxis.direction = AxisBase.HORIZONTAL_AXIS;
 			_horizontalAxis.metaData = this;
 			
-			_horizontalAxis.addEventListener(DataResizeEvent.RESIZE_BY_INDEX, dataResizedByIndex, false, 0, true);
-			_horizontalAxis.addEventListener(DataResizeEvent.RESIZE_BY_RANGE, dataResizedByRange, false, 0, true);
+			_horizontalAxis.addEventListener(DataResizeEvent.RATE_SERIES_DATA_ITEMS, rateDataItems, false, 0, true);
+			
+			_horizontalAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_BY_INDEXS, dataResizedByIndex, false, 0, true);
+			_horizontalAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, dataResizedByRange, false, 0, true);
+			
+			_horizontalAxis.addEventListener(DataResizeEvent.RENDER_SERIES, renderScaledData, false, 0, true);
+			
+			_horizontalAxis.addEventListener(DataResizeEvent.UPDATE_TOOLTIPS_BY_DATA, updateTipByData, false, 0, true);
+			_horizontalAxis.addEventListener(DataResizeEvent.HIDE_TIPS, hideTips, false, 0, true);
 		}
 
 		/**
@@ -688,11 +832,25 @@ package com.fiCharts.charts.chart2D.encry
 			_vAxis = value;
 		}
 		
+		
+		
+		
+		
+		
+		
+		//------------------------------------------------------------------
+		//
+		//
+		// 序列数据的处理
+		//
+		//
+		//-----------------------------------------------------------------
+		
 		/**
 		 */
-		private var _dataProvider:XML;
+		private var _dataProvider:Vector.<Object>;
 
-		public function get dataProvider():XML
+		public function get dataProvider():Vector.<Object>
 		{
 			return _dataProvider;
 		}
@@ -700,60 +858,165 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 *  Individual data.
 		 */
-		public function set dataProvider(value:XML):void
+		public function set dataProvider(value:Vector.<Object>):void
 		{
 			if (value != _dataProvider)
 			{
 				_dataProvider = value;
-				initData();
+				preInitData();
 				ifDataChanged = true;
 			}
 		}
 		
 		/**
-		 *  创建节点和坐标轴的数据
+		 *  初始化坐标轴数据, 预初始化节点数据， 
+		 * 
+		 *  节点数据的完全初始化需等到正式渲染序列之前
+		 * 
+		 *  因为大数据下， 序列的渲染都是采集部分数据动态渲染，
+		 * 
+		 *  不能所有数据节点一次全部创建并渲染, 太耗性能
 		 */
-		protected function initData():void
+		protected function preInitData():void
 		{
-			var seriesDataItem:SeriesDataItemVO
+			PerformaceTest.start("预构建数据节点");
+			
+			var seriesDataItem:SeriesDataItemVO;
+			var item:Object;
+			var i:uint = 0;
+			
 			dataItemVOs = new Vector.<SeriesDataItemVO>
 			horizontalValues = new Vector.<Object>;
 			verticalValues = new Vector.<Object>;
+			sourceDataItems = new Vector.<SeriesDataItemVO>;
 			
-			for each (var item:XML in dataProvider.children())
+			for each (item in dataProvider)
 			{
 				seriesDataItem = this.seriesDataItem;
 				
-				seriesDataItem.metaData = new Object;
-				XMLVOMapper.pushXMLDataToVO(item, seriesDataItem.metaData);//将XML转化为对象
+				seriesDataItem.xValue = item[xField]; // xValue.
+				seriesDataItem.yValue = item[yField]; // yValue.
+				setItemColor(item, seriesDataItem);
 				
-				seriesDataItem.xValue = seriesDataItem.metaData[xField]; // xValue.
-				seriesDataItem.yValue = seriesDataItem.metaData[yField]; // yValue.
+				seriesDataItem.xVerifyValue = this.horizontalAxis.getVerifyData(seriesDataItem.xValue);
+				seriesDataItem.yVerifyValue = this.verticalAxis.getVerifyData(seriesDataItem.yValue);
 				
-				seriesDataItem.xLabel = horizontalAxis.getXLabel(seriesDataItem.xValue);
-				seriesDataItem.yLabel = verticalAxis.getYLabel(seriesDataItem.yValue);
-				seriesDataItem.xDisplayName = horizontalAxis.displayName;
-				seriesDataItem.yDisplayName = verticalAxis.displayName;
+				horizontalValues[i] = seriesDataItem.xVerifyValue;
+				verticalValues[i] = seriesDataItem.yVerifyValue;
+				dataItemVOs[i] = sourceDataItems[i] = seriesDataItem;
 				
-				setItemColor(seriesDataItem.metaData, seriesDataItem);
-				seriesDataItem.seriesName = seriesName;
-				
-				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, 
-					['xValue', 'yValue', 'xLabel', 'yLabel', 'xDisplayName', 'yDisplayName', 'seriesName', 'color']);
-				
-				horizontalValues.push(seriesDataItem.xValue);
-				verticalValues.push(seriesDataItem.yValue);
-				dataItemVOs.push(seriesDataItem);
+				i ++;
 			}
 			
+			updateMaxIndex();
 			
-			dataOffsetter.maxIndex = itemRenderMaxIndex = dataItemVOs.length - 1;
+			PerformaceTest.end("预构建数据节点");
 		}
+		
+		/**
+		 */		
+		public function initData():void
+		{
+			var seriesDataItem:SeriesDataItemVO;
+			for each (seriesDataItem in dataItemVOs)
+				initDataItem(seriesDataItem);
+		}
+		
+		/**
+		 * 
+		 * 从原始数据节点中筛分一部分用于渲染， 如果节点
+		 * 
+		 * 未被完全初始化，就完成其初始化
+		 * 
+		 */		
+		private function rateDataItems(evt:DataResizeEvent):void
+		{
+			PerformaceTest.start("构建数据节点");
+			
+			this.dataItemVOs.length = this.horValues.length = verValues.length = 0;
+			
+			var sourceDataLen:uint = this.sourceDataItems.length;
+			var i:uint, j:uint = 0;
+			var dataItem:SeriesDataItemVO;
+			
+			for (i = 0; i < sourceDataLen; i += evt.step)
+			{
+				if (i + evt.step >= sourceDataLen)
+					dataItem = dataItemVOs[j] = sourceDataItems[sourceDataLen - 1];
+				else
+					dataItem = dataItemVOs[j] = sourceDataItems[i];
+				
+				if (dataItem.metaData == null)
+					initDataItem(dataItem);
+				
+				horValues[j] = this.horizontalValues[i];
+				verValues[j] = this.verticalValues[i];
+				
+				j ++;
+			}
+			
+			updateMaxIndex();
+			
+			PerformaceTest.end("构建数据节点");
+		}
+		
+		/**
+		 */		
+		protected function initDataItem(seriesDataItem:SeriesDataItemVO):void
+		{
+			seriesDataItem.metaData = {};
+			
+			seriesDataItem.xLabel = horizontalAxis.getXLabel(seriesDataItem.xVerifyValue);
+			seriesDataItem.yLabel = verticalAxis.getYLabel(seriesDataItem.yVerifyValue);
+			
+			seriesDataItem.xDisplayName = horizontalAxis.displayName;
+			seriesDataItem.yDisplayName = verticalAxis.displayName;
+			
+			seriesDataItem.seriesName = seriesName;
+			
+			XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, 
+				['xValue', 'yValue', 'xLabel', 'yLabel', 'xDisplayName', 'yDisplayName', 'seriesName', 'color']);
+			
+			this.initTipString(seriesDataItem, getXTip(seriesDataItem), getYTip(seriesDataItem),
+				getZTip(seriesDataItem), false); 
+		}
+		
+		/**
+		 */		
+		protected function getXTip(item:SeriesDataItemVO):String
+		{
+			return item.xLabel;
+		}
+		
+		/**
+		 */		
+		protected function getYTip(item:SeriesDataItemVO):String
+		{
+			return item.yLabel;
+		}
+		
+		/**
+		 */		
+		protected function getZTip(item:SeriesDataItemVO):String
+		{
+			return "";
+		}
+		
+		/**
+		 */		
+		protected function updateMaxIndex():void
+		{
+			dataOffsetter.maxIndex = maxDataItemIndex = dataItemVOs.length - 1;
+		}
+		
+		/**
+		 */		
+		protected var sourceDataItems:Vector.<SeriesDataItemVO>;
 		
 		/**
 		 * 把节点总数存下来，后继节点渲染会频繁用于计算；
 		 */		
-		protected var itemRenderMaxIndex:uint;
+		public var maxDataItemIndex:uint = 0;
 		
 		/**
 		 * 构建数据节点VO

@@ -55,6 +55,11 @@ package com.fiCharts.charts.common
 		function get dataXML():XML;
 		
 		/**
+		 */		
+		function get dataVOes():Vector.<Object>;
+		function set dataVOes(value:Vector.<Object>):void;
+		
+		/**
 		 * 图表的宽度
 		 */		
 		function set chartWidth(value:Number):void;

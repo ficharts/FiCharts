@@ -69,10 +69,10 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */			
-		override protected function initData():void
+		override protected function preInitData():void
 		{
 			var xValue:Object, yValue:Number, positiveValue:Number, fullValue:Number, percent:Number;
-			var length:uint = dataProvider.children().length();
+			var length:uint = dataProvider.length;
 			var stack:StackedSeries;
 			var seriesDataItem:StackedSeriesDataItem;
 			
@@ -123,7 +123,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				verticalValues.push(positiveValue / fullValue * 100);
 			}
 			
-			dataOffsetter.maxIndex = itemRenderMaxIndex = length - 1;
+			dataOffsetter.maxIndex = maxDataItemIndex = length - 1;
 		}
 		
 		/**

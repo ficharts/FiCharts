@@ -50,6 +50,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 			itemRender.dataRender = this.dataRender;
 			itemRender.tooltip = this.tooltip;
 			
+			initTipString(item, itemRender.xTipLabel, 
+				itemRender.yTipLabel,itemRender.zTipLabel,itemRender.isHorizontal);
+			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
 		}
@@ -73,15 +76,15 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
-		override protected function layoutDataItems():void
+		override public function layoutDataItems(startIndex:int, endIndex:int, step:uint = 1):void
 		{
 			adjustColumnWidth();
 			
 			var item:SeriesDataItemVO;
 			for each (item in dataItemVOs)
 			{
-				item.x = this.horizontalAxis.valueToX((item as StackedSeriesDataItem).startValue) - baseLine;
-				item.dataItemX = horizontalAxis.valueToX((item as StackedSeriesDataItem).endValue);
+				item.x = this.horizontalAxis.valueToX((item as StackedSeriesDataItem).startValue, NaN) - baseLine;
+				item.dataItemX = horizontalAxis.valueToX((item as StackedSeriesDataItem).endValue, NaN);
 				
 				// 数据节点的坐标系与渲染节点不同， 两者相差 值为 baseLine
 				item.y = verticalAxis.valueToY(item.yValue) - columnGoupWidth / 2 +
@@ -93,7 +96,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 			
 			for each (item in this.fullDataItems)
 			{
-				item.dataItemX = horizontalAxis.valueToX(item.xValue);
+				item.dataItemX = horizontalAxis.valueToX(item.xValue, NaN);
 					
 				item.dataItemY = verticalAxis.valueToY(item.yValue) - columnGoupWidth / 2 +
 				this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
@@ -106,12 +109,12 @@ package com.fiCharts.charts.chart2D.bar.stack
 		{
 			for each (var columnUI:Column2DUI in this.columnUIs)
 			{
-				columnUI.x = horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataItem).startValue) - baseLine;
+				columnUI.x = horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataItem).startValue, NaN) - baseLine;
 				columnUI.y = columnUI.dataItem.y; //+ partColumnWidth / 2;
 				
 				(columnUI.dataItem as StackedSeriesDataItem).width = 
-				columnUI.columnWidth = horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataItem).endValue) -
-					horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataItem).startValue);;
+				columnUI.columnWidth = horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataItem).endValue, NaN) -
+					horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataItem).startValue, NaN);
 				
 				columnUI.columnHeight = partColumnWidth;
 				columnUI.render();
@@ -141,10 +144,10 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
-		override protected function initData():void
+		override protected function preInitData():void
 		{
 			var xValue:Number, yValue:Object, positiveValue:Number, negativeValue:Number;
-			var length:uint = dataProvider.children().length();
+			var length:uint = dataProvider.length;
 			var stack:StackedSeries;
 			var combleSeriesDataItem:SeriesDataItemVO;
 			var stackedSeriesDataItem:StackedSeriesDataItem;
@@ -247,7 +250,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		//
 		//---------------------------------------------
 		
-		override protected function applyDataFeature():void
+		override public function applyDataFeature():void
 		{
 			this.directionControl.dataFeature = this.horizontalAxis.getSeriesDataFeature(
 				this.horizontalValues.concat());
@@ -262,16 +265,16 @@ package com.fiCharts.charts.chart2D.bar.stack
 		override public function upBaseLine():void
 		{
 			if ((horizontalAxis as LinearAxis).baseAtZero)
-				directionControl.baseLine = horizontalAxis.valueToX(0);
+				directionControl.baseLine = horizontalAxis.valueToX(0, NaN);
 			else
-				directionControl.baseLine = horizontalAxis.valueToX(directionControl.dataFeature.minValue);
+				directionControl.baseLine = horizontalAxis.valueToX(directionControl.dataFeature.minValue, NaN);
 		}
 		
 		/**
 		 */		
 		override public function centerBaseLine():void
 		{
-			directionControl.baseLine = horizontalAxis.valueToX(0);
+			directionControl.baseLine = horizontalAxis.valueToX(0, NaN);
 		}
 		
 		/**
@@ -279,9 +282,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 		override public function downBaseLine():void
 		{
 			if ((horizontalAxis as LinearAxis).baseAtZero)
-				directionControl.baseLine = horizontalAxis.valueToX(0);
+				directionControl.baseLine = horizontalAxis.valueToX(0, NaN);
 			else
-				directionControl.baseLine = horizontalAxis.valueToX(directionControl.dataFeature.maxValue);
+				directionControl.baseLine = horizontalAxis.valueToX(directionControl.dataFeature.maxValue, NaN);
 		}
 		
 		/**

@@ -1,13 +1,10 @@
 package com.fiCharts.utils.XMLConfigKit.style
 {
-	import com.fiCharts.ui.text.Label;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
-	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
-	import flash.text.TextFormat;
 	
 	/**
 	 */	
@@ -47,11 +44,8 @@ package com.fiCharts.utils.XMLConfigKit.style
 			if (labelStyle == null) return;
 			
 			this.visible = labelStyle.enable;
-				
 			StyleManager.setLabelUIText(this, this.metaData);
-			
-			textField.x = labelStyle.hPadding;
-			textField.y = labelStyle.vPadding;
+			textField.autoSize = TextFieldAutoSize.CENTER;
 			
 			if (labelStyle.layout == LabelStyle.WRAP)
 			{
@@ -70,18 +64,19 @@ package com.fiCharts.utils.XMLConfigKit.style
 				textField.wordWrap = false
 				textField.text = text;
 				textField.setTextFormat(labelStyle.getTextFormat(metaData));
-				
 				textField.width = textField.textWidth;
 				textField.height = textField.textHeight;
 			}
 			
-			textField.autoSize = TextFieldAutoSize.CENTER;
 			StyleManager.setEffects(textField, labelStyle.text as Text, metaData);
 			
 			// 绘制背景
 			this.graphics.clear();
 			StyleManager.setShapeStyle(labelStyle, this.graphics, this.metaData);
 			this.graphics.drawRoundRect(0, 0, this.uiWidth, this.uiHeight, labelStyle.radius, labelStyle.radius);
+			
+			textField.x = labelStyle.hPadding;
+			textField.y = labelStyle.vPadding;
 		}
 		
 		/**
@@ -142,7 +137,14 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function get uiWidth():Number
 		{
-			return textField.textWidth + labelStyle.hPadding * 2; 
+			if (labelStyle.layout == LabelStyle.WRAP)
+			{
+				return textField.textWidth + labelStyle.hPadding * 2; 
+			}
+			else
+			{
+				return textField.textWidth + labelStyle.hPadding * 2; 
+			}
 		}
 		
 		/**
@@ -150,7 +152,6 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function get uiHeight():Number
 		{
-			
 			return textField.height + labelStyle.vPadding * 2;
 		}
 		

@@ -20,9 +20,19 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		 */		
 		public function getFormat(metaData:Object):flash.text.TextFormat
 		{
-			_format = new flash.text.TextFormat(this.font, this.size, null, this.bold, this.italic);
-			_format.leading = this.leading;
+			if (_format)
+			{
+				_format.font = this.font;
+				_format.size = this.size;
+				_format.bold = this.bold;
+				_format.italic = this.italic;
+			}
+			else
+			{
+				_format = new flash.text.TextFormat(this.font, this.size, null, this.bold, this.italic);
+			}
 			
+			_format.leading = this.leading;
 			_format.color = StyleManager.getColor(metaData, this.color);
 			
 			return _format;

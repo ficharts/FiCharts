@@ -18,6 +18,7 @@ package com.fiCharts.utils.graphic
 	import flash.display.DisplayObject;
 	import flash.display.Graphics;
 	import flash.display.IBitmapDrawable;
+	import flash.display.Shape;
 	import flash.display.SpreadMethod;
 	import flash.display.Sprite;
 	import flash.filters.ColorMatrixFilter;
@@ -74,7 +75,7 @@ package com.fiCharts.utils.graphic
 		
 		/**
 		 */		
-		public static function drawCircle(target:Sprite, style:Style, metaData:Object):void
+		public static function drawCircle(target:Shape, style:Style, metaData:Object):void
 		{
 			setShapeStyle(style, target.graphics, metaData);
 			target.graphics.drawCircle(0, 0, style.radius);

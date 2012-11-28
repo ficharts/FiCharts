@@ -9,14 +9,14 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
-		override protected function get yTipLabel():String
+		override public function get yTipLabel():String
 		{
 			return '<b>' + itemVO.yValue + '</b>';
 		}
 		
 		/**
 		 */		
-		override protected function get zTipLabel():String
+		override public function get zTipLabel():String
 		{
 			var percentTip:String;
 			percentTip = '<b>' + itemVO.zLabel + '<b>';

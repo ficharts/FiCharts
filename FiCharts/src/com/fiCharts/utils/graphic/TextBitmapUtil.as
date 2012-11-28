@@ -4,6 +4,7 @@ package com.fiCharts.utils.graphic
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.PixelSnapping;
+	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
@@ -31,8 +32,11 @@ package com.fiCharts.utils.graphic
 		{
 			var bw:Number = target.width;
 			var bh:Number = target.height;
+			
+			var rec:Rectangle = new Rectangle;
+			
 			var myBitmapData:BitmapData = new BitmapData(bw, bh, true, 0xFFFFFF);
-			myBitmapData.draw(target, null, null, null, null, true);
+			myBitmapData.draw(target, null, null, null, null, false);
 			
 			return myBitmapData;
 		}
@@ -62,10 +66,10 @@ package com.fiCharts.utils.graphic
 
 			var bw:Number = textfield.width;
 			var bh:Number = textfield.height;
-			var myBitmapData:BitmapData = new BitmapData(bw, bh, true, 0xFFFFFF);
+			var myBitmapData:BitmapData = new BitmapData(bw, bh, false, 0xFFFFFF);
 			myBitmapData.draw(textfield, null, null, null, null, false);
 
-			var bmp:Bitmap = new Bitmap(myBitmapData, PixelSnapping.ALWAYS, true);
+			var bmp:Bitmap = new Bitmap(myBitmapData, PixelSnapping.ALWAYS, false);
 			return bmp;
 		}
 	}

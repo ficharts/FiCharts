@@ -25,7 +25,7 @@ package com.fiCharts.charts.chart2D.bubble
 		{
 			super.dataResizedByIndex(evt);
 			
-			updataItemRendersLayout();
+			//updataItemRendersLayout();
 		}
 		
 		/**
@@ -34,7 +34,7 @@ package com.fiCharts.charts.chart2D.bubble
 		{
 			super.dataResizedByRange(evt);
 			
-			updataItemRendersLayout();
+			//updataItemRendersLayout();
 		}
 		
 		/**
@@ -54,13 +54,13 @@ package com.fiCharts.charts.chart2D.bubble
 		
 		/**
 		 */		
-		override protected function layoutDataItems():void
+		override public function layoutDataItems(startIndex:int, endIndex:int, step:uint = 1):void
 		{
 			var item:SeriesDataItemVO;
-			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
+			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{
 				item = dataItemVOs[i];
-				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue);
+				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue, i);
 				item.dataItemY =  (verticalAxis.valueToY(item.yValue));
 				item.y = item.dataItemY - this.baseLine;
 					
@@ -75,7 +75,7 @@ package com.fiCharts.charts.chart2D.bubble
 		/**
 		 * 绘制占位符， 鼠标移动到节点上方时保证可以触发事件;
 		 */		
-		override protected function renderChart():void
+		override protected function draw():void
 		{
 			this.canvas.graphics.clear();	
 			canvas.graphics.beginFill(0, 0);
@@ -98,6 +98,9 @@ package com.fiCharts.charts.chart2D.bubble
 			
 			itemRender.dataRender = this.bubbleRender;
 			itemRender.tooltip = this.tooltip;
+			
+			initTipString(item, itemRender.xTipLabel, 
+				itemRender.yTipLabel,getZTip(item),itemRender.isHorizontal);
 			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
@@ -213,7 +216,7 @@ package com.fiCharts.charts.chart2D.bubble
 		
 		/**
 		 */		
-		override protected function initData():void
+		override protected function preInitData():void
 		{
 			var seriesDataItem:SeriesDataItemVO;
 			
@@ -222,12 +225,11 @@ package com.fiCharts.charts.chart2D.bubble
 			verticalValues = new Vector.<Object>;
 			radiusValues = new Vector.<Object>;
 			
-			for each (var item:XML in dataProvider.children())
+			for each (var item:Object in dataProvider)
 			{
 				seriesDataItem = new BubbleDataItem();
 				
-				seriesDataItem.metaData = new Object();
-				XMLVOMapper.pushXMLDataToVO(item, seriesDataItem.metaData);//将XML转化为对象
+				seriesDataItem.metaData = item;
 				
 				seriesDataItem.xValue = seriesDataItem.metaData[xField]; // xValue.
 				seriesDataItem.yValue = seriesDataItem.metaData[yField]; // yValue.
@@ -257,7 +259,20 @@ package com.fiCharts.charts.chart2D.bubble
 				dataItemVOs.push(seriesDataItem);
 			}
 			
-			dataOffsetter.maxIndex = itemRenderMaxIndex = dataItemVOs.length - 1;
+			dataOffsetter.maxIndex = maxDataItemIndex = dataItemVOs.length - 1;
+		}
+		
+		/**
+		 */		
+		override protected function getZTip(itemVO:SeriesDataItemVO):String
+		{
+			var bubbleTip:String;
+			bubbleTip = itemVO.zLabel;
+			
+			if (itemVO.zDisplayName)
+				bubbleTip = itemVO.zDisplayName + ':' + bubbleTip;
+			
+			return '<br>' + bubbleTip;
 		}
 		
 		/**

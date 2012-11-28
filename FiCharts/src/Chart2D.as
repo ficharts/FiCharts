@@ -1,6 +1,6 @@
 package
 {
-	import com.fiCharts.charts.chart2D.encry.ChartBase;
+	import com.fiCharts.charts.chart2D.encry.ChartMain;
 	import com.fiCharts.charts.chart2D.encry.ChartShellBase;
 	
 	import flash.utils.ByteArray;
@@ -32,7 +32,7 @@ package
 		 */
 		override protected function createChart():void
 		{
-			chart = new ChartBase();
+			chart = new ChartMain();
 			
 			super.createChart(); 
 		}

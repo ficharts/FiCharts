@@ -28,7 +28,7 @@ package com.fiCharts.charts.chart2D.marker
 		{
 			super.dataResizedByIndex(evt);
 			
-			updataItemRendersLayout();
+			//updataItemRendersLayout();
 		}
 		
 		/**
@@ -37,7 +37,7 @@ package com.fiCharts.charts.chart2D.marker
 		{
 			super.dataResizedByRange(evt);
 			
-			updataItemRendersLayout();
+			//updataItemRendersLayout();
 		}
 		
 		/**
@@ -64,7 +64,7 @@ package com.fiCharts.charts.chart2D.marker
 		/**
 		 * Render PlotChart.
 		 */
-		override protected function renderChart():void
+		override protected function draw():void
 		{
 			this.canvas.graphics.clear();	
 			canvas.graphics.beginFill(0, 0);
@@ -76,13 +76,13 @@ package com.fiCharts.charts.chart2D.marker
 		/**
 		 * 更新数据节点的布局信息；
 		 */		
-		override protected function layoutDataItems():void
+		override public function layoutDataItems(startIndex:int, endIndex:int, step:uint = 1):void
 		{   
 			var item:SeriesDataItemVO;
-			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
+			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{	
 				item = dataItemVOs[i];
-				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue);
+				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue, i);
 				item.dataItemY = (verticalAxis.valueToY(item.yValue));
 				item.offset = this.baseLine;
 				item.y = item.dataItemY - this.baseLine;
@@ -105,6 +105,9 @@ package com.fiCharts.charts.chart2D.marker
 			
 			itemRender.dataRender = this.markerRender;
 			itemRender.tooltip = this.tooltip;
+			
+			initTipString(item, itemRender.xTipLabel, 
+				itemRender.yTipLabel,itemRender.zTipLabel,itemRender.isHorizontal);
 			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);

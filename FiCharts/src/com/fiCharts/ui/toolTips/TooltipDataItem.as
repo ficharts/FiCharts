@@ -2,6 +2,11 @@ package com.fiCharts.ui.toolTips
 {
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 
+	/**
+	 * 信息提示的数据节点， 一个信息提示可以由多个数据节点组成
+	 * 
+	 * 一次提示多份信息，每个数据节点包含元数据和样式两个属性
+	 */	
 	public class TooltipDataItem
 	{
 		public function TooltipDataItem()
@@ -44,6 +49,14 @@ package com.fiCharts.ui.toolTips
 		public function set style(value:TooltipStyle):void
 		{
 			_style = value;
+		}
+		
+		/**
+		 */		
+		public function distory():void
+		{
+			_style = null;
+			_metaData = null;
 		}
 
 	}

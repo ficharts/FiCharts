@@ -29,7 +29,7 @@ package com.fiCharts.charts.chart2D.column2D
 		{
 			super.dataResizedByIndex(evt);
 			layoutColumnUIs();
-			updataItemRendersLayout();
+			//updataItemRendersLayout();
 		}
 		
 		/**
@@ -51,6 +51,9 @@ package com.fiCharts.charts.chart2D.column2D
 				
 			itemRender.dataRender = this.dataRender;
 			itemRender.tooltip = this.tooltip;
+			
+			initTipString(item, itemRender.xTipLabel, 
+				itemRender.yTipLabel,itemRender.zTipLabel,itemRender.isHorizontal);
 			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
@@ -101,15 +104,15 @@ package com.fiCharts.charts.chart2D.column2D
 		/**
 		 * 更新数据节点的布局信息；
 		 */		
-		override protected function layoutDataItems():void
+		override public function layoutDataItems(startIndex:int, endIndex:int, step:uint = 1):void
 		{
 			adjustColumnWidth();
 			
 			var item:SeriesDataItemVO;
-			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
+			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{
 				item = dataItemVOs[i]
-				item.x = horizontalAxis.valueToX(item.xValue) - columnGoupWidth / 2 +
+				item.x = horizontalAxis.valueToX(item.xValue, i) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
 				
 				item.y = (verticalAxis.valueToY(item.yValue));
@@ -122,7 +125,7 @@ package com.fiCharts.charts.chart2D.column2D
 		/**
 		 * 渲染区域
 		 */
-		override protected function renderChart():void
+		override protected function draw():void
 		{
 			if (ifDataChanged)
 			{

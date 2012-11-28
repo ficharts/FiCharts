@@ -36,9 +36,9 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			dataOffsetter.minIndex = evt.start;
 			dataOffsetter.maxIndex = evt.end;
 			
-			dataOffsetter.offSet(0, itemRenderMaxIndex);
+			dataOffsetter.offSet(0, maxDataItemIndex);
 			
-			layoutDataItems();
+			//layoutDataItems();
 			layoutColumnUIs();
 			updataItemRendersLayout();
 		}
@@ -48,7 +48,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		 * 数据缩放后更新数据范围内的数据结点位置
 		 * 
 		 */		
-		override protected function updataItemRendersLayout():void
+		protected function updataItemRendersLayout():void
 		{
 			var itemRender:ItemRenderBace;
 			var rendersForLabel:Array = [];
@@ -68,11 +68,6 @@ package com.fiCharts.charts.chart2D.column2D.stack
 					itemRender.visible = false;
 				}
 			}
-			
-			// 将数据范围内的  数值标签交给 主程序绘制
-			var dataResizeEvt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.RENDER_SIZED_VALUE_LABELS);
-			dataResizeEvt.sizedItemRenders =  rendersForLabel;
-			this.dispatchEvent(dataResizeEvt);
 		}
 		
 		/**
@@ -87,7 +82,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
-		override protected function renderChart():void
+		override protected function draw():void
 		{
 			if (ifDataChanged)
 			{
@@ -162,33 +157,34 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
-		override protected function layoutDataItems():void
+		override public function layoutDataItems(startIndex:int, endIndex:int, step:uint = 1):void
 		{
 			adjustColumnWidth();
 			
 			var item:SeriesDataItemVO;
-			for each(item in this.dataItemVOs)
+			var i:int;
+			
+			for (i = startIndex; i <= endIndex; i += step)
 			{
-				if(item.index >= dataOffsetter.minIndex && item.index <= dataOffsetter.maxIndex)
-				{
-					item.x = horizontalAxis.valueToX(item.xValue) - columnGoupWidth / 2 +
-						this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
-					item.dataItemX = item.x;
-					
-					// 数据节点的坐标系与渲染节点不同， 两者相差 值为 baseLine
-					item.y = verticalAxis.valueToY((item as StackedSeriesDataItem).startValue) - baseLine;
-					item.dataItemY = verticalAxis.valueToY((item as StackedSeriesDataItem).endValue);
-					item.offset = baseLine;
-				}
+				item = dataItemVOs[i];
+				
+				item.x = horizontalAxis.valueToX(item.xValue, i) - columnGoupWidth / 2 +
+					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
+				item.dataItemX = item.x;
+				
+				// 数据节点的坐标系与渲染节点不同， 两者相差 值为 baseLine
+				item.y = verticalAxis.valueToY((item as StackedSeriesDataItem).startValue) - baseLine;
+				item.dataItemY = verticalAxis.valueToY((item as StackedSeriesDataItem).endValue);
+				item.offset = baseLine;
 			}
 			
 			if(fullDataItems == null) return;//百分百堆积图没有总数据节点
 			
-			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
+			for (i = startIndex; i <= endIndex; i += step)
 			{
 				item = fullDataItems[i];
 				
-				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue) - columnGoupWidth / 2 +
+				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue, i) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
 				
 				item.y = item.dataItemY = verticalAxis.valueToY(item.yValue);
@@ -198,7 +194,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		/**
 		 * 创建汇总数据节点的渲染器， 这里创建的渲染器只是用于汇总数据的显示；
 		 */		
-		override protected function createItemRenders():void
+		override public function createItemRenders():void
 		{
 			super.createItemRenders();
 			
@@ -246,10 +242,10 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		 * 
 		 * 这里把原始的数据节点与计算得出的汇总数据节点分离；
 		 */		
-		override protected function initData():void
+		override protected function preInitData():void
 		{
 			var xValue:Object, yValue:Number, positiveValue:Number, negativeValue:Number;
-			var length:uint = dataProvider.children().length();
+			var length:uint = dataProvider.length;
 			var stack:StackedSeries;
 			var combleSeriesDataItem:SeriesDataItemVO;
 			var stackedSeriesDataItem:StackedSeriesDataItem;
@@ -327,7 +323,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				verticalValues.push(negativeValue);
 			}
 			
-			dataOffsetter.maxIndex = itemRenderMaxIndex = length - 1;
+			dataOffsetter.maxIndex = maxDataItemIndex = length - 1;
 		}
 		
 		/**

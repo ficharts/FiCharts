@@ -265,9 +265,9 @@
                 
                 <states id='lineStates'>
                     <normal>
-                        <border color='${color}' thikness='3' alpha='0.8'/>
+                        <border color='${color}' thikness='1' alpha='0.8'/>
                         <cover>
-                            <border pixelHinting='false' color='${color}{adjustColor:1.8}' thikness='1.5' alpha='0.8'/>
+                            <border pixelHinting='false' color='${color}{adjustColor:1.8}' thikness='1' alpha='0.8'/>
                         </cover>
                     </normal>
                     <hover>

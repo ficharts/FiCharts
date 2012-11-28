@@ -5,12 +5,16 @@ package com.fiCharts.charts.chart2D.bar.stack
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
-	import com.fiCharts.charts.chart2D.encry.ChartProxy;
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
+	/**
+	 * 
+	 * @author wallen
+	 * 
+	 */	
 	public class StackedPercentBarSeries extends StackedBarSeries
 	{
 		public function StackedPercentBarSeries()
@@ -34,6 +38,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 			
 			itemRender.dataRender = this.dataRender;
 			itemRender.tooltip = this.tooltip;
+			
+			initTipString(item, itemRender.xTipLabel, 
+				itemRender.yTipLabel, this.getZTip(item),itemRender.isHorizontal);
 			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
@@ -72,10 +79,10 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */			
-		override protected function initData():void
+		override protected function preInitData():void
 		{
 			var xValue:Number, yValue:Object, positiveValue:Number, fullValue:Number, percent:Number;
-			var length:uint = dataProvider.children().length();
+			var length:uint = dataProvider.length
 			var stack:StackedSeries;
 			var seriesDataItem:StackedSeriesDataItem;
 			
@@ -125,6 +132,19 @@ package com.fiCharts.charts.chart2D.bar.stack
 				verticalValues.push(yValue);
 				horizontalValues.push(positiveValue / fullValue * 100);
 			}
+		}
+		
+		/**
+		 */		
+		override protected function getZTip(itemVO:SeriesDataItemVO):String
+		{
+			var percentTip:String;
+			percentTip = itemVO.zLabel;
+			
+			if (itemVO.zDisplayName)
+				percentTip = itemVO.zDisplayName + ':' + percentTip;
+			
+			return '<br>' + percentTip;
 		}
 		
 		/**

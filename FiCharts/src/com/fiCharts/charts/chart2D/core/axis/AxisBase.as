@@ -1,7 +1,9 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
+	import com.fiCharts.charts.chart2D.core.model.DataScale;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.common.ChartDataFormatter;
+	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
@@ -11,12 +13,18 @@ package com.fiCharts.charts.chart2D.core.axis
 	import com.fiCharts.utils.graphic.TextBitmapUtil;
 	
 	import flash.display.Bitmap;
-	import flash.display.DisplayObject;
+	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.geom.Matrix;
 
 	/**
 	 * 坐标轴的基类，主要负责绘制坐标轴，具体计算都由不同类型的轴负责
+	 * 
+	 * 坐标轴有刻度分布密度和数据节点分部密度两方面；
+	 * 
+	 * 刻度密度由数值步长和最小单元刻度决定， 数据节点分部密度由当前可视区域内包含数据节点密度决定
+	 * 
 	 */	
 	public class AxisBase extends Sprite 
 	{
@@ -38,34 +46,114 @@ package com.fiCharts.charts.chart2D.core.axis
 			this.addChild(labelUIsCanvas);
 			addChild(labelsMask);
 			labelUIsCanvas.mask = labelsMask;
+			
+			// 初始化当前模式
+			curPattern = this.getNormalPatter();
 		}
 		
 		/**
-		 * 根据数据的比例范围渲染基于此坐标轴的序列
-		 * 
-		 * 对于大数据量观看整体图表时，没必要把每个点都渲染出来，而是根据合适的单位距离内的点密度
-		 * 
-		 * 来渲染;
-		 * 
 		 */		
-		public function renderSeries(start:Number, end:Number):void
+		public function stopTip():void
 		{
-			
+			curPattern.stopTips();
 		}
+		
+		/**
+		 */		
+		public function updateToolTips():void
+		{
+			this.curPattern.updateToolTips();
+		}
+		
+		
+		/**
+		 * 原始数据不一定等于坐标轴上的数据节点， 例如时间类型的坐标轴
+		 * 
+		 * 校验后的值是数字(time)，原始值是字符串(2001-12-01)
+		 */		
+		public function getVerifyData(data:Object):Object
+		{
+			return data;
+		}
+		
+		/**
+		 */		
+		public function adjustZoomFactor(scaleModel:DataScale):void
+		{
+			curPattern.adjustZoomFactor(scaleModel);
+		}
+		
+		/**
+		 */		
+		public function toNomalPattern():void
+		{
+			if(curPattern)
+				curPattern.toNormalPattern();
+			else
+				curPattern = getNormalPatter();
+		}
+		
+		/**
+		 */		
+		public function toDataScalePatter():void
+		{
+			if (curPattern)
+				curPattern.toDataResizePattern();
+			else
+				curPattern = getDataScalePattern();
+			
+			this.curPattern.dataUpdated();
+		}
+		
+		/**
+		 */		
+		internal function getNormalPatter():IAxisPattern
+		{
+			return null;
+		}
+		
+		/**
+		 */		
+		internal function getDataScalePattern():IAxisPattern
+		{
+			return null;
+		}
+		
+		/**
+		 */		
+		internal var curPattern:IAxisPattern;
+		
+		/**
+		 */		
+		internal var normalPattern:IAxisPattern;
+		
+		/**
+		 */		
+		internal var dataScalePattern:IAxisPattern;
 		
 		/**
 		 * 根据原始数据得到其在总数据中的百分比位置，用来做尺寸缩放
 		 */		
 		public function getDataPercent(value:Object):Number
 		{
-			return 0;
+			return curPattern.getPercentByData(value);
+		}
+		
+		/**
+		 * 将原始的值转换为百分比，用于初次根据配置文件获取缩放比率，
+		 * 
+		 * 因为坐标轴很早就已渲染，进行了数据筛分
+		 */		
+		public function getSourceDataPercent(value:Object):Number
+		{
+			return curPattern.getPercentBySourceData(value);
 		}
 		
 		/**
 		 */		
 		public function posToPercent(pos:Number):Number
 		{
-			return 0;
+			return curPattern.posToPercent(pos);
 		}
 		
 		/**
@@ -73,7 +161,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function percentToPos(per:Number):Number
 		{
-			return 0;
+			return curPattern.percentToPos(per);
 		}
 		
 		/**
@@ -81,72 +169,29 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function dataScrolled(dataRange:DataRange):void
 		{
+			curPattern.dataScrolled(dataRange);
 		}
 		
 		/**
 		 * 数据缩放后调用
 		 */		
-		public function dataResized(start:Number, end:Number):void
+		public function dataResized(dataRange:DataRange):void
 		{
-			var startPerc:Number = (currentDataRange.min - this.sourceDataRange.min) / this.confirmedSourceValueRange;
-			var endPerc:Number = (currentDataRange.max - this.sourceDataRange.min) / this.confirmedSourceValueRange;
-			
-			drawScrollBar(startPerc, endPerc);
-			//generateTicksForBGRender(startPerc, endPerc);
-			
 			changed = true;
+			curPattern.dataResized(dataRange);
 		}
 		
 		/**
-		 * 数据滚动过程中，仅是改变label容器的位置
+		 * 数据滚动过程中，仅需要绘制显示范围内的Label
 		 */		
 		public function scrollingData(offset:Number):void
 		{
-			if (this.direction == HORIZONTAL_AXIS)
-			{
-				currentScrollPos += offset;
-				
-				if (currentScrollPos <= offsetSize && currentScrollPos >= minScrollPos)
-					this.labelUIsCanvas.x = currentScrollPos;
-				else if (currentScrollPos > offsetSize)
-					this.labelUIsCanvas.x = currentScrollPos = offsetSize;
-				else if (currentScrollPos < minScrollPos)
-					this.labelUIsCanvas.x = currentScrollPos = minScrollPos;
-			}
-			
-			var perc:Number = currentScrollPos / this.fullSize;
-			var startPerc:Number = (currentDataRange.min - this.sourceDataRange.min) / confirmedSourceValueRange - perc;
-			var endPerc:Number = (currentDataRange.max - this.sourceDataRange.min) / confirmedSourceValueRange - perc;
-			
-			drawScrollBar(startPerc, endPerc);
-			//generateTicksForBGRender(startPerc, endPerc);
+			curPattern.scrollingData(offset);
 		}
 		
 		/**
 		 */		
-		private function generateTicksForBGRender(startPerc:Number, endPerc:Number):void
-		{
-			if (ticksForBGRender == null)
-				ticksForBGRender = new Vector.<Number>;
-				
-			var startPos:Number = percentToPos(startPerc);
-			var endPos:Number = percentToPos(endPerc);
-			
-			ticksForBGRender.length = 0;
-			for each(var i:Number in this.ticks)
-			{
-				if (i >= startPos && i <= endPos)
-					ticksForBGRender.push(i);
-			}
-		}
-		
-		/**
-		 */		
-		public var ticksForBGRender:Vector.<Number>;
-		
-		/**
-		 */		
-		protected function drawScrollBar(startPerc:Number, endPerc:Number):void
+		internal function drawScrollBar(startPerc:Number, endPerc:Number):void
 		{
 			this.graphics.clear();
 			
@@ -162,51 +207,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public var scrollBarStyle:Style;
 		
-		/**
-		 */		
-		public var currentScrollPos:Number = 0;
-		
-		/**
-		 * 坐标原点的尺寸偏移量
-		 */		
-		public var offsetSize:Number = 0;
-		
-		/**
-		 */		
-		protected var minScrollPos:Number = 0;
-		
-		/**
-		 * 每次渲染或者数据缩放后需重新计算尺寸关系
-		 */		
-		protected function setFullSizeAndOffsize():void
-		{
-			fullSize = this.size / (currentDataRange.max - currentDataRange.min) * confirmedSourceValueRange;
-			this.offsetSize = (currentDataRange.min - sourceDataRange.min) / confirmedSourceValueRange * fullSize;
-			this.unitSize = fullSize / this.labelsData.length;
-			minScrollPos = offsetSize + size - this.fullSize;
-			
-			var currentRate:Number = this.sourceValues.length / this.fullSize;
-		}
-		
-		/**
-		 * 大数据量时，当前数据密度大于最大值，节点渲染需间隔进行
-		 * 
-		 * 此数值为间隔率
-		 */		
-		private var dataRate:uint;
-		
-		/**
-		 * 数据的最大渲染密度， 大数据量时无需每个节点都渲染，为了提升性能，采集一定
-		 * 
-		 * 密度下的节点即可 . 只需要渲染部分节点的话， 就没必要全部创建节点UI和itemRender等对象
-		 * 
-		 * 那么序列的尺寸缩放或者数据缩放时也需要动态创建未被创建的对象，每次序列渲染前都需要知道 自己的
-		 * 
-		 * 数据间隔率； 所以，动态创建的itemrender要动态添加到主场景中，不是之前的全部节点一次发总给主场景；数值标签也是只有需要渲染的节点的
-		 * 
-		 * 才会比发送至主场景；
-		 */		
-		private var maxDataPerSize:uint;
 		
 		/**
 		 * 对于每此数据缩放，坐标轴仅需绘制一次，子数据的滚动只是移动label容器的位置而已
@@ -215,118 +215,12 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			if (changed)
 			{
-				this.clearLabels();
-				this.labelUIsCanvas.cacheAsBitmap = false;
 				this.labelsMask.graphics.clear();
+				labelRender.style = this.label;
 				
-				var labelUI:DisplayObject;
-				var axisLabel:LabelUI;
-				var length:uint = this.labelsData.length;
-				var valuePositon:Number;
+				this.curPattern.renderHorLabelUIs();
 				
-				var labelX:Number;
-				var labelY:Number;
-				
-				// 横向的最小间距不能小于Label的宽度， 这里要先获取这个宽度，从而决定单元间隔数
-				var i:uint;
-				minUintSize = 10;//轴的尺寸刷新后 minUintSize 会重新计算，避免之前的大尺寸和谐掉后继的小尺寸
-				for (i = 0; i < length; i ++)
-				{
-					if (this.enable)
-					{
-						labelUI = labelUIs[i];
-						if (labelUI == null)
-						{
-							labelsData[i].label = this.getXLabel(labelsData[i].value);
-							labelsData[i].color = this.metaData.color;
-							
-							axisLabel = new LabelUI();
-							axisLabel.style = this.label;
-							axisLabel.metaData = labelsData[i];
-							
-							// 如果label换行显示，那么先以单元宽度为准
-							if (this.labelDisplay == LabelStyle.WRAP)
-								axisLabel.maxLabelWidth = this.unitSize;
-							
-							axisLabel.render();
-							
-							// 这里的labelUI可考虑用bitmap data绘制来优化渲染
-							labelUI = labelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
-							axisLabel = null;
-						}
-							
-						// 线性轴的label UI 每次渲染创建时都需要重新计算  minUintSize ，因为每次的Label都是重新生成的
-						if (label.layout == LabelStyle.VERTICAL)
-						{
-							if (labelUI.height > minUintSize)
-								minUintSize = labelUI.height;
-						}
-						else if (label.layout == LabelStyle.ROTATION)
-						{
-							if (labelUI.width * 0.5 > minUintSize)
-								minUintSize = labelUI.width * 0.5;
-						}
-						else
-						{
-							if (labelUI.width > minUintSize)
-								minUintSize = labelUI.width;
-						}
-						
-					}
-					
-				}
-				
-				//保证标签间距大于最小单元宽度， 防止标签重叠；
-				var addFactor:uint = 1;
-				var uintAmount:uint = length;
-				while (this.fullSize > 0 && (this.fullSize / uintAmount) < this.minUintSize)
-				{
-					addFactor += 1;
-					uintAmount = length / addFactor;
-				}
-				
-				// 布局和显示数据范围内的label
-				_ticks = new Vector.<Number>();
-				for (i = 0; i < length; i += addFactor)
-				{
-					valuePositon = valueToX(labelsData[i].value);
-					_ticks.push(valuePositon);
-					
-					if (this.enable)
-					{
-						labelUI = labelUIs[i];
-						
-						if (label.layout == LabelStyle.ROTATION)
-						{
-							labelUI.rotation = 0;
-							labelX = - Math.cos(Math.PI / 4) * labelUI.width;
-							labelY = Math.sin(Math.PI / 4) * labelUI.width;
-							labelUI.rotation = - 45;
-						}
-						else if (label.layout == LabelStyle.VERTICAL)
-						{
-							labelUI.rotation = 0;
-							labelX = - labelUI.height / 2;
-							labelY = labelUI.width;
-							labelUI.rotation = - 90;
-						}
-						else
-						{
-							labelX = - labelUI.width / 2;
-							labelY = 0;
-						}
-						
-						labelUI.x = valuePositon + labelX;
-						
-						if (this.position == 'bottom')
-							labelUI.y = label.margin + labelY;
-						else
-							labelUI.y = - label.margin - labelY - labelUI.height;
-						
-						labelUIsCanvas.addChild(labelUI);
-					}
-				}
-				
+				// 横轴的坐标轴遮罩只绘制一次，图表初始化时会先整个坐标轴一起渲染
 				this.labelsMask.graphics.beginFill(0);
 				if (this.position == 'bottom')
 				{
@@ -348,137 +242,257 @@ package com.fiCharts.charts.chart2D.core.axis
 				if (enable && this.tickMark.enable)
 					drawHoriTicks();
 				
-				this.labelUIsCanvas.cacheAsBitmap = true;
 				changed = false;
 			}
 		}
 		
 		/**
+		 * 将显示区域内的label绘制，如果label未被创建，那么先创建其在绘制
 		 */		
-		private var labelsMask:Shape = new Shape;
+		internal function renderHoriLabelUIs(startIndex:int, endIndex:int, length:int):void
+		{
+			var labelUI:BitmapData;
+			var labelVO:AxisLabelData;
+			var valuePositon:Number;
+			
+			
+			// 横向的最小间距不能小于Label的宽度， 这里要先获取这个宽度，从而决定单元间隔数
+			var i:uint;
+			
+			// 先获得字符数最长的label位置， 然后根据其获取最小单元宽度
+			var labelLen:uint = 0;
+			var labelIndex:uint = 0;
+			var temLabelLen:uint = 0;
+			for (i = startIndex; i <= endIndex; i ++)
+			{
+				temLabelLen = this.getXLabel(labelVOes[i].value).length;
+				if (temLabelLen > labelLen)
+				{
+					labelLen = temLabelLen;
+					labelIndex = i;
+				}
+			}
+			
+			labelUI = createLabelUI(labelIndex);
+			minUintSize = 10;//轴的尺寸刷新后 minUintSize 会重新计算，避免之前的大尺寸和谐掉后继的小尺寸
+			// 线性轴的label UI 每次渲染创建时都需要重新计算  minUintSize ，因为每次的Label都是重新生成的
+			if (label.layout == LabelStyle.VERTICAL)
+			{
+				if (labelUI.height > minUintSize)
+					minUintSize = labelUI.height;
+			}
+			else if (label.layout == LabelStyle.ROTATION)
+			{
+				if (labelUI.width * 0.5 > minUintSize)
+					minUintSize = labelUI.width * 0.5;
+			}
+			else
+			{
+				if (labelUI.width > minUintSize)
+					minUintSize = labelUI.width;
+			}
+			
+			//保证标签间距大于最小单元宽度， 防止标签重叠；
+			var addFactor:uint = 1;
+			var uintAmount:uint = length;
+			while (size > 0 && (size / uintAmount) < minUintSize)
+			{
+				addFactor += 1;
+				uintAmount = length / addFactor;
+			}
+			
+			// 布局和显示数据范围内的label
+			_ticks.length = 0;
+			
+			for (i = startIndex; i <= endIndex; i += addFactor)
+			{
+				valuePositon = this.curPattern.valueToSize(labelVOes[i].value, - 1)
+				_ticks.push(valuePositon);
+				
+				if (enable)
+				{
+					labelUI = labelUIs[i];
+					
+					if (labelUI == null)
+						labelUI = createLabelUI(i);
+					
+					drawLabelUI(labelUI, valuePositon);
+				}
+			}
+		}
 		
 		/**
 		 */		
-		protected var labelUIs:Array = [];
+		private function drawLabelUI(labelUI:BitmapData, valuePositon:Number):void
+		{
+			var labelX:Number = 0;
+			var labelY:Number = 0;
+			var bm:Bitmap;
+			
+			if (label.layout == LabelStyle.ROTATION)
+			{
+				bm = new Bitmap(labelUI);
+				bm.x = - Math.cos(Math.PI / 4) * labelUI.width + valuePositon;
+				
+				labelY = Math.sin(Math.PI / 4) * labelUI.width;
+				if (this.position == 'bottom')
+					labelY = label.margin + labelY;
+				else
+					labelY = - label.margin - labelUI.height - labelY;
+				
+				bm.y = labelY;
+				bm.rotation = - 45
+				labelUIsCanvas.addChild(bm);
+			}
+			else if (label.layout == LabelStyle.VERTICAL)
+			{
+				bm = new Bitmap(labelUI);
+				bm.x = - labelUI.height / 2 + valuePositon;
+				
+				labelY = labelUI.width;
+				if (this.position == 'bottom')
+					labelY = label.margin + labelY;
+				else
+					labelY = - label.margin - labelUI.height - labelY;
+				
+				bm.y = labelY;
+				bm.rotation = - 90;
+				labelUIsCanvas.addChild(bm);
+			}
+			else
+			{
+				labelMartrix.tx = - labelUI.width / 2 + valuePositon;
+				
+				if (this.position == 'bottom')
+					labelMartrix.ty = label.margin;
+				else
+					labelMartrix.ty = - label.margin - labelUI.height;
+				
+				labelUIsCanvas.graphics.beginBitmapFill(labelUI, labelMartrix, false);
+				labelUIsCanvas.graphics.drawRect(labelMartrix.tx, labelMartrix.ty, labelUI.width, labelUI.height);
+			}
+		}
 		
 		/**
-		 * label的容器用来数据缩放时整体移动label，辅助遮罩效果
+		 * 
 		 */		
-		protected var labelUIsCanvas:Sprite = new Sprite;
+		private function createLabelUI(index:uint):BitmapData
+		{
+			var labelVO:AxisLabelData, ui:BitmapData;
+			
+			labelVO = labelVOes[index];
+			labelVO.label = getXLabel(labelVO.value);
+			labelVO.color = metaData.color;
+			labelRender.metaData = labelVO;
+			
+			// 如果label换行显示，那么先以单元宽度为准
+			if (labelDisplay == LabelStyle.WRAP)
+				labelRender.maxLabelWidth = unitSize;
+			
+			labelRender.render();
+			
+			// 这里的labelUI可考虑用bitmap data绘制来优化渲染
+			ui = labelUIs[index] = TextBitmapUtil.getUIBmd(labelRender);
+			
+			return ui;
+		}
 		
 		/**
+		 * 仅字段型坐标轴才需要调节刻度线位置
 		 */		
-		protected function adjustHoriTicks():void
+		internal function adjustHoriTicks():void
 		{
 			
 		}
 		
 		/**
-		 * 
-		 * 这个值有可能比uinitSize要大，取决于label的尺寸
-		 * 
-		 */
-		public var minUintSize:Number = 10;
-		
-		/**
+		 * 纵轴暂时不存在数据缩放控制，渲染单纯很多
 		 */		
 		public function renderVerticalAxis():void
 		{
 			if (changed)
 			{
 				this.clearLabels();
-				
 				this.labelsMask.graphics.clear();
 				
-				_ticks = new Vector.<Number>();
-				
-				var labelUI:DisplayObject;
-				var axisLabel:LabelUI;
-				var length:uint = this.labelsData.length;
+				var labelUI:BitmapData;
+				var length:uint = this.labelVOes.length;
 				var valuePositon:Number;
 				
 				var labelX:Number;
 				var labelY:Number;
 				
 				var i:uint;
+				var labelVO:AxisLabelData;
 				minUintSize = 10;
+				
+				PerformaceTest.start();
 				for (i = 0; i < length; i ++)
 				{
 					if (this.enable)
 					{
-						if (labelUIs[i]) continue;
+						labelUI = labelUIs[i];
 						
-						labelsData[i].label = this.getXLabel(labelsData[i].value);
-						labelsData[i].color = this.metaData.color;
-						
-						axisLabel = new LabelUI();
-						axisLabel.style = this.label;
-						axisLabel.metaData = labelsData[i];
-						axisLabel.render();
+						if (labelUI == null)
+						{
+							labelVO = labelVOes[i];
+							labelVO.label = this.getYLabel(labelVO.value);
+							labelVO.color = this.metaData.color;
+							labelRender.style = this.label;
+							labelRender.metaData = labelVO;
+							labelRender.render();
+							
+							labelUI = labelUIs[i] = TextBitmapUtil.getUIBmd(labelRender);
+							restoreLabel(labelVO, labelUI);// 创建一对，存储一对儿
+						}
 						
 						if (label.layout == LabelStyle.ROTATION)
 						{
-							if (axisLabel.width > minUintSize)
-								minUintSize = axisLabel.width;
+							if (labelUI.width > minUintSize)
+								minUintSize = labelUI.width;
 						}
 						else
 						{
-							if (axisLabel.height > minUintSize)
-								minUintSize = axisLabel.height;
+							if (labelUI.height > minUintSize)
+								minUintSize = labelUI.height;
 						}
 						
-						// 这里的labelUI可考虑用bitmap data绘制来优化渲染
-						labelUI = labelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
-						axisLabel = null;
 					}
 					
 				}
 				
+				PerformaceTest.end("创建Label");
+				
 				//保证标签间距大于最小单元宽度， 防止标签重叠；
 				var addFactor:uint = 1;
 				var uintAmount:uint = length;
-				while (fullSize > 0 && (this.fullSize / uintAmount) < this.minUintSize)
+				while (size > 0 && (this.size / uintAmount) < this.minUintSize)
 				{
 					addFactor += 1;
 					uintAmount = length / addFactor;
 				}
 				
+				_ticks.length = 0;
 				for (i = 0; i < length; i += addFactor)
 				{
-					valuePositon = valueToY(labelsData[i].value);
+					valuePositon = valueToY(labelVOes[i].value);
 					_ticks.push(valuePositon);
 					
 					if (enable)
 					{
 						labelUI = labelUIs[i];
 						
-						if (label.layout == LabelStyle.ROTATION)
-						{
-							labelX = - Math.cos(Math.PI / 4) * labelUI.width - 
-								Math.cos(Math.PI / 4) * labelUI.height / 2;
-							
-							labelY = Math.sin(Math.PI / 4) * labelUI.width - 
-								Math.cos(Math.PI / 4) * labelUI.height;
-							
-							labelUI.rotation = - 45;
-						}
-						else
-						{
-							labelX = - labelUI.width;
-							labelY = - labelUI.height / 2;
-						}
-						
 						if (position == "left")
-							labelUI.x = - label.margin + labelX;
+							labelMartrix.tx = - labelUI.width - label.margin;
 						else
-							labelUI.x = label.margin;
+							labelMartrix.tx = label.margin;
+							
+						labelMartrix.ty =  valuePositon -  labelUI.height / 2;
 						
-						labelUI.y = valuePositon + labelY;
-						
-						labelUIsCanvas.addChild(labelUI);
+						labelUIsCanvas.graphics.beginBitmapFill(labelUI, labelMartrix, false);
+						labelUIsCanvas.graphics.drawRect(labelMartrix.tx, labelMartrix.ty, labelUI.width, labelUI.height);
 					}
 				}
-				
 				
 				this.labelsMask.graphics.beginFill(0);
 				if (position == "left")
@@ -506,6 +520,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 * 数据缩放中，y轴会动态刷新，存储下label数据避免了重复构建渲染其性能开销
+		 * 
+		 * 这个开销挺大的
+		 */		
+		protected function restoreLabel(vo:AxisLabelData, ui:BitmapData):void
+		{
+			
+		}
+		
+		/**
 		 */		
 		protected function adjustVertiTicks():void
 		{
@@ -513,7 +537,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		protected function drawHoriTicks():void
+		internal function drawHoriTicks():void
 		{
 			// 绘制刻度线
 			StyleManager.setLineStyle(this.labelUIsCanvas.graphics, tickMark);
@@ -572,14 +596,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		private var titleLabel:LabelUI = new LabelUI;
-		
-		/**
-		 */		
-		private var titileBitmap:Bitmap;
-		
-		/**
-		 */		
 		protected function createVerticalTitle():void
 		{
 			if(titileBitmap && titileBitmap.parent)
@@ -607,10 +623,11 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 *  Clear labels.
 		 */		
-		protected function clearLabels() : void
+		internal function clearLabels() : void
 		{
 			this.labelUIsCanvas.graphics.clear();
-			while (labelUIsCanvas.numChildren > 0)
+			
+			while (labelUIsCanvas.numChildren)
 				labelUIsCanvas.removeChildAt(0);
 		}
 		
@@ -626,48 +643,85 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 * 这两个全局唯一，用来渲染label，然后将bitmapdata其绘制到坐标轴 
 		 */		
-		public function redyToUpdateData():void
-		{
-			sourceValues = new Vector.<Object>;
-		}
+		internal var labelMartrix:Matrix = new Matrix;
+		internal var labelRender:LabelUI = new LabelUI;
 		
 		/**
-		 */
-		protected var confirmedSourceValueRange:Number
+		 */		
+		private var labelsMask:Shape = new Shape;
 		
 		/**
-		 * 根据原始值核定后的最大最小值 
 		 */		
-		protected var sourceDataRange:DataRange = new DataRange;
-		
+		internal var labelUIs:Array = [];
 		
 		/**
-		 * 当前的数据范围(被核定后的) 
+		 * label的容器用来数据缩放时整体移动label，辅助遮罩效果
 		 */		
-		protected var currentDataRange:DataRange = new DataRange;
+		internal var labelUIsCanvas:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var titleLabel:LabelUI = new LabelUI;
+		
+		/**
+		 */		
+		private var titileBitmap:Bitmap;
 		
 		/**
 		 * 轴标签数据
 		 */
-		protected var labelsData:Vector.<AxisLabelData>;
+		internal var labelVOes:Vector.<AxisLabelData> = new Vector.<AxisLabelData>;
+		
+		
+		
+		//---------------------------------------------------
+		//
+		// 
+		//  数据初始化， 数据缩放中Y轴需动态更新，也许处理数据
+		//
+		//
+		//--------------------------------------------------
 		
 		/**
-		 * 原始数据
 		 */		
-		protected var sourceValues:Vector.<Object>;
-		public function pushValues(values:Vector.<Object>) : void
+		public function redayToUpdataYData():void
 		{
-			
 		}
 		
 		/**
-		 * 尺寸更新后更新坐标轴相关属性；
-		 * 
-		 * 计算最大最小值，间隔刻度，label数据
-		 */
-		public function beforeRender():void
+		 */		
+		public function pushYData(value:Vector.<Object>):void
 		{
+		}
+		
+		/**
+		 */		
+		public function yDataUpdated():void
+		{
+		}
+		
+		
+		/**
+		 *     
+		 *  以下是原始数据的处理
+		 * 
+		 */		
+		
+		
+		/**
+		 */		
+		public function redyToUpdateData():void
+		{
+			sourceValues.length = 0;
+		}
+		
+		/**
+		 */		
+		public function pushValues(values:Vector.<Object>) : void
+		{
+			
 		}
 		
 		/**
@@ -685,13 +739,29 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 * 尺寸更新后更新坐标轴相关属性；
+		 * 
+		 * 计算最大最小值，间隔刻度，label数据
+		 */
+		public function beforeRender():void
+		{
+			if (this.changed)
+				this.curPattern.beforeRender();
+		}
+		
+		/**
+		 * 原始数据
+		 */		
+		internal var sourceValues:Array = [];
+		
+		/**
 		 * 轴的创建， 尺寸， 数据改变此标识都会为真；
 		 */		
-		protected var changed:Boolean = true;
+		internal var changed:Boolean = true;
 		
 		/**
 		 */		
-		protected var _ticks:Vector.<Number>;
+		internal var _ticks:Vector.<Number> = new Vector.<Number>;
 		
 		/**
 		 */
@@ -699,7 +769,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			return _ticks;
 		}
-
+		
 		
 		/**
 		 * @return 
@@ -743,7 +813,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 * 
 		 *  因为label可能会很长，label间距为单元刻度的倍数
 		 */
-		private var _uintSize:Number;
+		private var _uintSize:Number = 0;
 		
 		public function get unitSize():Number
 		{
@@ -754,6 +824,11 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			_uintSize = value;
 		}
+		
+		/**
+		 * 这个值有可能比uinitSize要大，取决于label的尺寸
+		 */
+		public var minUintSize:Number = 10;
 		
 		/**
 		 * @param value
@@ -771,19 +846,24 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 * 
+		 * 大数据量计算时， 根据数据再获取其位置信息很耗性能， 所以把位置直接
+		 * 
+		 * 传进来，方便 Field 轴的位置计算
+		 * 
 		 * @param value
 		 * @return 
 		 */		
-		public function valueToX( value : Object ) : Number
+		public function valueToX(value:Object, index:uint) : Number
 		{
 			return 0;
 		}
 		
 		/**
 		 */		
-		protected function valueToSize( value : Object ) : Number
+		protected function valueToSize( value : Object, index:uint ) : Number
 		{
-			return 0
+			return this.curPattern.valueToSize(value, index);
 		}
 		
 		/**
@@ -884,12 +964,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		// 坐标轴公共属性
 		//
 		//------------------------------------------------
-		
-		
-		/**
-		 * 数据缩放时 由当前数据范围与原始数据范围比例反推出的理论长度
-		 */		
-		protected var fullSize:Number = 0;
 		
 		/**
 		 * 是否显示/渲染坐标轴； 
