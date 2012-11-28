@@ -5,6 +5,7 @@ package com.fiCharts.charts.chart2D.marker
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
 	import com.fiCharts.charts.chart2D.encry.SeriesBase;
+	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -52,6 +53,7 @@ package com.fiCharts.charts.chart2D.marker
 		override public function created():void
 		{
 			stateControl = new StatesControl(this);
+			chartColorManager = new ChartColorManager;
 		}
 		
 		/**
