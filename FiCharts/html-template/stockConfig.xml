@@ -1,0 +1,10 @@
+ <config precision="2" title="数据缩放" subTitle='鼠标滚动缩放，拖拽查看，背景双击全屏'>
+   <axis>
+     <x title="A" type="date" input="YYYYMMDD"/> 
+     <y title="B" type="linear"/> 
+   </axis>
+   <series>
+     <line xField="label" yField="value" /> 
+   </series>
+   <dataScale enable='true'/> 
+ </config>

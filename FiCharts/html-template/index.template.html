@@ -16,7 +16,8 @@
             //chart2D.setConfigFile('pieData.xml');
             
             var chart2D = new Chart2D({id: 'pie2D_div', width: '100%', height: '100%', style: 'white'});
-            chart2D.setConfigFile('data.xml');
+            chart2D.setConfigFile('stockConfig.xml');
+            chart2D.setCSVData("date.csv", ["label", "value"])
 			
         </script>
     </head>
