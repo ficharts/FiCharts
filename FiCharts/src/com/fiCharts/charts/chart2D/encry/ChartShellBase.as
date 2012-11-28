@@ -661,7 +661,7 @@ package com.fiCharts.charts.chart2D.encry
 			ExternalUtil.addCallback("setDataXML", getXMLDataHandler);
 			ExternalUtil.addCallback("setDataFile", requestDataURL);
 			
-			ExternalUtil.addCallback("setCSVFile", requestCSVData);
+			ExternalUtil.addCallback("setCSVData", requestCSVData);
 			ExternalUtil.addCallback("render", renderHandler);
 			ExternalUtil.addCallback("saveImage", saveImage);
 			

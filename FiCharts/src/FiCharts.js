@@ -425,7 +425,7 @@
 				//仅设置了配置XML，然后添加csv数据；
 				//如果设置了配置文件就必须等到配置文件加载完毕后才能加载csv数据
 				if (this.ifCSVFileChanged && ifConfigFileChanged == false){
-				    this.setCSVFile(this.csvFile, this.csvFields)
+				    this.setCSVData(this.csvFile, this.csvFields)
 				    this.ifCSVFileChanged = false;
 				}
 			}
@@ -457,7 +457,7 @@
 			
 			// 配置文件加载完毕后判断是否有 csv 数据
 			if (this.ifCSVFileChanged){
-			    this.setCSVFile(this.csvFile, this.csvFields)
+			    this.setCSVData(this.csvFile, this.csvFields)
 			    this.ifCSVFileChanged = false;
 			}
 			
@@ -548,9 +548,9 @@
 			return this;
 		};
 		
-		that.setCSVFile = function(path, fields){
+		that.setCSVData = function(path, fields){
 			if (this.ifReady)
-				this.swf.setCSVFile(path, fields);
+				this.swf.setCSVData(path, fields);
 			else
 			    this.ifCSVFileChanged = true;
 			
