@@ -19,7 +19,6 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.system.OS;
 	
 	import flash.display.DisplayObject;
-	import flash.display.NativeMenu;
 	import flash.display.Sprite;
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
@@ -31,9 +30,7 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-	import flash.system.Capabilities;
 	import flash.system.Security;
-	import flash.system.SecurityDomain;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
 	import flash.utils.ByteArray;
@@ -54,8 +51,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 版本号 
 		 */	
-		public static const VARSION:String = "1.2.2 Beta";
-		
+		public static const VARSION:String = "1.2.2.1 Beta";
 		
 		/**
 		 */		
@@ -633,7 +629,8 @@ package com.fiCharts.charts.chart2D.encry
 			
 			ExternalUtil.addCallback("setCSVData", requestCSVData);
 			ExternalUtil.addCallback("render", renderHandler);
-			
+			ExternalUtil.addCallback("setWebMode", setWebMode);
+				
 			// Flash的初始化参数配置
 			_configFileURL = stage.loaderInfo.parameters['configFile'];
 			_style = stage.loaderInfo.parameters['style'];
@@ -644,6 +641,8 @@ package com.fiCharts.charts.chart2D.encry
 			this.noDataInfo = stage.loaderInfo.parameters['noDataInfo'];
 			this.loadingDataInfo = stage.loaderInfo.parameters['loadingDataInfo'];
 			this.loadingDataErrorInfo = stage.loaderInfo.parameters['loadingDataErrorInfo'];
+			
+			ExternalUtil.call("FiCharts.beforeInit", id);
 		}
 		
 		/**
@@ -778,7 +777,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function resizeHandler(evt:Event):void
 		{
-			if (ifAutoResizeToStage)
+			if (ifWebMode)
 			{
 				if (stage.stageWidth <=  ChartShellBase.MIN_SIZE || stage.stageHeight <= ChartShellBase.MIN_SIZE)
 					return;
@@ -795,7 +794,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		private function resizeChart():void
 		{
-			if (this.ifAutoResizeToStage)
+			if (this.ifWebMode)
 			{
 				chart.chartWidth = _width = stage.stageWidth;
 				chart.chartHeight = _height = stage.stageHeight;
@@ -822,6 +821,20 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 */		
+		private function setWebMode():void
+		{
+			this.ifWebMode = true;
+		}
+		
+		/**
+		 *  网页模式下, 图表的宽高会自动适应容器尺寸
+		 * 
+		 *  Flash项目中，图表的宽高随用户设置
+		 */		
+		public var ifWebMode:Boolean = false;
+		
+		/**
 		 * 信息提示标签;
 		 */		
 		private var infoLabel:Label;
@@ -841,14 +854,6 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 */		
 		private var id:String;
-		
-		
-		/**
-		 * 默认图表会自动适应舞台尺寸，无需设置宽高，可自适应网页中的容器尺寸；
-		 * 
-		 * Flash/AIR项目中根据需要关闭此特性，手动设置图表尺寸；
-		 */		
-		public var ifAutoResizeToStage:Boolean = true;
 		
 		/**
 		 */		

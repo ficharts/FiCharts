@@ -206,6 +206,10 @@
 	//
 	//-------------------------------
 	
+	FiCharts.beforeInit = function(id) {
+		FiCharts.getChartByID(id).beforeInit();
+	};
+	
 	FiCharts.ready = function(id) {
 		FiCharts.getChartByID(id).ready();
 	};
@@ -408,11 +412,21 @@
 		//
 		//-------------------------------------
 		
+		
+		// 此方法在swf已经被创建但未内部初始化之前被调用
+		// 这是图表调用外部的第一个方法，之后是 ready
+		that.beforeInit = function(){
+			 this.swf = doc.getElementById(this.id);
+			 
+			 // 设置了此模式后，图表会自动适应容器尺寸，当宽高设为100%时
+			 // 容器尺寸缩放，图表自动调整自己的尺寸，并完成渲染；
+			 this.swf.setWebMode();
+		};
+		
+		// 此方法在图表完成整个初始化后被创建
 		that.ready = function() {
 		    
 		    this.ifReady = true;
-		    
-		    this.swf = doc.getElementById(this.id);
 		    
 			if (this.ifConfigChanged) {
 				this.setConfigXML(this.configXML);
