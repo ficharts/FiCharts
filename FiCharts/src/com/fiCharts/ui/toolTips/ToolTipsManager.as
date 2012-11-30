@@ -1,5 +1,6 @@
 package com.fiCharts.ui.toolTips
 {
+	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	
@@ -79,6 +80,8 @@ package com.fiCharts.ui.toolTips
 			toolTipUI.tooltipHolder = evt.toolTipsHolder;
 			toolTipUI.updateLabel();
 			
+			isHorizontal = evt.toolTipsHolder.isHorizontal;
+			
 			if (evt.toolTipsHolder.locked && evt.toolTipsHolder.location)// 固定位置
 			{
 				var location:Point = this.container.globalToLocal(evt.toolTipsHolder.location);
@@ -114,6 +117,10 @@ package com.fiCharts.ui.toolTips
 		
 		/**
 		 */		
+		private var isHorizontal:Boolean = false;
+		
+		/**
+		 */		
 		private function hideToolTipsHandler(evt:ToolTipsEvent):void
 		{
 			ifMoving = false;
@@ -127,8 +134,16 @@ package com.fiCharts.ui.toolTips
 		{
 			if (ifMoving)
 			{
-				toolTipUI.x = container.mouseX;
-				toolTipUI.y = container.mouseY - toolTipUI.height / 2 - toolTipUI.style.vPadding;
+				if (isHorizontal)
+				{
+					toolTipUI.x = container.mouseX + toolTipUI.width / 2 + toolTipUI.style.hMargin;
+					toolTipUI.y = container.mouseY;
+				}
+				else
+				{
+					toolTipUI.x = container.mouseX;
+					toolTipUI.y = container.mouseY - toolTipUI.height / 2 - toolTipUI.style.vMargin;
+				}
 				
 				adjustTipUILocation();
 			}
@@ -145,7 +160,12 @@ package com.fiCharts.ui.toolTips
 			
 			// 右
 			if (toolTipUI.x + toolTipUI.width / 2 + container.x + edgeGutter > container.stage.stageWidth)
-				toolTipUI.x = container.stage.stageWidth - toolTipUI.width / 2 - container.x - edgeGutter;
+			{
+				if (isHorizontal)
+					toolTipUI.x = container.stage.mouseX - toolTipUI.width / 2 - toolTipUI.style.hMargin;
+				else
+					toolTipUI.x = container.stage.stageWidth - toolTipUI.width / 2 - container.x - edgeGutter;
+			}
 			
 			// 上
 			if (toolTipUI.y - toolTipUI.height / 2 - container.y < edgeGutter)

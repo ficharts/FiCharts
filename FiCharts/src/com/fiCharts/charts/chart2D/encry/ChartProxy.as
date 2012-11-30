@@ -141,6 +141,8 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.registerObjectToProperty('tooltip', 'group', 'text');
 			XMLVOLib.registerObjectToProperty('group', 'text', 'value');
 			
+			XMLVOLib.registerObjectToProperty('config', 'tooltip', 'label');
+			
 			XMLVOLib.registerObjectToProperty('x', 'label', 'text');
 			XMLVOLib.registerObjectToProperty('y', 'label', 'text');
 		}

@@ -18,6 +18,8 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.events.MouseEvent;
 	import flash.events.TransformGestureEvent;
 	import flash.geom.Matrix;
+	import flash.ui.Mouse;
+	import flash.ui.MouseCursor;
 	
 	
 	
@@ -81,7 +83,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function toClassicPattern():void
 		{
-			disableControlEvts();
+			_leaveChartCanvas();
 			
 			if (chartMain.classicPattern)
 				chartMain.currentPattern = chartMain.classicPattern;
@@ -113,32 +115,9 @@ package com.fiCharts.charts.chart2D.encry
 			{
 				//非锁定状态
 				tipsHolder = new ToolTipHolder;
+				tipsHolder.isHorizontal = true;
 				tipsHolder.locked = false;
 			}
-		}
-		
-		/**
-		 */		
-		private function enableControlEvts():void
-		{
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler, false, 0, true);
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_UP, stopMoveHandler, false, 0, true);
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
-			chartMain.stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, mobileZoomHandler, false, 0, true);
-			
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_MOVE, toolTipsHandler, false, 0, true);
-		}
-		
-		/**
-		 */		
-		private function disableControlEvts():void
-		{
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler);
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_UP, stopMoveHandler);
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
-			chartMain.stage.removeEventListener(TransformGestureEvent.GESTURE_ZOOM, mobileZoomHandler);
-			
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_MOVE, toolTipsHandler);
 		}
 		
 		/**
@@ -371,7 +350,11 @@ package com.fiCharts.charts.chart2D.encry
 			chartMain.chartCanvas.mouseChildren = chartMain.chartCanvas.mouseEnabled = true;
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_UP, stopScroll);
 			
-			updateTips();
+			// 鼠标移出画布区域，停止拖动后不更新提示信息
+			if(chartMain.chartCanvas.hitTestPoint(evt.stageX, evt.stageY))
+				updateTips();
+			else
+				_leaveChartCanvas();
 		}
 		
 		/**
@@ -472,10 +455,12 @@ package com.fiCharts.charts.chart2D.encry
 		
 		
 		
+		
+		
 		//----------------------------------------------------
 		//
 		//
-		//  信息提示控制
+		//  信息提示，手势控制，一切以鼠标是否位于图表画布区域为限
 		//
 		//
 		//-----------------------------------------------------
@@ -484,24 +469,75 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function mouseInSeriesArea(evt:MouseEvent):void
 		{
-			this.enableControlEvts();
+			this.gotoChartCanvas();
 		}
 		
 		/**
 		 */		
 		private function mouseOutSeriesArea(evt:MouseEvent):void
 		{
-			this.disableControlEvts();
-			hideTips();
+			this.leaveChartCanvas(evt.stageX, evt.stageY);
 		}
 										   
 		/**
 		 * 
-		 * 
 		 */		
 		private function toolTipsHandler(evt:MouseEvent):void
 		{
-			updateTips();
+			// 防止鼠标移出图表画布区域继续信息提示
+			if(chartMain.chartCanvas.hitTestPoint(evt.stageX, evt.stageY) == false)
+			{
+				this._leaveChartCanvas(); 
+			}
+			else
+			{
+				updateTips();
+			}
+		}
+		
+		/**
+		 * 
+		 * 鼠标移出图表画布区域，结束信息提示，还原鼠标状态
+		 */		
+		private function leaveChartCanvas(x:Number, y:Number):void
+		{
+			// 防止鼠标依旧位于图表画布中， 但由于其他罩盖引起的的  rollOut
+			if(chartMain.chartCanvas.hitTestPoint(x, y))
+				return; 
+			
+			_leaveChartCanvas();
+		}
+		
+		/**
+		 * 鼠标进入图表画布区域，开始信息提示，改变鼠标状态
+		 */		
+		private function gotoChartCanvas():void
+		{
+			chartMain.stage.addEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler, false, 0, true);
+			chartMain.stage.addEventListener(MouseEvent.MOUSE_UP, stopMoveHandler, false, 0, true);
+			chartMain.stage.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
+			chartMain.stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, mobileZoomHandler, false, 0, true);
+			
+			chartMain.stage.addEventListener(MouseEvent.MOUSE_MOVE, toolTipsHandler, false, 0, true);
+			
+			Mouse.cursor = flash.ui.MouseCursor.HAND;
+		}
+		
+		/**
+		 */		
+		private function _leaveChartCanvas():void
+		{
+			if (this.ifSrollingData) return;
+			
+			chartMain.stage.removeEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler);
+			chartMain.stage.removeEventListener(MouseEvent.MOUSE_UP, stopMoveHandler);
+			chartMain.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
+			chartMain.stage.removeEventListener(TransformGestureEvent.GESTURE_ZOOM, mobileZoomHandler);
+			
+			chartMain.stage.removeEventListener(MouseEvent.MOUSE_MOVE, toolTipsHandler);
+			
+			Mouse.cursor = flash.ui.MouseCursor.ARROW;
+			hideTips();
 		}
 		
 		/**

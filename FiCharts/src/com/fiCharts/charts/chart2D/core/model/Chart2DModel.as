@@ -2,6 +2,7 @@ package com.fiCharts.charts.chart2D.core.model
 {
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.charts.legend.LegendStyle;
+	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -456,5 +457,7 @@ package com.fiCharts.charts.chart2D.core.model
 		{
 			_scrollBar = value;
 		}
+		
+
 	}
 }

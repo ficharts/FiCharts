@@ -1155,7 +1155,9 @@ package com.fiCharts.charts.chart2D.encry
 			bottomAxisContainer = new AxisContianer;
 			addChild(bottomAxisContainer);
 			
-			chartCanvas = new ChartCanvas
+			chartCanvas = new ChartCanvas;
+			chartCanvas.doubleClickEnabled = true;
+			chartCanvas.addEventListener(MouseEvent.DOUBLE_CLICK, fullScreenHandler, false, 0, true);
 			addChild(chartCanvas);
 			
 			chartMask = new Shape;

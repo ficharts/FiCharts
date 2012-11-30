@@ -78,7 +78,7 @@ package com.fiCharts.utils
 			var valueNameArray:Array = value.match(rex);
 			
 			//属性处理函数的提取
-			rex = /(?:\{\w+\:\w+\.?\w*\})/g;
+			rex = /(?:\{\w+\:\w+\.?[^\}]*\})/g;
 			var functionArray:Array = value.match(rex);
 			
 			// 此属性名可以是层级关系
@@ -135,7 +135,7 @@ package com.fiCharts.utils
 			if (isBraceParagraph(sourceField))
 			{
 				var value:Object;
-				var rex:RegExp = /(?:\$\{\w+\.?\w*\})(\{\w+:\w+\.?\w*\})*/g;
+				var rex:RegExp = /(?:\$\{\w+\.?\w*\})(\{\w+:\w+\.?[^\}]*\})*/g;
 				var braceValues:Array = sourceField.match(rex);
 				
 				for each (var fieldValue:String in braceValues)

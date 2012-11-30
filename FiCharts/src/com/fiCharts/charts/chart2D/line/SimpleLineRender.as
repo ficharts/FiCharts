@@ -51,16 +51,15 @@ package com.fiCharts.charts.chart2D.line
 			series.renderSimleLine(series.canvas.graphics, 
 				series.dataOffsetter.minIndex, series.dataOffsetter.maxIndex);
 			
-			/*
-			if (series.style.cover && series.style.cover.border)
+			
+			/*if (series.style.cover && series.style.cover.border)
 			{
 				StyleManager.setLineStyle(series.canvas.graphics, series.style.cover.border, series.style, series);
 				series.renderSimleLine(series.canvas.graphics, 
 					series.dataOffsetter.minIndex, series.dataOffsetter.maxIndex, series.style.cover.offset);
-			}*/
-			
-			//StyleManager.setEffects(series.canvas, series.style, series);
-			
+			}
+		
+			StyleManager.setEffects(series.canvas, series.style, series);*/
 		}
 		
 		/**

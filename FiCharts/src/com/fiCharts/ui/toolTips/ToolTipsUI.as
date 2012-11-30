@@ -59,7 +59,7 @@ package com.fiCharts.ui.toolTips
 		{
 			this.mouseChildren = false;
 			this.mouseEnabled = false;
-			label.multiline = true;;
+			multylabel.multiline = true;;
 			
 			addChild(bg);
 			labelsContainer = new Sprite;
@@ -107,10 +107,6 @@ package com.fiCharts.ui.toolTips
 		}
 		
 		/**
-		 */		
-		private var label:Label	= new Label;
-		
-		/**
 		 * 有两种信息提示模式，一是含有多个一是只有一项内容；
 		 */		
 		public function updateLabel():void
@@ -134,7 +130,6 @@ package com.fiCharts.ui.toolTips
 				this.style = tooltipHolder.style;
 				updateBgSize();
 				
-				var labelUI:LabelUI = new LabelUI();
 				labelUI.style = this.style;
 				labelUI.metaData = tooltipHolder.metaData;
 				labelUI.render();
@@ -144,6 +139,10 @@ package com.fiCharts.ui.toolTips
 				labelsContainer.y = - labelsContainer.height / 2;
 			}
 		}
+		
+		/**
+		 */		
+		private var labelUI:LabelUI = new LabelUI();
 		
 		/**
 		 * 
@@ -171,12 +170,12 @@ package com.fiCharts.ui.toolTips
 				fontColor = uint(StyleManager.getColor(tooltipItem.metaData, style.format.color));
 				pStyle.color = '#' + fontColor.toString(16);
 				styleSheet.setStyle("p", pStyle);
-				label.styleSheet = styleSheet;
-				label.htmlText = '<p>' +  RexUtil.replaceFieldBraceValue(this.style.text.value, tooltipItem.metaData) + '</p>'; 
+				multylabel.styleSheet = styleSheet;
+				multylabel.htmlText = '<p>' +  RexUtil.replaceFieldBraceValue(this.style.text.value, tooltipItem.metaData) + '</p>'; 
 				
-				StyleManager.setEffects(label, this.style.text as Text, tooltipItem.metaData);
-				var bmd:BitmapData = new BitmapData(label.width, label.height, true, 0xFFFFFF);
-				bmd.draw(label);
+				StyleManager.setEffects(multylabel, this.style.text as Text, tooltipItem.metaData);
+				var bmd:BitmapData = new BitmapData(multylabel.width, multylabel.height, true, 0xFFFFFF);
+				bmd.draw(multylabel);
 				bm = new Bitmap(bmd);
 				
 				bm.y = labelY - bm.height;
@@ -185,6 +184,10 @@ package com.fiCharts.ui.toolTips
 				labelY = - labelsContainer.height - style.vPadding;
 			}
 		}
+		
+		/**
+		 */		
+		private var multylabel:Label	= new Label;
 		
 		/**
 		 */		

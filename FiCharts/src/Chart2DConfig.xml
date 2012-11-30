@@ -54,8 +54,8 @@
             </yAxis>
             
             
-            <tooltip enable='true' locked='true' self="${tooltip}" group="${tooltip}">
-                <self radius='0' padding='5' vMargin='10'>
+            <tooltip enable='true' locked='true' label='${tooltip}'>
+                <self radius='0' padding='5' vMargin='10' hMargin='20'>
                     <border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
                     <fill color='FFFFFF' alpha='0.9'/>
                     <cover>
@@ -63,7 +63,7 @@
                     </cover>
                     <format font='微软雅黑' size='12' color='${color}' bold='false'/>
                 </self>
-                <group radius='0' padding='5' vMargin='10'>
+                <group radius='0' padding='5' vMargin='10' hMargin='20'>
                     <border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
                     <fill color='FFFFFF' alpha='0.9'/>
                     <format font='微软雅黑' size='12' color='${color}' bold='false'/>
@@ -265,7 +265,7 @@
                 
                 <states id='lineStates'>
                     <normal>
-                        <border color='${color}' thikness='1' alpha='0.8'/>
+                        <border color='${color}' thikness='2' alpha='0.8'/>
                         <cover>
                             <border pixelHinting='false' color='${color}{adjustColor:1.8}' thikness='1' alpha='0.8'/>
                         </cover>

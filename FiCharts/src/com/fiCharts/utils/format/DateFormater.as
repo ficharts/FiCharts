@@ -178,16 +178,17 @@ package com.fiCharts.utils.format
 			else
 				newDate = new Date();
 			
+			newDate.seconds = secondNum;
+			newDate.minutes = minNum;
+			newDate.hours = hourNum;
 			
+			newDate.month = 0;// 防止当前月没有31号时造成date归零，所以先给足空间
+			newDate.date = dayNum;
+			newDate.month = monthNum - 1;
 			
 			newDate.fullYear = yearNum;
-			newDate.month =  monthNum - 1;
-			newDate.date = dayNum;
-			newDate.hours = hourNum;
-			newDate.minutes = minNum;
-			newDate.seconds = secondNum;
 			
-			if (dayNum != newDate.getDate() || (monthNum - 1) != newDate.getMonth())
+			if (dayNum != newDate.date || (monthNum - 1) != newDate.month)
 				return null;
 			
 			return newDate;
