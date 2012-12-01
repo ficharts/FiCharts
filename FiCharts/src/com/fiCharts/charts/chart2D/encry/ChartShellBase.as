@@ -482,12 +482,12 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		protected function init():void
 		{
-			if (OS.isDesktopSystem)
+			if (OS.isWebSystem)
 				Security.allowDomain("*");
 			
 			initLanguage();
 			
-			if (OS.isDesktopSystem)
+			if (OS.isWebSystem)
 			{
 				initMenu();
 				initInterfaces();
@@ -677,7 +677,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			resizeChart();
 			
-			if (OS.isDesktopSystem)
+			if (OS.isWebSystem)
 			{
 				//
 				// 如果有预先设置好的自定义配置， 将其设置为自定义样式；
