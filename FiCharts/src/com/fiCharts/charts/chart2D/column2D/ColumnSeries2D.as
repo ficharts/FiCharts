@@ -1,7 +1,6 @@
 package com.fiCharts.charts.chart2D.column2D
 {
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
@@ -21,15 +20,6 @@ package com.fiCharts.charts.chart2D.column2D
 		public function ColumnSeries2D()
 		{
 			super();
-		}
-		
-		/**
-		 */		
-		override protected function dataResizedByIndex(evt:DataResizeEvent):void
-		{
-			super.dataResizedByIndex(evt);
-			layoutColumnUIs();
-			updataItemRendersLayout();
 		}
 		
 		/**
@@ -106,7 +96,7 @@ package com.fiCharts.charts.chart2D.column2D
 			adjustColumnWidth();
 			
 			var item:SeriesDataItemVO;
-			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
+			for (var i:uint = 0; i <= this.itemRenderMaxIndex; i ++)
 			{
 				item = dataItemVOs[i]
 				item.x = horizontalAxis.valueToX(item.xValue) - columnGoupWidth / 2 +
@@ -182,18 +172,10 @@ package com.fiCharts.charts.chart2D.column2D
 			for (var i:uint = 0; i < len; i ++)
 			{
 				columnUI = columnUIs[i];
-				if (i >= dataOffsetter.minIndex && i <= dataOffsetter.maxIndex)
-				{
-					columnUI.x = columnUI.dataItem.x - this.partColumnWidth / 2;
-					columnUI.y = 0;
-					setColumnUISize(columnUI);
-					columnUI.render();
-					columnUI.visible = true;
-				}
-				else
-				{
-					columnUI.visible = false;
-				}
+				columnUI.x = columnUI.dataItem.x - this.partColumnWidth / 2;
+				columnUI.y = 0;
+				setColumnUISize(columnUI);
+				columnUI.render();
 			}
 		}
 		

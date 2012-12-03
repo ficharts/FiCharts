@@ -39,47 +39,29 @@ package com.fiCharts.charts.chart2D.area2D
 		 */
 		override protected function renderChart():void
 		{
-			if (renderType == 'simple')
+			if (ifDataChanged)
 			{
-				if (this.ifSizeChanged || this.ifDataChanged)
-				{
-					
-					states.tx = this.seriesWidth;
-					states.width = seriesWidth;
-					
-					this.style = this.states.getNormal;
-					
-					renderWholeLine(dataOffsetter.minIndex, dataOffsetter.maxIndex);
-					ifSizeChanged = ifDataChanged = false;
-				}
-			}
-			else
-			{
-				if (ifDataChanged)
-				{
-					while (canvas.numChildren)
-						canvas.removeChildAt(0);
-					
-					var areaUI:PartLineUI;
-					partUIs = new Vector.<PartLineUI>;
-					for each (var itemDataVO:SeriesDataItemVO in dataItemVOs)
-					{
-						areaUI = new PartAreaUI(itemDataVO);
-						areaUI.partUIRender = this;
-						areaUI.states = this.states;
-						areaUI.metaData = itemDataVO.metaData;
-						canvas.addChild(areaUI);
-						partUIs.push(areaUI);
-					}
-				}
+				while (canvas.numChildren)
+					canvas.removeChildAt(0);
 				
-				if (this.ifSizeChanged || this.ifDataChanged)
+				var areaUI:PartLineUI;
+				partUIs = new Vector.<PartLineUI>;
+				for each (var itemDataVO:SeriesDataItemVO in dataItemVOs)
 				{
-					renderPartUIs();
-					ifSizeChanged = ifDataChanged = false;
+					areaUI = new PartAreaUI(itemDataVO);
+					areaUI.partUIRender = this;
+					areaUI.states = this.states;
+					areaUI.metaData = itemDataVO.metaData;
+					canvas.addChild(areaUI);
+					partUIs.push(areaUI);
 				}
 			}
 			
+			if (this.ifSizeChanged || this.ifDataChanged)
+			{
+				renderPartUIs();
+				ifSizeChanged = ifDataChanged = false;
+			}
 		}
 		
 		/**

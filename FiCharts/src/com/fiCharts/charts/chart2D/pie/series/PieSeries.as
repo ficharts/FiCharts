@@ -1,7 +1,6 @@
 package com.fiCharts.charts.chart2D.pie.series
 {
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
-	import com.fiCharts.charts.chart2D.core.itemRender.LegendStateControl;
 	import com.fiCharts.charts.chart2D.pie.PieChartModel;
 	import com.fiCharts.charts.chart2D.pie.PieDataFormatter;
 	import com.fiCharts.charts.common.ChartColorManager;
@@ -15,14 +14,11 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
-	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
-	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
-	import flash.geom.Point;
 
 	/**
 	 */	

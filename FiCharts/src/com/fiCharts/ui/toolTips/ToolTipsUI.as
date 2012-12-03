@@ -146,7 +146,6 @@ package com.fiCharts.ui.toolTips
 		}
 		
 		/**
-		 * 
 		 */		
 		private function updateMultiDataLabel():void
 		{

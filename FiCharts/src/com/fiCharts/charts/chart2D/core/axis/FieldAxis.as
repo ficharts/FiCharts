@@ -1,6 +1,5 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
@@ -16,98 +15,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		public function FieldAxis()
 		{
 			super();
-		}
-		
-		/**
-		 */		
-		override public function percentToPos(per:Number):Number
-		{
-			return this.currentScrollPos - this.offsetSize + this.fullSize * per;
-		}
-		
-		/**
-		 */		
-		override public function posToPercent(pos:Number):Number
-		{
-			var perc:Number;
-			var position:Number = pos;
-			
-			if (this.inverse)
-				position = this.fullSize - position;
-			
-			perc = (offsetSize + position - this.currentScrollPos) / fullSize;
-			
-			return perc;
-		}
-		
-		/**
-		 */		
-		override public function getDataPercent(value:Object):Number
-		{
-			var result:Number = this.sourceValues.indexOf(value) / this.confirmedSourceValueRange;
-			
-			if (result < 0)
-				result = 0;
-			
-			if (result > 1)
-				result = 1;
-			
-			return result;
-		}
-		
-		override public function dataScrolled(dataRange:DataRange):void
-		{
-			var offPerc:Number = this.currentScrollPos / this.fullSize;
-			var min:Number = Math.floor(this.currentDataRange.min - offPerc * confirmedSourceValueRange);
-			var max:Number = Math.ceil(currentDataRange.max - offPerc * confirmedSourceValueRange);
-			
-			if (min < 0) min = 0;
-			if (max > this.sourceDataRange.max) max = sourceDataRange.max;
-			
-			dataRange.min = min / confirmedSourceValueRange;
-			dataRange.max = max / confirmedSourceValueRange;
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_INDEX, 
-				min, max));
-		}
-		
-		/**
-		 * 字符类型数据节点均匀分布， 根据位置就可划定数值范围
-		 */		
-		override public function dataResized(start:Number, end:Number):void
-		{
-			getCurrentDataRange(start, end);
-			setFullSizeAndOffsize();
-			
-			this.labelUIsCanvas.x = currentScrollPos = 0;// 数据缩放后尺寸有了新的关系
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_INDEX, 
-				currentDataRange.min, currentDataRange.max));
-			
-			super.dataResized(start, end);
-		}
-		
-		/**
-		 */		
-		override public function renderSeries(start:Number, end:Number):void
-		{
-			var len:uint = this.sourceValues.length - 1;
-			var min:Number, max:Number;
-			min = Math.floor(start * len);
-			max =  Math.ceil(end * len);
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_INDEX, 
-				min, max));
-		}
-		
-		/**
-		 */		
-		private function getCurrentDataRange(start:Number, end:Number):void
-		{
-			var len:uint = this.sourceValues.length - 1;
-			
-			currentDataRange.min = Math.floor(start * len);
-			currentDataRange.max = Math.ceil(end * len);
 		}
 		
 		/**
@@ -142,7 +49,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			var result:Number = unitSize * .5 + 
 				sourceValues.indexOf(value.toString()) * this.unitSize
-				 - this.offsetSize + this.currentScrollPos;
 			
 			if (inverse)
 				return size - result;
@@ -156,8 +62,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			if (ifTickCenter)
 			{
-				ticks.unshift(this.currentScrollPos - this.offsetSize);
-				ticks.push(this.fullSize + this.currentScrollPos - this.offsetSize);
+				ticks.unshift(0);
+				ticks.push(this.size);
 			}
 			else
 			{
@@ -166,7 +72,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				else
 					ticks.forEach(shiftLeft);
 				
-				ticks.push(this.currentScrollPos - this.offsetSize + fullSize);
+				ticks.push(size);
 			}
 		}
 		
@@ -270,20 +176,14 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 * 
 		 * 数据源与label节点一一对应；
-		 * 
 		 */		
 		override public function beforeRender():void
 		{
 			if (changed)
 			{
-				currentDataRange.min = sourceDataRange.min = 0;
-				currentDataRange.max = sourceDataRange.max = this.sourceValues.length - 1;
-				confirmedSourceValueRange = sourceDataRange.max - sourceDataRange.min;
-				
 				createLabelsData();
-				setFullSizeAndOffsize();
+				this.unitSize = size / this.labelsData.length;
 			}
 		}
 		

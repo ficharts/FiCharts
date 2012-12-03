@@ -32,6 +32,14 @@ package com.fiCharts.charts.chart2D.core.events
 		public static const ITEM_CLICKED:String = 'itemClicked';
 		
 		/**
+		 */		
+		public static const ITEM_OVER:String = "itemOver";
+		
+		/**
+		 */		
+		public static const ITEM_OUT:String = "itemOut";
+		
+		/**
 		 * 图表渲染完成
 		 */		
 		public static const RENDERED:String = 'renderd';

@@ -19,7 +19,6 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.system.OS;
 	
 	import flash.display.DisplayObject;
-	import flash.display.NativeMenu;
 	import flash.display.Sprite;
 	import flash.events.ContextMenuEvent;
 	import flash.events.Event;
@@ -31,9 +30,6 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-	import flash.system.Capabilities;
-	import flash.system.Security;
-	import flash.system.SecurityDomain;
 	import flash.system.Security;
 	import flash.ui.ContextMenu;
 	import flash.ui.ContextMenuItem;
@@ -55,7 +51,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 版本号 
 		 */	
-		public static const VARSION:String = "1.2.2.1 Beta";
+		public static const VARSION:String = "1.2.2.2 Beta";
 		
 		/**
 		 */		
@@ -114,71 +110,6 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 */		
 		protected var customConfig:XML;
-		
-		
-		/**
-		 */		
-		private var _ifDataScalable:Boolean = false;
-
-		/**
-		 * 是否开启数据缩放，开启后<code>scaleData</code>方法才会生效
-		 */
-		public function get ifDataScalable():Boolean
-		{
-			return _ifDataScalable;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set ifDataScalable(value:Boolean):void
-		{
-			_ifDataScalable = value;
-			
-			if (ifReady)
-				chart.setDataScalable(_ifDataScalable);
-			else
-				ifDataScalableChanged = true;
-		}
-		
-		/**
-		 */		
-		private var ifDataScalableChanged:Boolean = false;
-		
-		/**
-		 * 
-		 * 根据数据范围缩放图表
-		 * 
-		 * @param valueFrom 数据范围的起点值
-		 * @param valueTo   数据范围的终点值 
-		 * 
-		 */		
-		public function scaleData(valueFrom:Object, valueTo:Object):void
-		{
-			if (ifReady)
-			{
-				chart.scaleData(valueFrom, valueTo);
-			}
-			else
-			{
-				dataScaleForm = valueFrom;
-				dataScaleTo = valueTo;
-				ifScaleDataChanged = true;
-			}
-		}
-		
-		/**
-		 */		
-		private var ifScaleDataChanged:Boolean = false;
-		
-		/**
-		 */		
-		private var dataScaleForm:Object;
-		
-		/**
-		 */		
-		private var dataScaleTo:Object;
-		
 		
 		
 		/**
@@ -341,9 +272,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function getConfigServiceHandler(evt:URLServiceEvent):void
 		{
+			ExternalUtil.call("FiCharts.configFileLoaded", id, evt.data);
+			
 			setConfigXMLHandler(evt.data);
 			renderHandler();
-			ExternalUtil.call("FiCharts.configFileLoaded", id, evt.data);
 		}
 		
 		/**
@@ -393,9 +325,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		private function getDataServiceHandler(evt:URLServiceEvent):void
 		{
+			ExternalUtil.call("FiCharts.dataFileLoaded", id, evt.data);
+			
 			getXMLDataHandler(evt.data);
 			renderHandler();
-			ExternalUtil.call("FiCharts.dataFileLoaded", id, evt.data);
 		}
 		
 		/**
@@ -449,6 +382,22 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			evt.stopPropagation();
 			ExternalUtil.call('FiCharts.itemClick', id, evt.dataItem.metaData);
+		}
+		
+		/**
+		 */		
+		private function itemOverHandler(evt:FiChartsEvent):void
+		{
+			evt.stopPropagation();
+			ExternalUtil.call('FiCharts.itemOver', id, evt.dataItem.metaData);
+		}
+		
+		/**
+		 */		
+		private function itemOutHandler(evt:FiChartsEvent):void
+		{
+			evt.stopPropagation();
+			ExternalUtil.call('FiCharts.itemOut', id, evt.dataItem.metaData);
 		}
 		
 		/**
@@ -620,8 +569,6 @@ package com.fiCharts.charts.chart2D.encry
 		//-----------------------------------------------------
 		protected function initInterfaces():void
 		{
-			ExternalUtil.addCallback("ifDataScalable", ifChartDataScalable);
-			
 			ExternalUtil.addCallback("setConfigXML", setConfigXMLHandler);
 			ExternalUtil.addCallback("setConfigFile", requestConfigURL);
 			
@@ -648,13 +595,6 @@ package com.fiCharts.charts.chart2D.encry
 			this.loadingDataErrorInfo = stage.loaderInfo.parameters['loadingDataErrorInfo'];
 			
 			ExternalUtil.call("FiCharts.beforeInit", id);
-		}
-		
-		/**
-		 */		
-		private function ifChartDataScalable():Boolean
-		{
-			return chart.ifDataScalable();
 		}
 		
 		
@@ -730,18 +670,6 @@ package com.fiCharts.charts.chart2D.encry
 				ifPreRender = false;
 			}
 			
-			if (ifDataScalableChanged)
-			{
-				this.chart.setDataScalable(this.ifDataScalable);
-				ifDataScalableChanged = false;
-			}
-			
-			if (this.ifScaleDataChanged && this.ifDataScalable)
-			{
-				this.scaleData(this.dataScaleTo, dataScaleTo);
-				ifScaleDataChanged = false;
-			}
-			
 			if (this.ifConfigFileURLChanged)
 			{
 				this.setConfigFileURL(this._configFileURL);
@@ -765,6 +693,9 @@ package com.fiCharts.charts.chart2D.encry
 			// 子类需先创建图表
 			addChild(chart as DisplayObject);
 			(chart as EventDispatcher).addEventListener(FiChartsEvent.RENDERED, renderedHandler, false, 0, true);
+			
+			(chart as EventDispatcher).addEventListener(FiChartsEvent.ITEM_OVER, itemOverHandler, false, 0, true);
+			(chart as EventDispatcher).addEventListener(FiChartsEvent.ITEM_OUT, itemOutHandler, false, 0, true);
 			(chart as EventDispatcher).addEventListener(FiChartsEvent.ITEM_CLICKED, itemClickHandler, false, 0, true);
 		}
 		
@@ -826,6 +757,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 此接口只有在网页模式下才会被调用
 		 */		
 		private function setWebMode():void
 		{

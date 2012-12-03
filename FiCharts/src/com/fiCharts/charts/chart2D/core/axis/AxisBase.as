@@ -41,172 +41,9 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 * 根据数据的比例范围渲染基于此坐标轴的序列
-		 * 
-		 * 对于大数据量观看整体图表时，没必要把每个点都渲染出来，而是根据合适的单位距离内的点密度
-		 * 
-		 * 来渲染;
-		 * 
-		 */		
-		public function renderSeries(start:Number, end:Number):void
-		{
-			
-		}
-		
-		/**
-		 * 根据原始数据得到其在总数据中的百分比位置，用来做尺寸缩放
-		 */		
-		public function getDataPercent(value:Object):Number
-		{
-			return 0;
-		}
-		
-		/**
-		 */		
-		public function posToPercent(pos:Number):Number
-		{
-			return 0;
-		}
-		
-		/**
-		 * 将百分比位置信息转换为真正的位置数值
-		 */		
-		public function percentToPos(per:Number):Number
-		{
-			return 0;
-		}
-		
-		/**
-		 * 滚动结束后，渲染数据范围内的序列
-		 */		
-		public function dataScrolled(dataRange:DataRange):void
-		{
-		}
-		
-		/**
-		 * 数据缩放后调用
-		 */		
-		public function dataResized(start:Number, end:Number):void
-		{
-			var startPerc:Number = (currentDataRange.min - this.sourceDataRange.min) / this.confirmedSourceValueRange;
-			var endPerc:Number = (currentDataRange.max - this.sourceDataRange.min) / this.confirmedSourceValueRange;
-			
-			drawScrollBar(startPerc, endPerc);
-			//generateTicksForBGRender(startPerc, endPerc);
-			
-			changed = true;
-		}
-		
-		/**
-		 * 数据滚动过程中，仅是改变label容器的位置
-		 */		
-		public function scrollingData(offset:Number):void
-		{
-			if (this.direction == HORIZONTAL_AXIS)
-			{
-				currentScrollPos += offset;
-				
-				if (currentScrollPos <= offsetSize && currentScrollPos >= minScrollPos)
-					this.labelUIsCanvas.x = currentScrollPos;
-				else if (currentScrollPos > offsetSize)
-					this.labelUIsCanvas.x = currentScrollPos = offsetSize;
-				else if (currentScrollPos < minScrollPos)
-					this.labelUIsCanvas.x = currentScrollPos = minScrollPos;
-			}
-			
-			var perc:Number = currentScrollPos / this.fullSize;
-			var startPerc:Number = (currentDataRange.min - this.sourceDataRange.min) / confirmedSourceValueRange - perc;
-			var endPerc:Number = (currentDataRange.max - this.sourceDataRange.min) / confirmedSourceValueRange - perc;
-			
-			drawScrollBar(startPerc, endPerc);
-			//generateTicksForBGRender(startPerc, endPerc);
-		}
-		
-		/**
-		 */		
-		private function generateTicksForBGRender(startPerc:Number, endPerc:Number):void
-		{
-			if (ticksForBGRender == null)
-				ticksForBGRender = new Vector.<Number>;
-				
-			var startPos:Number = percentToPos(startPerc);
-			var endPos:Number = percentToPos(endPerc);
-			
-			ticksForBGRender.length = 0;
-			for each(var i:Number in this.ticks)
-			{
-				if (i >= startPos && i <= endPos)
-					ticksForBGRender.push(i);
-			}
-		}
-		
-		/**
-		 */		
-		public var ticksForBGRender:Vector.<Number>;
-		
-		/**
-		 */		
-		protected function drawScrollBar(startPerc:Number, endPerc:Number):void
-		{
-			this.graphics.clear();
-			
-			if (startPerc == 0 && endPerc == 1) return;// 数据完全显示时，滚动条没必要显示
-				
-			StyleManager.setShapeStyle(this.scrollBarStyle, this.graphics);
-			this.graphics.drawRoundRect(startPerc * this.size, label.margin / 2, 
-				size * (endPerc - startPerc), scrollBarStyle.height, scrollBarStyle.radius, scrollBarStyle.radius);
-		}
-		
-		/**
 		 * 滚动条的样式
 		 */		
 		public var scrollBarStyle:Style;
-		
-		/**
-		 */		
-		public var currentScrollPos:Number = 0;
-		
-		/**
-		 * 坐标原点的尺寸偏移量
-		 */		
-		public var offsetSize:Number = 0;
-		
-		/**
-		 */		
-		protected var minScrollPos:Number = 0;
-		
-		/**
-		 * 每次渲染或者数据缩放后需重新计算尺寸关系
-		 */		
-		protected function setFullSizeAndOffsize():void
-		{
-			fullSize = this.size / (currentDataRange.max - currentDataRange.min) * confirmedSourceValueRange;
-			this.offsetSize = (currentDataRange.min - sourceDataRange.min) / confirmedSourceValueRange * fullSize;
-			this.unitSize = fullSize / this.labelsData.length;
-			minScrollPos = offsetSize + size - this.fullSize;
-			
-			var currentRate:Number = this.sourceValues.length / this.fullSize;
-		}
-		
-		/**
-		 * 大数据量时，当前数据密度大于最大值，节点渲染需间隔进行
-		 * 
-		 * 此数值为间隔率
-		 */		
-		private var dataRate:uint;
-		
-		/**
-		 * 数据的最大渲染密度， 大数据量时无需每个节点都渲染，为了提升性能，采集一定
-		 * 
-		 * 密度下的节点即可 . 只需要渲染部分节点的话， 就没必要全部创建节点UI和itemRender等对象
-		 * 
-		 * 那么序列的尺寸缩放或者数据缩放时也需要动态创建未被创建的对象，每次序列渲染前都需要知道 自己的
-		 * 
-		 * 数据间隔率； 所以，动态创建的itemrender要动态添加到主场景中，不是之前的全部节点一次发总给主场景；数值标签也是只有需要渲染的节点的
-		 * 
-		 * 才会比发送至主场景；
-		 */		
-		private var maxDataPerSize:uint;
 		
 		/**
 		 * 对于每此数据缩放，坐标轴仅需绘制一次，子数据的滚动只是移动label容器的位置而已
@@ -216,7 +53,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			if (changed)
 			{
 				this.clearLabels();
-				this.labelUIsCanvas.cacheAsBitmap = false;
 				this.labelsMask.graphics.clear();
 				
 				var labelUI:DisplayObject;
@@ -279,7 +115,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				//保证标签间距大于最小单元宽度， 防止标签重叠；
 				var addFactor:uint = 1;
 				var uintAmount:uint = length;
-				while (this.fullSize > 0 && (this.fullSize / uintAmount) < this.minUintSize)
+				while (this.size > 0 && (this.size / uintAmount) < this.minUintSize)
 				{
 					addFactor += 1;
 					uintAmount = length / addFactor;
@@ -348,7 +184,6 @@ package com.fiCharts.charts.chart2D.core.axis
 				if (enable && this.tickMark.enable)
 					drawHoriTicks();
 				
-				this.labelUIsCanvas.cacheAsBitmap = true;
 				changed = false;
 			}
 		}
@@ -408,7 +243,7 @@ package com.fiCharts.charts.chart2D.core.axis
 					{
 						if (labelUIs[i]) continue;
 						
-						labelsData[i].label = this.getXLabel(labelsData[i].value);
+						labelsData[i].label = this.getYLabel(labelsData[i].value);
 						labelsData[i].color = this.metaData.color;
 						
 						axisLabel = new LabelUI();
@@ -437,7 +272,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				//保证标签间距大于最小单元宽度， 防止标签重叠；
 				var addFactor:uint = 1;
 				var uintAmount:uint = length;
-				while (fullSize > 0 && (this.fullSize / uintAmount) < this.minUintSize)
+				while (size > 0 && (this.size / uintAmount) < this.minUintSize)
 				{
 					addFactor += 1;
 					uintAmount = length / addFactor;
@@ -631,21 +466,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			sourceValues = new Vector.<Object>;
 		}
-		
-		/**
-		 */
-		protected var confirmedSourceValueRange:Number
-		
-		/**
-		 * 根据原始值核定后的最大最小值 
-		 */		
-		protected var sourceDataRange:DataRange = new DataRange;
-		
-		
-		/**
-		 * 当前的数据范围(被核定后的) 
-		 */		
-		protected var currentDataRange:DataRange = new DataRange;
 		
 		/**
 		 * 轴标签数据
@@ -885,11 +705,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		//
 		//------------------------------------------------
 		
-		
-		/**
-		 * 数据缩放时 由当前数据范围与原始数据范围比例反推出的理论长度
-		 */		
-		protected var fullSize:Number = 0;
 		
 		/**
 		 * 是否显示/渲染坐标轴； 

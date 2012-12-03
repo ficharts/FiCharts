@@ -1,6 +1,5 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -25,39 +24,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			dayP = "day";
 			monthP = "month";
 			fullYearP = "fullYear";         
-		}
-		
-		/**
-		 */		
-		override public function percentToPos(per:Number):Number
-		{
-			var position:Number;
-			
-			if (confirmedSourceValueRange)
-				position = per * this.fullSize - offsetSize + this.currentScrollPos;
-			else
-				position = 0;
-			
-			if (this.inverse)
-				position = this.fullSize - position;
-			
-			return position;
-		}
-		
-		/**
-		 * 滚动结束后，渲染数据范围内的序列，数据范围根据滚动位置计算
-		 */		
-		override public function dataScrolled(dataRange:DataRange):void
-		{
-			var offPerc:Number = this.currentScrollPos / this.fullSize;
-			var min:Number = this.currentDataRange.min - offPerc * this.sourceValueDis;
-			var max:Number = currentDataRange.max - offPerc * sourceValueDis;
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
-				min, max));
-			
-			dataRange.min = (min - this.sourceDataRange.min) / this.confirmedSourceValueRange;
-			dataRange.max = (max - this.sourceDataRange.min) / this.confirmedSourceValueRange;
 		}
 		
 		/**
@@ -153,7 +119,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				this.changed = false;
 				
 				// 气泡图的控制气泡大小的轴无需渲染，原始刻度间距即为确认的间距
-				confirmedSourceValueRange = _maximum - _minimum;
+				confirmedDis = _maximum - _minimum;
 				return; 
 			}
 			
@@ -180,12 +146,12 @@ package com.fiCharts.charts.chart2D.core.axis
 			var currenDate:Date = new Date;
 			var labelData:AxisLabelData;
 			
-			startDate.setTime(this.sourceDataRange.min);
+			startDate.setTime(this.minimum);
 			
 			for (var i:uint = 0; i < uintAmount; i ++)
 			{
 				labelData = new AxisLabelData;
-				currenDate.setTime(this.sourceDataRange.min);
+				currenDate.setTime(this.minimum);
 				switch (lastValidUnits)
 				{
 					case "seconds":
@@ -285,6 +251,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		override protected function confirmMaxMin():void
 		{
+			confirmedDis = _maximum - _minimum;
 			uintAmount = Math.ceil(this.sourceValueDis / interval) + 1;
 		}
 		
@@ -320,23 +287,23 @@ package com.fiCharts.charts.chart2D.core.axis
 				return DateFormater.dateToString(DateFormater.stringToDate(value.toString(), this.input), this.output);
 			}
 			
-			if (confirmedSourceValueRange > MILLISECONDS_IN_MINUTE && confirmedSourceValueRange <= MILLISECONDS_IN_HOUR)
+			if (confirmedDis > MILLISECONDS_IN_MINUTE && confirmedDis <= MILLISECONDS_IN_HOUR)
 			{
 				return DateFormater.stringDateToMinuetString(String(value), this.input);
 			}
-			else if (confirmedSourceValueRange > MILLISECONDS_IN_HOUR && confirmedSourceValueRange <= MILLISECONDS_IN_DAY)
+			else if (confirmedDis > MILLISECONDS_IN_HOUR && confirmedDis <= MILLISECONDS_IN_DAY)
 			{
 				return DateFormater.stringDateToTimeString(String(value), this.input);
 			}
-			else if (confirmedSourceValueRange > MILLISECONDS_IN_DAY && confirmedSourceValueRange <= MILLISECONDS_IN_MONTH)
+			else if (confirmedDis > MILLISECONDS_IN_DAY && confirmedDis <= MILLISECONDS_IN_MONTH)
 			{
 				return DateFormater.stringDateToDayString(String(value), this.input);
 			}
-			else if (confirmedSourceValueRange > MILLISECONDS_IN_MONTH && confirmedSourceValueRange <= MILLISECONDS_IN_YEAR)
+			else if (confirmedDis > MILLISECONDS_IN_MONTH && confirmedDis <= MILLISECONDS_IN_YEAR)
 			{
 				return DateFormater.stringDateToMonthString(String(value), this.input);
 			}
-			else if (confirmedSourceValueRange > MILLISECONDS_IN_YEAR)
+			else if (confirmedDis > MILLISECONDS_IN_YEAR)
 			{
 				return DateFormater.stringDateToYearString(String(value), this.input);
 			}
@@ -387,7 +354,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			if (value == null)
 				return 0;
 			else
-				return (stringDateToDateTimer(value) - this.sourceDataRange.min) / confirmedSourceValueRange;
+				return (stringDateToDateTimer(value) - this.minimum) / confirmedDis;
 		}
 		
 		/**

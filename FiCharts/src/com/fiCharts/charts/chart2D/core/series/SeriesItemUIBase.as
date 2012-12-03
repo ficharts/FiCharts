@@ -1,5 +1,6 @@
 package com.fiCharts.charts.chart2D.core.series
 {
+	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.LegendStateControl;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
@@ -136,6 +137,10 @@ package com.fiCharts.charts.chart2D.core.series
 		protected function rollOverHandler(evt:MouseEvent):void
 		{
 			dataItem.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SHOW_TOOLTIP));
+			
+			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_OVER);
+			event.dataItem = this.dataItem;
+			this.dispatchEvent(event);
 		}
 		
 		/**
@@ -143,6 +148,10 @@ package com.fiCharts.charts.chart2D.core.series
 		protected function rollOutHandler(evt:MouseEvent):void
 		{
 			dataItem.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.HIDE_TOOLTIP));
+			
+			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_OUT);
+			event.dataItem = this.dataItem;
+			this.dispatchEvent(event);
 		}
 		
 		/**

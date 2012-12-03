@@ -2,7 +2,7 @@
 <project name="Ficharts Builder" basedir="." default="Release FiCharts">
 	<property name="FLEX_HOME" value="D:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.6.0" />
 	<property name="WORK_SPACE" value="G:/FiCharts" />
-	<property name="VER" value="1.2.2.1" />
+	<property name="VER" value="1.2.2.2" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" /> 
 
 	<!--发布-->

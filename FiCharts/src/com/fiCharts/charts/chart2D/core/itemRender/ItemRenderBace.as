@@ -62,6 +62,10 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		 */		
 		private function rollOverHandler(evt:MouseEvent):void
 		{
+			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_OVER);
+			event.dataItem = this.itemVO;
+			this.dispatchEvent(event);
+			
 			this.showToolTips();
 		}
 		
@@ -69,6 +73,10 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		 */		
 		private function rollOutHandler(evt:MouseEvent):void
 		{
+			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_OUT);
+			event.dataItem = this.itemVO;
+			this.dispatchEvent(event);
+			
 			this.hideToolTips();	
 		}				
 		

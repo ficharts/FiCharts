@@ -12,15 +12,12 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedPercentColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
 	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
-	import com.fiCharts.charts.chart2D.core.ScrollImageRenderForDataResize;
 	import com.fiCharts.charts.chart2D.core.TitleBox;
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.AxisContianer;
-	import com.fiCharts.charts.chart2D.core.axis.DataRange;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.backgound.ChartBGUI;
 	import com.fiCharts.charts.chart2D.core.backgound.GridFieldUI;
-	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
@@ -28,6 +25,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.Series;
 	import com.fiCharts.charts.chart2D.core.series.ChartCanvas;
+	import com.fiCharts.charts.chart2D.line.LineSeries;
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
 	import com.fiCharts.charts.common.IChart;
 	import com.fiCharts.charts.legend.LegendPanel;
@@ -35,12 +33,10 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.ui.toolTips.ToolTipsManager;
 	import com.fiCharts.ui.toolTips.TooltipDataItem;
-	import com.fiCharts.utils.ExternalUtil;
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.system.GC;
-	import com.fiCharts.utils.system.OS;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -49,10 +45,8 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.display.Sprite;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
-	import flash.events.GesturePhase;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
-	import flash.events.TransformGestureEvent;
 	import flash.geom.Matrix;
 	import flash.utils.Timer;
 	
@@ -77,7 +71,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			// Class list.
 			
-			//LineSeries;
+			LineSeries;
 			AreaSeries2D;
 			MarkerSeries; 
 			BubbleSeries;
@@ -93,439 +87,6 @@ package com.fiCharts.charts.chart2D.encry
 			
 			init();
 		}
-		
-		
-		
-		
-		//----------------------------------------------------------------------------------------
-		//
-		// 数据 缩放与滚动处理访方式类似，缩放过程中和滚动过程中的
-		//
-		// 性能开销很大，需优化区别对待
-		//
-		//
-		//  完成缩放时：
-		//  1.坐标轴计算计算尺寸缩放关系，生成新label数据， label位置偏移式定位； 
-		//  2.序列整体渲染， 截图整体序列和渲染节点，数据标签，供后继滚动用
-		//  3.背景网格全数据渲染，仅范围内可见
-		//  4.label容器，背景网格容器位置清零
-		//
-		//  开始滚动时：
-		//  1.序列截图呈现
-		//  2.坐标label容器， 背景网格和截图一起鼠标一起移动；
-		//  
-		//
-		//  移动结束时：
-		//  1.坐标轴根据移动位置计算新的取值范围，从而得出新的位置偏移量
-		//  2.根据新的数据范围渲染序列等
-		//  3.移除序列截图
-		//  (移动过程中坐标轴的fullSize没有变，数据范围差值没有变，刻度数据没有变，仅是移动幻象而已)
-		//  (尺寸缩放过程中进渲染一次全序列，其他都是局部序列渲染) 
-		//
-		//
-		//
-		//  缩放和滚动的截图一次截序列宽度的3倍大小
-		//  1.先给3倍范围内数据给序列让其渲染
-		//  2.按照尺寸范围截取序列的图
-		//  3.将截图交给截图呈现器
-		//  4.只有滚动和缩放时截图才呈现
-		//  5.当截图范围不能满足需要时，给新数据并重新截图
-		//  6.截图不会重复绘制，尺寸缩放后先清空截图呈现器
-		//
-		//--------------------------------------------------------------------------------------
-		
-		
-		/**
-		 */		
-		public function ifDataScalable():Boolean
-		{
-			return chartModel.dataScale.enable;
-		}
-		
-		/**
-		 */		
-		public function setDataScalable(value:Boolean):void
-		{
-			chartModel.dataScale.enable = value;
-		}
-		
-		/**
-		 * 
-		 * 动态进行数据缩放的对外接口, 用于Flash/AIR等类型的项目中， web用配置文件方式处理数据缩放
-		 * 
-		 */		
-		public function scaleData(startValue:Object, endValue:Object):void
-		{
-			if (chartModel.dataScale.enable)
-			{
-				currentDataRange.min = scrollBaseAxis.getDataPercent(startValue);
-				currentDataRange.max = scrollBaseAxis.getDataPercent(endValue);		
-				
-				this.dataResized(currentDataRange.min, currentDataRange.max);
-			}
-		}
-		
-		/**
-		 */		
-		private function initDataResizeContorl():void
-		{
-			/*if (OS.isDesktopSystem == false)
-				this.mouseChildren = this.mouseEnabled = false;*/
-				
-			 stage.addEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler, false, 0, true);
-			 stage.addEventListener(MouseEvent.MOUSE_UP, stopMoveHandler);
-			 stage.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
-			 
-			 ExternalUtil.addCallback("onWebmousewheel", onWebMouseWheel);
-			 
-			 stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, mobileZoomHandler, false, 0, true);
-		}
-		
-		/**
-		 */		
-		private function mobileZoomHandler(evt:TransformGestureEvent):void
-		{
-			if(chartModel.dataScale.enable)
-			{
-				if (evt.phase == GesturePhase.BEGIN)
-				{
-					/*chartCanvas.visible = chartCanvas.mouseChildren = chartCanvas.mouseEnabled = false;
-					this.scrollImgRender.visible = true;
-					
-					firstDraw();*/
-					zoomScale = 1;
-				}
-				else if (evt.phase == GesturePhase.END)
-				{
-					/*chartCanvas.visible = chartCanvas.mouseChildren = chartCanvas.mouseEnabled = true;
-					this.scrollImgRender.visible = false;*/
-					
-					var ifZoomIn:Boolean = (zoomScale - 1) > 0 ? true : false; 
-					resizeChartOnGesture(0.5, ifZoomIn, Math.abs(zoomScale - 1));
-				}
-				else
-				{
-					zoomScale = zoomScale * evt.scaleX;
-				}
-			}
-			
-		}
-		
-		/**
-		 */		
-		private var zoomScale:Number; 
-		
-		/**
-		 * 网页中的Flash无法接受滚轮，需要先屏蔽web中的滚轮事件，将滚动值传给Flash
-		 */		
-		private function onWebMouseWheel(value:Number):void
-		{
-			if(chartModel.dataScale.enable)
-			{
-				var percent:Number = this.mouseX / this.chartWidth;
-				var ifZoomIn:Boolean = value > 0 ? true : false; 
-				
-				resizeChartOnGesture(percent, ifZoomIn, chartModel.dataScale.zoomScale);
-			}
-		}
-		
-		/**
-		 * percent 代表触控位置
-		 * 
-		 * scale 是缩放的倍数
-		 */		
-		private function resizeChartOnGesture(percent:Number, ifZoomIn:Boolean, scale:Number):void
-		{
-			var dis:Number = this.currentDataRange.max - this.currentDataRange.min;
-			
-			var targetPer:Number = this.currentDataRange.min + dis * percent;
-			var newStart:Number, newEnd:Number;
-			var zoomPer:Number = dis * scale;
-			var minZoom:Number = zoomPer * targetPer;
-			var maxZoom:Number = zoomPer - minZoom;
-			
-			if (ifZoomIn > 0) // 放大
-			{
-				if (dis <= 1 / chartModel.dataScale.maxScale) return;
-				
-				newStart = this.currentDataRange.min + minZoom
-				newEnd = this.currentDataRange.max - maxZoom
-			}
-			else// 缩小
-			{
-				newStart = this.currentDataRange.min - minZoom;
-				newEnd = this.currentDataRange.max + maxZoom
-				
-				if (newStart < 0 && newEnd <= 1)
-				{
-					newEnd += zoomPer;
-					newStart = 0;
-				}
-				else if (newEnd > 1 && newStart >= 0)
-				{
-					newStart -= zoomPer;
-					newEnd = 1;
-				}
-			}
-			
-			if (newStart < 0)
-				newStart = 0;
-			
-			if (newEnd > 1)
-				newEnd = 1;
-			
-			this.dataResized(newStart, newEnd);
-		}
-		
-		/**
-		 */		
-		private function mouseWheelHandler(evt:MouseEvent):void
-		{
-			onWebMouseWheel(evt.delta);
-		}
-		
-		/**
-		 */		
-		private function stopMoveHandler(evt:MouseEvent):void
-		{
-			if(chartModel.dataScale.enable)
-				stage.removeEventListener(MouseEvent.MOUSE_MOVE, checkScrollHandler);
-		}
-		
-		/**
-		 */		
-		private function stageDownHadler(evt:MouseEvent):void
-		{
-			if(chartModel.dataScale.enable)
-			{
-				currentPosition = evt.stageX;
-				stage.addEventListener(MouseEvent.MOUSE_MOVE, checkScrollHandler);
-			}
-		}
-		
-		/**
-		 */		
-		private function checkScrollHandler(evt:MouseEvent):void
-		{
-			if (currentDataRange.min == 0 && currentDataRange.max == 1) return;
-			
-			var offset:Number = evt.stageX - currentPosition; 
-			
-			if (ifSrollingData)
-			{
-				scrollData(offset);
-				currentPosition = evt.stageX;
-			}
-			else
-			{
-				// 只要有一次移动距离大于特定值就证明开始了滚动
-				if (OS.isDesktopSystem && Math.abs(offset) >= 3)
-					startScroll();
-				else
-					startScroll();
-			}
-		}
-		
-		/**
-		 */		
-		private function startScroll():void
-		{
-			ifSrollingData = true;
-			stage.addEventListener(MouseEvent.MOUSE_UP, willEndScrollHadler);
-			chartCanvas.visible = chartCanvas.mouseChildren = chartCanvas.mouseEnabled = false;
-			this.scrollImgRender.visible = true;
-			
-			firstDraw();
-		}
-		
-		/**
-		 */		
-		private function willEndScrollHadler(evt:MouseEvent):void
-		{
-			ifSrollingData = false;
-			
-			this.chartCanvas.clearValuelabels();
-			scrollBaseAxis.dataScrolled(this.currentDataRange);
-			
-			chartCanvas.visible = true;
-			scrollImgRender.visible = false;
-			this.chartCanvas.mouseChildren = chartCanvas.mouseEnabled = true;
-			
-			stage.removeEventListener(MouseEvent.MOUSE_UP, willEndScrollHadler);
-		}
-		
-		/**
-		 * 数据滚动的过程中序列是不渲染的，只是移动的截图
-		 */		
-		private function scrollData(offset:Number):void
-		{
-			scrollBaseAxis.scrollingData(offset);
-			
-			this.gridField.scrollHGrid(scrollBaseAxis.currentScrollPos);
-			this.scrollImgRender.scroll(scrollBaseAxis.currentScrollPos);
-			
-			var start:Number;
-			var end:Number;
-			
-			if (- scrollBaseAxis.currentScrollPos + this.sizeX > scrollImgRender.endPos)
-			{
-				start = scrollBaseAxis.posToPercent(scrollImgRender.endPos + scrollBaseAxis.currentScrollPos);
-				end = start + dataDis;
-				
-				renderSeriesForDraw(start, end);
-			}
-			
-			if (scrollBaseAxis.currentScrollPos + scrollImgRender.startPos > 0)
-			{
-				end = scrollBaseAxis.posToPercent(scrollImgRender.startPos 
-					+ scrollBaseAxis.currentScrollPos);
-				
-				start = end - dataDis;
-				
-				renderSeriesForDraw(start, end);
-			}
-		}
-		
-		/**
-		 * 不是鼠标按下后一移动就还是数据滚动，而是移动一小段距离后才
-		 * 
-		 * 正式开始滚动数据
-		 */		
-		private var ifSrollingData:Boolean = false;
-		
-		/**
-		 */		
-		private var currentPosition:Number = 0;
-		
-		/**
-		 *
-		 * 制定数据范围，此范围是在整体数据中的比例范围， 因尺寸缩放比例好根据
-		 * 
-		 * 设备输入值计算，用户操控用比例方式计算，接口用原始数据转换；
-		 *  
-		 */		
-		private function dataResized(startPercent:Number, endPercent:Number):void
-		{
-			if(endPercent > startPercent && startPercent >= 0 && startPercent <= 1 && endPercent >= 0 && endPercent <= 1)
-			{
-				currentDataRange.min = startPercent;
-				currentDataRange.max = endPercent;
-				
-				// 每次都会重新绘制   数值标签， 只有范围内的数值标签才会被渲染，其他都被清空掉；
-				this.chartCanvas.clearValuelabels();
-				
-				// 坐标轴会驱动序列按照节点位置或数据范围方式完成, 序列再驱动渲染节点等的更新
-				scrollBaseAxis.dataResized(currentDataRange.min, currentDataRange.max);
-				scrollBaseAxis.renderHoriticalAxis();
-				gridField.drawHGidLine(scrollBaseAxis.ticks, chartModel.gridField);
-				
-				this.combileItemRender();
-				
-				if (this.chartModel.dataScale.enable && scrollImgRender  == null)
-				{
-					scrollImgRender = new ScrollImageRenderForDataResize;
-					scrollImgRender.x = this.originX;
-					scrollImgRender.y = this.originY;
-					scrollImgRender.visible = false;
-					this.addChild(scrollImgRender);					
-				}
-				
-				scrollImgRender.reset();
-				ifDrawedAfterResized = false;
-			}
-		}
-		
-		/**
-		 * 开始拖动时， 一次截取3屏的图表，为当前屏前后各一屏
-		 *
-		 * 数据滚动过程中，如截屏不够显示则一次截取一瓶动态补上
-		 */		
-		private function firstDraw():void
-		{
-			if (ifDrawedAfterResized == false)
-			{
-				dataDis = currentDataRange.max - currentDataRange.min;
-				var drawStart:Number = currentDataRange.min - dataDis;
-				var drawEnd:Number = currentDataRange.max + dataDis;
-				
-				renderSeriesForDraw(drawStart, drawEnd);
-				
-				ifDrawedAfterResized = true;
-			}
-		}
-		
-		/**
-		 */		
-		private var ifDrawedAfterResized:Boolean = false;
-		
-		/**
-		 * 根据取值比例范围，截取图表的图
-		 */		
-		private function renderSeriesForDraw(drawStart:Number, drawEnd:Number):void
-		{
-			if(drawStart < 0)
-				drawStart = 0;
-			
-			if(drawEnd > 1)
-				drawEnd = 1;
-			
-			if (drawStart == 1) return;
-			
-			this.chartCanvas.clearValuelabels();
-			scrollBaseAxis.renderSeries(drawStart, drawEnd);
-			
-			var startPos:Number = scrollBaseAxis.percentToPos(drawStart);
-			var endPos:Number = scrollBaseAxis.percentToPos(drawEnd);
-			var posDis:Number = endPos - startPos;;
-			
-			if (posDis < 5) return;
-			
-			this.chartMask.visible = false;
-			this.chartCanvas.mask = null;
-			
-			var matr:Matrix = new Matrix;
-			matr.tx = - startPos ;
-			matr.ty = sizeY;
-			
-			var myBitmapData:BitmapData = new BitmapData(posDis, sizeY, true, 0xFFFFFF);
-			myBitmapData.draw(chartCanvas, matr, null, null, null, false);
-			
-			this.chartCanvas.mask = chartMask;
-			this.chartMask.visible = true;
-			
-			matr.tx = startPos - scrollBaseAxis.currentScrollPos;
-			matr.ty = - sizeY;
-			scrollImgRender.draw(myBitmapData, matr, posDis, this.sizeY);
-		}
-		
-		/**
-		 */		
-		private var scrollImgRender:ScrollImageRenderForDataResize;
-		
-		/**
-		 * 目前仅横向支持数据滚动
-		 */		
-		private var scrollBaseAxis:AxisBase;
-		
-		/**
-		 * 绘制序列的数值标签
-		 */		
-		private function drawResizeValueLabels(evt:DataResizeEvent):void
-		{
-			evt.stopPropagation();
-			this.drawValueLabels(evt.sizedItemRenders);
-		}
-		
-		/**
-		 */		
-		private var dataDis:Number = 0;
-		
-
-		/**
-		 */		
-		private var currentDataRange:DataRange;
-		
-		
 		
 		
 		
@@ -635,7 +196,6 @@ package com.fiCharts.charts.chart2D.encry
 		
 		
 		
-		
 		//----------------------------------------------
 		//
 		// 	Render the chart.
@@ -711,23 +271,9 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function renderEnd():void
 		{
-			if(chartModel.dataScale.enable)
-			{
-				if (currentDataRange == null)
-					currentDataRange = new DataRange;
-					
-				if (this.chartModel.dataScale.changed)
-				{
-					currentDataRange.min = scrollBaseAxis.getDataPercent(this.chartModel.dataScale.start);
-					currentDataRange.max = scrollBaseAxis.getDataPercent(this.chartModel.dataScale.end);		
-					this.chartModel.dataScale.changed = false;
-				}
-				
-				this.dataResized(currentDataRange.min, currentDataRange.max);
-				scrollImgRender.drawMask(sizeX, sizeY);
-			}
+			this.chartModel.axis.changed = chartModel.series.changed = ifSourceDataChanged = false;
 			
-			//openFlash();
+			openFlash();
 			GC.run();
 		}
 		
@@ -803,8 +349,6 @@ package com.fiCharts.charts.chart2D.encry
 					axis.size = sizeY;
 					axis.y = originY;
 				}
-				
-				this.chartModel.axis.changed = false;
 			}
 			
 			this.bottomAxisContainer.size = this.topAxisContainer.size = 0;
@@ -911,7 +455,7 @@ package com.fiCharts.charts.chart2D.encry
 					}
 				}
 				
-				chartModel.series.changed = ifSourceDataChanged = false;
+				
 			}
 			
 			for each (itemRender in itemRenders)
@@ -1216,12 +760,6 @@ package com.fiCharts.charts.chart2D.encry
 			this.chartMask.x = chartCanvas.x = gridField.x = originX;
 			this.chartMask.y = chartCanvas.y = originY; 
 				
-			if (scrollImgRender)
-			{
-				scrollImgRender.x = originX;
-				scrollImgRender.y = originY;
-			}
-			
 			gridField.y = topY;
 			layoutLegendPanel();
 		}
@@ -1591,16 +1129,6 @@ package com.fiCharts.charts.chart2D.encry
 					}
 				}
 				
-				//目前仅横轴方向支持数据滚动和缩放，并且仅单轴支持
-				if(chartModel.dataScale.enable)
-				{
-					scrollBaseAxis = hAxises[0];
-					
-					if (scrollBaseAxis is LinearAxis)
-						(scrollBaseAxis as LinearAxis).baseAtZero = false;
-						
-					scrollBaseAxis.scrollBarStyle = this.chartModel.scrollBar;					
-				}
 			}
 			
 		}
@@ -1758,8 +1286,6 @@ package com.fiCharts.charts.chart2D.encry
 			// 设置当前默认的样式配置
 			chartProxy.styleInit();
 			chartProxy.setConfigCore(chartProxy.currentStyleXML);
-			
-			StageUtil.initApplication(this, initDataResizeContorl);
 		}
 		
 		/**
@@ -1853,7 +1379,6 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_LEGEND_STYLE, updateLegendStyleHandler);
 			
 			this.addEventListener(ItemRenderEvent.UPDATE_VALUE_LABEL, updateValueLabelHandler, false, 0, true);
-			this.addEventListener(DataResizeEvent.RENDER_SIZED_VALUE_LABELS, drawResizeValueLabels, false, 0, true);
 		}
 		
 		/**

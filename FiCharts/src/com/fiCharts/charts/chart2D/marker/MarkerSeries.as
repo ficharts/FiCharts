@@ -1,6 +1,5 @@
 package com.fiCharts.charts.chart2D.marker
 {
-	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
@@ -21,24 +20,6 @@ package com.fiCharts.charts.chart2D.marker
 		public function MarkerSeries()
 		{
 			super();
-		}
-		
-		/**
-		 */		
-		override protected function dataResizedByIndex(evt:DataResizeEvent):void
-		{
-			super.dataResizedByIndex(evt);
-			
-			updataItemRendersLayout();
-		}
-		
-		/**
-		 */		
-		override protected function dataResizedByRange(evt:DataResizeEvent):void
-		{
-			super.dataResizedByRange(evt);
-			
-			updataItemRendersLayout();
 		}
 		
 		/**
@@ -81,7 +62,7 @@ package com.fiCharts.charts.chart2D.marker
 		override protected function layoutDataItems():void
 		{   
 			var item:SeriesDataItemVO;
-			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
+			for (var i:uint = 0; i <= this.itemRenderMaxIndex; i ++)
 			{	
 				item = dataItemVOs[i];
 				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue);

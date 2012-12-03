@@ -123,7 +123,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				verticalValues.push(positiveValue / fullValue * 100);
 			}
 			
-			dataOffsetter.maxIndex = itemRenderMaxIndex = length - 1;
+			itemRenderMaxIndex = length - 1;
 		}
 		
 		/**

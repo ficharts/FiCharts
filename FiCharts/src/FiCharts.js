@@ -191,7 +191,10 @@
 	FiCharts.event.RENDERED = "rendered";
 	FiCharts.event.CONFIG_LOADED = "configLoaded";
 	FiCharts.event.DATA_LOADED = "dataLoaded";
+	
 	FiCharts.event.ITEM_CLICKED = "itemClick";
+	FiCharts.event.ITEM_OVER = "itemOver";
+	FiCharts.event.ITEM_OUT = "itemOut";
 	
 	FiCharts.message = {};
 	FiCharts.message.init = '初始化...';
@@ -207,7 +210,14 @@
 	//-------------------------------
 	
 	FiCharts.beforeInit = function(id) {
-		FiCharts.getChartByID(id).beforeInit();
+		
+		var chart = FiCharts.getChartByID(id);
+		
+		// IE 下 初始化顺序较奇葩，这里处理较稳妥，防止swf为空
+		if (chart.swf == null)
+			chart.swf = doc.getElementById(chart.id);
+		
+		chart.beforeInit();
 	};
 	
 	FiCharts.ready = function(id) {
@@ -224,6 +234,14 @@
 	
 	FiCharts.itemClick = function(id, value) {
 		FiCharts.getChartByID(id).itemClick(value);
+	};
+	
+	FiCharts.itemOver = function(id, value) {
+		FiCharts.getChartByID(id).itemOver(value);
+	};
+	
+	FiCharts.itemOut = function(id, value) {
+		FiCharts.getChartByID(id).itemOut(value);
 	};
 	
 	FiCharts.rendered = function(id) {
@@ -304,6 +322,7 @@
 		};
 		
 		that.initChart = function (arg) {
+			registerChart(this.id, this);
 			
 			var flashvars = {};
 			flashvars.id = this.id;
@@ -321,7 +340,6 @@
 			
 				
 			initSWF(this, flashvars);
-			registerChart(this.id, this);
 		};
 		
 		that.dispose = function() {
@@ -404,6 +422,15 @@
 			return this.addEventListener(FiCharts.event.ITEM_CLICKED, callback);
 		};
 		
+		that.onItemOver = function(callback) {
+			return this.addEventListener(FiCharts.event.ITEM_OVER, callback);
+		};
+		
+		that.onItemOut = function(callback) {
+			return this.addEventListener(FiCharts.event.ITEM_OUT, callback);
+		};
+		
+		
 		
 		
 		//-------------------------------------
@@ -416,7 +443,6 @@
 		// 此方法在swf已经被创建但未内部初始化之前被调用
 		// 这是图表调用外部的第一个方法，之后是 ready
 		that.beforeInit = function(){
-			 this.swf = doc.getElementById(this.id);
 			 
 			 // 设置了此模式后，图表会自动适应容器尺寸，当宽高设为100%时
 			 // 容器尺寸缩放，图表自动调整自己的尺寸，并完成渲染；
@@ -472,6 +498,14 @@
 		
 		that.itemClick = function(value) {
 			this.dispatchEvent({type: FiCharts.event.ITEM_CLICKED, data: value, target: this})
+		};
+		
+		that.itemOver = function(value) {
+			this.dispatchEvent({type: FiCharts.event.ITEM_OVER, data: value, target: this})
+		};
+		
+		that.itemOut = function(value) {
+			this.dispatchEvent({type: FiCharts.event.ITEM_OUT, data: value, target: this})
 		};
 		
 		

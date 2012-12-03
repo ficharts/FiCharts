@@ -1,6 +1,5 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
@@ -20,102 +19,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 */		
-		override public function percentToPos(per:Number):Number
-		{
-			return this.valueToX(this.confirmedSourceValueRange * per + this.sourceDataRange.min);
-		}
-		
-		/**
-		 */		
-		override public function posToPercent(pos:Number):Number
-		{
-			var perc:Number;
-			var position:Number = pos;
-			
-			if (this.inverse)
-				position = this.fullSize - position;
-			
-			perc = (offsetSize + position - this.currentScrollPos) / fullSize;
-			
-			return perc;
-		}
-		
-		/**
-		 */		
-		override public function getDataPercent(value:Object):Number
-		{
-			return this.getValuePercent(value)
-		}
-		
-		/**
-		 * 滚动结束后，渲染数据范围内的序列，数据范围根据滚动位置计算
-		 */		
-		override public function dataScrolled(dataRange:DataRange):void
-		{
-			var offPerc:Number = this.currentScrollPos / this.fullSize;
-			var min:Number = this.currentDataRange.min - offPerc * this.confirmedSourceValueRange;
-			var max:Number = currentDataRange.max - offPerc * this.confirmedSourceValueRange;
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
-				min, max));
-			
-			dataRange.min = getDataPercent(min);
-			dataRange.max = getDataPercent(max);
-		}
-		
-		/**
-		 * 主要是为了生成label数据和确定位置偏移，单元间距
-		 */		
-		override public function dataResized(start:Number, end:Number):void
-		{
-			getCurrentDataRange(start, end);
-			
-			// 数据缩放时才重新创建label数据, 数据范围决定label数据
-			createLabelsData();
-			setFullSizeAndOffsize();
-			
-			this.labelUIsCanvas.x = currentScrollPos = 0;// 数据缩放后尺寸有了新的关系
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
-				this.currentDataRange.min, this.currentDataRange.max));
-			
-			super.dataResized(start, end);
-		}
-		
-		/**
-		 */		
-		override public function renderSeries(start:Number, end:Number):void
-		{
-			var min:Number, max:Number;
-			min = start * this.confirmedSourceValueRange + this.sourceDataRange.min;
-			max = end * confirmedSourceValueRange + this.sourceDataRange.min;
-			
-			this.dispatchEvent(new DataResizeEvent(DataResizeEvent.RESIZE_BY_RANGE, 
-				min, max));
-		}
-		
-		/**
-		 * 根据数值百分比区间，计算出当前取值范围
-		 */		
-		private function getCurrentDataRange(start:Number, end:Number):void
-		{
-			/*var min:Number, max:Number;
-			min = start * this.sourceValueDis + this.sourceMin;
-			max = end * sourceValueDis + this.sourceMin;
-			
-			// 确定当前最值
-			this.preMaxMin(max, min);
-			this.confirmMaxMin();*/
-			
-			/*currentDataRange.min = this.minimum;
-			currentDataRange.max = this.maximum;*/
-			
-			currentDataRange.min = this.sourceDataRange.min + this.confirmedSourceValueRange * start;
-			currentDataRange.max = this.sourceDataRange.min + this.confirmedSourceValueRange * end;
-		}
-		
-		/**
 		 * 正式渲染之前调用; 子数据范围渲染前不调用此方法
 		 */		
 		override public function beforeRender():void
@@ -125,15 +28,8 @@ package com.fiCharts.charts.chart2D.core.axis
 				preMaxMin(sourceMax, sourceMin);
 				confirmMaxMin();
 				
-				currentDataRange.min = sourceDataRange.min = this.minimum;
-				currentDataRange.max = sourceDataRange.max = this.maximum;
-				
-				//获得最值差，供后继频繁计算用
-				confirmedSourceValueRange = sourceDataRange.max - sourceDataRange.min;
-				
 				this.createLabelsData();
-				setFullSizeAndOffsize();
-				
+				this.unitSize = size / this.labelsData.length;
 			}
 		}
 		
@@ -234,7 +130,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				this.changed = false;
 				
 				// 气泡图的控制气泡大小的轴无需渲染，原始刻度间距即为确认的间距
-				confirmedSourceValueRange = _maximum - _minimum;
+				confirmedDis = _maximum - _minimum;
 				return; 
 			}
 			
@@ -347,6 +243,7 @@ package com.fiCharts.charts.chart2D.core.axis
 					_minimum -= interval;
 			}
 			
+			confirmedDis = _maximum - _minimum;
 		}
 		
 		/**
@@ -358,10 +255,10 @@ package com.fiCharts.charts.chart2D.core.axis
 			labelsData = new Vector.<AxisLabelData>;
 			
 			//// Flash 中数字计算精度有偏差, 防止与最值及其相近的值蒙混过关
-			var maxValue:Number = this.sourceDataRange.max + interval - interval / 100000;
+			var maxValue:Number = this.maximum + interval - interval / 100000;
 			
 			// internal 会随当前数值范围而变， 数据缩放时需重新计算labelData
-			for (var i:Number = this.sourceDataRange.min; i < maxValue; i += interval)
+			for (var i:Number = this.minimum; i < maxValue; i += interval)
 			{
 				labelData = new AxisLabelData();
 				labelData.value = i;
@@ -371,34 +268,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			labelUIs.length = 0;
 			clearLabels();
 		}
-		
-		/**
-		 * 
-		private function setCurrentLabelsIndexRange():void
-		{
-			var length:uint = this.labelsData.length;
-			
-			labelStartIndex = 0;
-			labelEndIndex = length - 1;
-			
-			for (var i:Number = 0; i < length; i ++)
-			{
-				if (this.currentDataRange.min >= Number(labelsData[i].value))
-				{
-					this.labelStartIndex = i;
-				}
-				else if (currentDataRange.max <= Number(labelsData[i].value))
-				{
-					this.labelEndIndex = i;
-					break;
-				}
-				else
-				{
-					continue;
-				}
-			}
-		}
-		*/		
 		
 		/**
 		 * 原始值的最大最小值
@@ -488,13 +357,13 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			var position:Number;
 			
-			if (confirmedSourceValueRange)
-				position = getValuePercent(value) * this.fullSize - offsetSize + this.currentScrollPos;
+			if (confirmedDis)
+				position = getValuePercent(value) * this.size;
 			else
 				position = 0;
 			
 			if (this.inverse)
-				position = this.fullSize - position;
+				position = this.size - position;
 			
 			return position;
 		}
@@ -506,7 +375,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			if (value == null)
 				return 0;
 			else
-				return (Number(value) - this.sourceDataRange.min) / confirmedSourceValueRange;
+				return (Number(value) - this.minimum) / confirmedDis;
 		}
 
 		/**
@@ -580,5 +449,9 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			_baseAtZero = XMLVOMapper.boolean(v);
 		}
+		
+		/**
+		 */		
+		protected var confirmedDis:Number = 0;
 	}
 }

@@ -1,9 +1,9 @@
 package com.fiCharts.charts.chart2D.line
 {
-	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
+	import com.fiCharts.charts.chart2D.core.series.DataIndexOffseter;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.encry.SeriesBase;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
@@ -30,66 +30,6 @@ package com.fiCharts.charts.chart2D.line
 		}
 		
 		/**
-		 * 线条的渲染模式， 简单型和复杂型， 默认是复杂型 default;
-		 * 
-		 * 简单型， simple 则每个节点不单独渲染，单个节点无法响应交互动作，但是渲染效率较高
-		 * 
-		 * 大数据量时建议采用simple类型
-		 */		
-		private var _type:String = 'default';
-
-		/**
-		 */
-		public function get renderType():String
-		{
-			return _type;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set renderType(value:String):void
-		{
-			_type = value;
-		}
-
-		/**
-		 */		
-		override protected function dataResizedByIndex(evt:DataResizeEvent):void
-		{
-			super.dataResizedByIndex(evt);
-			
-			if (renderType == 'simple')
-			{
-				renderWholeLine(dataOffsetter.minIndex, dataOffsetter.maxIndex);
-			}
-			else
-			{
-				renderPartUIs();
-			}
-			
-			updataItemRendersLayout();
-		}
-		
-		/**
-		 */		
-		override protected function dataResizedByRange(evt:DataResizeEvent):void
-		{
-			super.dataResizedByRange(evt);
-			
-			if (renderType == 'simple')
-			{
-				renderWholeLine(dataOffsetter.minIndex, dataOffsetter.maxIndex);
-			}
-			else
-			{
-				renderPartUIs();
-			}
-			
-			updataItemRendersLayout();
-		}
-		
-		/**
 		 */		
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
@@ -102,48 +42,31 @@ package com.fiCharts.charts.chart2D.line
 		 */
 		override protected function renderChart():void
 		{
-			if (renderType == 'simple')
+			if (ifDataChanged)
 			{
-				if (this.ifSizeChanged || this.ifDataChanged)
+				while (canvas.numChildren)
+					canvas.removeChildAt(0);
+				
+				var linePartUI:PartLineUI;
+				partUIs = new Vector.<PartLineUI>;
+				for each (var itemDataVO:SeriesDataItemVO in dataItemVOs)
 				{
-					
-					states.tx = this.seriesWidth;
-					states.width = seriesWidth;
-					
-					this.style = this.states.getNormal;
-					
-					renderWholeLine(dataOffsetter.minIndex, dataOffsetter.maxIndex);
-					ifSizeChanged = ifDataChanged = false;
+					linePartUI = new PartLineUI(itemDataVO);
+					linePartUI.partUIRender = this;
+					linePartUI.states = this.states;
+					linePartUI.metaData = itemDataVO.metaData;
+					canvas.addChild(linePartUI);
+					partUIs.push(linePartUI);
 				}
 			}
-			else
+			
+			if (this.ifSizeChanged || this.ifDataChanged)
 			{
-				if (ifDataChanged)
-				{
-					while (canvas.numChildren)
-						canvas.removeChildAt(0);
-					
-					var linePartUI:PartLineUI;
-					partUIs = new Vector.<PartLineUI>;
-					for each (var itemDataVO:SeriesDataItemVO in dataItemVOs)
-					{
-						linePartUI = new PartLineUI(itemDataVO);
-						linePartUI.partUIRender = this;
-						linePartUI.states = this.states;
-						linePartUI.metaData = itemDataVO.metaData;
-						canvas.addChild(linePartUI);
-						partUIs.push(linePartUI);
-					}
-				}
+				states.tx = this.seriesWidth;
+				states.width = seriesWidth;
 				
-				if (this.ifSizeChanged || this.ifDataChanged)
-				{
-					states.tx = this.seriesWidth;
-					states.width = seriesWidth;
-					
-					renderPartUIs();
-					ifSizeChanged = ifDataChanged = false;
-				}
+				renderPartUIs();
+				ifSizeChanged = ifDataChanged = false;
 			}
 			
 		}
@@ -152,43 +75,31 @@ package com.fiCharts.charts.chart2D.line
 		 */		
 		protected function renderPartUIs():void
 		{
-			// 不用选然道临界结点，而是把临界结点包含在内用于辅助渲染最靠近临界节点的节点
-			var startRenderIndex:uint = dataOffsetter.minIndex// + dataOffsetter.dataIndexOffset;
-			var endRenderIndex:uint = dataOffsetter.maxIndex// - dataOffsetter.dataIndexOffset;
 			
 			for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
 			{
-				if (startRenderIndex <= i && i <=  endRenderIndex)
+					
+				if (i == 0)
 				{
-					partUIs[i].visible = true;
-					
-					if (i == startRenderIndex)
-					{
-						partUIs[i].locX = partUIs[i].dataItem.x;
-						partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i].dataItem.x) / 2;
-					}
-					else if (i == endRenderIndex)
-					{
-						partUIs[i].locX = partUIs[i - 1].dataItem.x + (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
-						partUIs[i].locWidth = (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
-					}
-					else
-					{
-						partUIs[i].locX = partUIs[i - 1].dataItem.x + (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
-						partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
-					}
-					
-					partUIs[i].locHeight = this.verticalAxis.size;
-					partUIs[i].locY = - this.verticalAxis.size - this.baseLine;
-					
-					partUIs[i].renderIndex = i;
-					partUIs[i].render();
+					partUIs[i].locX = partUIs[i].dataItem.x;
+					partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i].dataItem.x) / 2;
+				}
+				else if (i == itemRenderMaxIndex)
+				{
+					partUIs[i].locX = partUIs[i - 1].dataItem.x + (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
+					partUIs[i].locWidth = (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
 				}
 				else
 				{
-					partUIs[i].visible = false;
+					partUIs[i].locX = partUIs[i - 1].dataItem.x + (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
+					partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
 				}
-						
+				
+				partUIs[i].locHeight = this.verticalAxis.size;
+				partUIs[i].locY = - this.verticalAxis.size - this.baseLine;
+				
+				partUIs[i].renderIndex = i;
+				partUIs[i].render();
 			}
 		}
 		
@@ -339,6 +250,10 @@ package com.fiCharts.charts.chart2D.line
 				this.dataOffsetter.dataIndexOffset = 1;
 			}
 		}
+		
+		/**
+		 */		
+		protected var dataOffsetter:DataIndexOffseter = new DataIndexOffseter;
 		
 		/**
 		 * 是否以渐进线段方式绘制 

@@ -1,18 +1,16 @@
 package com.fiCharts.charts.chart2D.pie.series
 {
+	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.series.SeriesItemUIBase;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.ui.toolTips.ToolTipHolder;
 	import com.fiCharts.ui.toolTips.ToolTipsEvent;
-	import com.fiCharts.ui.toolTips.TooltipDataItem;
 	import com.fiCharts.ui.toolTips.TooltipStyle;
-	import com.fiCharts.utils.XMLConfigKit.effect.IEffectable;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.events.MouseEvent;
-	import flash.geom.Point;
 	
 	/**
 	 */	
@@ -33,6 +31,10 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */		
 		override protected function rollOverHandler(evt:MouseEvent):void
 		{
+			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_OVER);
+			event.dataItem = this.dataItem;
+			this.dispatchEvent(event);
+			
 			this.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.SHOW_TOOL_TIPS, tooltipHolder));
 		}
 		
@@ -40,7 +42,20 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */		
 		override protected function rollOutHandler(evt:MouseEvent):void
 		{
+			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_OUT);
+			event.dataItem = this.dataItem;
+			this.dispatchEvent(event);
+			
 			this.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
+		}
+		
+		/**
+		 */		
+		override public function downHandler():void
+		{
+			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_CLICKED);
+			event.dataItem = this.dataItem;
+			this.dispatchEvent(event);
 		}
 		
 		/**

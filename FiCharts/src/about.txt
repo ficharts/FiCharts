@@ -11,4 +11,4 @@
 
 6.demo.html是样例，本地运行需配置安全沙箱，请参见官网 "文档 > 图表创建 > 创建第一个图表" 章节
 
-7.开源代码库地址：git@github.com:ficharts/FiCharts.git
+
