@@ -205,7 +205,6 @@ package com.fiCharts.charts.chart2D.encry
 			}
 		}
 		
-		
 		/**
 		 */		
 		override public function get width():Number
