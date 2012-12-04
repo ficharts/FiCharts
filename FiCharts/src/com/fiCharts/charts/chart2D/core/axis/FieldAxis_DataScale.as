@@ -21,7 +21,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function stopTips():void
 		{
-			
+			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.HIDE_TIPS));
 		}
 		
 		/**
@@ -72,6 +72,8 @@ package com.fiCharts.charts.chart2D.core.axis
 			axis.renderHoriticalAxis();
 			
 			renderYAxisAndSeries(dataScaleProxy.currentDataRange.min, dataScaleProxy.currentDataRange.max);
+			
+			updateToolTips();
 		}
 		
 		/**

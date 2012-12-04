@@ -43,7 +43,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function dataResized(dataRange:DataRange):void
 		{
-			stopTips();
 			
 			//筛分数据节点
 			dataScaleProxy.updateCurDataItems(dataRange.min, dataRange.max, axis, this);
