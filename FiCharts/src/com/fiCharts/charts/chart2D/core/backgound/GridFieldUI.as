@@ -94,6 +94,9 @@ package com.fiCharts.charts.chart2D.core.backgound
 				if (i % 2 != 0 && i <= departs)
 				{
 					vGrid.graphics.lineStyle(0, 0, 0);
+					
+					style.hGrid.width = style.width;
+					style.hGrid.height = partHeight;
 					StyleManager.setFillStyle(vGrid.graphics, style.hGrid);
 					vGrid.graphics.drawRect(0, lineY, style.width, partHeight);
 					vGrid.graphics.endFill();
@@ -134,6 +137,9 @@ package com.fiCharts.charts.chart2D.core.backgound
 					if (i % 2 != 0 && i <= departs)
 					{
 						hGrid.graphics.lineStyle(0, 0, 0);
+						
+						style.vGrid.width = partLength;
+						style.vGrid.height = style.height;
 						StyleManager.setFillStyle(hGrid.graphics, style.vGrid);
 						hGrid.graphics.drawRect(lineX, 0, partLength, style.height);
 						hGrid.graphics.endFill();

@@ -64,7 +64,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */
 		override public function pushValues(values:Vector.<Object>):void
 		{
-			var item:Number, i:uint = 0;
+			var item:Number, i:uint = sourceValues.length;
 			for each (item in values)
 			{
 				sourceValues[i] = item;
@@ -480,7 +480,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		override public function pushYData(value:Vector.<Object>):void
 		{
-			var item:Object, i:Number = 0;
+			var item:Object, i:Number = yScrollData.length;
 			for each(item in value)
 			{
 				yScrollData[i] = item;

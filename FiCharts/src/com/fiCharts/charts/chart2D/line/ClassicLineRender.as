@@ -107,7 +107,7 @@ package com.fiCharts.charts.chart2D.line
 				series.renderPartLine(canvas, style.cover.offset, renderIndex);
 			}
 			
-			//StyleManager.setEffects(canvas, style, metaData);
+			StyleManager.setEffects(canvas, style, metaData);
 		}
 		
 	}

@@ -130,8 +130,12 @@ package com.fiCharts.charts.chart2D.encry
 			{
 				axis.redayToUpdataYData()
 				
-				for each (var seriesVO:SeriesBase in chartMain.series)
-					seriesVO.updateYAxisValueForScroll();
+				for each (var seriesItem:SeriesBase in chartMain.series)
+				{
+					// 别忘了图例可以控制序列的隐藏
+					if(seriesItem.visible)					
+						seriesItem.updateYAxisValueForScroll();
+				}
 				
 				axis.yDataUpdated();
 				
@@ -551,9 +555,15 @@ package com.fiCharts.charts.chart2D.encry
 				scrollBaseAxis.updateToolTips();
 				
 				for each (var series:SeriesBase in chartMain.series)
-				tipsHolder.pushTip(series.tipItem);
+				{
+					// 别忘了图例可以控制序列的隐藏
+					if(series.visible)
+						tipsHolder.pushTip(series.tipItem);
+				}
 				
-				chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.SHOW_TOOL_TIPS, tipsHolder));
+				// 别忘了序列都被图例隐藏的情况
+				if(tipsHolder.tipLength)
+					chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.SHOW_TOOL_TIPS, tipsHolder));
 			}
 		}
 		

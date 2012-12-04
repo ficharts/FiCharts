@@ -25,10 +25,27 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 * 找到离鼠标位置最近的点
 		 */		
 		public function updateToolTips():void
 		{
+			var evt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.UPDATE_TIPS_BY_INDEX);
 			
+			var curPerc:Number = posToPercent(axis.mouseX);
+			evt.start = Math.floor(curPerc * dataScaleProxy.maxIndex);
+			evt.end =  Math.ceil(curPerc * dataScaleProxy.maxIndex);
+			
+			var prePerc:Number = dataScaleProxy.getPercentByData(evt.start);
+			var nexPerc:Number = dataScaleProxy.getPercentByData(evt.end);
+			
+			evt.data = curPerc - prePerc;
+			
+			if (evt.data < (nexPerc - curPerc))
+				evt.data = evt.start;
+			else
+				evt.data = evt.end;
+			
+			axis.dispatchEvent(evt);
 		}
 		
 		/**
@@ -60,6 +77,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function dataResized(dataRange:DataRange):void
 		{
+			stopTips();
+			
 			dataScaleProxy.updateCurDataItems(dataRange.min, dataRange.max, axis, this);
 			
 			// 获得当前数据 index 范围

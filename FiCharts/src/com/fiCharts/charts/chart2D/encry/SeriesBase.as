@@ -95,7 +95,8 @@ package com.fiCharts.charts.chart2D.encry
 				simpleDataRender = new Shape;
 				simpleDataRender.graphics.clear();
 				
-				var style:Style = dataRender.states.normal as Style;
+				// 注意这里采用的是  hover 状态下的数据节点样式
+				var style:Style = dataRender.states.hover as Style;
 				StyleManager.drawCircle(simpleDataRender, style, this);
 				this.addChild(simpleDataRender);
 			}
@@ -147,6 +148,13 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
+		private function updateTipByIndex(evt:DataResizeEvent):void
+		{
+			showItem(evt.data);
+		}
+		
+		/**
+		 */		
 		private function updateTipByData(evt:DataResizeEvent):void
 		{
 			var i:uint;
@@ -168,7 +176,14 @@ package com.fiCharts.charts.chart2D.encry
 				}
 			}
 			
-			if (index >= 0)
+			showItem(index);
+		}
+		
+		/**
+		 */		
+		private function showItem(index:uint):void
+		{
+			if (index >= 0 && index <= maxDataItemIndex)
 			{
 				var item:SeriesDataItemVO = this.dataItemVOs[index];
 				simpleDataRender.x = item.x;
@@ -331,7 +346,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		protected var stateControl:StatesControl;
+		public var stateControl:StatesControl;
 		
 		/**
 		 */		
@@ -777,7 +792,8 @@ package com.fiCharts.charts.chart2D.encry
 			
 			_horizontalAxis.addEventListener(DataResizeEvent.RENDER_SERIES, renderScaledData, false, 0, true);
 			
-			_horizontalAxis.addEventListener(DataResizeEvent.UPDATE_TOOLTIPS_BY_DATA, updateTipByData, false, 0, true);
+			_horizontalAxis.addEventListener(DataResizeEvent.UPDATE_TIPS_BY_DATA, updateTipByData, false, 0, true);
+			_horizontalAxis.addEventListener(DataResizeEvent.UPDATE_TIPS_BY_INDEX, updateTipByIndex, false, 0, true);
 			_horizontalAxis.addEventListener(DataResizeEvent.HIDE_TIPS, hideTips, false, 0, true);
 		}
 
@@ -1327,6 +1343,20 @@ package com.fiCharts.charts.chart2D.encry
 		public function set seriesName(value:String):void
 		{
 			_seriesName = value;
+		}
+		
+		/**
+		 */		
+		override public function set name(value:String):void
+		{
+			_seriesName = value;
+		}
+		
+		/**
+		 */		
+		override public function get name():String
+		{
+			return _seriesName;
 		}
 
 		/**

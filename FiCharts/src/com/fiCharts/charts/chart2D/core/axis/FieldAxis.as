@@ -173,9 +173,11 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */
 		override public function pushValues(values:Vector.<Object>):void
 		{
-			for each (var item:String in values)
+			var item:String, i:uint = sourceValues.length;
+			for each (item in values)
 			{
-				sourceValues.push(item);
+				sourceValues[i] = item;
+				i ++;				
 			}
 		}
 		

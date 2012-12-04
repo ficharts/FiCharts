@@ -1,18 +1,12 @@
 package com.fiCharts.charts.legend.view.itemRender
 {
-	import com.fiCharts.charts.chart2D.core.columnRender.ColumnRender;
-	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
-	import com.fiCharts.utils.XMLConfigKit.style.IStyleUI;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
-	import flash.events.MouseEvent;
-	import flash.filters.ColorMatrixFilter;
-	import flash.filters.GlowFilter;
 	
 	/**
 	 */	
@@ -125,6 +119,7 @@ package com.fiCharts.charts.legend.view.itemRender
 		 */		
 		public function render():void
 		{
+			this.graphics.clear();
 			StyleManager.drawRect(this, style, metaData);
 		}
 		

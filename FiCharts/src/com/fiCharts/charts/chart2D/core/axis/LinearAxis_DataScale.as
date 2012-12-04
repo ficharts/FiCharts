@@ -31,7 +31,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			var data:Number = getDataByPerc(posToPercent(axis.mouseX));
 			
-			var evt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.UPDATE_TOOLTIPS_BY_DATA);
+			var evt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.UPDATE_TIPS_BY_DATA);
 			evt.start = data - axis.interval;
 			evt.end = data + axis.interval;
 			evt.data = data;
@@ -43,6 +43,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function dataResized(dataRange:DataRange):void
 		{
+			stopTips();
 			
 			//筛分数据节点
 			dataScaleProxy.updateCurDataItems(dataRange.min, dataRange.max, axis, this);

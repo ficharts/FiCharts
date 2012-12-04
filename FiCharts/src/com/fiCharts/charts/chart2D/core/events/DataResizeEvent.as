@@ -14,7 +14,12 @@ package com.fiCharts.charts.chart2D.core.events
 		/**
 		 * 根据数据计算出toolips节点 
 		 */		
-		public static const UPDATE_TOOLTIPS_BY_DATA:String = "updateTooltipsByData"
+		public static const UPDATE_TIPS_BY_DATA:String = "updateTooltipsByData"
+			
+		/**
+		 * 根据节点位置计算出tooltips节点
+		 */			
+		public static const UPDATE_TIPS_BY_INDEX:String = "updateTipsByIndex";
 		
 		/**
 		 *  根据数据位置缩放图表，用于均匀分部的字符型数据节点
