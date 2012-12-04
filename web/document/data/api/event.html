@@ -156,6 +156,70 @@
 					</table>
 				</div>
 
+				<p class='subTitle'>FiCharts.event.ITEM_OVER</p>
+				<p>当鼠标滑入图表中某个节点时触发此事件，节点对象随事件传递出来。</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>type</span></td>
+								<td><span class='code'>itemOver</span></td>
+								<td>事件类型</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>target</span></td>
+								<td>图表自身</td>
+								<td>触发此事件的对象</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>data</span></td>
+								<td>数据节点对象</td>
+								<td>数据节点对象，包含此节点上的完整信息</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+
+				<p class='subTitle'>FiCharts.event.ITEM_OUT</p>
+				<p>当鼠标滑出图表中某个节点时触发此事件，节点对象随事件传递出来。</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>type</span></td>
+								<td><span class='code'>itemOut</span></td>
+								<td>事件类型</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>target</span></td>
+								<td>图表自身</td>
+								<td>触发此事件的对象</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>data</span></td>
+								<td>数据节点对象</td>
+								<td>数据节点对象，包含此节点上的完整信息</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+
 				<p class='subTitle'>与事件相关的函数</p>
 				<div class="tableWrapper">
 					<table width="100%">
@@ -205,6 +269,17 @@
 								<td><span class='code'>onClicked</span></td>
 								<td>function</td>
 								<td>添加<span class='code'>ITEM_CLICKED</span>事件</td>
+							</tr>
+							<tr>
+								<td><span class='code'>onItemOver</span></td>
+								<td>function</td>
+								<td>添加<span class='code'>ITEM_OVER</span>事件, 鼠标经滑入点时触发</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>onItemOut</span></td>
+								<td>function</td>
+								<td>添加<span class='code'>ITEM_OUT</span>事件, 鼠标滑出节点时触发</td>
 							</tr>
 							
 						</tbody>

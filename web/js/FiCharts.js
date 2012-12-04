@@ -191,7 +191,10 @@
 	FiCharts.event.RENDERED = "rendered";
 	FiCharts.event.CONFIG_LOADED = "configLoaded";
 	FiCharts.event.DATA_LOADED = "dataLoaded";
+	
 	FiCharts.event.ITEM_CLICKED = "itemClick";
+	FiCharts.event.ITEM_OVER = "itemOver";
+	FiCharts.event.ITEM_OUT = "itemOut";
 	
 	FiCharts.message = {};
 	FiCharts.message.init = '初始化...';
@@ -210,6 +213,10 @@
 		
 		var chart = FiCharts.getChartByID(id);
 		
+<<<<<<< HEAD
+=======
+		// IE 下 初始化顺序较奇葩，这里处理较稳妥，防止swf为空
+>>>>>>> 9f53dc4497b3ac71a0cafa071081c8a32cd35ad6
 		if (chart.swf == null)
 			chart.swf = doc.getElementById(chart.id);
 		
@@ -230,6 +237,14 @@
 	
 	FiCharts.itemClick = function(id, value) {
 		FiCharts.getChartByID(id).itemClick(value);
+	};
+	
+	FiCharts.itemOver = function(id, value) {
+		FiCharts.getChartByID(id).itemOver(value);
+	};
+	
+	FiCharts.itemOut = function(id, value) {
+		FiCharts.getChartByID(id).itemOut(value);
 	};
 	
 	FiCharts.rendered = function(id) {
@@ -410,6 +425,15 @@
 			return this.addEventListener(FiCharts.event.ITEM_CLICKED, callback);
 		};
 		
+		that.onItemOver = function(callback) {
+			return this.addEventListener(FiCharts.event.ITEM_OVER, callback);
+		};
+		
+		that.onItemOut = function(callback) {
+			return this.addEventListener(FiCharts.event.ITEM_OUT, callback);
+		};
+		
+		
 		
 		
 		//-------------------------------------
@@ -477,6 +501,14 @@
 		
 		that.itemClick = function(value) {
 			this.dispatchEvent({type: FiCharts.event.ITEM_CLICKED, data: value, target: this})
+		};
+		
+		that.itemOver = function(value) {
+			this.dispatchEvent({type: FiCharts.event.ITEM_OVER, data: value, target: this})
+		};
+		
+		that.itemOut = function(value) {
+			this.dispatchEvent({type: FiCharts.event.ITEM_OUT, data: value, target: this})
 		};
 		
 		

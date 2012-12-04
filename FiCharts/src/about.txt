@@ -1,14 +1,18 @@
 
-1.ficharts开源免费，基于MIT协议，可用于任何项目（包括商业类）
+1.ficharts开源免费，基于LGPL协议，可用于任何项目(包括商业类);
 
-2.使用时请附带此协议，ficharts版权终归ficharts项目组所有
+2.未经许可，不得将源码修改或衍生后再发布;不得将反编译的代码用于任何商业目的;
 
-3.文档和样例在官网上: www.ficharts.com
+3.使用时请附带此协议，ficharts版权终归ficharts项目组所有;
 
-4.咨询与技术支持邮箱：ficharts.dev@gmail.com
+4.文档和样例在官网上: www.ficharts.com;
 
-5.关注新浪微博了解最新动态：http://weibo.com/u/2431448684
+5.咨询与技术支持邮箱：ficharts.dev@gmail.com
 
-6.demo.html是样例，本地运行需配置安全沙箱，请参见官网 "文档 > 图表创建 > 创建第一个图表" 章节
+6.关注新浪微博了解最新动态：http://weibo.com/u/2431448684
+
+7.demo.html是样例，本地运行需配置安全沙箱，请参见官网 "文档 > 图表创建 > 创建第一个图表" 章节;
+
+
 
 

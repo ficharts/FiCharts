@@ -9,7 +9,6 @@ package
 			super();
 			
 			var chart:Chart2D = new Chart2D();
-			chart.ifAutoResizeToStage = false;
 			chart.width = 500;
 			chart.height = 500;
 			chart.setConfigXML(configXML.toString());
