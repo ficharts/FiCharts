@@ -1,16 +1,12 @@
 package com.fiCharts.utils.XMLConfigKit.style
 {
-	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.effect.Effects;
-	import com.fiCharts.utils.XMLConfigKit.effect.IEffectElement;
 	import com.fiCharts.utils.XMLConfigKit.effect.IEffectable;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Cover;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Fill;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
-	import com.fiCharts.utils.graphic.StyleManager;
-	import com.fiCharts.utils.graphic.style.FillStyle;
 	
 	/**
 	 * 通常用来设置矩形或者原型的样式，包含填充，边框及基本的尺寸信息；

@@ -304,8 +304,6 @@
                 <hGrid>
                     <border color='E2E2E2' thikness='1'/>
                 </hGrid>
-                <vGrid>
-                </vGrid>
             </gridField>
             <xAxis type="field" labelDisplay="normal">
                 <title>

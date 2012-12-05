@@ -1,6 +1,7 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
 	import com.fiCharts.charts.chart2D.core.model.DataScale;
+	import com.fiCharts.charts.chart2D.core.model.DataBarStyle;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.utils.PerformaceTest;
@@ -42,7 +43,9 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function AxisBase()
 		{
-			this.mouseChildren = this.mouseEnabled = false;
+			//this.mouseChildren = this.mouseEnabled = false;
+			
+			labelUIsCanvas.mouseChildren = labelUIsCanvas.mouseEnabled = false;
 			this.addChild(labelUIsCanvas);
 			addChild(labelsMask);
 			labelUIsCanvas.mask = labelsMask;
@@ -91,6 +94,10 @@ package com.fiCharts.charts.chart2D.core.axis
 				curPattern.toNormalPattern();
 			else
 				curPattern = getNormalPatter();
+			
+			dataScrollBar.distory();
+			this.removeChild(dataScrollBar)
+			dataScrollBar = null;
 		}
 		
 		/**
@@ -103,7 +110,17 @@ package com.fiCharts.charts.chart2D.core.axis
 				curPattern = getDataScalePattern();
 			
 			this.curPattern.dataUpdated();
+			
+			if (dataScrollBar == null)
+			{
+				dataScrollBar = new DataScrollBar(this, this.dataBarStyle);
+				this.addChild(dataScrollBar);
+			}
 		}
+		
+		/**
+		 */		
+		private var dataScrollBar:DataScrollBar;
 		
 		/**
 		 */		
@@ -191,22 +208,15 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		internal function drawScrollBar(startPerc:Number, endPerc:Number):void
+		internal function updateScrollBar(startPerc:Number, endPerc:Number):void
 		{
-			this.graphics.clear();
-			
-			if (startPerc == 0 && endPerc == 1) return;// 数据完全显示时，滚动条没必要显示
-				
-			StyleManager.setShapeStyle(this.scrollBarStyle, this.graphics);
-			this.graphics.drawRoundRect(startPerc * this.size, label.margin / 2, 
-				size * (endPerc - startPerc), scrollBarStyle.height, scrollBarStyle.radius, scrollBarStyle.radius);
+			dataScrollBar.update(startPerc, endPerc);
 		}
 		
 		/**
 		 * 滚动条的样式
 		 */		
-		public var scrollBarStyle:Style;
-		
+		public var dataBarStyle:DataBarStyle;
 		
 		/**
 		 * 对于每此数据缩放，坐标轴仅需绘制一次，子数据的滚动只是移动label容器的位置而已
@@ -241,6 +251,10 @@ package com.fiCharts.charts.chart2D.core.axis
 				
 				if (enable && this.tickMark.enable)
 					drawHoriTicks();
+				
+				
+				if (this.dataScrollBar)
+					dataScrollBar.render();
 				
 				changed = false;
 			}
@@ -461,8 +475,6 @@ package com.fiCharts.charts.chart2D.core.axis
 					
 				}
 				
-				PerformaceTest.end("创建Label");
-				
 				//保证标签间距大于最小单元宽度， 防止标签重叠；
 				var addFactor:uint = 1;
 				var uintAmount:uint = length;
@@ -586,9 +598,21 @@ package com.fiCharts.charts.chart2D.core.axis
 				titleLabel.x = size * .5 - titleLabel.width * .5;
 				
 				if (position == 'bottom')
-					titleLabel.y = height + title.margin;
+				{
+					
+					if (this.dataScrollBar)
+					{
+						titleLabel.y = this.labelUIsCanvas.height + title.margin + dataScrollBar.barHeight;
+					}
+					else
+					{
+						titleLabel.y = this.labelUIsCanvas.height + title.margin;
+					}
+				}
 				else
-					titleLabel.y = - height - title.margin - titleLabel.height;
+				{
+					titleLabel.y = - labelUIsCanvas.height - title.margin - titleLabel.height;
+				}
 				
 				this.addChild(titleLabel);
 			}
@@ -611,9 +635,9 @@ package com.fiCharts.charts.chart2D.core.axis
 				titileBitmap.rotation =  - 90;
 				
 				if(this.position == "left")
-					titileBitmap.x = - width - title.margin - titileBitmap.width;
+					titileBitmap.x = - this.labelUIsCanvas.width - title.margin - titileBitmap.width;
 				else
-					titileBitmap.x = width + title.margin;
+					titileBitmap.x = labelUIsCanvas.width + title.margin;
 				
 				titileBitmap.y = - size * .5 + titileBitmap.height * .5 ;
 				addChild(titileBitmap);

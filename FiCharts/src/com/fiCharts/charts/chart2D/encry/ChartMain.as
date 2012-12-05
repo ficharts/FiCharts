@@ -300,7 +300,6 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			configSeriesAxis();
 			
-			
 			configSeriesAndLegendData();
 			updateAxisData();
 			this.currentPattern.preConfig();

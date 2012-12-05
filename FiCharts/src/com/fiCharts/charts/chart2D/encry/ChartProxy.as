@@ -10,6 +10,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedPercentColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
 	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
+	import com.fiCharts.charts.chart2D.core.axis.DataScrollBar;
 	import com.fiCharts.charts.chart2D.core.axis.TickMarkStyle;
 	import com.fiCharts.charts.chart2D.core.model.AxisModel;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
@@ -37,6 +38,9 @@ package com.fiCharts.charts.chart2D.encry
 	{
 		public function ChartProxy()
 		{
+			DataScrollBar;
+			XMLVOLib.registerCustomClasses(<dataBar path='com.fiCharts.charts.chart2D.core.model.DataBarStyle'/>);
+			
 			XMLVOLib.registerCustomClasses(<dataScale path='com.fiCharts.charts.chart2D.core.model.DataScale'/>);
 			
 			ChartBGStyle;

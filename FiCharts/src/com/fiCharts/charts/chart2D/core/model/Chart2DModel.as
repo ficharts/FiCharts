@@ -441,11 +441,12 @@ package com.fiCharts.charts.chart2D.core.model
 		
 		/**
 		 */		
-		private var _scrollBar:Style;
+		private var _scrollBar:DataBarStyle;
 
 		/**
+		 * 数据缩放控制条的样式
 		 */
-		public function get scrollBar():Style
+		public function get dataBar():DataBarStyle
 		{
 			return _scrollBar;
 		}
@@ -453,7 +454,7 @@ package com.fiCharts.charts.chart2D.core.model
 		/**
 		 * @private
 		 */
-		public function set scrollBar(value:Style):void
+		public function set dataBar(value:DataBarStyle):void
 		{
 			_scrollBar = value;
 		}

@@ -1,6 +1,5 @@
 package com.fiCharts.charts.chart2D.encry
 {
-	import com.fiCharts.charts.chart2D.core.ScrollImageRenderForDataResize;
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.DataRange;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
@@ -9,15 +8,10 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.ui.toolTips.ToolTipHolder;
 	import com.fiCharts.ui.toolTips.ToolTipsEvent;
 	import com.fiCharts.utils.ExternalUtil;
-	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.system.OS;
 	
-	import flash.display.BitmapData;
-	import flash.display.Stage;
-	import flash.events.GesturePhase;
 	import flash.events.MouseEvent;
 	import flash.events.TransformGestureEvent;
-	import flash.geom.Matrix;
 	import flash.ui.Mouse;
 	import flash.ui.MouseCursor;
 	
@@ -287,18 +281,31 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private function stopMoveHandler(evt:MouseEvent):void
+		private function stageDownHadler(evt:MouseEvent):void
 		{
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_MOVE, checkScrollHandler);
+			ifMouseDown = true;
+			
+			this.hideTips();
+			currentPosition = evt.stageX;
+			chartMain.stage.addEventListener(MouseEvent.MOUSE_MOVE, checkScrollHandler);
 		}
 		
 		/**
 		 */		
-		private function stageDownHadler(evt:MouseEvent):void
+		private function stopMoveHandler(evt:MouseEvent):void
 		{
-			currentPosition = evt.stageX;
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_MOVE, checkScrollHandler);
+			ifMouseDown = false;
+			
+			updateTips();
+			chartMain.stage.removeEventListener(MouseEvent.MOUSE_MOVE, checkScrollHandler);
 		}
+		
+		/**
+		 * 鼠标按下后，隐藏tips， 松开显示tips；
+		 * 
+		 * 为了防止拖拽时显示tips，故设定此值用来判断
+		 */		
+		private var ifMouseDown:Boolean = false;
 		
 		/**
 		 */		
@@ -331,8 +338,6 @@ package com.fiCharts.charts.chart2D.encry
 			
 			chartMain.stage.addEventListener(MouseEvent.MOUSE_UP, stopScroll);
 			chartMain.chartCanvas.mouseChildren = chartMain.chartCanvas.mouseEnabled = false;
-			
-			this.hideTips();
 		}
 		
 		/**
@@ -412,7 +417,7 @@ package com.fiCharts.charts.chart2D.encry
 			if (scrollBaseAxis is LinearAxis)
 				(scrollBaseAxis as LinearAxis).baseAtZero = false;
 			
-			scrollBaseAxis.scrollBarStyle = chartMain.chartModel.scrollBar;	
+			scrollBaseAxis.dataBarStyle = chartMain.chartModel.dataBar;	
 			scrollBaseAxis.addEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange, false, 0, true);
 		}
 		
@@ -549,7 +554,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function updateTips():void
 		{
-			if (scrollBaseAxis && ifSrollingData == false)
+			if (scrollBaseAxis && ifMouseDown == false)
 			{
 				tipsHolder.clear();
 				scrollBaseAxis.updateToolTips();

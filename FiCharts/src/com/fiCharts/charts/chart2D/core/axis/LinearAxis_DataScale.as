@@ -113,7 +113,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			// 绘制滚动条
 			var startPerc:Number = dataScaleProxy.getPercentByData(minData);
 			var endPerc:Number = dataScaleProxy.getPercentByData(maxData);
-			axis.drawScrollBar(startPerc, endPerc);
+			axis.updateScrollBar(startPerc, endPerc);
 			
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, minData, maxData));
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE));

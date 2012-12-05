@@ -6,10 +6,26 @@
      <x title="A" type="field" input="YYYYMMDD"/> 
      <y title="B" type="linear"/> 
    </axis>
-   <legend enable="true"/>
+   <legend enable="false"/>
    <series>
      <area name="a" xField="label" yField="value"/> 
      <line name="b" xField="label" yField="valueB"/> 
    </series>
    <dataScale enable='true'/> 
+   <dataBar>
+   		<states>
+            <normal>
+            	<border color="CCCCCC"/>
+                <fill color='EEEEEE'/>
+            </normal>
+            <hover>
+            	<border color="CCCCCC"/>
+                <fill color='DDDDDD'/>
+            </hover>
+            <down>
+            	<border color="CCCCCC"/>
+                <fill color='EEEEEE'/>
+            </down>
+        </states>
+   </dataBar>
  </config>
