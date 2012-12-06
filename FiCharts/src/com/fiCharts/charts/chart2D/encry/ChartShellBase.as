@@ -7,6 +7,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.common.language.LanguageConfig;
 	import com.fiCharts.ui.text.Label;
 	import com.fiCharts.utils.ExternalUtil;
+	import com.fiCharts.utils.ImgSaver;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -51,7 +52,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 版本号 
 		 */	
-		public static const VARSION:String = "1.2.2.2 Beta";
+		public static const VARSION:String = "1.2.2.3 Beta";
 		
 		/**
 		 */		
@@ -80,6 +81,10 @@ package com.fiCharts.charts.chart2D.encry
 			
 			languageXML = XML(defaultConfig.menu.toXMLString());
 		}
+		
+		
+		
+		
 		
 		
 		
@@ -243,8 +248,18 @@ package com.fiCharts.charts.chart2D.encry
 				_height = value;
 		}
 		
+		/**
+		 */		
 		private var _height:Number = ChartShellBase.MIN_SIZE;
 		
+		/**
+		 * 存储图表截图
+		 */		
+		public function saveImg(name:String = "ficharts.png"):void
+		{
+			if (ifReady)
+				ImgSaver.saveImg(this, name);
+		}
 		
 		
 		
@@ -549,9 +564,15 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function saveImageHandler(evt:Event):void
 		{
-			var imageByteArray:ByteArray = PNGEncoder.encode(BitmapUtil.draw(this));
-			var file:FileReference = new FileReference();
-			file.save(imageByteArray, 'fichart.png');
+			ImgSaver.saveImg(this, "ficharts.png");
+		}
+		
+		/**
+		 * 返回图表的截图，以base64编码
+		 */		
+		private function getChartBase64Data():String
+		{
+			return ImgSaver.get64Data(this);
 		}
 		
 		/**
@@ -579,6 +600,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			ExternalUtil.addCallback("setCSVData", requestCSVData);
 			ExternalUtil.addCallback("render", renderHandler);
+			ExternalUtil.addCallback("getChartBase64Data", getChartBase64Data);
 			
 			ExternalUtil.addCallback("setWebMode", setWebMode);
 				

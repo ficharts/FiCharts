@@ -610,6 +610,15 @@
 		    this.setDataXML(xmlString);
 		    
 		    return this;
+		};
+		
+		that.getChartBase64Data = function(){
+			
+			if (this.ifReady) {
+				return this.swf.getChartBase64Data();
+			}
+			
+			return null;
 		}
 		
 		return that;

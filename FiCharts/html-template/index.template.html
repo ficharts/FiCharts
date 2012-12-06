@@ -14,6 +14,11 @@
             var chart2D = new Chart2D('chart2D_div');
            	chart2D.setSize("100%","100%");
             chart2D.setConfigFile('data.xml');
+            chart2D.onRendered(function(){
+            	
+            	alert(chart2D.getChartBase64Data())
+            	
+            })
         </script>
     </head>
     <body>
