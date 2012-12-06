@@ -202,24 +202,13 @@ package com.fiCharts.utils.graphic
 		}
 		
 		
+		
+		
 		//--------------------------------------
 		//
 		// 应用样式
 		//
 		//--------------------------------------
-		
-		/**
-		 * 设置过度颜色填充;
-		 */		
-		public static function setFill(graphic:Graphics, fillVO:GradientColorStyle):void
-		{
-			var colors:Array = fillVO.fillColors  as Array;
-			var alphas:Array = fillVO.fillAlphas as Array;
-			var ratios:Array = fillVO.fillRatioes as Array;
-			
-			matr.createGradientBox(fillVO.width, fillVO.height, fillVO.fillAngle, fillVO.tx, fillVO.ty);
-			graphic.beginGradientFill(fillVO.fillType, colors, alphas, ratios, matr, SpreadMethod.PAD);  
-		}
 		
 		/**
 		 * 设置形状边框与填充信息, 仅当样式存在时才设置该样式项；

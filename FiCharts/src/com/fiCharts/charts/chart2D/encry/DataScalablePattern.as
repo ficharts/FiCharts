@@ -86,7 +86,8 @@ package com.fiCharts.charts.chart2D.encry
 			
 			chartMain.chartCanvas.removeEventListener(MouseEvent.ROLL_OVER, mouseInSeriesArea);
 			chartMain.chartCanvas.removeEventListener(MouseEvent.ROLL_OUT, mouseOutSeriesArea);
-				
+			chartMain.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
+			scrollBaseAxis.removeEventListener(DataResizeEvent.DATA_SCROLLED, dataScolledByDataBar);
 			ExternalUtil.addCallback("onWebmousewheel", null);
 			
 			scrollBaseAxis.toNomalPattern();
@@ -102,7 +103,8 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			chartMain.chartCanvas.addEventListener(MouseEvent.ROLL_OVER, mouseInSeriesArea, false, 0 ,true);
 			chartMain.chartCanvas.addEventListener(MouseEvent.ROLL_OUT, mouseOutSeriesArea, false, 0, true);
-				
+			chartMain.stage.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
+			
 			ExternalUtil.addCallback("onWebmousewheel", onWebMouseWheel);
 			
 			if (tipsHolder == null)
@@ -148,6 +150,7 @@ package com.fiCharts.charts.chart2D.encry
 				series.toSimplePattern();
 			
 			this.scrollBaseAxis.toDataScalePatter();
+			scrollBaseAxis.addEventListener(DataResizeEvent.DATA_SCROLLED, dataScolledByDataBar, false, 0, true);
 		}
 		
 		/**
@@ -191,12 +194,12 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			if (evt.scaleX > 1)
 			{
-				resizeChartOnGesture(0.5, true, 
+				resizeOnCanvasGesture(0.5, true, 
 					evt.scaleX - 1);
 			}
 			else
 			{
-				resizeChartOnGesture(0.5, false, 
+				resizeOnCanvasGesture(0.5, false, 
 					1 - evt.scaleX);
 			}
 		}
@@ -221,7 +224,7 @@ package com.fiCharts.charts.chart2D.encry
 				else
 					scale = chartMain.chartModel.dataScale.zoomOutScale;
 				
-				resizeChartOnGesture(percent, ifZoomIn, scale);
+				resizeOnCanvasGesture(percent, ifZoomIn, scale);
 			}
 		}
 		
@@ -230,7 +233,7 @@ package com.fiCharts.charts.chart2D.encry
 		 * 
 		 * scale 是缩放的倍数
 		 */		
-		private function resizeChartOnGesture(percent:Number, ifZoomIn:Boolean, scale:Number):void
+		private function resizeOnCanvasGesture(percent:Number, ifZoomIn:Boolean, scale:Number):void
 		{
 			var dis:Number = this.currentDataRange.max - this.currentDataRange.min;
 			var targetPer:Number = this.currentDataRange.min + dis * percent;
@@ -331,6 +334,16 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 数据缩放条滚动结束时触发
+		 */		
+		private function dataScolledByDataBar(evt:DataResizeEvent):void
+		{
+			evt.stopPropagation();
+			_stopScroll();
+		}
+		
+		/**
+		 * 开始数据滚动
 		 */		
 		private function startScroll():void
 		{
@@ -341,7 +354,10 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 * 数据滚动的过程中序列是不渲染的，只是移动的截图
+		 * 数据滚动， 数据滚动的过程中，坐标轴的当前数据区域并没改变，
+		 * 
+		 * 只是改变了 滚动位置
+		 * 
 		 */		
 		private function scroll(offset:Number):void
 		{
@@ -350,8 +366,16 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 结束数据滚动
 		 */		
 		private function stopScroll(evt:MouseEvent):void
+		{
+			_stopScroll();
+		}
+		
+		/**
+		 */		
+		private function _stopScroll():void
 		{
 			ifSrollingData = false;
 			
@@ -360,7 +384,7 @@ package com.fiCharts.charts.chart2D.encry
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_UP, stopScroll);
 			
 			// 鼠标移出画布区域，停止拖动后不更新提示信息
-			if(chartMain.chartCanvas.hitTestPoint(evt.stageX, evt.stageY))
+			if(ifMouseInCanvas())
 				updateTips();
 			else
 				_leaveChartCanvas();
@@ -394,6 +418,10 @@ package com.fiCharts.charts.chart2D.encry
 				// 坐标轴会驱动序列按照节点位置或数据范围方式完成, 序列再驱动渲染节点等的更新
 				scrollBaseAxis.dataResized(currentDataRange);
 				chartMain.gridField.drawHGidLine(scrollBaseAxis.ticks, chartMain.chartModel.gridField);
+				
+				
+				if(ifMouseInCanvas() == false)
+					this.hideTips();
 			}
 		}
 		
@@ -485,7 +513,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function mouseOutSeriesArea(evt:MouseEvent):void
 		{
-			this.leaveChartCanvas(evt.stageX, evt.stageY);
+			this.leaveChartCanvas();
 		}
 										   
 		/**
@@ -494,7 +522,7 @@ package com.fiCharts.charts.chart2D.encry
 		private function toolTipsHandler(evt:MouseEvent):void
 		{
 			// 防止鼠标移出图表画布区域继续信息提示
-			if(chartMain.chartCanvas.hitTestPoint(evt.stageX, evt.stageY) == false)
+			if(ifMouseInCanvas() == false)
 			{
 				this._leaveChartCanvas(); 
 			}
@@ -508,13 +536,23 @@ package com.fiCharts.charts.chart2D.encry
 		 * 
 		 * 鼠标移出图表画布区域，结束信息提示，还原鼠标状态
 		 */		
-		private function leaveChartCanvas(x:Number, y:Number):void
+		private function leaveChartCanvas():void
 		{
 			// 防止鼠标依旧位于图表画布中， 但由于其他罩盖引起的的  rollOut
-			if(chartMain.chartCanvas.hitTestPoint(x, y))
+			if(ifMouseInCanvas())
 				return; 
 			
 			_leaveChartCanvas();
+		}
+		
+		/**
+		 */		
+		private function ifMouseInCanvas():Boolean
+		{
+			if(chartMain.chartCanvas.hitTestPoint(chartMain.stage.mouseX, chartMain.stage.mouseY))
+				return true;
+			
+			return false;
 		}
 		
 		/**
@@ -524,7 +562,6 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			chartMain.stage.addEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler, false, 0, true);
 			chartMain.stage.addEventListener(MouseEvent.MOUSE_UP, stopMoveHandler, false, 0, true);
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
 			chartMain.stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, mobileZoomHandler, false, 0, true);
 			
 			chartMain.stage.addEventListener(MouseEvent.MOUSE_MOVE, toolTipsHandler, false, 0, true);
@@ -540,7 +577,6 @@ package com.fiCharts.charts.chart2D.encry
 			
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler);
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_UP, stopMoveHandler);
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 			chartMain.stage.removeEventListener(TransformGestureEvent.GESTURE_ZOOM, mobileZoomHandler);
 			
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_MOVE, toolTipsHandler);

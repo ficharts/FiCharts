@@ -14,7 +14,7 @@ package com.fiCharts.charts.chart2D.area2D
 		{
 			this.series = series;
 			series.stateControl = new StatesControl(series);
-			series.stateControl.states = series.states;
+			series.stateControl.setDefault();
 		}
 		
 		/**

@@ -91,11 +91,13 @@
             </legend>
             
             <dataRender>
-                <states normal='dataRenderStyle' hover='dataRenderStyle'>
+                <states>
                     <normal>
+                    	<border color='${color}{adjustColor:1}' thikness='1' alpha='0.8'/>
                         <fill color='${color}{adjustColor:1.3}, ${color}' alpha='0.5, 0.5' type='radial'/>
                     </normal>
                     <hover radius='6'>
+                    	<border color='${color}{adjustColor:1}' thikness='1' alpha='1'/>
                         <fill color='${color}{adjustColor:1.6}, ${color}{adjustColor:1.3}' alpha='0.5,0.5' type='radial'/>
                     </hover>
                 </states>
@@ -216,10 +218,6 @@
             
             <!-- 精简版 基础定义 -->
             <definition>
-                <style id='dataRenderStyle' radius='3'>
-                    <border color='${color}{adjustColor:1}' thikness='1' alpha='0.8'/>
-                </style>
-                
                 <style id='legendIconStyle' width='25' height='15'>
                     <border color='${color}{adjustColor:0.8}' thikness='.5'/>
                 </style>
@@ -250,13 +248,13 @@
                 
                 <states id='lineStates'>
                     <normal>
-                        <border color='${color}' thikness='1' alpha='0.8'/>
+                        <border color='${color}' thikness='2' alpha='0.8'/>
                     </normal>
                     <hover>
-                        <border color='${color}{adjustColor:1.3}' thikness='2' alpha='0.8'/>
+                        <border color='${color}{adjustColor:1.6}' thikness='3' alpha='1'/>
                     </hover>
                     <down>
-                        <border color='${color}' thikness='2' alpha='0.8'/>
+                        <border color='${color}' thikness='3' alpha='1'/>
                     </down>
                 </states>
                 

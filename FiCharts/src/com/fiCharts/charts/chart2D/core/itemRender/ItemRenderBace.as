@@ -390,8 +390,9 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		public function set dataRender(value:DataRenderStyle):void
 		{
 			_dataRender = value;
-			
-			statesContorl.states = _dataRender.states;
+			this.states = _dataRender.states;
+				
+			statesContorl.setDefault();
 		}
 		
 		/**

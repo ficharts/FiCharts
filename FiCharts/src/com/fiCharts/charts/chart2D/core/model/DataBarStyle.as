@@ -1,6 +1,8 @@
 package com.fiCharts.charts.chart2D.core.model
 {
 	import com.fiCharts.utils.XMLConfigKit.style.States;
+	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
+	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	
 	/**
 	 */	
@@ -13,22 +15,57 @@ package com.fiCharts.charts.chart2D.core.model
 		
 		/**
 		 */		
-		private var _states:States
+		private var _height:Number = 0;
 
 		/**
 		 */
-		public function get states():States
+		public function get height():Number
 		{
-			return _states;
+			return _height;
 		}
 
 		/**
 		 * @private
 		 */
-		public function set states(value:States):void
+		public function set height(value:Number):void
 		{
-			_states = value;
+			_height = value;
 		}
+
+		/**
+		 */		
+		private var _barBG:Style;
+
+		public function get barBG():Style
+		{
+			return _barBG;
+		}
+
+		public function set barBG(value:Style):void
+		{
+			_barBG = value;
+		}
+		
+		/**
+		 */		
+		private var _window:DataBarWindowStyle;
+
+		/**
+		 */
+		public function get window():DataBarWindowStyle
+		{
+			return _window;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set window(value:DataBarWindowStyle):void
+		{
+			_window = value;
+		}
+		
+		
 
 	}
 }

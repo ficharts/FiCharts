@@ -38,6 +38,8 @@ package com.fiCharts.charts.chart2D.encry
 	{
 		public function ChartProxy()
 		{
+			XMLVOLib.setASStyleKey("barBG");
+			
 			DataScrollBar;
 			XMLVOLib.registerCustomClasses(<dataBar path='com.fiCharts.charts.chart2D.core.model.DataBarStyle'/>);
 			

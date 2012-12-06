@@ -1,9 +1,9 @@
  <config precision="2" title="数据缩放" subTitle='鼠标滚动缩放，拖拽查看，背景双击全屏'>
-   <!--tooltip>
+   <tooltip>
    	<label><![CDATA[日期:${xValue}{formatDate:YYYYMMDD,YYYY-MM-DD}<br>数值:${yLabel}]]></label>
-   </tooltip-->
+   </tooltip>
    <axis>
-     <x title="A" type="field" input="YYYYMMDD"/> 
+     <x title="A" type="date" input="YYYYMMDD"/> 
      <y title="B" type="linear"/> 
    </axis>
    <legend enable="false"/>
@@ -13,19 +13,9 @@
    </series>
    <dataScale enable='true'/> 
    <dataBar>
-   		<states>
-            <normal>
-            	<border color="CCCCCC"/>
-                <fill color='EEEEEE'/>
-            </normal>
-            <hover>
-            	<border color="CCCCCC"/>
-                <fill color='DDDDDD'/>
-            </hover>
-            <down>
-            	<border color="CCCCCC"/>
-                <fill color='EEEEEE'/>
-            </down>
-        </states>
+        <barBG height='50'>
+        	<border color="CCCCCC"/>
+            <fill color='EEEEEE'/>
+        </barBG>
    </dataBar>
  </config>

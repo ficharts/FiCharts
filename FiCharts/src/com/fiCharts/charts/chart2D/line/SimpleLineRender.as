@@ -13,7 +13,7 @@ package com.fiCharts.charts.chart2D.line
 		{
 			this.series = series;
 			series.stateControl = new StatesControl(series);
-			series.stateControl.states = series.states;
+			series.stateControl.setDefault();
 		}
 		
 		/**

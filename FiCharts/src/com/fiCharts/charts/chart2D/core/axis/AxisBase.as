@@ -1,14 +1,13 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.model.DataScale;
 	import com.fiCharts.charts.chart2D.core.model.DataBarStyle;
+	import com.fiCharts.charts.chart2D.core.model.DataScale;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
 	import com.fiCharts.utils.graphic.StyleManager;
 	import com.fiCharts.utils.graphic.TextBitmapUtil;
@@ -204,6 +203,13 @@ package com.fiCharts.charts.chart2D.core.axis
 		public function scrollingData(offset:Number):void
 		{
 			curPattern.scrollingData(offset);
+		}
+		
+		/**
+		 */		
+		public function scrollDataByDataBar(offset:Number):void
+		{
+			
 		}
 		
 		/**

@@ -1,41 +1,30 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
+	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.DataBarStyle;
-	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
-	import com.fiCharts.utils.XMLConfigKit.style.States;
-	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
-	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
 	/**
 	 */	
-	public class DataScrollBar extends Sprite implements IStyleStatesUI
+	public class DataScrollBar extends Sprite
 	{
 		public function DataScrollBar(axis:AxisBase, style:DataBarStyle)
 		{
 			super();
 			this.axis = axis;
 			this.barStyle = style;
+			this.addChild(window);
 			
-			stateControl = new StatesControl(this);
-			stateControl.states = barStyle.states;
-			
-			this.addChild(holder);
 			axis.addEventListener(MouseEvent.ROLL_OVER, rollOver, false, 0 , true);
 			axis.addEventListener(MouseEvent.ROLL_OUT, rollOut, false, 0, true);
 		}
 		
 		/**
 		 */		
-		private var holder:Shape = new Shape;
-		
-		/**
-		 */		
-		private var stateControl:StatesControl;
+		private var window:DataBarWindow = new DataBarWindow;
 		
 		/**
 		 */		
@@ -50,19 +39,28 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			stage.addEventListener(MouseEvent.MOUSE_UP, stopDragHandler, false, 0 , true);
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, dragHandler, false, 0, true);
+			currenPos = evt.stageX;
 		}
+		
+		/**
+		 */		
+		private var currenPos:Number = 0;
 		
 		/**
 		 */		
 		private function dragHandler(evt:MouseEvent):void
 		{
-			trace("drag");
+			var offset:Number = currenPos - evt.stageX;
+			axis.scrollingData(offset / (max - min));
+			currenPos = evt.stageX;
+			axis.stopTip();
 		}
 		
 		/**
 		 */		
 		private function stopDragHandler(evt:MouseEvent):void
 		{
+			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.DATA_SCROLLED));
 			stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragHandler);
 			stage.removeEventListener(MouseEvent.MOUSE_UP, stopDragHandler);
 		}
@@ -85,12 +83,20 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function update(startPerc:Number, endPerc:Number):void
 		{
-			holder.graphics.clear();
+			min = startPerc;
+			max = endPerc; 
+				
+			window.graphics.clear();
 			
 			var w:Number = (endPerc - startPerc) * axis.size;
-			holder.graphics.beginFill(0, 0.5);
-			holder.graphics.drawRect(startPerc * axis.size, axis.labelUIsCanvas.height, w, barHeight);
+			window.graphics.beginFill(0, 0.5);
+			window.graphics.drawRect(startPerc * axis.size, axis.labelUIsCanvas.height, w, barHeight);
 		}
+		
+		/**
+		 */		
+		private var min:Number = 0;
+		private var max:Number = 0;
 		
 		/**
 		 */		
@@ -98,68 +104,12 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function get states():States
-		{
-			return _states;
-		}
-		
-		/**
-		 */		
-		public function set states(value:States):void
-		{
-			_states = value;
-		}
-		
-		/**
-		 */		
-		private var _states:States;
-		
-		/**
-		 */		
 		public function render():void
 		{
 			this.graphics.clear();
-			style.width = axis.size;
-			style.height = this.barHeight;
-			style.ty = axis.labelUIsCanvas.height;
-			
-			StyleManager.drawRect(this, style);
-		}
-		
-		/**
-		 */		
-		public function get style():Style
-		{
-			return _style;
-		}
-		
-		/**
-		 */		
-		public function set style(value:Style):void
-		{
-			_style = value;
-		}
-		
-		/**
-		 */		
-		private var _style:Style;
-		
-		/**
-		 */		
-		public function hoverHandler():void
-		{
-		}
-		
-		/**
-		 */		
-		public function normalHandler():void
-		{
-		}
-		
-		/**
-		 */		
-		public function downHandler():void
-		{
+			barStyle.barBG.width = axis.size;
+			barStyle.barBG.ty = axis.labelUIsCanvas.height;
+			StyleManager.drawRect(this, barStyle.barBG);
 		}
 		
 		/**

@@ -22,22 +22,16 @@ package com.fiCharts.utils.XMLConfigKit.style
 		private var ui:IStyleStatesUI;
 		
 		/**
-		 */		
-		private var _states:States;
-
-		/**
 		 */
-		public function get states():States
+		private function get states():States
 		{
-			return _states;
+			return ui.states;
 		}
-
+		
 		/**
-		 * @private
-		 */
-		public function set states(value:States):void
+		 */		
+		public function setDefault():void
 		{
-			_states = value;
 			ui.style = states.getNormal;
 		}
 

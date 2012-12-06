@@ -1,18 +1,9 @@
 package com.fiCharts.charts.chart2D.column2D
 {
-	import com.fiCharts.charts.chart2D.core.columnRender.ColumnRender;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.series.SeriesItemUIBase;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
-	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
-	import com.fiCharts.utils.XMLConfigKit.style.States;
-	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
-	import com.fiCharts.utils.graphic.GradientColorStyle;
 	import com.fiCharts.utils.graphic.StyleManager;
-	
-	import flash.events.MouseEvent;
-	import flash.geom.Rectangle;
 	
 	/**
 	 * @author wallen
@@ -60,10 +51,6 @@ package com.fiCharts.charts.chart2D.column2D
 			this.width = columnWidth;
 			this.height = Math.abs(columnHeight);
 		}
-		
-		/**
-		 */		
-		private var columnRender:ColumnRender;
 		
 		/**
 		 */		

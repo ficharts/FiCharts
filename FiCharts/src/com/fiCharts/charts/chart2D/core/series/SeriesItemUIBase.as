@@ -92,7 +92,7 @@ package com.fiCharts.charts.chart2D.core.series
 		{
 			_states = value;
 			
-			statesControl.states = this.states;
+			statesControl.setDefault();
 		}
 		
 		/**

@@ -177,7 +177,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			dataIndexForRenderLabels.offSet(0, maxIndex);// 多取两个数据位，丰满一些
 		}
 		
-		
 		/**
 		 */		
 		private function createLabelsData():void
