@@ -302,7 +302,9 @@ package com.fiCharts.charts.chart2D.encry
 			
 			configSeriesAndLegendData();
 			updateAxisData();
-			this.currentPattern.preConfig();
+			
+			if (chartModel.axis.changed || chartModel.series.changed || ifSourceDataChanged)
+				this.currentPattern.preConfig();
 		}
 		
 		/**

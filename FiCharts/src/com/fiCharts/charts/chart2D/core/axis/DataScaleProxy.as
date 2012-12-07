@@ -87,6 +87,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			axisPattern.udpateIndexOfCurSourceData(step);
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.RATE_SERIES_DATA_ITEMS, 0, 0, step));
+			axis.upateDataStep(step);
 		}
 		
 		/**

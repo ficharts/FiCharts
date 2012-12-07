@@ -1,14 +1,17 @@
-package com.fiCharts.charts.chart2D.core.axis
+package com.fiCharts.charts.chart2D.core.dataBar
 {
-	import com.fiCharts.charts.chart2D.core.model.DataBarWindowStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
+	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	
+	/**
+	 * 
+	 */	
 	public class DataBarWindow extends Sprite implements IStyleStatesUI
 	{
 		public function DataBarWindow()
@@ -29,6 +32,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			_winStyle = value;
 			this.states = _winStyle.states;
+			stateControl.setDefault();
 		}
 
 		/**
@@ -47,23 +51,48 @@ package com.fiCharts.charts.chart2D.core.axis
 			_states = value;
 		}
 		
+		/**
+		 */		
 		private var _states:States;
 		
 		/**
 		 */		
 		public function render():void
 		{
+			this.graphics.clear();
+			style.width = winWidth;
+			style.height = winHeight;
+			StyleManager.drawRect(this, style);
 		}
 		
+		/**
+		 */		
+		public var winWidth:Number = 0;
+
+		/**
+		 */		
+		public var winHeight:Number = 0;
+		
+		/**
+		 */		
 		public function get style():Style
 		{
-			return null;
+			return _style;
 		}
 		
+		/**
+		 */		
 		public function set style(value:Style):void
 		{
+			_style = value;
 		}
 		
+		/**
+		 */		
+		private var _style:Style;
+		
+		/**
+		 */		
 		public function hoverHandler():void
 		{
 		}

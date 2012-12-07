@@ -1,5 +1,6 @@
 package com.fiCharts.utils.XMLConfigKit.style
 {
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 
@@ -14,7 +15,6 @@ package com.fiCharts.utils.XMLConfigKit.style
 			ui.addEventListener(MouseEvent.ROLL_OVER, overHandler, false, 0, true);
 			ui.addEventListener(MouseEvent.ROLL_OUT, outHandler, false, 0, true);
 			ui.addEventListener(MouseEvent.MOUSE_DOWN, downHandler, false, 0, true);
-			ui.addEventListener(MouseEvent.MOUSE_UP, upHandler, false, 0, true);
 		}
 
 		/**
@@ -39,7 +39,10 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function overHandler(evt:MouseEvent):void
 		{
-			//trace(this.ui, 'over', this.enable);
+			isOut = false;
+			
+			if (isDowning) return;
+			
 			if (enable)
 				this.toHover();
 		}
@@ -48,27 +51,49 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function outHandler(evt:MouseEvent):void
 		{
-			//trace(this.ui, 'out', this.enable);
+			isOut = true;
+			
+			if (isDowning) return;
+			
 			if (enable)
 				this.toNormal();
 		}
 		
 		/**
 		 */		
+		private var isOut:Boolean = true;
+		
+		/**
+		 */		
 		private function downHandler(evt:MouseEvent):void
 		{
-			//trace(this.ui, 'down');
+			(ui as DisplayObject).stage.addEventListener(MouseEvent.MOUSE_UP, upHandler, false, 0, true);
+			
+			isDowning = true;
+			
 			if (enable)
 				this.toDown();	
 		}
 		
 		/**
 		 */		
+		private var isDowning:Boolean = false;
+		
+		/**
+		 */		
 		private function upHandler(evt:MouseEvent):void
 		{
-			//trace(this.ui, 'up');	
+			(ui as DisplayObject).stage.removeEventListener(MouseEvent.MOUSE_UP, upHandler);
+			
+			isDowning = false;
+			
 			if (enable)
-				this.toHover();
+			{
+				if (isOut)
+					toNormal();
+				else
+					this.toHover();
+			}
 		}
 		
 		/**

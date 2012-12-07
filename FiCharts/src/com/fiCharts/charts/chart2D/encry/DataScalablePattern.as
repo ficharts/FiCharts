@@ -87,11 +87,13 @@ package com.fiCharts.charts.chart2D.encry
 			chartMain.chartCanvas.removeEventListener(MouseEvent.ROLL_OVER, mouseInSeriesArea);
 			chartMain.chartCanvas.removeEventListener(MouseEvent.ROLL_OUT, mouseOutSeriesArea);
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
+			
 			scrollBaseAxis.removeEventListener(DataResizeEvent.DATA_SCROLLED, dataScolledByDataBar);
+			scrollBaseAxis.removeEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange);
+			
 			ExternalUtil.addCallback("onWebmousewheel", null);
 			
 			scrollBaseAxis.toNomalPattern();
-			
 			tipsHolder.distory();
 			tipsHolder = null;
 		}
@@ -149,7 +151,26 @@ package com.fiCharts.charts.chart2D.encry
 			for each(var series:SeriesBase in chartMain.series)
 				series.toSimplePattern();
 			
+			preConfigScrollAxis();
+		}
+		
+		/**
+		 * 在这里完成所有对于数据滚动轴的定义
+		 */		
+		private function preConfigScrollAxis():void
+		{
+			if (scrollBaseAxis is LinearAxis)
+				(scrollBaseAxis as LinearAxis).baseAtZero = false;
+			
 			this.scrollBaseAxis.toDataScalePatter();
+			scrollBaseAxis.initDataBar(chartMain.chartModel.dataBar);
+			
+			//将第一个序列的数据和坐标轴给予数据渲染图表
+			var series:SeriesBase = chartMain.series[0];
+			scrollBaseAxis.configDataBarChart(series.dataItemVOs.concat(), 
+				series.horizontalAxis, series.verticalAxis);
+			
+			scrollBaseAxis.addEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange, false, 0, true);
 			scrollBaseAxis.addEventListener(DataResizeEvent.DATA_SCROLLED, dataScolledByDataBar, false, 0, true);
 		}
 		
@@ -160,6 +181,10 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			for each(var series:SeriesBase in chartMain.series)
 				series.render();
+			
+			series = chartMain.series[0];
+			scrollBaseAxis.setChartSizeFeature(series.baseLine, chartMain.sizeY);
+			scrollBaseAxis.renderDataBar();
 		}
 		
 		/**
@@ -441,12 +466,6 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			//目前仅横轴方向支持数据滚动和缩放，并且仅单轴支持
 			scrollBaseAxis = scrolAxis;
-			
-			if (scrollBaseAxis is LinearAxis)
-				(scrollBaseAxis as LinearAxis).baseAtZero = false;
-			
-			scrollBaseAxis.dataBarStyle = chartMain.chartModel.dataBar;	
-			scrollBaseAxis.addEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange, false, 0, true);
 		}
 		
 		/**

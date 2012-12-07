@@ -56,8 +56,8 @@ package com.fiCharts.charts.chart2D.line
 			{
 				series.applyDataFeature();
 				
-				series.states.tx = series.seriesWidth;
-				series.states.width = series.seriesWidth;
+				//series.states.width = series.seriesWidth;
+				//series.states.height = series.seriesHeight;
 				
 				series.ifSizeChanged = series.ifDataChanged = false;
 			}

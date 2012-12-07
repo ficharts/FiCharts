@@ -1,4 +1,4 @@
-package com.fiCharts.charts.chart2D.core.model
+package com.fiCharts.charts.chart2D.core.dataBar
 {
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
@@ -65,7 +65,24 @@ package com.fiCharts.charts.chart2D.core.model
 			_window = value;
 		}
 		
-		
+		/**
+		 */		
+		private var _chart:Style;
+
+		/**
+		 */
+		public function get chart():Style
+		{
+			return _chart;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set chart(value:Style):void
+		{
+			_chart = value;
+		}
 
 	}
 }

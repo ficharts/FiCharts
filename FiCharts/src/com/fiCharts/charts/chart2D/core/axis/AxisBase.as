@@ -1,9 +1,11 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.model.DataBarStyle;
+	import com.fiCharts.charts.chart2D.core.dataBar.DataBarStyle;
+	import com.fiCharts.charts.chart2D.core.dataBar.DataScrollBar;
 	import com.fiCharts.charts.chart2D.core.model.DataScale;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.common.ChartDataFormatter;
+	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -112,14 +114,10 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			if (dataScrollBar == null)
 			{
-				dataScrollBar = new DataScrollBar(this, this.dataBarStyle);
+				dataScrollBar = new DataScrollBar(this);
 				this.addChild(dataScrollBar);
 			}
 		}
-		
-		/**
-		 */		
-		private var dataScrollBar:DataScrollBar;
 		
 		/**
 		 */		
@@ -206,25 +204,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 */		
-		public function scrollDataByDataBar(offset:Number):void
-		{
-			
-		}
-		
-		/**
-		 */		
-		internal function updateScrollBar(startPerc:Number, endPerc:Number):void
-		{
-			dataScrollBar.update(startPerc, endPerc);
-		}
-		
-		/**
-		 * 滚动条的样式
-		 */		
-		public var dataBarStyle:DataBarStyle;
-		
-		/**
 		 * 对于每此数据缩放，坐标轴仅需绘制一次，子数据的滚动只是移动label容器的位置而已
 		 */		
 		public function renderHoriticalAxis():void
@@ -257,10 +236,6 @@ package com.fiCharts.charts.chart2D.core.axis
 				
 				if (enable && this.tickMark.enable)
 					drawHoriTicks();
-				
-				
-				if (this.dataScrollBar)
-					dataScrollBar.render();
 				
 				changed = false;
 			}
@@ -446,7 +421,6 @@ package com.fiCharts.charts.chart2D.core.axis
 				var labelVO:AxisLabelData;
 				minUintSize = 10;
 				
-				PerformaceTest.start();
 				for (i = 0; i < length; i ++)
 				{
 					if (this.enable)
@@ -689,7 +663,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * label的容器用来数据缩放时整体移动label，辅助遮罩效果
 		 */		
-		internal var labelUIsCanvas:Sprite = new Sprite;
+		public var labelUIsCanvas:Sprite = new Sprite;
 		
 		/**
 		 */		
@@ -1176,6 +1150,65 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			_metaData = value;
 		}
+		
+		
+		
+		
+		
+		//--------------------------------------------------------------
+		//
+		//  
+		// 数据滚动条的控制
+		//
+		//
+		//---------------------------------------------------------------
+		
+		
+		/**
+		 */		
+		internal function updateScrollBar(startPerc:Number, endPerc:Number):void
+		{
+			dataScrollBar.update(startPerc, endPerc);
+		}
+		
+		/**
+		 */		
+		public function renderDataBar():void
+		{
+			dataScrollBar.render();
+		}
+		
+		/**
+		 */		
+		public function setChartSizeFeature(baseLine:Number, height:Number):void
+		{
+			dataScrollBar.setChartSizeFeature(baseLine, height);
+		}
+		
+		/**
+		 */		
+		internal function upateDataStep(value:uint):void
+		{
+			dataScrollBar.updateChartDataStep(value);
+		}
+		
+		/**
+		 */		
+		public function configDataBarChart(data:Vector.<SeriesDataItemVO>, hAxis:AxisBase, vAxis:AxisBase):void
+		{
+			dataScrollBar.configDataBarChart(data, hAxis, vAxis);
+		}
+		
+		/**
+		 */		
+		public function initDataBar(style:DataBarStyle):void
+		{
+			dataScrollBar.init(style);
+		}
+		
+		/**
+		 */		
+		private var dataScrollBar:DataScrollBar;
 
 	}
 }

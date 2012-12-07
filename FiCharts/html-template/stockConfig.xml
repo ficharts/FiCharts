@@ -4,18 +4,35 @@
    </tooltip>
    <axis>
      <x title="A" type="date" input="YYYYMMDD"/> 
-     <y title="B" type="linear"/> 
+     <y title="B" type="linear" baseAtZero='false'/> 
    </axis>
    <legend enable="false"/>
    <series>
-     <area name="a" xField="label" yField="value"/> 
+     <!--area name="a" xField="label" yField="value"/--> 
      <line name="b" xField="label" yField="valueB"/> 
    </series>
    <dataScale enable='true'/> 
-   <dataBar>
-        <barBG height='50'>
-        	<border color="CCCCCC"/>
-            <fill color='EEEEEE'/>
-        </barBG>
+   <dataBar height='50'>
+	    <barBG>
+	    	<border color="CCCCCC"/>
+	        <fill color='EEEEEE'/>
+	    </barBG>
+	    <chart>
+	    	<border color='097DDA' thikness='2' alpha='0.8'/>
+            <fill color='097DDA' alpha='0.3'/>
+	    </chart>
+	    <window>
+	    	<states>
+	    		<normal>
+	    			<fill color='FF0000' alpha='0.5'/>
+	    		</normal>
+	    		<hover>
+	    			<fill color='FFFF00' alpha='0.5'/>
+	    		</hover>
+	    		<down>
+	    			<fill color='FF00FF' alpha='0.5'/>
+	    		</down>
+	    	</states>
+	    </window>
    </dataBar>
  </config>

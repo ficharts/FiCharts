@@ -7,6 +7,7 @@ package com.fiCharts.charts.chart2D.core.model
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
+	import com.fiCharts.charts.chart2D.core.dataBar.DataBarStyle;
 	
 	/**
 	 */

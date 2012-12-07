@@ -56,10 +56,9 @@ package com.fiCharts.charts.chart2D.area2D
 			if (series.ifSizeChanged || series.ifDataChanged)
 			{
 				series.applyDataFeature();
-				series.style = series.states.getNormal;
 				
-				series.states.tx = series.seriesWidth;
-				series.states.width = series.seriesWidth;
+				//series.states.tx = series.seriesWidth;
+				//series.states.width = series.seriesWidth;
 				
 				series.ifSizeChanged = series.ifDataChanged = false;
 			}

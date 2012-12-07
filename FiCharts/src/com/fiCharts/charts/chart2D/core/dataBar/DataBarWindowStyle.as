@@ -1,4 +1,4 @@
-package com.fiCharts.charts.chart2D.core.model
+package com.fiCharts.charts.chart2D.core.dataBar
 {
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 
@@ -7,6 +7,10 @@ package com.fiCharts.charts.chart2D.core.model
 		public function DataBarWindowStyle()
 		{
 		}
+		
+		/**
+		 */		
+		public var height:Number = 0;
 		
 		/**
 		 */		
