@@ -37,9 +37,9 @@ package com.fiCharts.charts.chart2D.core.events
 		public static const GET_SERIES_DATA_INDEX_RANGE_BY_DATA:String = "getSeriesDataIndexRangeByData";
 		
 		/**
-		 * 渲染序列 
+		 * 渲染数据缩放了的序列 
 		 */		
-		public static const RENDER_SERIES:String = "renderSeries";
+		public static const RENDER_DATA_RESIZED_SERIES:String = "renderDataResizedSeries";
 		
 		/**
 		 * 渲染坐标轴

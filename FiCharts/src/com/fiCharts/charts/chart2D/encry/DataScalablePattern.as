@@ -8,6 +8,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.ui.toolTips.ToolTipHolder;
 	import com.fiCharts.ui.toolTips.ToolTipsEvent;
 	import com.fiCharts.utils.ExternalUtil;
+	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.system.OS;
 	
 	import flash.events.MouseEvent;
@@ -122,6 +123,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function updateYAxisDataRange(evt:DataResizeEvent):void
 		{
+			PerformaceTest.start("updateYAxisDataRange");
+			
 			var axis:AxisBase;
 			var ifYAxiChanged:Boolean = false;
 			for each (axis in chartMain.vAxises)
@@ -141,6 +144,8 @@ package com.fiCharts.charts.chart2D.encry
 			}
 			
 			this.chartMain.renderVGrid();
+			
+			PerformaceTest.end("updateYAxisDataRange");
 		}
 		
 		/**

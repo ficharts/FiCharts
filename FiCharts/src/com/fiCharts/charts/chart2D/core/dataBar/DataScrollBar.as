@@ -122,7 +122,6 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		
 		/**
 		 * 坐标轴进行任何数据缩放操作时，同步更新；
-		 * 
 		 */		
 		public function update(startPerc:Number, endPerc:Number):void
 		{

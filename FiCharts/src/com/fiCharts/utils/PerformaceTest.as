@@ -10,17 +10,25 @@ package com.fiCharts.utils
 		
 		/**
 		 */		
+		public static var ifRun:Boolean = true;
+		
+		/**
+		 */		
 		public static function end(desc:String = 'tem'):void
 		{
-			trace(desc + " : " + (getTimer() - time) / 1000 + "s");
+			if (ifRun)
+				trace(desc + " : " + (getTimer() - time) / 1000 + "s");
 		}
 		
 		/**
 		 */		
 		public static function start(value:String = "start"):void
 		{
-			time = getTimer();
-			trace("start : " + value);
+			if (ifRun)
+			{
+				time = getTimer();
+				trace("start : " + value);
+			}
 		}
 		
 		/**
@@ -31,11 +39,15 @@ package com.fiCharts.utils
 		 */		
 		public static function funTest(fun:Function, desc:String = "method"):void
 		{
-			var preT:Number = flash.utils.getTimer();
+			if (ifRun)
+			{
+				var preT:Number = flash.utils.getTimer();
+				
+				fun();
+				
+				trace(desc + " : " + (getTimer() - preT) / 1000 + "s");
+			}
 			
-			fun();
-			
-			trace(desc + " : " + (getTimer() - preT) / 1000 + "s");
 		}
 	}
 }
