@@ -137,7 +137,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.GET_SERIES_DATA_INDEX_BY_INDEXS, min, max));
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE));
-			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.RENDER_SERIES));
+			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.RENDER_DATA_RESIZED_SERIES));
 		}
 		
 		/**

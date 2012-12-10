@@ -97,10 +97,12 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function scrollingData(offset:Number):void
 		{
+			PerformaceTest.start("scrollingData");
 			if (axis.direction == AxisBase.HORIZONTAL_AXIS)
 				dataScaleProxy.scrollData(offset);
 			
 			this.scrollingLabelsAndTicks();
+			PerformaceTest.end("scrollingData");
 			
 			renderYAxisAndSeries(this.scrollMinData, this.scrollMaxData);
 		}
@@ -110,14 +112,17 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		protected function renderYAxisAndSeries(minData:Number, maxData:Number):void
 		{
+			PerformaceTest.start("updateScrollBar");
 			// 绘制滚动条
 			var startPerc:Number = dataScaleProxy.getPercentByData(minData);
 			var endPerc:Number = dataScaleProxy.getPercentByData(maxData);
 			axis.updateScrollBar(startPerc, endPerc);
+			PerformaceTest.end("updateScrollBar");
 			
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, minData, maxData));
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE));
-			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.RENDER_SERIES));
+			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.RENDER_DATA_RESIZED_SERIES));
+			trace("----------------------------------------------------------------------")
 		}
 		
 		/**

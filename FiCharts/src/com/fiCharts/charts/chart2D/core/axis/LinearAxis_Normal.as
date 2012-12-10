@@ -13,7 +13,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			this._axis = axis;
 		}
 		
-		
 		/**
 		 */		
 		public function stopTips():void

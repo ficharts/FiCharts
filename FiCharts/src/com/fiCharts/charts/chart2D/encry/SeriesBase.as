@@ -15,7 +15,6 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
-	import com.fiCharts.ui.toolTips.ToolTipHolder;
 	import com.fiCharts.ui.toolTips.TooltipDataItem;
 	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.PerformaceTest;
@@ -234,6 +233,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function dataResizedByRange(evt:DataResizeEvent):void
 		{
+			PerformaceTest.start("dataResizedByRange");
 			evt.stopPropagation();
 			
 			dataOffsetter.minIndex = 0;
@@ -243,6 +243,7 @@ package com.fiCharts.charts.chart2D.encry
 			dataOffsetter.offSet(0, maxDataItemIndex);
 			
 			scrollYValues = this.verValues.slice(dataOffsetter.minIndex, dataOffsetter.maxIndex + 1);
+			PerformaceTest.end("dataResizedByRange");
 		}
 		
 		/**
@@ -262,9 +263,11 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private function renderScaledData(evt:DataResizeEvent):void
+		private function renderDataResized(evt:DataResizeEvent):void
 		{
+			PerformaceTest.start("renderScaledData");
 			this.curRenderPattern.renderScaledData();
+			PerformaceTest.end("renderScaledData");
 		}
 		
 		/**
@@ -790,7 +793,7 @@ package com.fiCharts.charts.chart2D.encry
 			_horizontalAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_BY_INDEXS, dataResizedByIndex, false, 0, true);
 			_horizontalAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, dataResizedByRange, false, 0, true);
 			
-			_horizontalAxis.addEventListener(DataResizeEvent.RENDER_SERIES, renderScaledData, false, 0, true);
+			_horizontalAxis.addEventListener(DataResizeEvent.RENDER_DATA_RESIZED_SERIES, renderDataResized, false, 0, true);
 			
 			_horizontalAxis.addEventListener(DataResizeEvent.UPDATE_TIPS_BY_DATA, updateTipByData, false, 0, true);
 			_horizontalAxis.addEventListener(DataResizeEvent.UPDATE_TIPS_BY_INDEX, updateTipByIndex, false, 0, true);
