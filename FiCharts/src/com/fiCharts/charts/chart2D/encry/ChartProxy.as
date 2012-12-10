@@ -10,12 +10,12 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedPercentColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
 	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
-	import com.fiCharts.charts.chart2D.core.dataBar.DataScrollBar;
 	import com.fiCharts.charts.chart2D.core.axis.TickMarkStyle;
+	import com.fiCharts.charts.chart2D.core.dataBar.DataBarWindowStyle;
+	import com.fiCharts.charts.chart2D.core.dataBar.DataScrollBar;
 	import com.fiCharts.charts.chart2D.core.model.AxisModel;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.ChartBGStyle;
-	import com.fiCharts.charts.chart2D.core.dataBar.DataBarWindowStyle;
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
 	import com.fiCharts.charts.chart2D.core.model.GridFieldStyle;
 	import com.fiCharts.charts.chart2D.core.model.Series;
@@ -45,8 +45,6 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.setASStyleKey("barBG");
 			XMLVOLib.setASStyleKey("chart");
 			
-			DataScrollBar;
-			XMLVOLib.registerCustomClasses(<dataBar path='com.fiCharts.charts.chart2D.core.dataBar.DataBarStyle'/>);
 			
 			XMLVOLib.registerCustomClasses(<dataScale path='com.fiCharts.charts.chart2D.core.model.DataScale'/>);
 			
@@ -245,6 +243,8 @@ package com.fiCharts.charts.chart2D.encry
 			
 			XMLVOLib.setXML(Chart2DModel.BAR_SERIES, value.child('bar'));
 			XMLVOLib.setXML(Chart2DModel.STACKED_BAR_SERIES, value.child('stackedBar'));
+			
+			XMLVOLib.setXML(Chart2DModel.DATA_BAR, value.child('dataBar'));
 			
 			for each (var item:XML in value.child('definition').children())
 				XMLVOLib.setXML(item.@id, item);

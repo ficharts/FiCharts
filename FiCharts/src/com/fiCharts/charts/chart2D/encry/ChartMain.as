@@ -386,7 +386,7 @@ package com.fiCharts.charts.chart2D.encry
 				axis.beforeRender();
 				axis.renderHoriticalAxis();
 				
-				temOffset = axis.minUintSize;
+				temOffset = axis.temUintSize + chartModel.chartBG.paddingRight;
 				
 				// 防止坐标轴边沿label无法完全显示，这个值会作用在左右间距上，给边缘label留够空间
 				if (temOffset != hAxisLabelOffset)
@@ -412,7 +412,7 @@ package com.fiCharts.charts.chart2D.encry
 				axis.beforeRender();
 				axis.renderVerticalAxis();
 				
-				temOffset = axis.minUintSize;
+				temOffset = axis.temUintSize;
 				if (temOffset != vAxisLabelOffset)
 					vAxisLabelOffset = temOffset;
 				

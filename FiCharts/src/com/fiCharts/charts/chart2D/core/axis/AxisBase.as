@@ -1,12 +1,9 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.dataBar.DataBarStyle;
 	import com.fiCharts.charts.chart2D.core.dataBar.DataScrollBar;
 	import com.fiCharts.charts.chart2D.core.model.DataScale;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.common.ChartDataFormatter;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
-	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
@@ -56,6 +53,48 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 *  是否隐藏边缘label，因 第一个和最后一个label经常会跨越坐标轴边缘
+		 * 
+		 *  设置此属性可以将边缘label隐藏掉；
+		 * 
+		 *  主要用于数据滚动轴图表的x边缘label隐藏
+		 */		
+		private var _ifHideEdgeLabel:Boolean = false
+
+		/**
+		 */			
+		public function get ifHideEdgeLabel():Boolean
+		{
+			return _ifHideEdgeLabel;
+		}
+
+		/**
+		 */		
+		public function set ifHideEdgeLabel(value:Boolean):void
+		{
+			_ifHideEdgeLabel = XMLVOMapper.boolean(value);
+		}
+		
+		/**
+		 * 用于给滚动轴复制坐标轴
+		 * 
+		 * 这时原始数据刚刚配置完毕,dataUptated之前
+		 */		
+		public function clone():AxisBase
+		{
+			return null;
+		}
+		
+		/**
+		 */		
+		protected function initClone(axis:AxisBase):void
+		{
+			axis.sourceValues = this.sourceValues.concat();
+			axis.dataFormatter = this.dataFormatter;
+			axis.metaData = this.metaData;
+		}
+		
+		/**
 		 */		
 		public function stopTip():void
 		{
@@ -96,9 +135,9 @@ package com.fiCharts.charts.chart2D.core.axis
 			else
 				curPattern = getNormalPatter();
 			
-			dataScrollBar.distory();
-			this.removeChild(dataScrollBar)
-			dataScrollBar = null;
+			scrollBar.distory();
+			this.removeChild(scrollBar)
+			scrollBar = null;
 		}
 		
 		/**
@@ -112,10 +151,10 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			this.curPattern.dataUpdated();
 			
-			if (dataScrollBar == null)
+			if (scrollBar == null)
 			{
-				dataScrollBar = new DataScrollBar(this);
-				this.addChild(dataScrollBar);
+				scrollBar = new DataScrollBar(this);
+				this.addChild(scrollBar);
 			}
 		}
 		
@@ -219,13 +258,13 @@ package com.fiCharts.charts.chart2D.core.axis
 				this.labelsMask.graphics.beginFill(0);
 				if (this.position == 'bottom')
 				{
-					this.labelsMask.graphics.drawRect(- minUintSize / 2, 0, 
-						this.size + this.minUintSize, this.labelUIsCanvas.height);
+					this.labelsMask.graphics.drawRect(- temUintSize / 2, 0, 
+						this.size + this.temUintSize, this.labelUIsCanvas.height);
 				}
 				else
 				{
-					this.labelsMask.graphics.drawRect(- minUintSize / 2, - this.labelUIsCanvas.height, 
-						this.size + this.minUintSize, this.labelUIsCanvas.height);
+					this.labelsMask.graphics.drawRect(- temUintSize / 2, - this.labelUIsCanvas.height, 
+						this.size + this.temUintSize, this.labelUIsCanvas.height);
 				}
 				labelsMask.graphics.endFill();
 				
@@ -269,28 +308,28 @@ package com.fiCharts.charts.chart2D.core.axis
 			}
 			
 			labelUI = createLabelUI(labelIndex);
-			minUintSize = 10;//轴的尺寸刷新后 minUintSize 会重新计算，避免之前的大尺寸和谐掉后继的小尺寸
+			temUintSize = minUintSize;//轴的尺寸刷新后 minUintSize 会重新计算，避免之前的大尺寸和谐掉后继的小尺寸
 			// 线性轴的label UI 每次渲染创建时都需要重新计算  minUintSize ，因为每次的Label都是重新生成的
 			if (label.layout == LabelStyle.VERTICAL)
 			{
-				if (labelUI.height > minUintSize)
-					minUintSize = labelUI.height;
+				if (labelUI.height > temUintSize)
+					temUintSize = labelUI.height;
 			}
 			else if (label.layout == LabelStyle.ROTATION)
 			{
-				if (labelUI.width * 0.5 > minUintSize)
-					minUintSize = labelUI.width * 0.5;
+				if (labelUI.width * 0.5 > temUintSize)
+					temUintSize = labelUI.width * 0.5;
 			}
 			else
 			{
-				if (labelUI.width > minUintSize)
-					minUintSize = labelUI.width;
+				if (labelUI.width > temUintSize)
+					temUintSize = labelUI.width;
 			}
 			
 			//保证标签间距大于最小单元宽度， 防止标签重叠；
 			var addFactor:uint = 1;
 			var uintAmount:uint = length;
-			while (size > 0 && (size / uintAmount) < minUintSize)
+			while (size > 0 && (size / uintAmount) < temUintSize)
 			{
 				addFactor += 1;
 				uintAmount = length / addFactor;
@@ -311,14 +350,14 @@ package com.fiCharts.charts.chart2D.core.axis
 					if (labelUI == null)
 						labelUI = createLabelUI(i);
 					
-					drawLabelUI(labelUI, valuePositon);
+					drawHoriLabelUI(labelUI, valuePositon);
 				}
 			}
 		}
 		
 		/**
 		 */		
-		private function drawLabelUI(labelUI:BitmapData, valuePositon:Number):void
+		private function drawHoriLabelUI(labelUI:BitmapData, valuePositon:Number):void
 		{
 			var labelX:Number = 0;
 			var labelY:Number = 0;
@@ -419,7 +458,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				
 				var i:uint;
 				var labelVO:AxisLabelData;
-				minUintSize = 10;
+				temUintSize = minUintSize;
 				
 				for (i = 0; i < length; i ++)
 				{
@@ -442,13 +481,13 @@ package com.fiCharts.charts.chart2D.core.axis
 						
 						if (label.layout == LabelStyle.ROTATION)
 						{
-							if (labelUI.width > minUintSize)
-								minUintSize = labelUI.width;
+							if (labelUI.width > temUintSize)
+								temUintSize = labelUI.width;
 						}
 						else
 						{
-							if (labelUI.height > minUintSize)
-								minUintSize = labelUI.height;
+							if (labelUI.height > temUintSize)
+								temUintSize = labelUI.height;
 						}
 						
 					}
@@ -458,7 +497,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				//保证标签间距大于最小单元宽度， 防止标签重叠；
 				var addFactor:uint = 1;
 				var uintAmount:uint = length;
-				while (size > 0 && (this.size / uintAmount) < this.minUintSize)
+				while (size > 0 && (this.size / uintAmount) < temUintSize)
 				{
 					addFactor += 1;
 					uintAmount = length / addFactor;
@@ -489,13 +528,13 @@ package com.fiCharts.charts.chart2D.core.axis
 				this.labelsMask.graphics.beginFill(0);
 				if (position == "left")
 				{
-					this.labelsMask.graphics.drawRect(0, minUintSize / 2, 
-						- this.labelUIsCanvas.width - 2, - this.size - this.minUintSize);
+					this.labelsMask.graphics.drawRect(0, temUintSize / 2, 
+						- this.labelUIsCanvas.width - 2, - this.size - this.temUintSize);
 				}
 				else
 				{
-					this.labelsMask.graphics.drawRect(0, minUintSize / 2, 
-						 this.labelUIsCanvas.width + 2, - this.size - this.minUintSize);
+					this.labelsMask.graphics.drawRect(0, temUintSize / 2, 
+						 this.labelUIsCanvas.width + 2, - this.size - this.temUintSize);
 				}
 				labelsMask.graphics.endFill();
 				
@@ -569,7 +608,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			if(titleLabel.parent)
 				this.removeChild(titleLabel);
 			
-			if (title.text.value)
+			if (title && title.text.value)
 			{
 				titleLabel.style = title;
 				titleLabel.metaData = this.metaData;
@@ -580,9 +619,9 @@ package com.fiCharts.charts.chart2D.core.axis
 				if (position == 'bottom')
 				{
 					
-					if (this.dataScrollBar)
+					if (this.scrollBar)
 					{
-						titleLabel.y = this.labelUIsCanvas.height + title.margin + dataScrollBar.barHeight;
+						titleLabel.y = this.labelUIsCanvas.height + title.margin + scrollBar.barHeight;
 					}
 					else
 					{
@@ -605,7 +644,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			if(titileBitmap && titileBitmap.parent)
 				this.removeChild(titileBitmap);
 			
-			if (title.text.value)
+			if (title && title.text.value)
 			{
 				titleLabel.metaData = this.metaData;
 				titleLabel.style = title;
@@ -732,12 +771,15 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function dataUpdated():void
 		{
-			this.label.layout = this.labelDisplay;
-			
-			if (label.layout == LabelStyle.NONE)
-				label.enable = false;
-			else 
-				label.enable = true;
+			if(label)
+			{
+				this.label.layout = this.labelDisplay;
+				
+				if (label.layout == LabelStyle.NONE)
+					label.enable = false;
+				else 
+					label.enable = true;
+			}
 			
 			changed = true;
 		}
@@ -756,7 +798,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 原始数据
 		 */		
-		internal var sourceValues:Array = [];
+		public var sourceValues:Array = [];
 		
 		/**
 		 * 轴的创建， 尺寸， 数据改变此标识都会为真；
@@ -832,8 +874,11 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 这个值有可能比uinitSize要大，取决于label的尺寸
 		 */
-		public var minUintSize:Number = 10;
+		public var temUintSize:Number = 0;
 		
+		/**
+		 */		
+		public var minUintSize:uint = 10;
 		/**
 		 * @param value
 		 */		
@@ -1168,47 +1213,19 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		internal function updateScrollBar(startPerc:Number, endPerc:Number):void
 		{
-			dataScrollBar.update(startPerc, endPerc);
-		}
-		
-		/**
-		 */		
-		public function renderDataBar():void
-		{
-			dataScrollBar.render();
-		}
-		
-		/**
-		 */		
-		public function setChartSizeFeature(baseLine:Number, height:Number):void
-		{
-			dataScrollBar.setChartSizeFeature(baseLine, height);
+			scrollBar.update(startPerc, endPerc);
 		}
 		
 		/**
 		 */		
 		internal function upateDataStep(value:uint):void
 		{
-			dataScrollBar.updateChartDataStep(value);
+			scrollBar.updateChartDataStep(value);
 		}
 		
 		/**
 		 */		
-		public function configDataBarChart(data:Vector.<SeriesDataItemVO>, hAxis:AxisBase, vAxis:AxisBase):void
-		{
-			dataScrollBar.configDataBarChart(data, hAxis, vAxis);
-		}
-		
-		/**
-		 */		
-		public function initDataBar(style:DataBarStyle):void
-		{
-			dataScrollBar.init(style);
-		}
-		
-		/**
-		 */		
-		private var dataScrollBar:DataScrollBar;
+		public var scrollBar:DataScrollBar;
 
 	}
 }

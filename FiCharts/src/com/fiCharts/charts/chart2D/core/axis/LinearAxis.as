@@ -23,6 +23,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 */		
+		override public function clone():AxisBase
+		{
+			var axis:LinearAxis = new LinearAxis;
+			initClone(axis);
+			
+			return axis;
+		}
+		
+		/**
 		 * 原始数据序列化后的间距
 		 */		
 		internal  var confirmedSourceValueDis:Number = 0;
@@ -223,8 +233,8 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			//最小单位值
 			var minUintValue:Number = 0;
-			if (minUintSize <= size)
-				minUintValue = Math.max(minUintSize / axisLen * preValueDis, preValueDis / maxDepartLineAmount);
+			if (temUintSize <= size)
+				minUintValue = Math.max(temUintSize / axisLen * preValueDis, preValueDis / maxDepartLineAmount);
 			else
 				minUintValue = preValueDis;
 			

@@ -1,5 +1,6 @@
 package com.fiCharts.charts.chart2D.core.model
 {
+	import com.fiCharts.charts.chart2D.core.dataBar.DataBarStyle;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.ui.toolTips.TooltipStyle;
@@ -7,12 +8,15 @@ package com.fiCharts.charts.chart2D.core.model
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
-	import com.fiCharts.charts.chart2D.core.dataBar.DataBarStyle;
 	
 	/**
 	 */
 	public class Chart2DModel
 	{
+		/**
+		 */		
+		public static const DATA_BAR:String = "dataBar";
+		
 		/**
 		 */		
 		public static const UPDATE_TITLE_STYLE:String = 'upateTitleStyle';
@@ -439,27 +443,6 @@ package com.fiCharts.charts.chart2D.core.model
 		{
 			_gridField = value;
 		}
-		
-		/**
-		 */		
-		private var _scrollBar:DataBarStyle;
-
-		/**
-		 * 数据缩放控制条的样式
-		 */
-		public function get dataBar():DataBarStyle
-		{
-			return _scrollBar;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set dataBar(value:DataBarStyle):void
-		{
-			_scrollBar = value;
-		}
-		
 
 	}
 }

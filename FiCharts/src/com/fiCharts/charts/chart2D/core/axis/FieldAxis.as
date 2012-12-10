@@ -20,6 +20,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
+		override public function clone():AxisBase
+		{
+			var axis:AxisBase = new FieldAxis;
+			initClone(axis);
+			
+			return axis;
+		}
+		
+		/**
+		 */		
 		override internal function getDataScalePattern():IAxisPattern
 		{
 			return new FieldAxis_DataScale(this);

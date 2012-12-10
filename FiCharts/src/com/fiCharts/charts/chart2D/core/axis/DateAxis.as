@@ -26,6 +26,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 */		
+		override public function clone():AxisBase
+		{
+			var axis:AxisBase = new DateAxis;
+			initClone(axis);
+			
+			return axis;
+		}
+		
+		/**
 		 * 
 		 * 数据滚动过程中，label数据不变，仅动态更新显示
 		 * 
@@ -183,12 +193,15 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			sourceValueDis = sourceMax - sourceMin;
 			
-			this.label.layout = this.labelDisplay;
-			
-			if (label.layout == LabelStyle.NONE)
-				label.enable = false;
-			else 
-				label.enable = true;
+			if (label)
+			{
+				this.label.layout = this.labelDisplay;
+				
+				if (label.layout == LabelStyle.NONE)
+					label.enable = false;
+				else 
+					label.enable = true;
+			}
 			
 			changed = true;
 		}

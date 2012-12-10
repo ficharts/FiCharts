@@ -3,11 +3,16 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.DataRange;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
+	import com.fiCharts.charts.chart2D.core.dataBar.DataBarStyle;
+	import com.fiCharts.charts.chart2D.core.dataBar.DataScrollBar;
 	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
+	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.ui.toolTips.ToolTipHolder;
 	import com.fiCharts.ui.toolTips.ToolTipsEvent;
 	import com.fiCharts.utils.ExternalUtil;
+	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
+	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.system.OS;
 	
 	import flash.events.MouseEvent;
@@ -88,12 +93,12 @@ package com.fiCharts.charts.chart2D.encry
 			chartMain.chartCanvas.removeEventListener(MouseEvent.ROLL_OUT, mouseOutSeriesArea);
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 			
-			scrollBaseAxis.removeEventListener(DataResizeEvent.DATA_SCROLLED, dataScolledByDataBar);
-			scrollBaseAxis.removeEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange);
+			scrollAxis.removeEventListener(DataResizeEvent.DATA_SCROLLED, dataScolledByDataBar);
+			scrollAxis.removeEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange);
 			
 			ExternalUtil.addCallback("onWebmousewheel", null);
 			
-			scrollBaseAxis.toNomalPattern();
+			scrollAxis.toNomalPattern();
 			tipsHolder.distory();
 			tipsHolder = null;
 		}
@@ -155,23 +160,41 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 * 在这里完成所有对于数据滚动轴的定义
+		 * 在这里完成所有对于数据滚动轴的定义, 包括样式和数据
 		 */		
 		private function preConfigScrollAxis():void
 		{
-			if (scrollBaseAxis is LinearAxis)
-				(scrollBaseAxis as LinearAxis).baseAtZero = false;
+			if (scrollAxis is LinearAxis)
+				(scrollAxis as LinearAxis).baseAtZero = false;
 			
-			this.scrollBaseAxis.toDataScalePatter();
-			scrollBaseAxis.initDataBar(chartMain.chartModel.dataBar);
+			this.scrollAxis.toDataScalePatter();
 			
-			//将第一个序列的数据和坐标轴给予数据渲染图表
+			var dataBarStyle:DataBarStyle = new DataBarStyle;
+			var config:* = XMLVOLib.getXML(Chart2DModel.DATA_BAR)
+			XMLVOMapper.fuck(config, dataBarStyle);
+			scrollBar.init(dataBarStyle);
+			
+			//将第一个序列的数据和坐标轴克隆给滚动图表
 			var series:SeriesBase = chartMain.series[0];
-			scrollBaseAxis.configDataBarChart(series.dataItemVOs.concat(), 
-				series.horizontalAxis, series.verticalAxis);
 			
-			scrollBaseAxis.addEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange, false, 0, true);
-			scrollBaseAxis.addEventListener(DataResizeEvent.DATA_SCROLLED, dataScolledByDataBar, false, 0, true);
+			// 创建并设置坐标轴样式
+			var hAxis:AxisBase = series.horizontalAxis.clone();
+			var vAxis:AxisBase = series.verticalAxis.clone();
+			
+			var xStyle:* = config.child("chart").child("xAxis");
+			var yStyle:* = config.child("chart").child("yAxis");
+			
+			XMLVOMapper.fuck(xStyle, hAxis);
+			XMLVOMapper.fuck(yStyle, vAxis);
+			
+			hAxis.dataUpdated();
+			vAxis.dataUpdated();
+			
+			scrollBar.setAxis(hAxis, vAxis);
+			scrollBar.setData(series.dataItemVOs.concat(), series.verticalValues.concat());
+			
+			scrollAxis.addEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange, false, 0, true);
+			scrollAxis.addEventListener(DataResizeEvent.DATA_SCROLLED, dataScolledByDataBar, false, 0, true);
 		}
 		
 		/**
@@ -182,9 +205,14 @@ package com.fiCharts.charts.chart2D.encry
 			for each(var series:SeriesBase in chartMain.series)
 				series.render();
 			
-			series = chartMain.series[0];
-			scrollBaseAxis.setChartSizeFeature(series.baseLine, chartMain.sizeY);
-			scrollBaseAxis.renderDataBar();
+			scrollBar.render();
+		}
+		
+		/**
+		 */		
+		private function get scrollBar():DataScrollBar
+		{
+			return scrollAxis.scrollBar;
 		}
 		
 		/**
@@ -196,15 +224,15 @@ package com.fiCharts.charts.chart2D.encry
 			
 			if (chartMain.chartModel.dataScale.changed)
 			{
-				currentDataRange.min = scrollBaseAxis.getSourceDataPercent(chartMain.chartModel.dataScale.start);
-				currentDataRange.max = scrollBaseAxis.getSourceDataPercent(chartMain.chartModel.dataScale.end);		
+				currentDataRange.min = scrollAxis.getSourceDataPercent(chartMain.chartModel.dataScale.start);
+				currentDataRange.max = scrollAxis.getSourceDataPercent(chartMain.chartModel.dataScale.end);		
 				chartMain.chartModel.dataScale.changed = false;
 			}
 			
 			dataResized(currentDataRange.min, currentDataRange.max);
 			
 			// 计算放大比率，每次缩放的倍数，进而提升缩放的速度和体验，减少渲染次数提升性能
-			scrollBaseAxis.adjustZoomFactor(chartMain.chartModel.dataScale);
+			scrollAxis.adjustZoomFactor(chartMain.chartModel.dataScale);
 		}
 		
 		/**
@@ -343,7 +371,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			var offset:Number = evt.stageX - currentPosition; 
 			
-			if (ifSrollingData)
+			if (ifSrolling)
 			{
 				scroll(offset);
 				currentPosition = evt.stageX;
@@ -372,7 +400,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function startScroll():void
 		{
-			ifSrollingData = true;
+			ifSrolling = true;
 			
 			chartMain.stage.addEventListener(MouseEvent.MOUSE_UP, stopScroll);
 			chartMain.chartCanvas.mouseChildren = chartMain.chartCanvas.mouseEnabled = false;
@@ -386,8 +414,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function scroll(offset:Number):void
 		{
-			scrollBaseAxis.scrollingData(offset);
-			chartMain.gridField.drawHGidLine(scrollBaseAxis.ticks, chartMain.chartModel.gridField);
+			scrollAxis.scrollingData(offset);
+			chartMain.gridField.drawHGidLine(scrollAxis.ticks, chartMain.chartModel.gridField);
 		}
 		
 		/**
@@ -402,9 +430,9 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function _stopScroll():void
 		{
-			ifSrollingData = false;
+			ifSrolling = false;
 			
-			scrollBaseAxis.dataScrolled(this.currentDataRange);
+			scrollAxis.dataScrolled(this.currentDataRange);
 			chartMain.chartCanvas.mouseChildren = chartMain.chartCanvas.mouseEnabled = true;
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_UP, stopScroll);
 			
@@ -420,7 +448,7 @@ package com.fiCharts.charts.chart2D.encry
 		 * 
 		 * 正式开始滚动数据
 		 */		
-		private var ifSrollingData:Boolean = false;
+		private var ifSrolling:Boolean = false;
 		
 		/**
 		 */		
@@ -441,8 +469,8 @@ package com.fiCharts.charts.chart2D.encry
 				currentDataRange.max = endPercent;
 				
 				// 坐标轴会驱动序列按照节点位置或数据范围方式完成, 序列再驱动渲染节点等的更新
-				scrollBaseAxis.dataResized(currentDataRange);
-				chartMain.gridField.drawHGidLine(scrollBaseAxis.ticks, chartMain.chartModel.gridField);
+				scrollAxis.dataResized(currentDataRange);
+				chartMain.gridField.drawHGidLine(scrollAxis.ticks, chartMain.chartModel.gridField);
 				
 				
 				if(ifMouseInCanvas() == false)
@@ -465,7 +493,7 @@ package com.fiCharts.charts.chart2D.encry
 		public function configSeriesAxis(scrolAxis:AxisBase):void
 		{
 			//目前仅横轴方向支持数据滚动和缩放，并且仅单轴支持
-			scrollBaseAxis = scrolAxis;
+			scrollAxis = scrolAxis;
 		}
 		
 		/**
@@ -474,7 +502,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private var scrollBaseAxis:AxisBase;
+		private var scrollAxis:AxisBase;
 		
 		/**
 		 */		
@@ -500,8 +528,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function scaleData(startValue:Object, endValue:Object):void
 		{
-			currentDataRange.min = scrollBaseAxis.getDataPercent(startValue);
-			currentDataRange.max = scrollBaseAxis.getDataPercent(endValue);		
+			currentDataRange.min = scrollAxis.getDataPercent(startValue);
+			currentDataRange.max = scrollAxis.getDataPercent(endValue);		
 			
 			dataResized(currentDataRange.min, currentDataRange.max);
 		}
@@ -592,7 +620,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function _leaveChartCanvas():void
 		{
-			if (this.ifSrollingData) return;
+			if (this.ifSrolling) return;
 			
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler);
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_UP, stopMoveHandler);
@@ -609,10 +637,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function updateTips():void
 		{
-			if (scrollBaseAxis && ifMouseDown == false)
+			if (scrollAxis && ifMouseDown == false)
 			{
 				tipsHolder.clear();
-				scrollBaseAxis.updateToolTips();
+				scrollAxis.updateToolTips();
 				
 				for each (var series:SeriesBase in chartMain.series)
 				{
@@ -631,7 +659,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function hideTips():void
 		{
-			scrollBaseAxis.stopTip();
+			scrollAxis.stopTip();
 			chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
 		}
 		

@@ -185,7 +185,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			axis.labelVOes.length = axis.labelUIs.length = labelIndexInfo.length = 0;
 			
 			var length:uint = dataScaleProxy.maxIndex;
-			var step:uint = Math.ceil(axis.minUintSize / axis.unitSize);
+			var step:uint = Math.ceil(axis.temUintSize / axis.unitSize);
 			var i:uint = 0, j:uint = 0;
 			for (i = 0; i <= length; i += step)
 			{

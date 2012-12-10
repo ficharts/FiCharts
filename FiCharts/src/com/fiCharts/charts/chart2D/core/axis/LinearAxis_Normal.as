@@ -101,8 +101,11 @@ package com.fiCharts.charts.chart2D.core.axis
 			axis.clearLabels();
 			
 			var length:int = axis.labelVOes.length;
-			axis.renderHoriLabelUIs(0, length - 1, 
-				length);
+			
+			if (axis.ifHideEdgeLabel)
+				axis.renderHoriLabelUIs(1, length - 2, length - 2);
+			else
+				axis.renderHoriLabelUIs(0, length - 1, length);
 		}
 		
 		/**

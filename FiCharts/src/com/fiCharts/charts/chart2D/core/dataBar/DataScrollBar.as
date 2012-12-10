@@ -57,19 +57,21 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		
 		/**
 		 */		
-		public function configDataBarChart(data:Vector.<SeriesDataItemVO>, hAxis:AxisBase, vAxis:AxisBase):void
+		public function setAxis(horAxis:AxisBase, vAxis:AxisBase):void
 		{
-			chart.dataItems = data;
-			chart.hAxis = hAxis;
+			chart.hAxis = horAxis;
+			chart.hAxis.position = "bottom";
+			chart.addChildAt(horAxis, 0);
+			
 			chart.vAxis = vAxis;
 		}
 		
 		/**
 		 */		
-		public function setChartSizeFeature(baseLine:Number, chartHeight:Number):void
+		public function setData(data:Vector.<SeriesDataItemVO>, vValues:Vector.<Object>):void
 		{
-			chart.factor = barHeight / chartHeight;
-			chart.baseLine = - baseLine * chart.factor + barHeight;
+			chart.dataItems = data;
+			chart.verticalValues = vValues;
 		}
 		
 		/**
@@ -150,17 +152,16 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		 */		
 		public function render():void
 		{
-			style.barBG.width = axis.size;
-			style.barBG.height = this.barHeight;
-			style.barBG.ty = ty;
-			
-			this.graphics.clear();
-			StyleManager.drawRect(this, style.barBG);
-			
 			chart.chartWidth = axis.size;
 			chart.chartHeight = barHeight;
 			chart.y = ty;
 			chart.render();
+			
+			style.barBG.width = axis.size;
+			style.barBG.height = this.barHeight;
+			style.barBG.ty = ty;
+			this.graphics.clear();
+			StyleManager.drawRect(this, style.barBG);
 		}
 		
 		/**

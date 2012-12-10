@@ -18,8 +18,20 @@
 	        <fill color='EEEEEE'/>
 	    </barBG>
 	    <chart>
-	    	<border color='097DDA' thikness='2' alpha='0.8'/>
+	    	<border color='097DDA' thikness='1.5' alpha='1' pixelHinting='false'/>
             <fill color='097DDA' alpha='0.3'/>
+            <xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
+	            <tickMark color='E4E2E2' thikness='1' alpha='1'/>
+	            <label margin='0'>
+	                <format color='9F9F9F' font='微软雅黑'/>
+	                <text value='${label}'>
+	                	<effects>
+	                        <shadow color='FFFFFF' alpha='1' distance='1' blur='1' angle='90'/>
+	                    </effects>
+	                </text>
+	            </label>
+	         </xAxis>
+	         <yAxis/>
 	    </chart>
 	    <window>
 	    	<states>
