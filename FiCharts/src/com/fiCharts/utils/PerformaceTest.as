@@ -10,7 +10,7 @@ package com.fiCharts.utils
 		
 		/**
 		 */		
-		public static var ifRun:Boolean = true;
+		public static var ifRun:Boolean = false;
 		
 		/**
 		 */		

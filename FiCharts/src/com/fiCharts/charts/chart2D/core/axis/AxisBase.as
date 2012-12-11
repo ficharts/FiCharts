@@ -237,9 +237,9 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 数据滚动过程中，仅需要绘制显示范围内的Label
 		 */		
-		public function scrollingData(offset:Number):void
+		public function scrollingByChartCanvas(offset:Number):void
 		{
-			curPattern.scrollingData(offset);
+			curPattern.scrollingByChartCanvas(offset);
 		}
 		
 		/**
@@ -1211,9 +1211,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		internal function updateScrollBar(startPerc:Number, endPerc:Number):void
+		internal function updateScrollBarSize(startPerc:Number, endPerc:Number):void
 		{
-			scrollBar.update(startPerc, endPerc);
+			scrollBar.updateWindowSize(startPerc, endPerc);
+		}
+		
+		/**
+		 */		
+		internal function updateScrollBarPos(perc:Number):void
+		{
+			scrollBar.updateWindowPos(perc);
 		}
 		
 		/**

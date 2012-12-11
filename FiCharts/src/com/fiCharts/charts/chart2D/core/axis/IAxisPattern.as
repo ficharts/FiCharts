@@ -47,8 +47,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 * 
 		 * 数据滚动可以看做是位置的整体偏移，坐标刻度数据本身没有变
 		 */		
-		function scrollingData(offset:Number):void;
-		
+		function scrollingByChartCanvas(offset:Number):void;
 		
 		/**
 		 * 

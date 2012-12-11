@@ -59,6 +59,8 @@ package com.fiCharts.charts.chart2D.core.axis
 			renderYAxisAndSeries(dataScaleProxy.currentDataRange.min, dataScaleProxy.currentDataRange.max);
 			
 			updateToolTips();
+			
+			axis.updateScrollBarSize(dataRange.min, dataRange.max);
 		}
 		
 		/**
@@ -94,8 +96,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		protected var sourceConfirmedMin:Number = 0;
 		
 		/**
+		 * 
 		 */		
-		public function scrollingData(offset:Number):void
+		public function scrollByDataBar(sourceOff:Number):void
+		{
+			
+		}
+		
+		/**
+		 */		
+		public function scrollingByChartCanvas(offset:Number):void
 		{
 			PerformaceTest.start("scrollingData");
 			if (axis.direction == AxisBase.HORIZONTAL_AXIS)
@@ -105,6 +115,8 @@ package com.fiCharts.charts.chart2D.core.axis
 			PerformaceTest.end("scrollingData");
 			
 			renderYAxisAndSeries(this.scrollMinData, this.scrollMaxData);
+			
+			axis.updateScrollBarPos(dataScaleProxy.getPercentByData(scrollMinData));
 		}
 		
 		/**
@@ -112,13 +124,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		protected function renderYAxisAndSeries(minData:Number, maxData:Number):void
 		{
-			PerformaceTest.start("updateScrollBar");
-			// 绘制滚动条
-			var startPerc:Number = dataScaleProxy.getPercentByData(minData);
-			var endPerc:Number = dataScaleProxy.getPercentByData(maxData);
-			axis.updateScrollBar(startPerc, endPerc);
-			PerformaceTest.end("updateScrollBar");
-			
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, minData, maxData));
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE));
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.RENDER_DATA_RESIZED_SERIES));

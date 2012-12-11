@@ -110,6 +110,7 @@ package com.fiCharts.ui.toolTips
 			else// 随鼠标位置而移动
 			{
 				ifMoving = true;
+				_moveTips();
 			}
 			
 			toolTipUI.show();
@@ -131,6 +132,13 @@ package com.fiCharts.ui.toolTips
 		/**
 		 */		
 		private function moveHandler(evt:Event):void
+		{
+			_moveTips();
+		}
+		
+		/**
+		 */		
+		private function _moveTips():void
 		{
 			if (ifMoving)
 			{

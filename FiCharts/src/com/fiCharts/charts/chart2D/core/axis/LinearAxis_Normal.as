@@ -109,7 +109,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function scrollingData(offset:Number):void
+		public function scrollingByChartCanvas(offset:Number):void
 		{
 		}
 		

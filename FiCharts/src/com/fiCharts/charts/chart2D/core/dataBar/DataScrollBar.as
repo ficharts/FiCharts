@@ -1,14 +1,18 @@
 package com.fiCharts.charts.chart2D.core.dataBar
 {
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
+	import com.fiCharts.charts.chart2D.core.axis.DataRange;
 	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.graphic.StyleManager;
+	import com.fiCharts.utils.interactive.DragControl;
+	import com.fiCharts.utils.interactive.IDragCanvas;
 	
 	import fl.events.DataChangeEvent;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.ui.MouseCursorData;
 	
 	/**
 	 * 
@@ -20,14 +24,56 @@ package com.fiCharts.charts.chart2D.core.dataBar
 	 * 
 	 * 数据缩放时，刷新窗口状态
 	 */	
-	public class DataScrollBar extends Sprite
+	public class DataScrollBar extends Sprite implements IDragCanvas
 	{
 		public function DataScrollBar(axis:AxisBase)
 		{
 			super();
 			this.axis = axis;
+			dragControl = new DragControl(this, this);
+			dragControl.addEventListener(MouseEvent.MOUSE_DOWN, downHandler, false, 0, true);
 		}
 		
+		/**
+		 */		
+		public var dataRange:DataRange;
+		
+		/**
+		 */		
+		private var dragControl:DragControl;
+		
+		/**
+		 */		
+		private function downHandler(evt:MouseEvent):void
+		{
+			sourceX = window.x;
+		}
+		
+		/**
+		 */		
+		private var sourceX:Number = 0;
+		
+		/**
+		 */		
+		public function startScroll():void
+		{
+			
+		}
+		
+		/**
+		 */		
+		public function scrolling(offset:Number, sourceOffset:Number):void
+		{
+			axis.scrollingByChartCanvas(- offset / (max - min));
+		}
+		
+		/**
+		 */		
+		public function stopScroll():void
+		{
+			axis.dataScrolled(dataRange);
+		}
+			
 		/**
 		 */		
 		public function init(style:DataBarStyle):void
@@ -39,9 +85,6 @@ package com.fiCharts.charts.chart2D.core.dataBar
 			
 			window.winStyle = style.window;
 			this.addChild(window);
-			
-			axis.addEventListener(MouseEvent.ROLL_OVER, rollOver, false, 0 , true);
-			axis.addEventListener(MouseEvent.ROLL_OUT, rollOut, false, 0, true);
 		}
 		
 		/**
@@ -79,53 +122,9 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		private var window:DataBarWindow = new DataBarWindow;
 		
 		/**
-		 */		
-		private function rollOver(evt:MouseEvent):void
-		{
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, startDragHandler, false, 0, true);
-		}
-		
-		/**
-		 */		
-		private function startDragHandler(evt:MouseEvent):void
-		{
-			stage.addEventListener(MouseEvent.MOUSE_UP, stopDragHandler, false, 0 , true);
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, dragHandler, false, 0, true);
-			currenPos = evt.stageX;
-		}
-		
-		/**
-		 */		
-		private var currenPos:Number = 0;
-		
-		/**
-		 */		
-		private function dragHandler(evt:MouseEvent):void
-		{
-			var offset:Number = currenPos - evt.stageX;
-			axis.scrollingData(offset / (max - min));
-			currenPos = evt.stageX;
-			axis.stopTip();
-		}
-		
-		/**
-		 */		
-		private function stopDragHandler(evt:MouseEvent):void
-		{
-			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.DATA_SCROLLED));
-			stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragHandler);
-			stage.removeEventListener(MouseEvent.MOUSE_UP, stopDragHandler);
-		}
-		
-		private function rollOut(evt:MouseEvent):void
-		{
-			stage.removeEventListener(MouseEvent.MOUSE_DOWN, startDragHandler);
-		}
-		
-		/**
 		 * 坐标轴进行任何数据缩放操作时，同步更新；
 		 */		
-		public function update(startPerc:Number, endPerc:Number):void
+		public function updateWindowSize(startPerc:Number, endPerc:Number):void
 		{
 			min = startPerc;
 			max = endPerc; 
@@ -134,8 +133,15 @@ package com.fiCharts.charts.chart2D.core.dataBar
 			window.winHeight = this.barHeight;
 			
 			window.render();
-			window.x = startPerc * axis.size;
+			updateWindowPos(startPerc);
 			window.y = ty;
+		}
+		
+		/**
+		 */		
+		public function updateWindowPos(perc:Number):void
+		{
+			window.x = perc * axis.size;
 		}
 		
 		/**

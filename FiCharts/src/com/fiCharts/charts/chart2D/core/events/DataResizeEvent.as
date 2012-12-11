@@ -7,11 +7,6 @@ package com.fiCharts.charts.chart2D.core.events
 	public class DataResizeEvent extends Event
 	{
 		/**
-		 *  从数据滚动条滑动数据后，需要同步更新主控制器的当前数据范围
-		 */		
-		public static const DATA_SCROLLED:String = "dataScrolled";
-		
-		/**
 		 * 数据滚动时需隐藏tips 
 		 */		
 		public static const HIDE_TIPS:String = "hideTips";

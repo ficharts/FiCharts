@@ -97,7 +97,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function scrollingData(offset:Number):void
+		public function scrollingByChartCanvas(offset:Number):void
 		{
 			if (axis.direction == AxisBase.HORIZONTAL_AXIS)
 				dataScaleProxy.scrollData(offset);
@@ -133,7 +133,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			// 绘制滚动条
 			var startPerc:Number = min / dataScaleProxy.maxIndex;
 			var endPerc:Number = max / dataScaleProxy.maxIndex;
-			axis.updateScrollBar(startPerc, endPerc);
+			axis.updateScrollBarSize(startPerc, endPerc);
 			
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.GET_SERIES_DATA_INDEX_BY_INDEXS, min, max));
 			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE));

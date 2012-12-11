@@ -14,6 +14,12 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.interactive.DragControl;
+	import com.fiCharts.utils.interactive.IDragCanvas;
+	import com.fiCharts.utils.interactive.ITipCanvas;
+	import com.fiCharts.utils.interactive.IZoomCanvas;
+	import com.fiCharts.utils.interactive.TipCanvasControl;
+	import com.fiCharts.utils.interactive.ZoomControl;
 	import com.fiCharts.utils.system.OS;
 	
 	import flash.events.MouseEvent;
@@ -69,7 +75,7 @@ package com.fiCharts.charts.chart2D.encry
 	 * 数据缩放的总控制类， 关键构成元素都在这里，包括多点触摸的缩放控制
 	 * 
 	 */	
-	public class DataScalablePattern implements IChartPattern
+	public class DataScalablePattern implements IChartPattern, IDragCanvas, IZoomCanvas, ITipCanvas
 	{
 		/**
 		 */		
@@ -83,21 +89,15 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function toClassicPattern():void
 		{
-			_leaveChartCanvas();
-			
 			if (chartMain.classicPattern)
 				chartMain.currentPattern = chartMain.classicPattern;
 			else
 				chartMain.currentPattern = new ClassicPattern(chartMain);
 			
-			chartMain.chartCanvas.removeEventListener(MouseEvent.ROLL_OVER, mouseInSeriesArea);
-			chartMain.chartCanvas.removeEventListener(MouseEvent.ROLL_OUT, mouseOutSeriesArea);
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
-			
-			scrollAxis.removeEventListener(DataResizeEvent.DATA_SCROLLED, dataScolledByDataBar);
-			scrollAxis.removeEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange);
-			
 			ExternalUtil.addCallback("onWebmousewheel", null);
+			
+			scrollAxis.removeEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange);
 			
 			scrollAxis.toNomalPattern();
 			tipsHolder.distory();
@@ -109,10 +109,11 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function init():void
 		{
-			chartMain.chartCanvas.addEventListener(MouseEvent.ROLL_OVER, mouseInSeriesArea, false, 0 ,true);
-			chartMain.chartCanvas.addEventListener(MouseEvent.ROLL_OUT, mouseOutSeriesArea, false, 0, true);
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
+			dragController = new DragControl(chartMain.chartCanvas, this);
+			zoomControl = new ZoomControl(chartMain.chartCanvas, this);
+			tipsContorl = new TipCanvasControl(chartMain.chartCanvas, this);
 			
+			chartMain.stage.addEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler, false, 0, true);
 			ExternalUtil.addCallback("onWebmousewheel", onWebMouseWheel);
 			
 			if (tipsHolder == null)
@@ -123,6 +124,12 @@ package com.fiCharts.charts.chart2D.encry
 				tipsHolder.locked = false;
 			}
 		}
+		
+		/**
+		 */		
+		private var dragController:DragControl;
+		private var zoomControl:ZoomControl;
+		private var tipsContorl:TipCanvasControl;
 		
 		/**
 		 */		
@@ -144,7 +151,6 @@ package com.fiCharts.charts.chart2D.encry
 				}
 				
 				axis.yDataUpdated();
-				
 				axis.renderVerticalAxis();
 			}
 			
@@ -195,11 +201,11 @@ package com.fiCharts.charts.chart2D.encry
 			hAxis.dataUpdated();
 			vAxis.dataUpdated();
 			
+			scrollBar.dataRange = this.currentDataRange;
 			scrollBar.setAxis(hAxis, vAxis);
 			scrollBar.setData(series.dataItemVOs.concat(), series.verticalValues.concat());
 			
 			scrollAxis.addEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange, false, 0, true);
-			scrollAxis.addEventListener(DataResizeEvent.DATA_SCROLLED, dataScolledByDataBar, false, 0, true);
 		}
 		
 		/**
@@ -224,9 +230,6 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function renderEnd():void
 		{
-			if (currentDataRange == null)
-				currentDataRange = new DataRange;
-			
 			if (chartMain.chartModel.dataScale.changed)
 			{
 				currentDataRange.min = scrollAxis.getSourceDataPercent(chartMain.chartModel.dataScale.start);
@@ -248,17 +251,17 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private function mobileZoomHandler(evt:TransformGestureEvent):void
+		public function zoom(scale:Number):void
 		{
-			if (evt.scaleX > 1)
+			if (scale > 1)
 			{
 				resizeOnCanvasGesture(0.5, true, 
-					evt.scaleX - 1);
+					scale - 1);
 			}
 			else
 			{
 				resizeOnCanvasGesture(0.5, false, 
-					1 - evt.scaleX);
+					1 - scale);
 			}
 		}
 		
@@ -341,73 +344,10 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 */		
-		private function stageDownHadler(evt:MouseEvent):void
-		{
-			ifMouseDown = true;
-			
-			this.hideTips();
-			currentPosition = evt.stageX;
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_MOVE, checkScrollHandler);
-		}
-		
-		/**
-		 */		
-		private function stopMoveHandler(evt:MouseEvent):void
-		{
-			ifMouseDown = false;
-			
-			updateTips();
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_MOVE, checkScrollHandler);
-		}
-		
-		/**
-		 * 鼠标按下后，隐藏tips， 松开显示tips；
-		 * 
-		 * 为了防止拖拽时显示tips，故设定此值用来判断
-		 */		
-		private var ifMouseDown:Boolean = false;
-		
-		/**
-		 */		
-		private function checkScrollHandler(evt:MouseEvent):void
-		{
-			if (currentDataRange.min == 0 && currentDataRange.max == 1) return;
-			
-			var offset:Number = evt.stageX - currentPosition; 
-			
-			if (ifSrolling)
-			{
-				scroll(offset);
-				currentPosition = evt.stageX;
-			}
-			else
-			{
-				// 只要有一次移动距离大于特定值就证明开始了滚动
-				if (OS.isDesktopSystem && Math.abs(offset) >= 3)
-					startScroll();
-				else
-					startScroll();
-			}
-		}
-		
-		/**
-		 * 数据缩放条滚动结束时触发
-		 */		
-		private function dataScolledByDataBar(evt:DataResizeEvent):void
-		{
-			evt.stopPropagation();
-			_stopScroll();
-		}
-		
-		/**
 		 * 开始数据滚动
 		 */		
-		private function startScroll():void
+		public function startScroll():void
 		{
-			ifSrolling = true;
-			
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_UP, stopScroll);
 			chartMain.chartCanvas.mouseChildren = chartMain.chartCanvas.mouseEnabled = false;
 		}
 		
@@ -417,47 +357,21 @@ package com.fiCharts.charts.chart2D.encry
 		 * 只是改变了 滚动位置
 		 * 
 		 */		
-		private function scroll(offset:Number):void
+		public function scrolling(offset:Number, sourceOffset:Number):void
 		{
-			scrollAxis.scrollingData(offset);
+			if (currentDataRange.min == 0 && currentDataRange.max == 1) return;
+			
+			scrollAxis.scrollingByChartCanvas(offset);
 			chartMain.gridField.drawHGidLine(scrollAxis.ticks, chartMain.chartModel.gridField);
 		}
 		
 		/**
-		 * 结束数据滚动
 		 */		
-		private function stopScroll(evt:MouseEvent):void
+		public function stopScroll():void
 		{
-			_stopScroll();
-		}
-		
-		/**
-		 */		
-		private function _stopScroll():void
-		{
-			ifSrolling = false;
-			
 			scrollAxis.dataScrolled(this.currentDataRange);
 			chartMain.chartCanvas.mouseChildren = chartMain.chartCanvas.mouseEnabled = true;
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_UP, stopScroll);
-			
-			// 鼠标移出画布区域，停止拖动后不更新提示信息
-			if(ifMouseInCanvas())
-				updateTips();
-			else
-				_leaveChartCanvas();
 		}
-		
-		/**
-		 * 不是鼠标按下后一移动就还是数据滚动，而是移动一小段距离后才
-		 * 
-		 * 正式开始滚动数据
-		 */		
-		private var ifSrolling:Boolean = false;
-		
-		/**
-		 */		
-		private var currentPosition:Number = 0;
 		
 		/**
 		 *
@@ -477,16 +391,10 @@ package com.fiCharts.charts.chart2D.encry
 				scrollAxis.dataResized(currentDataRange);
 				chartMain.gridField.drawHGidLine(scrollAxis.ticks, chartMain.chartModel.gridField);
 				
-				
-				if(ifMouseInCanvas() == false)
+				if (this.tipsContorl.ifMouseIn == false)
 					this.hideTips();
 			}
 		}
-		
-		
-		/**
-		 */		
-		private var dataDis:Number = 0;
 		
 		/**
 		 * 图表主程序
@@ -503,7 +411,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private var currentDataRange:DataRange;
+		private var currentDataRange:DataRange = new DataRange;
 		
 		/**
 		 */		
@@ -554,95 +462,13 @@ package com.fiCharts.charts.chart2D.encry
 		//
 		//-----------------------------------------------------
 		
-		/**
-		 */		
-		private function mouseInSeriesArea(evt:MouseEvent):void
-		{
-			this.gotoChartCanvas();
-		}
-		
-		/**
-		 */		
-		private function mouseOutSeriesArea(evt:MouseEvent):void
-		{
-			this.leaveChartCanvas();
-		}
-										   
-		/**
-		 * 
-		 */		
-		private function toolTipsHandler(evt:MouseEvent):void
-		{
-			// 防止鼠标移出图表画布区域继续信息提示
-			if(ifMouseInCanvas() == false)
-			{
-				this._leaveChartCanvas(); 
-			}
-			else
-			{
-				updateTips();
-			}
-		}
-		
-		/**
-		 * 
-		 * 鼠标移出图表画布区域，结束信息提示，还原鼠标状态
-		 */		
-		private function leaveChartCanvas():void
-		{
-			// 防止鼠标依旧位于图表画布中， 但由于其他罩盖引起的的  rollOut
-			if(ifMouseInCanvas())
-				return; 
-			
-			_leaveChartCanvas();
-		}
-		
-		/**
-		 */		
-		private function ifMouseInCanvas():Boolean
-		{
-			if(chartMain.chartCanvas.hitTestPoint(chartMain.stage.mouseX, chartMain.stage.mouseY))
-				return true;
-			
-			return false;
-		}
-		
-		/**
-		 * 鼠标进入图表画布区域，开始信息提示，改变鼠标状态
-		 */		
-		private function gotoChartCanvas():void
-		{
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler, false, 0, true);
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_UP, stopMoveHandler, false, 0, true);
-			chartMain.stage.addEventListener(TransformGestureEvent.GESTURE_ZOOM, mobileZoomHandler, false, 0, true);
-			
-			chartMain.stage.addEventListener(MouseEvent.MOUSE_MOVE, toolTipsHandler, false, 0, true);
-			
-			Mouse.cursor = flash.ui.MouseCursor.HAND;
-		}
-		
-		/**
-		 */		
-		private function _leaveChartCanvas():void
-		{
-			if (this.ifSrolling) return;
-			
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_DOWN, stageDownHadler);
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_UP, stopMoveHandler);
-			chartMain.stage.removeEventListener(TransformGestureEvent.GESTURE_ZOOM, mobileZoomHandler);
-			
-			chartMain.stage.removeEventListener(MouseEvent.MOUSE_MOVE, toolTipsHandler);
-			
-			Mouse.cursor = flash.ui.MouseCursor.ARROW;
-			hideTips();
-		}
 		
 		/**
 		 * 刷新并显示信息提示， 由坐标轴定位到序列的节点
 		 */		
-		private function updateTips():void
+		public function showTips():void
 		{
-			if (scrollAxis && ifMouseDown == false)
+			if (scrollAxis)
 			{
 				tipsHolder.clear();
 				scrollAxis.updateToolTips();
@@ -662,7 +488,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private function hideTips():void
+		public function hideTips():void
 		{
 			scrollAxis.stopTip();
 			chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
