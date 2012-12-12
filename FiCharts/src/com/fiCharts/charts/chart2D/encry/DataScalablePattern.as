@@ -20,12 +20,8 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.interactive.IZoomCanvas;
 	import com.fiCharts.utils.interactive.TipCanvasControl;
 	import com.fiCharts.utils.interactive.ZoomControl;
-	import com.fiCharts.utils.system.OS;
 	
 	import flash.events.MouseEvent;
-	import flash.events.TransformGestureEvent;
-	import flash.ui.Mouse;
-	import flash.ui.MouseCursor;
 	
 	
 	
@@ -53,8 +49,6 @@ package com.fiCharts.charts.chart2D.encry
 	//  3.移除序列截图
 	//  4.坐标轴的当前数据范围不便，除非数据缩放时才会改变其
 	//  
-	//
-	//
 	//
 	//
 	//
@@ -105,6 +99,25 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 */		
+		public function toScalablePattern():void
+		{
+		}
+		
+		
+		
+		
+		
+		//-----------------------------------------------------------------
+		//
+		//
+		//
+		// 初始化过程
+		//
+		//
+		//-----------------------------------------------------------------
+		
+		/**
 		 * 添加控制数据缩放的监听器
 		 */		
 		public function init():void
@@ -131,32 +144,13 @@ package com.fiCharts.charts.chart2D.encry
 		private var zoomControl:ZoomControl;
 		private var tipsContorl:TipCanvasControl;
 		
+		
 		/**
 		 */		
-		private function updateYAxisDataRange(evt:DataResizeEvent):void
+		public function configSeriesAxis(scrolAxis:AxisBase):void
 		{
-			PerformaceTest.start("updateYAxisDataRange");
-			
-			var axis:AxisBase;
-			var ifYAxiChanged:Boolean = false;
-			for each (axis in chartMain.vAxises)
-			{
-				axis.redayToUpdataYData()
-				
-				for each (var seriesItem:SeriesBase in chartMain.series)
-				{
-					// 别忘了图例可以控制序列的隐藏
-					if(seriesItem.visible)					
-						seriesItem.updateYAxisValueForScroll();
-				}
-				
-				axis.yDataUpdated();
-				axis.renderVerticalAxis();
-			}
-			
-			this.chartMain.renderVGrid();
-			
-			PerformaceTest.end("updateYAxisDataRange");
+			//目前仅横轴方向支持数据滚动和缩放，并且仅单轴支持
+			scrollAxis = scrolAxis;
 		}
 		
 		/**
@@ -205,7 +199,18 @@ package com.fiCharts.charts.chart2D.encry
 			scrollBar.setAxis(hAxis, vAxis);
 			scrollBar.setData(series.dataItemVOs.concat(), series.verticalValues.concat());
 			
+			scrollAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_BY_INDEXS, dataResizedByIndex, false, 0, true);
+			scrollAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, dataResizedByRange, false, 0, true);
+			
 			scrollAxis.addEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange, false, 0, true);
+			//scrollAxis.addEventListener(DataResizeEvent.RENDER_DATA_RESIZED_SERIES, renderDataResized, false, 0, true);
+		}
+		
+		/**
+		 */		
+		private function get scrollBar():DataScrollBar
+		{
+			return scrollAxis.scrollBar;
 		}
 		
 		/**
@@ -217,13 +222,6 @@ package com.fiCharts.charts.chart2D.encry
 				series.render();
 			
 			scrollBar.render();
-		}
-		
-		/**
-		 */		
-		private function get scrollBar():DataScrollBar
-		{
-			return scrollAxis.scrollBar;
 		}
 		
 		/**
@@ -243,11 +241,82 @@ package com.fiCharts.charts.chart2D.encry
 			scrollAxis.adjustZoomFactor(chartMain.chartModel.dataScale);
 		}
 		
+		
+		
+		
+		
+		//-----------------------------------------------------
+		//
+		//
+		//  动态绘制
+		//
+		//
+		//-----------------------------------------------------
+		
+		protected function dataResizedByIndex(evt:DataResizeEvent):void
+		{
+			evt.stopPropagation();
+			
+			 evt.start;
+			 evt.end;
+		}
+		
+		/**
+		 * 
+		 * 前后各多延伸一个节点
+		 * 
+		 */		
+		protected function dataResizedByRange(evt:DataResizeEvent):void
+		{
+			PerformaceTest.start("dataResizedByRange");
+			evt.stopPropagation();
+			
+			evt.start, evt.end
+			
+			PerformaceTest.end("dataResizedByRange");
+		}
+		
 		/**
 		 */		
-		public function toScalablePattern():void
+		private function updateYAxisDataRange(evt:DataResizeEvent):void
 		{
+			PerformaceTest.start("updateYAxisDataRange");
+			
+			var axis:AxisBase;
+			var ifYAxiChanged:Boolean = false;
+			for each (axis in chartMain.vAxises)
+			{
+				axis.redayToUpdataYData()
+				
+				for each (var seriesItem:SeriesBase in chartMain.series)
+				{
+					// 别忘了图例可以控制序列的隐藏
+					if(seriesItem.visible)					
+						seriesItem.updateYAxisValueForScroll();
+				}
+				
+				axis.yDataUpdated();
+				axis.renderVerticalAxis();
+			}
+			
+			this.chartMain.renderVGrid();
+			
+			PerformaceTest.end("updateYAxisDataRange");
 		}
+		
+		
+		
+		
+		
+		
+		
+		//-----------------------------------------------------------
+		//
+		//
+		// 缩放控制
+		//
+		//
+		//------------------------------------------------------------
 		
 		/**
 		 */		
@@ -397,17 +466,19 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 */		
+		public function scaleData(startValue:Object, endValue:Object):void
+		{
+			currentDataRange.min = scrollAxis.getDataPercent(startValue);
+			currentDataRange.max = scrollAxis.getDataPercent(endValue);		
+			
+			dataResized(currentDataRange.min, currentDataRange.max);
+		}
+		
+		/**
 		 * 图表主程序
 		 */		
 		private var chartMain:ChartMain;
-		
-		/**
-		 */		
-		public function configSeriesAxis(scrolAxis:AxisBase):void
-		{
-			//目前仅横轴方向支持数据滚动和缩放，并且仅单轴支持
-			scrollAxis = scrolAxis;
-		}
 		
 		/**
 		 */		
@@ -437,15 +508,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 		}
 		
-		/**
-		 */		
-		public function scaleData(startValue:Object, endValue:Object):void
-		{
-			currentDataRange.min = scrollAxis.getDataPercent(startValue);
-			currentDataRange.max = scrollAxis.getDataPercent(endValue);		
-			
-			dataResized(currentDataRange.min, currentDataRange.max);
-		}
+		
 		
 		
 		
