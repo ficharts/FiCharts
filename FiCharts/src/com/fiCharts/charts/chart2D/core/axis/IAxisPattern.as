@@ -50,6 +50,10 @@ package com.fiCharts.charts.chart2D.core.axis
 		function scrollingByChartCanvas(offset:Number):void;
 		
 		/**
+		 */		
+		//function scrollByDataBar(offsetFromSource:Number):void
+		
+		/**
 		 * 
 		 * 根据当前滚动位置，计算屏幕区域数据范围，让序列渲染此数据
 		 * 
