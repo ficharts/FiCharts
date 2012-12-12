@@ -25,12 +25,12 @@ package com.fiCharts.charts.chart2D.column2D
 		
 		/**
 		 */		
-		override protected function dataResizedByIndex(evt:DataResizeEvent):void
+		/*override protected function dataResizedByIndex(evt:DataResizeEvent):void
 		{
 			super.dataResizedByIndex(evt);
 			layoutColumnUIs();
 			//updataItemRendersLayout();
-		}
+		}*/
 		
 		/**
 		 */		

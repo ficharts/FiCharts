@@ -215,35 +215,27 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		protected function dataResizedByIndex(evt:DataResizeEvent):void
+		public function dataResizedByIndex(minIndex:uint, maxIndex:uint):void
 		{
-			evt.stopPropagation();
-			
-			dataOffsetter.minIndex = evt.start;
-			dataOffsetter.maxIndex = evt.end;
+			dataOffsetter.minIndex = minIndex;
+			dataOffsetter.maxIndex = maxIndex;
 			dataOffsetter.offSet(0, maxDataItemIndex);
 			
 			scrollYValues = this.verValues.slice(dataOffsetter.minIndex, dataOffsetter.maxIndex + 1);
 		}
 		
 		/**
-		 * 
 		 * 前后各多延伸一个节点
-		 * 
 		 */		
-		protected function dataResizedByRange(evt:DataResizeEvent):void
+		public function dataResizedByRange(min:Number, max:Number):void
 		{
-			PerformaceTest.start("dataResizedByRange");
-			evt.stopPropagation();
-			
 			dataOffsetter.minIndex = 0;
 			dataOffsetter.maxIndex = maxDataItemIndex;
 			
-			dataOffsetter.getDataIndexRange(evt.start, evt.end, horValues);
+			dataOffsetter.getDataIndexRange(min, max, horValues);
 			dataOffsetter.offSet(0, maxDataItemIndex);
 			
 			scrollYValues = this.verValues.slice(dataOffsetter.minIndex, dataOffsetter.maxIndex + 1);
-			PerformaceTest.end("dataResizedByRange");
 		}
 		
 		/**
@@ -263,7 +255,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private function renderDataResized(evt:DataResizeEvent):void
+		public function renderDataResized():void
 		{
 			PerformaceTest.start("renderScaledData");
 			this.curRenderPattern.renderScaledData();
@@ -789,11 +781,6 @@ package com.fiCharts.charts.chart2D.encry
 			_horizontalAxis.metaData = this;
 			
 			_horizontalAxis.addEventListener(DataResizeEvent.RATE_SERIES_DATA_ITEMS, rateDataItems, false, 0, true);
-			
-			_horizontalAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_BY_INDEXS, dataResizedByIndex, false, 0, true);
-			_horizontalAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, dataResizedByRange, false, 0, true);
-			
-			_horizontalAxis.addEventListener(DataResizeEvent.RENDER_DATA_RESIZED_SERIES, renderDataResized, false, 0, true);
 			
 			_horizontalAxis.addEventListener(DataResizeEvent.UPDATE_TIPS_BY_DATA, updateTipByData, false, 0, true);
 			_horizontalAxis.addEventListener(DataResizeEvent.UPDATE_TIPS_BY_INDEX, updateTipByIndex, false, 0, true);

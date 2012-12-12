@@ -29,7 +29,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
-		override protected function dataResizedByIndex(evt:DataResizeEvent):void
+		/*override protected function dataResizedByIndex(evt:DataResizeEvent):void
 		{
 			evt.stopPropagation();
 			
@@ -41,7 +41,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			//layoutDataItems();
 			layoutColumnUIs();
 			updataItemRendersLayout();
-		}
+		}*/
 		
 		/**
 		 * 

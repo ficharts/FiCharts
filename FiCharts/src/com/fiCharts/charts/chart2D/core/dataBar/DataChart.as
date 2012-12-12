@@ -19,6 +19,8 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		{
 			super();
 			addChild(canvas);
+			
+			this.mouseChildren = this.mouseEnabled = false;
 		}
 		
 		/**

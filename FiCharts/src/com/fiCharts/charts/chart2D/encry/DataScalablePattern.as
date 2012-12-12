@@ -203,7 +203,7 @@ package com.fiCharts.charts.chart2D.encry
 			scrollAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, dataResizedByRange, false, 0, true);
 			
 			scrollAxis.addEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange, false, 0, true);
-			//scrollAxis.addEventListener(DataResizeEvent.RENDER_DATA_RESIZED_SERIES, renderDataResized, false, 0, true);
+			scrollAxis.addEventListener(DataResizeEvent.RENDER_DATA_RESIZED_SERIES, renderDataResized, false, 0, true);
 		}
 		
 		/**
@@ -257,8 +257,8 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			evt.stopPropagation();
 			
-			 evt.start;
-			 evt.end;
+			for each(var series:SeriesBase in this.chartMain.series)
+				series.dataResizedByIndex(evt.start, evt.end);
 		}
 		
 		/**
@@ -268,10 +268,12 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function dataResizedByRange(evt:DataResizeEvent):void
 		{
-			PerformaceTest.start("dataResizedByRange");
 			evt.stopPropagation();
 			
-			evt.start, evt.end
+			PerformaceTest.start("dataResizedByRange");
+			
+			for each(var series:SeriesBase in this.chartMain.series)
+				series.dataResizedByRange(evt.start, evt.end);
 			
 			PerformaceTest.end("dataResizedByRange");
 		}
@@ -303,6 +305,19 @@ package com.fiCharts.charts.chart2D.encry
 			
 			PerformaceTest.end("updateYAxisDataRange");
 		}
+		
+		/**
+		 */		
+		private function renderDataResized(evt:DataResizeEvent):void
+		{
+			PerformaceTest.start("renderScaledData");
+		
+			for each(var series:SeriesBase in this.chartMain.series)
+				series.renderDataResized();
+			
+			PerformaceTest.end("renderScaledData");
+		}
+		
 		
 		
 		
@@ -436,7 +451,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		public function stopScroll():void
+		public function stopScroll(offset:Number, sourceOffset:Number):void
 		{
 			scrollAxis.dataScrolled(this.currentDataRange);
 			chartMain.chartCanvas.mouseChildren = chartMain.chartCanvas.mouseEnabled = true;
@@ -534,8 +549,9 @@ package com.fiCharts.charts.chart2D.encry
 			if (scrollAxis)
 			{
 				tipsHolder.clear();
-				scrollAxis.updateToolTips();
+				scrollAxis.updateToolTips();//先更新每个序列的tips节点
 				
+				// 组装tips
 				for each (var series:SeriesBase in chartMain.series)
 				{
 					// 别忘了图例可以控制序列的隐藏
@@ -543,6 +559,7 @@ package com.fiCharts.charts.chart2D.encry
 						tipsHolder.pushTip(series.tipItem);
 				}
 				
+				// 显示tips
 				// 别忘了序列都被图例隐藏的情况
 				if(tipsHolder.tipLength)
 					chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.SHOW_TOOL_TIPS, tipsHolder));

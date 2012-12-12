@@ -13,7 +13,7 @@ package com.fiCharts.utils.interactive
 		
 		/**
 		 */		
-		function stopScroll():void;
+		function stopScroll(offset:Number, sourceOffset:Number):void;
 			
 	}
 }

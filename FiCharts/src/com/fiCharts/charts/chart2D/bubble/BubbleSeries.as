@@ -21,24 +21,6 @@ package com.fiCharts.charts.chart2D.bubble
 		
 		/**
 		 */		
-		override protected function dataResizedByIndex(evt:DataResizeEvent):void
-		{
-			super.dataResizedByIndex(evt);
-			
-			//updataItemRendersLayout();
-		}
-		
-		/**
-		 */		
-		override protected function dataResizedByRange(evt:DataResizeEvent):void
-		{
-			super.dataResizedByRange(evt);
-			
-			//updataItemRendersLayout();
-		}
-		
-		/**
-		 */		
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
 			super.beforeUpdateProperties(xml);

@@ -2,17 +2,13 @@ package com.fiCharts.charts.chart2D.core.dataBar
 {
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.DataRange;
-	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.graphic.StyleManager;
 	import com.fiCharts.utils.interactive.DragControl;
 	import com.fiCharts.utils.interactive.IDragCanvas;
 	
-	import fl.events.DataChangeEvent;
-	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
-	import flash.ui.MouseCursorData;
 	
 	/**
 	 * 
@@ -30,7 +26,7 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		{
 			super();
 			this.axis = axis;
-			dragControl = new DragControl(this, this);
+			dragControl = new DragControl(window, this);
 			dragControl.addEventListener(MouseEvent.MOUSE_DOWN, downHandler, false, 0, true);
 		}
 		
@@ -64,13 +60,21 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		 */		
 		public function scrolling(offset:Number, sourceOffset:Number):void
 		{
-			axis.scrollingByChartCanvas(- offset / (max - min));
+			var temX:Number = sourceX + sourceOffset;
+			
+			if (temX < 0)
+				temX = 0
+			else if (temX + window.winWidth > axis.size)
+				temX = axis.size - window.winWidth;
+			
+			window.x = temX;
 		}
 		
 		/**
 		 */		
-		public function stopScroll():void
+		public function stopScroll(offset:Number, sourceOffset:Number):void
 		{
+			axis.scrollingByChartCanvas(- sourceOffset / (max - min));
 			axis.dataScrolled(dataRange);
 		}
 			

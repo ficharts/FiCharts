@@ -22,23 +22,6 @@ package com.fiCharts.charts.chart2D.marker
 			super();
 		}
 		
-		/**
-		 */		
-		override protected function dataResizedByIndex(evt:DataResizeEvent):void
-		{
-			super.dataResizedByIndex(evt);
-			
-			//updataItemRendersLayout();
-		}
-		
-		/**
-		 */		
-		override protected function dataResizedByRange(evt:DataResizeEvent):void
-		{
-			super.dataResizedByRange(evt);
-			
-			//updataItemRendersLayout();
-		}
 		
 		/**
 		 */		

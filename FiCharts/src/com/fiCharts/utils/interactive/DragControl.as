@@ -75,15 +75,16 @@ package com.fiCharts.utils.interactive
 		{
 			var offset:Number = evt.stageX - currenPos;
 			currenPos = evt.stageX;
+			var disFS:Number = currenPos - sourcePos;
 			
 			if (ifSrolling)
 			{
-				draged.scrolling(offset, currenPos - sourcePos);
+				draged.scrolling(offset, disFS);
 			}
 			else
 			{
-				// 只要有一次移动距离大于特定值就证明开始了滚动
-				if (OS.isDesktopSystem && Math.abs(offset) >= 3)
+				// 只要相对于原始位置移动距离大于特定值就证明开始了滚动
+				if (OS.isDesktopSystem && Math.abs(disFS) >= 3)
 				{
 					ifSrolling = true;
 					draged.startScroll();
@@ -113,7 +114,7 @@ package com.fiCharts.utils.interactive
 			area.stage.removeEventListener(MouseEvent.MOUSE_MOVE, movingHandler);
 			area.stage.removeEventListener(MouseEvent.MOUSE_UP, upAndStopMoveHandler);
 			
-			draged.stopScroll();
+			draged.stopScroll(evt.stageX - currenPos, evt.stageX - sourcePos);
 		}
 		
 		
