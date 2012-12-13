@@ -82,8 +82,10 @@ package com.fiCharts.charts.chart2D.core.axis
 			axis.preMaxMin(axis.sourceMax, axis.sourceMin);
 			axis.confirmMaxMin(axis.size);
 			
-			//获得最值差，供后继频繁计算用
-			axis.confirmedSourceValueDis = axis.maximum - axis.minimum;
+			if(axis.ifCeilEdgeValue)
+				axis.confirmedSourceValueDis = axis.maximum - axis.minimum;
+			else
+				axis.confirmedSourceValueDis = axis.sourceMax - axis.sourceMin;
 			
 			axis.createLabelsData(axis.maximum, axis.minimum);
 			axis.unitSize = axis.size / axis.labelVOes.length;
@@ -156,10 +158,21 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function getPercentByData(data:Object):Number
 		{
+			
 			if (data == null)
+			{
 				return 0;
+			}
 			else
-				return (Number(data) - axis.minimum) / axis.confirmedSourceValueDis;
+			{
+				var confirmedMin:Number = 0;
+				if (axis.ifCeilEdgeValue)
+					confirmedMin = axis.minimum;
+				else
+					confirmedMin = axis.sourceMin;
+					
+				return (Number(data) - confirmedMin) / axis.confirmedSourceValueDis;
+			}
 		}
 		
 		/**

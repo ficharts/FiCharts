@@ -3,6 +3,7 @@ package com.fiCharts.charts.chart2D.core.axis
 	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.model.DataScale;
 	import com.fiCharts.charts.chart2D.core.series.DataIndexOffseter;
+	import com.fiCharts.utils.MathUtil;
 	import com.fiCharts.utils.PerformaceTest;
 
 	/**
@@ -43,6 +44,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function dataResized(dataRange:DataRange):void
 		{
+			ifScrolling = false;
+			
 			stopTips();
 			
 			//筛分数据节点
@@ -61,7 +64,17 @@ package com.fiCharts.charts.chart2D.core.axis
 			updateToolTips();
 			
 			axis.updateScrollBarSize(dataRange.min, dataRange.max);
+			
+			ifLabelOddPattern = MathUtil.ifOddNumber(dataIndexActor.minIndex)
 		}
+		
+		
+		/**
+		 *  为了让数据滚动更加平滑，被渲染label的位置序号奇偶不同会出现
+		 * 
+		 *  跳跃现象， 滚动过程中的奇偶特性要与缩放后相同；
+		 */		
+		private var ifLabelOddPattern:Boolean = false;
 		
 		/**
 		 */		
@@ -75,11 +88,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			axis.preMaxMin(max, min);
 			axis.confirmMaxMin(axis.size);
 			
-			// 数据放大后，单元刻度会变小，两头空隙还是按照旧单元刻度格局，需要调整，除去多余的 internal
-			dataScaleProxy.sourceDataRange.min = sourceConfirmedMin + Math.floor((axis.sourceMin - this.sourceConfirmedMin) / axis.interval) * axis.interval;
-			dataScaleProxy.sourceDataRange.max = sourceConfirmedMax - Math.floor((sourceConfirmedMax - axis.sourceMax) / axis.interval) * axis.interval;
-			dataScaleProxy.confirmedSrcValueDis = dataScaleProxy.sourceDataRange.max - dataScaleProxy.sourceDataRange.min
-			
 			dataScaleProxy.currentDataRange.min = dataScaleProxy.sourceDataRange.min + 
 				dataScaleProxy.confirmedSrcValueDis * start;
 			
@@ -87,16 +95,8 @@ package com.fiCharts.charts.chart2D.core.axis
 				dataScaleProxy.confirmedSrcValueDis * end;
 		}
 		
-		/**
-		 */		
-		protected var sourceConfirmedMax:Number = 0;
 		
 		/**
-		 */		
-		protected var sourceConfirmedMin:Number = 0;
-		
-		/**
-		 * 
 		 */		
 		public function scrollByDataBar(sourceOff:Number):void
 		{
@@ -107,12 +107,12 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function scrollingByChartCanvas(offset:Number):void
 		{
-			PerformaceTest.start("scrollingData");
+			ifScrolling = true;
+			
 			if (axis.direction == AxisBase.HORIZONTAL_AXIS)
 				dataScaleProxy.scrollData(offset);
 			
 			this.scrollingLabelsAndTicks();
-			PerformaceTest.end("scrollingData");
 			
 			renderYAxisAndSeries(this.scrollMinData, this.scrollMaxData);
 			
@@ -194,8 +194,16 @@ package com.fiCharts.charts.chart2D.core.axis
 			axis.preMaxMin(axis.sourceMax, axis.sourceMin);
 			axis.confirmMaxMin(axis.size);
 			
-			sourceConfirmedMin = dataScaleProxy.currentDataRange.min = dataScaleProxy.sourceDataRange.min = axis.minimum;
-			sourceConfirmedMax = dataScaleProxy.currentDataRange.max = dataScaleProxy.sourceDataRange.max = axis.maximum;
+			if(axis.ifCeilEdgeValue)
+			{
+				dataScaleProxy.currentDataRange.min = dataScaleProxy.sourceDataRange.min = axis.minimum;
+				dataScaleProxy.currentDataRange.max = dataScaleProxy.sourceDataRange.max = axis.maximum;
+			}
+			else
+			{
+				dataScaleProxy.currentDataRange.min = dataScaleProxy.sourceDataRange.min = axis.sourceMin;
+				dataScaleProxy.currentDataRange.max = dataScaleProxy.sourceDataRange.max = axis.sourceMax;
+			}
 			
 			//获得最值差，供后继频繁计算用
 			dataScaleProxy.confirmedSrcValueDis = dataScaleProxy.sourceDataRange.max - dataScaleProxy.sourceDataRange.min;
@@ -235,6 +243,10 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 */		
+		private var ifScrolling:Boolean = false;
+		
+		/**
 		 * 根据当前数据范围确定label范围，渲染这些label；
 		 * 
 		 * 已经被渲染的label不用重复渲染，之渲染需要渲染的；
@@ -246,8 +258,30 @@ package com.fiCharts.charts.chart2D.core.axis
 			axis.clearLabels();
 			getLabelIndexRangeForRender();
 			
-			axis.renderHoriLabelUIs(dataIndexActor.minIndex, dataIndexActor.maxIndex, 
-				dataIndexActor.length);
+			var min:uint, max:uint, len:uint;
+			if (ifScrolling)
+			{
+				if (MathUtil.ifOddNumber(dataIndexActor.minIndex) != this.ifLabelOddPattern)
+				{
+					min = dataIndexActor.minIndex - 1;
+					max = dataIndexActor.maxIndex + 1;
+					len = dataIndexActor.length + 2;
+				}
+				else
+				{
+					min = dataIndexActor.minIndex;
+					max = dataIndexActor.maxIndex;
+					len = dataIndexActor.length;
+				}
+			}
+			else
+			{
+				min = dataIndexActor.minIndex;
+				max = dataIndexActor.maxIndex;
+				len = dataIndexActor.length;
+			}
+			
+			axis.renderHoriLabelUIs(min, max, len);
 		}
 		
 		/**
@@ -262,7 +296,11 @@ package com.fiCharts.charts.chart2D.core.axis
 			var maxIndex:uint = dataIndexActor.maxIndex = axis.labelVOes.length - 1;
 			
 			dataIndexActor.getDataIndexRange(scrollMinData, scrollMaxData, axis.labelValues);
-			dataIndexActor.offSet(0, maxIndex);// 多取两个数据位，丰满一些
+			
+			if (axis.ifHideEdgeLabel)
+				dataIndexActor.offSet(1, maxIndex - 1);
+			else
+				dataIndexActor.offSet(0, maxIndex);// 多取两个数据位，丰满一些
 		}
 		
 		/**

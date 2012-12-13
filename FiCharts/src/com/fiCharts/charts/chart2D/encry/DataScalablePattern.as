@@ -94,6 +94,9 @@ package com.fiCharts.charts.chart2D.encry
 			scrollAxis.removeEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange);
 			
 			scrollAxis.toNomalPattern();
+			scrollAxis.ifCeilEdgeValue = true;
+			scrollAxis.ifHideEdgeLabel = false;
+			
 			tipsHolder.distory();
 			tipsHolder = null;
 		}
@@ -174,6 +177,10 @@ package com.fiCharts.charts.chart2D.encry
 			
 			this.scrollAxis.toDataScalePatter();
 			
+			// 边缘数据不取整，不显示边缘标签
+			scrollAxis.ifCeilEdgeValue = false;
+			scrollAxis.ifHideEdgeLabel = true;
+			
 			var dataBarStyle:DataBarStyle = new DataBarStyle;
 			var config:* = XMLVOLib.getXML(Chart2DModel.DATA_BAR)
 			XMLVOMapper.fuck(config, dataBarStyle);
@@ -194,6 +201,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			hAxis.dataUpdated();
 			vAxis.dataUpdated();
+			hAxis.ifCeilEdgeValue = false;
 			
 			scrollBar.dataRange = this.currentDataRange;
 			scrollBar.setAxis(hAxis, vAxis);
