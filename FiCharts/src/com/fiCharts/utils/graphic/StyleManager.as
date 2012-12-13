@@ -75,6 +75,18 @@ package com.fiCharts.utils.graphic
 		
 		/**
 		 */		
+		public static function drawRectOnShape(target:Shape, style:Style, metaData:Object = null):void
+		{
+			setShapeStyle(style, target.graphics, metaData);
+			target.graphics.drawRoundRect(style.tx, style.ty, style.width, style.height, style.radius, style.radius);
+			target.graphics.endFill();
+			
+			drawRectCover(target.graphics, style.getCover, metaData);
+			StyleManager.setEffects(target, style, metaData);
+		}
+		
+		/**
+		 */		
 		public static function drawCircle(target:Shape, style:Style, metaData:Object):void
 		{
 			setShapeStyle(style, target.graphics, metaData);

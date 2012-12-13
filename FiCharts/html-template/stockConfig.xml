@@ -6,6 +6,11 @@
      <x title="A" type="date" input="YYYYMMDD"/> 
      <y title="B" type="linear" baseAtZero='false'/> 
    </axis>
+   <gridField radius='0'>
+        <vGrid>
+        	<border color='E2E2E2' thikness='1'/>
+        </vGrid>
+    </gridField>
    <legend enable="false"/>
    <series>
      <!--area name="a" xField="label" yField="value"/--> 

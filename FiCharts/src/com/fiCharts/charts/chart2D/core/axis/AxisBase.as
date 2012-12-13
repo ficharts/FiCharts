@@ -53,6 +53,30 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
+		 */		
+		private var _ifCeilEdgeValue:Boolean = true;
+
+		/**
+		 * 自动将线性坐标轴边缘取整， 在大数据滚动图表中用到
+		 * 
+		 * 
+		 * 
+		 */
+		public function get ifCeilEdgeValue():Boolean
+		{
+			return _ifCeilEdgeValue;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set ifCeilEdgeValue(value:Boolean):void
+		{
+			_ifCeilEdgeValue = value;
+		}
+
+		
+		/**
 		 *  是否隐藏边缘label，因 第一个和最后一个label经常会跨越坐标轴边缘
 		 * 
 		 *  设置此属性可以将边缘label隐藏掉；

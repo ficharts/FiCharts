@@ -7,6 +7,7 @@ package com.fiCharts.charts.chart2D.core.dataBar
 	import com.fiCharts.utils.interactive.DragControl;
 	import com.fiCharts.utils.interactive.IDragCanvas;
 	
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
@@ -28,6 +29,14 @@ package com.fiCharts.charts.chart2D.core.dataBar
 			this.axis = axis;
 			dragControl = new DragControl(window, this);
 			dragControl.addEventListener(MouseEvent.MOUSE_DOWN, downHandler, false, 0, true);
+		}
+		
+		/**
+		 * 只是位置偏移，相当于是滚动，不是缩放；
+		 */		
+		private function gotoDataRange(evt:MouseEvent):void
+		{
+			_scrolled(- (bg.mouseX - (window.x + window.winWidth / 2)) / (max - min))
 		}
 		
 		/**
@@ -74,7 +83,14 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		 */		
 		public function stopScroll(offset:Number, sourceOffset:Number):void
 		{
-			axis.scrollingByChartCanvas(- sourceOffset / (max - min));
+			_scrolled(- sourceOffset / (max - min));
+		}
+		
+		/**
+		 */		
+		private function _scrolled(dis:Number):void
+		{
+			axis.scrollingByChartCanvas(dis);
 			axis.dataScrolled(dataRange);
 		}
 			
@@ -83,6 +99,9 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		public function init(style:DataBarStyle):void
 		{
 			this.style = style;
+			
+			bg.addEventListener(MouseEvent.MOUSE_DOWN, gotoDataRange, false, 0, true);
+			this.addChild(bg);
 			
 			chart.style = style.chart;
 			addChild(chart);
@@ -169,9 +188,14 @@ package com.fiCharts.charts.chart2D.core.dataBar
 			style.barBG.width = axis.size;
 			style.barBG.height = this.barHeight;
 			style.barBG.ty = ty;
-			this.graphics.clear();
-			StyleManager.drawRect(this, style.barBG);
+			
+			bg.graphics.clear();
+			StyleManager.drawRect(bg, style.barBG);
 		}
+		
+		/**
+		 */		
+		private var bg:Sprite = new Sprite;
 		
 		/**
 		 */		
