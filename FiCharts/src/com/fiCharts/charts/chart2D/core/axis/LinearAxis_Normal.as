@@ -1,6 +1,6 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.model.DataScale;
+	import com.fiCharts.charts.chart2D.core.model.Zoom;
 
 	/**
 	 */	
@@ -43,7 +43,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function adjustZoomFactor(model:DataScale):void
+		public function adjustZoomFactor(model:Zoom):void
 		{
 			
 		}
@@ -67,12 +67,12 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function toDataResizePattern():void
+		public function toZoomPattern():void
 		{
-			if (axis.dataScalePattern)
-				axis.curPattern = axis.dataScalePattern;
+			if (axis.zoomPattern)
+				axis.curPattern = axis.zoomPattern;
 			else
-				axis.curPattern = axis.getDataScalePattern();
+				axis.curPattern = axis.getZoomPattern();
 		}
 		
 		/**

@@ -1,7 +1,7 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
 	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
-	import com.fiCharts.charts.chart2D.core.model.DataScale;
+	import com.fiCharts.charts.chart2D.core.model.Zoom;
 	import com.fiCharts.charts.chart2D.core.series.DataIndexOffseter;
 	import com.fiCharts.utils.PerformaceTest;
 
@@ -212,14 +212,14 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function adjustZoomFactor(model:DataScale):void
+		public function adjustZoomFactor(model:Zoom):void
 		{
 			dataScaleProxy.adjustZoomFactor(model, axis.size);
 		}
 		
 		/**
 		 */		
-		public function toDataResizePattern():void
+		public function toZoomPattern():void
 		{
 			
 		}

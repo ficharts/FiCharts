@@ -80,14 +80,14 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function ifDataScalable():Boolean
 		{
-			return chartModel.dataScale.enable;
+			return chartModel.zoom.enable;
 		}
 		
 		/**
 		 */		
 		public function setDataScalable(value:Boolean):void
 		{
-			chartModel.dataScale.enable = value;
+			chartModel.zoom.enable = value;
 		}
 		
 		/**
@@ -1039,17 +1039,17 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private function toScaledStateHandler(evt:Event):void
+		private function toZoomPatternHandler(evt:Event):void
 		{
 			if (this.currentPattern == null)
-				currentPattern = new DataScalablePattern(this);
+				currentPattern = new ZoomPattern(this);
 			else
-				currentPattern.toScalablePattern();
+				currentPattern.toZoomPattern();
 		}
 		
 		/**
 		 */		
-		private function toClassicStateHandler(evt:Event):void
+		private function toClassicPatternHandler(evt:Event):void
 		{
 			if (this.currentPattern == null)
 				currentPattern = new ClassicPattern(this);
@@ -1181,8 +1181,8 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_TITLE_STYLE, updateTitleStyleHandler);
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_LEGEND_STYLE, updateLegendStyleHandler);
 			
-			XMLVOLib.addCreationHandler(ChartMain.TO_CLASSIC_STATE, toClassicStateHandler);
-			XMLVOLib.addCreationHandler(ChartMain.TO_SCALABLE_STATE, toScaledStateHandler);
+			XMLVOLib.addCreationHandler(ChartMain.TO_CLASSIC_PATTERN, toClassicPatternHandler);
+			XMLVOLib.addCreationHandler(ChartMain.TO_ZOOM_PATTERN, toZoomPatternHandler);
 			
 			this.addEventListener(ItemRenderEvent.UPDATE_VALUE_LABEL, updateValueLabelHandler, false, 0, true);
 		}
@@ -1264,12 +1264,12 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 */		
 		internal var classicPattern:IChartPattern;
-		internal var dataScalePattern:IChartPattern;
+		internal var zoomPattern:IChartPattern;
 		
 		/**
 		 */		
-		public static const TO_CLASSIC_STATE:String = 'toClassicState';
-		public static const TO_SCALABLE_STATE:String = 'toScalableState';
+		public static const TO_CLASSIC_PATTERN:String = 'toClassicState';
+		public static const TO_ZOOM_PATTERN:String = 'toZoomState';
 		
 	}
 }

@@ -1,7 +1,7 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
 	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
-	import com.fiCharts.charts.chart2D.core.model.DataScale;
+	import com.fiCharts.charts.chart2D.core.model.Zoom;
 
 	/**
 	 * 仅有数据缩放坐标轴才用到此类，记录坐标数据总范围,当前数据范围；
@@ -16,7 +16,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function adjustZoomFactor(model:DataScale, size:Number):void
+		public function adjustZoomFactor(model:Zoom, size:Number):void
 		{
 			var rate:Number = sourceDataLen / size;
 			

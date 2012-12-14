@@ -1,6 +1,6 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.model.DataScale;
+	import com.fiCharts.charts.chart2D.core.model.Zoom;
 	import com.fiCharts.utils.Map;
 	import com.fiCharts.utils.format.DateFormater;
 	
@@ -174,7 +174,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		override public function toDataResizePattern():void
+		override public function toZoomPattern():void
 		{
 		}
 		

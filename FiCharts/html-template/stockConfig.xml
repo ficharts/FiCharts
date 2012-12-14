@@ -16,8 +16,8 @@
      <!--area name="a" xField="label" yField="value"/--> 
      <line name="b" xField="label" yField="valueB"/> 
    </series>
-   <dataScale enable='true'/> 
-   <dataBar height='50'>
+   <zoom enable='true'/> 
+   <zoomBar height='50'>
 	    <barBG>
 	    	<border color="CCCCCC"/>
 	        <fill color='EEEEEE'/>
@@ -51,5 +51,5 @@
 	    		</down>
 	    	</states>
 	    </window>
-   </dataBar>
+   </zoomBar>
  </config>

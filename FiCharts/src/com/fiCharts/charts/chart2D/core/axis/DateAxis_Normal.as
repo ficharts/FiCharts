@@ -1,6 +1,5 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.model.DataScale;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.format.DateFormater;
 	
@@ -50,10 +49,10 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		override public function toDataResizePattern():void
+		override public function toZoomPattern():void
 		{
-			if (dateAxis.dataScalePattern)
-				dateAxis.curPattern = dateAxis.dataScalePattern;
+			if (dateAxis.zoomPattern)
+				dateAxis.curPattern = dateAxis.zoomPattern;
 			else
 				dateAxis.curPattern = new DateAxis_DataScale(dateAxis);
 		}

@@ -1,4 +1,4 @@
-package com.fiCharts.charts.chart2D.core.dataBar
+package com.fiCharts.charts.chart2D.core.zoomBar
 {
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.DataRange;
@@ -21,9 +21,9 @@ package com.fiCharts.charts.chart2D.core.dataBar
 	 * 
 	 * 数据缩放时，刷新窗口状态
 	 */	
-	public class DataScrollBar extends Sprite implements IDragCanvas
+	public class ZoomBar extends Sprite implements IDragCanvas
 	{
-		public function DataScrollBar(axis:AxisBase)
+		public function ZoomBar(axis:AxisBase)
 		{
 			super();
 			this.axis = axis;
@@ -96,7 +96,7 @@ package com.fiCharts.charts.chart2D.core.dataBar
 			
 		/**
 		 */		
-		public function init(style:DataBarStyle):void
+		public function init(style:ZoomBarStyle):void
 		{
 			this.style = style;
 			
@@ -112,7 +112,7 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		
 		/**
 		 */		
-		private var chart:DataChart = new DataChart;
+		private var chart:ZoomChart = new ZoomChart;
 		
 		/**
 		 */		
@@ -142,7 +142,7 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		
 		/**
 		 */		
-		private var window:DataBarWindow = new DataBarWindow;
+		private var window:ZoomWindow = new ZoomWindow;
 		
 		/**
 		 * 坐标轴进行任何数据缩放操作时，同步更新；
@@ -220,6 +220,6 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		
 		/**
 		 */		
-		private var style:DataBarStyle;
+		private var style:ZoomBarStyle;
 	}
 }

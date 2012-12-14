@@ -1,7 +1,7 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.dataBar.DataScrollBar;
-	import com.fiCharts.charts.chart2D.core.model.DataScale;
+	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBar;
+	import com.fiCharts.charts.chart2D.core.model.Zoom;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -41,8 +41,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function AxisBase()
 		{
-			//this.mouseChildren = this.mouseEnabled = false;
-			
 			labelUIsCanvas.mouseChildren = labelUIsCanvas.mouseEnabled = false;
 			this.addChild(labelUIsCanvas);
 			addChild(labelsMask);
@@ -145,7 +143,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function adjustZoomFactor(scaleModel:DataScale):void
+		public function adjustZoomFactor(scaleModel:Zoom):void
 		{
 			curPattern.adjustZoomFactor(scaleModel);
 		}
@@ -159,26 +157,26 @@ package com.fiCharts.charts.chart2D.core.axis
 			else
 				curPattern = getNormalPatter();
 			
-			scrollBar.distory();
-			this.removeChild(scrollBar)
-			scrollBar = null;
+			zoomBar.distory();
+			this.removeChild(zoomBar)
+			zoomBar = null;
 		}
 		
 		/**
 		 */		
-		public function toDataScalePatter():void
+		public function toZoomPattern():void
 		{
 			if (curPattern)
-				curPattern.toDataResizePattern();
+				curPattern.toZoomPattern();
 			else
-				curPattern = getDataScalePattern();
+				curPattern = getZoomPattern();
 			
 			this.curPattern.dataUpdated();
 			
-			if (scrollBar == null)
+			if (zoomBar == null)
 			{
-				scrollBar = new DataScrollBar(this);
-				this.addChild(scrollBar);
+				zoomBar = new ZoomBar(this);
+				this.addChild(zoomBar);
 			}
 		}
 		
@@ -191,7 +189,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		internal function getDataScalePattern():IAxisPattern
+		internal function getZoomPattern():IAxisPattern
 		{
 			return null;
 		}
@@ -206,7 +204,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		internal var dataScalePattern:IAxisPattern;
+		internal var zoomPattern:IAxisPattern;
 		
 		/**
 		 * 根据原始数据得到其在总数据中的百分比位置，用来做尺寸缩放
@@ -643,9 +641,9 @@ package com.fiCharts.charts.chart2D.core.axis
 				if (position == 'bottom')
 				{
 					
-					if (this.scrollBar)
+					if (this.zoomBar)
 					{
-						titleLabel.y = this.labelUIsCanvas.height + title.margin + scrollBar.barHeight;
+						titleLabel.y = this.labelUIsCanvas.height + title.margin + zoomBar.barHeight;
 					}
 					else
 					{
@@ -1237,26 +1235,26 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		internal function updateScrollBarSize(startPerc:Number, endPerc:Number):void
 		{
-			scrollBar.updateWindowSize(startPerc, endPerc);
+			zoomBar.updateWindowSize(startPerc, endPerc);
 		}
 		
 		/**
 		 */		
 		internal function updateScrollBarPos(perc:Number):void
 		{
-			scrollBar.updateWindowPos(perc);
+			zoomBar.updateWindowPos(perc);
 		}
 		
 		/**
 		 */		
 		internal function upateDataStep(value:uint):void
 		{
-			scrollBar.updateChartDataStep(value);
+			zoomBar.updateChartDataStep(value);
 		}
 		
 		/**
 		 */		
-		public var scrollBar:DataScrollBar;
+		public var zoomBar:ZoomBar;
 
 	}
 }

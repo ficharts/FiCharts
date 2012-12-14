@@ -1,14 +1,12 @@
-package com.fiCharts.charts.chart2D.core.dataBar
+package com.fiCharts.charts.chart2D.core.zoomBar
 {
-	import com.fiCharts.utils.XMLConfigKit.style.States;
-	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	
 	/**
 	 */	
-	public class DataBarStyle
+	public class ZoomBarStyle
 	{
-		public function DataBarStyle()
+		public function ZoomBarStyle()
 		{
 			super();
 		}
@@ -48,11 +46,11 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		
 		/**
 		 */		
-		private var _window:DataBarWindowStyle;
+		private var _window:ZoomWindowStyle;
 
 		/**
 		 */
-		public function get window():DataBarWindowStyle
+		public function get window():ZoomWindowStyle
 		{
 			return _window;
 		}
@@ -60,7 +58,7 @@ package com.fiCharts.charts.chart2D.core.dataBar
 		/**
 		 * @private
 		 */
-		public function set window(value:DataBarWindowStyle):void
+		public function set window(value:ZoomWindowStyle):void
 		{
 			_window = value;
 		}

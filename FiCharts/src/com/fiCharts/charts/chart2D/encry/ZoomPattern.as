@@ -3,8 +3,8 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.DataRange;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.dataBar.DataBarStyle;
-	import com.fiCharts.charts.chart2D.core.dataBar.DataScrollBar;
+	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBarStyle;
+	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBar;
 	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
@@ -69,11 +69,11 @@ package com.fiCharts.charts.chart2D.encry
 	 * 数据缩放的总控制类， 关键构成元素都在这里，包括多点触摸的缩放控制
 	 * 
 	 */	
-	public class DataScalablePattern implements IChartPattern, IDragCanvas, IZoomCanvas, ITipCanvas
+	public class ZoomPattern implements IChartPattern, IDragCanvas, IZoomCanvas, ITipCanvas
 	{
 		/**
 		 */		
-		public function DataScalablePattern(base:ChartMain)
+		public function ZoomPattern(base:ChartMain)
 		{
 			this.chartMain = base;
 			init();
@@ -91,11 +91,11 @@ package com.fiCharts.charts.chart2D.encry
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 			ExternalUtil.addCallback("onWebmousewheel", null);
 			
-			scrollAxis.removeEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange);
+			zoomAxis.removeEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange);
 			
-			scrollAxis.toNomalPattern();
-			scrollAxis.ifCeilEdgeValue = true;
-			scrollAxis.ifHideEdgeLabel = false;
+			zoomAxis.toNomalPattern();
+			zoomAxis.ifCeilEdgeValue = true;
+			zoomAxis.ifHideEdgeLabel = false;
 			
 			tipsHolder.distory();
 			tipsHolder = null;
@@ -103,7 +103,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		public function toScalablePattern():void
+		public function toZoomPattern():void
 		{
 		}
 		
@@ -153,7 +153,7 @@ package com.fiCharts.charts.chart2D.encry
 		public function configSeriesAxis(scrolAxis:AxisBase):void
 		{
 			//目前仅横轴方向支持数据滚动和缩放，并且仅单轴支持
-			scrollAxis = scrolAxis;
+			zoomAxis = scrolAxis;
 		}
 		
 		/**
@@ -172,19 +172,19 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function preConfigScrollAxis():void
 		{
-			if (scrollAxis is LinearAxis)
-				(scrollAxis as LinearAxis).baseAtZero = false;
+			if (zoomAxis is LinearAxis)
+				(zoomAxis as LinearAxis).baseAtZero = false;
 			
-			this.scrollAxis.toDataScalePatter();
+			this.zoomAxis.toZoomPattern();
 			
 			// 边缘数据不取整，不显示边缘标签
-			scrollAxis.ifCeilEdgeValue = false;
-			scrollAxis.ifHideEdgeLabel = true;
+			zoomAxis.ifCeilEdgeValue = false;
+			zoomAxis.ifHideEdgeLabel = true;
 			
-			var dataBarStyle:DataBarStyle = new DataBarStyle;
-			var config:* = XMLVOLib.getXML(Chart2DModel.DATA_BAR)
+			var dataBarStyle:ZoomBarStyle = new ZoomBarStyle;
+			var config:* = XMLVOLib.getXML(Chart2DModel.ZOOM_BAR)
 			XMLVOMapper.fuck(config, dataBarStyle);
-			scrollBar.init(dataBarStyle);
+			zoomBar.init(dataBarStyle);
 			
 			//将第一个序列的数据和坐标轴克隆给滚动图表
 			var series:SeriesBase = chartMain.series[0];
@@ -203,22 +203,22 @@ package com.fiCharts.charts.chart2D.encry
 			vAxis.dataUpdated();
 			hAxis.ifCeilEdgeValue = false;
 			
-			scrollBar.dataRange = this.currentDataRange;
-			scrollBar.setAxis(hAxis, vAxis);
-			scrollBar.setData(series.dataItemVOs.concat(), series.verticalValues.concat());
+			zoomBar.dataRange = this.currentDataRange;
+			zoomBar.setAxis(hAxis, vAxis);
+			zoomBar.setData(series.dataItemVOs.concat(), series.verticalValues.concat());
 			
-			scrollAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_BY_INDEXS, dataResizedByIndex, false, 0, true);
-			scrollAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, dataResizedByRange, false, 0, true);
+			zoomAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_BY_INDEXS, dataResizedByIndex, false, 0, true);
+			zoomAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, dataResizedByRange, false, 0, true);
 			
-			scrollAxis.addEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange, false, 0, true);
-			scrollAxis.addEventListener(DataResizeEvent.RENDER_DATA_RESIZED_SERIES, renderDataResized, false, 0, true);
+			zoomAxis.addEventListener(DataResizeEvent.UPDATE_Y_AXIS_DATA_RANGE, updateYAxisDataRange, false, 0, true);
+			zoomAxis.addEventListener(DataResizeEvent.RENDER_DATA_RESIZED_SERIES, renderDataResized, false, 0, true);
 		}
 		
 		/**
 		 */		
-		private function get scrollBar():DataScrollBar
+		private function get zoomBar():ZoomBar
 		{
-			return scrollAxis.scrollBar;
+			return zoomAxis.zoomBar;
 		}
 		
 		/**
@@ -229,24 +229,24 @@ package com.fiCharts.charts.chart2D.encry
 			for each(var series:SeriesBase in chartMain.series)
 				series.render();
 			
-			scrollBar.render();
+			zoomBar.render();
 		}
 		
 		/**
 		 */		
 		public function renderEnd():void
 		{
-			if (chartMain.chartModel.dataScale.changed)
+			if (chartMain.chartModel.zoom.changed)
 			{
-				currentDataRange.min = scrollAxis.getSourceDataPercent(chartMain.chartModel.dataScale.start);
-				currentDataRange.max = scrollAxis.getSourceDataPercent(chartMain.chartModel.dataScale.end);		
-				chartMain.chartModel.dataScale.changed = false;
+				currentDataRange.min = zoomAxis.getSourceDataPercent(chartMain.chartModel.zoom.start);
+				currentDataRange.max = zoomAxis.getSourceDataPercent(chartMain.chartModel.zoom.end);		
+				chartMain.chartModel.zoom.changed = false;
 			}
 			
 			dataResized(currentDataRange.min, currentDataRange.max);
 			
 			// 计算放大比率，每次缩放的倍数，进而提升缩放的速度和体验，减少渲染次数提升性能
-			scrollAxis.adjustZoomFactor(chartMain.chartModel.dataScale);
+			zoomAxis.adjustZoomFactor(chartMain.chartModel.zoom);
 		}
 		
 		
@@ -366,16 +366,16 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function onWebMouseWheel(value:Number):void
 		{
-			if(chartMain.chartModel.dataScale.enable)
+			if(chartMain.chartModel.zoom.enable)
 			{
 				var percent:Number = chartMain.mouseX / chartMain.chartWidth;
 				var ifZoomIn:Boolean = value > 0 ? true : false; 
 				
 				var scale:Number;
 				if (ifZoomIn)
-					scale = chartMain.chartModel.dataScale.zoomInScale;
+					scale = chartMain.chartModel.zoom.zoomInScale;
 				else
-					scale = chartMain.chartModel.dataScale.zoomOutScale;
+					scale = chartMain.chartModel.zoom.zoomOutScale;
 				
 				resizeOnCanvasGesture(percent, ifZoomIn, scale);
 			}
@@ -397,7 +397,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			if (ifZoomIn) // 放大
 			{
-				if (dis <= 1 / chartMain.chartModel.dataScale.maxScale) return;
+				if (dis <= 1 / chartMain.chartModel.zoom.maxScale) return;
 				
 				newStart = this.currentDataRange.min + minZoom
 				newEnd = this.currentDataRange.max - maxZoom
@@ -453,15 +453,15 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			if (currentDataRange.min == 0 && currentDataRange.max == 1) return;
 			
-			scrollAxis.scrollingByChartCanvas(offset);
-			chartMain.gridField.drawHGidLine(scrollAxis.ticks, chartMain.chartModel.gridField);
+			zoomAxis.scrollingByChartCanvas(offset);
+			chartMain.gridField.drawHGidLine(zoomAxis.ticks, chartMain.chartModel.gridField);
 		}
 		
 		/**
 		 */		
 		public function stopScroll(offset:Number, sourceOffset:Number):void
 		{
-			scrollAxis.dataScrolled(this.currentDataRange);
+			zoomAxis.dataScrolled(this.currentDataRange);
 			chartMain.chartCanvas.mouseChildren = chartMain.chartCanvas.mouseEnabled = true;
 		}
 		
@@ -480,8 +480,8 @@ package com.fiCharts.charts.chart2D.encry
 				currentDataRange.max = endPercent;
 				
 				// 坐标轴会驱动序列按照节点位置或数据范围方式完成, 序列再驱动渲染节点等的更新
-				scrollAxis.dataResized(currentDataRange);
-				chartMain.gridField.drawHGidLine(scrollAxis.ticks, chartMain.chartModel.gridField);
+				zoomAxis.dataResized(currentDataRange);
+				chartMain.gridField.drawHGidLine(zoomAxis.ticks, chartMain.chartModel.gridField);
 				
 				if (this.tipsContorl.ifMouseIn == false)
 					this.hideTips();
@@ -492,8 +492,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function scaleData(startValue:Object, endValue:Object):void
 		{
-			currentDataRange.min = scrollAxis.getDataPercent(startValue);
-			currentDataRange.max = scrollAxis.getDataPercent(endValue);		
+			currentDataRange.min = zoomAxis.getDataPercent(startValue);
+			currentDataRange.max = zoomAxis.getDataPercent(endValue);		
 			
 			dataResized(currentDataRange.min, currentDataRange.max);
 		}
@@ -509,7 +509,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private var scrollAxis:AxisBase;
+		private var zoomAxis:AxisBase;
 		
 		/**
 		 */		
@@ -554,10 +554,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function showTips():void
 		{
-			if (scrollAxis)
+			if (zoomAxis)
 			{
 				tipsHolder.clear();
-				scrollAxis.updateToolTips();//先更新每个序列的tips节点
+				zoomAxis.updateToolTips();//先更新每个序列的tips节点
 				
 				// 组装tips
 				for each (var series:SeriesBase in chartMain.series)
@@ -578,7 +578,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function hideTips():void
 		{
-			scrollAxis.stopTip();
+			zoomAxis.stopTip();
 			chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
 		}
 		

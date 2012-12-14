@@ -1,6 +1,6 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
-	import com.fiCharts.charts.chart2D.core.model.DataScale;
+	import com.fiCharts.charts.chart2D.core.model.Zoom;
 
 	public interface IAxisPattern
 	{
@@ -11,7 +11,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 调节数据缩放的最值，比率等参数
 		 */		
-		function adjustZoomFactor(model:DataScale):void;
+		function adjustZoomFactor(model:Zoom):void;
 		
 		/**
 		 */		
@@ -19,7 +19,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		function toDataResizePattern():void;
+		function toZoomPattern():void;
 		
 		/**
 		 */		

@@ -21,9 +21,9 @@ package com.fiCharts.charts.chart2D.core.model
 	 * 6.主程序的状态切换会映射到坐标轴和序列上；
 	 *  
 	 */	
-	public class DataScale
+	public class Zoom
 	{
-		public function DataScale()
+		public function Zoom()
 		{
 		}
 		
@@ -100,9 +100,9 @@ package com.fiCharts.charts.chart2D.core.model
 			_enable = XMLVOMapper.boolean(value);
 			
 			if (_enable)
-				XMLVOLib.dispatchCreation(ChartMain.TO_SCALABLE_STATE);
+				XMLVOLib.dispatchCreation(ChartMain.TO_ZOOM_PATTERN);
 			else
-				XMLVOLib.dispatchCreation(ChartMain.TO_CLASSIC_STATE);
+				XMLVOLib.dispatchCreation(ChartMain.TO_CLASSIC_PATTERN);
 		}
 		
 		/**

@@ -1,6 +1,6 @@
 package com.fiCharts.charts.chart2D.core.model
 {
-	import com.fiCharts.charts.chart2D.core.dataBar.DataBarStyle;
+	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBarStyle;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.ui.toolTips.TooltipStyle;
@@ -15,7 +15,7 @@ package com.fiCharts.charts.chart2D.core.model
 	{
 		/**
 		 */		
-		public static const DATA_BAR:String = "dataBar";
+		public static const ZOOM_BAR:String = "dataBar";
 		
 		/**
 		 */		
@@ -97,21 +97,21 @@ package com.fiCharts.charts.chart2D.core.model
 		 * 
 		 * 会相应缩放操作而缩放数据，例如滚轮缩放或者触摸放大缩放 
 		 */		
-		private var _dataScale:DataScale
+		private var _zoom:Zoom
 
 		/**
 		 */
-		public function get dataScale():DataScale
+		public function get zoom():Zoom
 		{
-			return _dataScale;
+			return _zoom;
 		}
 
 		/**
 		 * @private
 		 */
-		public function set dataScale(value:DataScale):void
+		public function set zoom(value:Zoom):void
 		{
-			_dataScale = value;
+			_zoom = value;
 		}
 		
 		
