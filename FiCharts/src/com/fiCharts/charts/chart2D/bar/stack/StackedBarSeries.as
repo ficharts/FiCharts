@@ -30,6 +30,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 		 */		
 		override protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
 		{
+			if (ifNullData(item))
+				return;
+			
 			itemRender.itemVO = item;
 			
 			item.metaData.valueLabel = item.xLabel;
