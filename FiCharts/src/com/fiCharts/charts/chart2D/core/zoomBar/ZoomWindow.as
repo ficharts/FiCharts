@@ -1,4 +1,4 @@
-package com.fiCharts.charts.chart2D.core.dataBar
+package com.fiCharts.charts.chart2D.core.zoomBar
 {
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
@@ -12,23 +12,23 @@ package com.fiCharts.charts.chart2D.core.dataBar
 	/**
 	 * 
 	 */	
-	public class DataBarWindow extends Sprite implements IStyleStatesUI
+	public class ZoomWindow extends Sprite implements IStyleStatesUI
 	{
-		public function DataBarWindow()
+		public function ZoomWindow()
 		{
 			stateControl = new StatesControl(this);
 		}
 		
 		/**
 		 */		
-		private var _winStyle:DataBarWindowStyle;
+		private var _winStyle:ZoomWindowStyle;
 
-		public function get winStyle():DataBarWindowStyle
+		public function get winStyle():ZoomWindowStyle
 		{
 			return _winStyle;
 		}
 
-		public function set winStyle(value:DataBarWindowStyle):void
+		public function set winStyle(value:ZoomWindowStyle):void
 		{
 			_winStyle = value;
 			this.states = _winStyle.states;

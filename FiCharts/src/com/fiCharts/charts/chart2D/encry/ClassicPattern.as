@@ -57,18 +57,18 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		public function toScalablePattern():void
+		public function toZoomPattern():void
 		{
-			if (chartMain.dataScalePattern)
+			if (chartMain.zoomPattern)
 			{
-				chartMain.currentPattern = chartMain.dataScalePattern;
+				chartMain.currentPattern = chartMain.zoomPattern;
 				
 				// 添加事件监听器， 控制数据缩放
 				chartMain.currentPattern.init();				
 			}
 			else
 			{
-				chartMain.currentPattern = new DataScalablePattern(chartMain);
+				chartMain.currentPattern = new ZoomPattern(chartMain);
 			}
 		}
 		

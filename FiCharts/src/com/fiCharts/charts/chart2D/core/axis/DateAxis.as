@@ -105,7 +105,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		override internal function getDataScalePattern():IAxisPattern
+		override internal function getZoomPattern():IAxisPattern
 		{
 			return new DateAxis_DataScale(this);
 		}

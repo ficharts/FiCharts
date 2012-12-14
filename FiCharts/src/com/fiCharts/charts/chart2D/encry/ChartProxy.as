@@ -11,8 +11,8 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
 	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
 	import com.fiCharts.charts.chart2D.core.axis.TickMarkStyle;
-	import com.fiCharts.charts.chart2D.core.dataBar.DataBarWindowStyle;
-	import com.fiCharts.charts.chart2D.core.dataBar.DataScrollBar;
+	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomWindowStyle;
+	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBar;
 	import com.fiCharts.charts.chart2D.core.model.AxisModel;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.ChartBGStyle;
@@ -39,14 +39,17 @@ package com.fiCharts.charts.chart2D.encry
 	{
 		public function ChartProxy()
 		{
-			DataBarWindowStyle;
-			XMLVOLib.registerCustomClasses(<window path='com.fiCharts.charts.chart2D.core.dataBar.DataBarWindowStyle'/>);
+			//-------------------数据缩放--------------------------------
+			ZoomWindowStyle;
+			XMLVOLib.registerCustomClasses(<window path='com.fiCharts.charts.chart2D.core.zoomBar.ZoomWindowStyle'/>);
 			
 			XMLVOLib.setASStyleKey("barBG");
 			XMLVOLib.setASStyleKey("chart");
 			
+			XMLVOLib.registerCustomClasses(<zoom path='com.fiCharts.charts.chart2D.core.model.Zoom'/>);
+			//------------------数据缩放---------------------------------
 			
-			XMLVOLib.registerCustomClasses(<dataScale path='com.fiCharts.charts.chart2D.core.model.DataScale'/>);
+			
 			
 			ChartBGStyle;
 			XMLVOLib.registerCustomClasses(<chartBG path='com.fiCharts.charts.chart2D.core.model.ChartBGStyle'/>);
@@ -127,7 +130,6 @@ package com.fiCharts.charts.chart2D.encry
 			
 			XMLVOLib.setASLabelStyleKey('valueLabel');
 			XMLVOLib.setASLabelStyleKey('innerValueLabel');
-			XMLVOLib.setASStyleKey('scrollBar');
 			
 			XMLVOLib.registerObjectToProperty('config', 'title', 'text');
 			XMLVOLib.registerObjectToProperty('config', 'subTitle', 'text');
@@ -244,7 +246,8 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.setXML(Chart2DModel.BAR_SERIES, value.child('bar'));
 			XMLVOLib.setXML(Chart2DModel.STACKED_BAR_SERIES, value.child('stackedBar'));
 			
-			XMLVOLib.setXML(Chart2DModel.DATA_BAR, value.child('dataBar'));
+			// 缩放条样式定义
+			XMLVOLib.setXML(Chart2DModel.ZOOM_BAR, value.child('zoomBar'));
 			
 			for each (var item:XML in value.child('definition').children())
 				XMLVOLib.setXML(item.@id, item);

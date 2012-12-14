@@ -1,4 +1,4 @@
-package com.fiCharts.charts.chart2D.core.dataBar
+package com.fiCharts.charts.chart2D.core.zoomBar
 {
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
@@ -13,9 +13,9 @@ package com.fiCharts.charts.chart2D.core.dataBar
 	
 	/**
 	 */	
-	public class DataChart extends Sprite implements IDirectionSeries
+	public class ZoomChart extends Sprite implements IDirectionSeries
 	{
-		public function DataChart()
+		public function ZoomChart()
 		{
 			super();
 			addChild(canvas);

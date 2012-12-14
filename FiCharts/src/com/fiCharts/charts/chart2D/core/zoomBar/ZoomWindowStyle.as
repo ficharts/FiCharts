@@ -1,10 +1,10 @@
-package com.fiCharts.charts.chart2D.core.dataBar
+package com.fiCharts.charts.chart2D.core.zoomBar
 {
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 
-	public class DataBarWindowStyle
+	public class ZoomWindowStyle
 	{
-		public function DataBarWindowStyle()
+		public function ZoomWindowStyle()
 		{
 		}
 		

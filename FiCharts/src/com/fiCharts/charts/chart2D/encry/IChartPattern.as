@@ -39,7 +39,7 @@ package com.fiCharts.charts.chart2D.encry
 	{
 		function init():void
 		
-		function toScalablePattern():void
+		function toZoomPattern():void
 			
 		function toClassicPattern():void
 			
