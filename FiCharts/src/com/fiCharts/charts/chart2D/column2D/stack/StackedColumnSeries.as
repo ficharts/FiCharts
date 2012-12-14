@@ -287,8 +287,6 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				legendVO.metaData = item;
 				legendVOes.push(legendVO);
 			}
-			
-			legendVOes.reverse();	
 				
 			return legendVOes;
 		}

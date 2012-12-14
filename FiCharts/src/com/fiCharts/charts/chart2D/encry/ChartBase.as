@@ -1151,7 +1151,6 @@ package com.fiCharts.charts.chart2D.encry
 						legends = legends.concat(seriesItem.legendData);
 				}
 				
-				legends.reverse();
 				if (legendPanel && chartModel.legend.enable)
 					legendPanel.legendData = legends;
 			}

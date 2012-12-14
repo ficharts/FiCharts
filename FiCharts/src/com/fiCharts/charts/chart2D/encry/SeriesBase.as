@@ -681,8 +681,8 @@ package com.fiCharts.charts.chart2D.encry
 				legendVO.addEventListener(LegendEvent.SHOW_LEGEND, seriesShowLegendHandler, false, 0, true);
 				
 				legendVO.metaData = this;
-				legendVOes.reverse();
 				legendVOes.push(legendVO);
+				
 			}
 			else
 			{

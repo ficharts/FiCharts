@@ -1,13 +1,12 @@
 package com.fiCharts.utils.XMLConfigKit.style
 {
-	import com.fiCharts.ui.text.Label;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
-	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import flash.text.TextLineMetrics;
 	
 	/**
 	 */	
@@ -50,32 +49,37 @@ package com.fiCharts.utils.XMLConfigKit.style
 				
 			StyleManager.setLabelUIText(this, this.metaData);
 			
-			textField.x = labelStyle.hPadding;
 			textField.y = labelStyle.vPadding;
 			
 			if (labelStyle.layout == LabelStyle.WRAP)
 			{
 				textField.wordWrap = true;
+				textField.autoSize = 'center'
 				
 				if (maxLabelWidth - labelStyle.hPadding * 2 < minLabelWidth)
 					textField.width = minLabelWidth;
 				else
 					textField.width = maxLabelWidth - labelStyle.hPadding * 2;
 				
+				textField.defaultTextFormat = labelStyle.getTextFormat(metaData);
 				textField.text = text;
-				textField.setTextFormat(labelStyle.getTextFormat(metaData));
+				
+				textField.x = labelStyle.hPadding;
+				textField.height = textField.textHeight;
 			}
 			else
 			{
-				textField.wordWrap = false
+				textField.wordWrap = false;
+				textField.autoSize = 'none';
+				textField.defaultTextFormat = labelStyle.getTextFormat(metaData);
 				textField.text = text;
-				textField.setTextFormat(labelStyle.getTextFormat(metaData));
 				
-				textField.width = textField.textWidth;
+				textMetric = textField.getLineMetrics(0);  
+				textField.width = textField.textWidth + textMetric.leading;
 				textField.height = textField.textHeight;
+				textField.x = labelStyle.hPadding - textMetric.leading / 2;
 			}
 			
-			textField.autoSize = TextFieldAutoSize.CENTER;
 			StyleManager.setEffects(textField, labelStyle.text as Text, metaData);
 			
 			// 绘制背景
@@ -83,6 +87,10 @@ package com.fiCharts.utils.XMLConfigKit.style
 			StyleManager.setShapeStyle(labelStyle, this.graphics, this.metaData);
 			this.graphics.drawRoundRect(0, 0, this.uiWidth, this.uiHeight, labelStyle.radius, labelStyle.radius);
 		}
+		
+		/**
+		 */		
+		private var textMetric:TextLineMetrics;
 		
 		/**
 		 */		
@@ -142,7 +150,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function get uiWidth():Number
 		{
-			return textField.textWidth + labelStyle.hPadding * 2; 
+			return textField.x + textField.width + labelStyle.hPadding; 
 		}
 		
 		/**
