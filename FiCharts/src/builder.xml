@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="Ficharts Builder" basedir="." default="Release FiCharts">
-	<property name="FLEX_HOME" value="I:/flex_sdk_4.6" />
-	<property name="WORK_SPACE" value="I:/项目/ficharts/FiCharts" />
+	<property name="FLEX_HOME" value="D:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.6.0" />
+	<property name="WORK_SPACE" value="G:/FiCharts" />
 	<property name="VER" value="1.2.2.3" />
 	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" /> 
 

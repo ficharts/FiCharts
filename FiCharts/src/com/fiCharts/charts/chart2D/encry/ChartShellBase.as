@@ -296,7 +296,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		private function setConfigXMLHandler(value:String):void
 		{
-			chart.configXML = XML(value);
+			if (value)
+				chart.configXML = XML(value);
 		}
 		
 		/**
@@ -350,7 +351,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		private function getXMLDataHandler(value:String):void
 		{
-			chart.dataXML = XML(value);
+			if (value)
+				chart.dataXML = XML(value);
 		}
 		
 		/**
