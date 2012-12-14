@@ -9,6 +9,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
+	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -51,6 +52,9 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				{
 					for each (var itemDataVO:SeriesDataItemVO in stack.dataItemVOs)
 					{
+						if (ifNullData(itemDataVO))
+							continue;
+						
 						columnItemUI = getSeriesItemUI(itemDataVO);
 						columnItemUI.states = this.states;//样式统一定义
 						columnItemUI.metaData = itemDataVO.metaData;
@@ -148,6 +152,9 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		 */		
 		override protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
 		{
+			if (ifNullData(item))
+				return;
+			
 			itemRender.itemVO = item;
 			
 			item.metaData.valueLabel = item.yLabel;

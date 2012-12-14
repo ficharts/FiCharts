@@ -14,6 +14,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
 	import com.fiCharts.ui.toolTips.TooltipStyle;
+	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -339,6 +340,9 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
 		{
+			if (ifNullData(item))
+				return;
+			
 			itemRender.itemVO = item;
 			
 			item.metaData.valueLabel = item.yLabel;
@@ -1029,6 +1033,19 @@ package com.fiCharts.charts.chart2D.encry
 		public function set animation(value:Object):void
 		{
 			_animation = Object;
+		}
+		
+		/**
+		 */		
+		protected function ifNullData(item:SeriesDataItemVO):Boolean
+		{
+			if (RexUtil.ifTextNull(item.xValue.toString()) || 
+				RexUtil.ifTextNull(item.yValue.toString()))
+			{
+				return true;
+			}
+			
+			return false;
 		}
 	}
 }
