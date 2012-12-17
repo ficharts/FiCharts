@@ -1039,6 +1039,11 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function ifNullData(item:SeriesDataItemVO):Boolean
 		{
+			//节点字段不存在
+			if (item.xValue == null || item.yValue == null)
+				return true;
+			
+			//基点字段为空
 			if (RexUtil.ifTextNull(item.xValue.toString()) || 
 				RexUtil.ifTextNull(item.yValue.toString()))
 			{
