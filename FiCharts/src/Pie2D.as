@@ -3,11 +3,6 @@ package
 	import com.fiCharts.charts.chart2D.encry.ChartShellBase;
 	import com.fiCharts.charts.chart2D.encry.PieChartBase;
 	
-	import flash.events.Event;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
-	import flash.utils.ByteArray;
-	
 	/**
 	 * 此类仅用于构建 2D 饼状图
 	 */	
@@ -15,18 +10,10 @@ package
 	{
 		public function Pie2D()
 		{
-			super();
-		}
-		
-		/**
-		 */		
-		override protected function init():void
-		{
-			var pie2DConfig:ByteArray = ByteArray(new Chart2DConfigXML);
-			pie2DConfig.uncompress();
-			setDefaultConfig(pie2DConfig.toString());
+			this.dec.License = LicenseXML;
+			this.dec.Config = Chart2DConfigXML;
 			
-			super.init();
+			super();
 		}
 		
 		/**
@@ -43,6 +30,11 @@ package
 		 */		
 		[Embed(source="Pie2DConfig.z", mimeType="application/octet-stream")]
 		private var Chart2DConfigXML:Class;
+		
+		/**
+		 */	
+		[Embed(source="license.z", mimeType="application/octet-stream")]
+		private var LicenseXML:Class;
 		
 		
 	}

@@ -1,6 +1,5 @@
 package com.fiCharts.charts.chart2D.encry
 {
-	import com.adobe.images.PNGEncoder;
 	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.common.IChart;
@@ -13,7 +12,6 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.csv.CSVLoader;
 	import com.fiCharts.utils.csv.CSVParseEvent;
-	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.layout.LayoutManager;
 	import com.fiCharts.utils.net.URLService;
 	import com.fiCharts.utils.net.URLServiceEvent;
@@ -26,7 +24,6 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
-	import flash.net.FileReference;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
@@ -63,8 +60,34 @@ package com.fiCharts.charts.chart2D.encry
 		public function ChartShellBase()
 		{
 			super();
-			StageUtil.initApplication(this, init);
+			StageUtil.initApplication(this, preInit);
 		}
+		
+		
+		
+		
+		
+		//------------------------------------------------
+		//
+		// 
+		//
+		//
+		//
+		//------------------------------------------------
+		
+		/**
+		 */		
+		private function preInit():void
+		{
+			dec.run(this);
+		}
+		
+		/**
+		 */		
+		protected var dec:Dec;
+		
+		
+		
 		
 		/**
 		 * 注入图表的基础配置文件， 此配置文件包含默认的样式模板, 菜单语言配置等；
@@ -72,7 +95,7 @@ package com.fiCharts.charts.chart2D.encry
 		 * 图表初始化时先初始此文件；
 		 * 
 		 */		
-		protected function setDefaultConfig(value:String):void
+		internal function setDefaultConfig(value:String):void
 		{
 			var defaultConfig:XML = XML(value);
 			
@@ -445,7 +468,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 
 		 */
-		protected function init():void
+		internal function init():void
 		{
 			if (OS.isWebSystem)
 				Security.allowDomain("*");

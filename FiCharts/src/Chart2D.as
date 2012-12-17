@@ -2,8 +2,7 @@ package
 {
 	import com.fiCharts.charts.chart2D.encry.ChartBase;
 	import com.fiCharts.charts.chart2D.encry.ChartShellBase;
-	
-	import flash.utils.ByteArray;
+	import com.fiCharts.charts.chart2D.encry.Dec;
 	
 	/**
 	 * 2D图表主程序，用此类可以构建柱状图，趋势图，堆积图，混合图表等。
@@ -14,18 +13,11 @@ package
 		 */
 		public function Chart2D()
 		{
-			super();
-		}
-		
-		/**
-		 */		
-		override protected function init():void
-		{
-			var chart2DConfig:ByteArray = ByteArray(new Chart2DConfigXML);
-			chart2DConfig.uncompress();
-			setDefaultConfig(chart2DConfig.toString());
+			this.dec = new Dec;
+			this.dec.License = LicenseXML;
+			this.dec.Config = Chart2DConfigXML;
 			
-			super.init();
+			super();
 		}
 		
 		/**
@@ -42,6 +34,11 @@ package
 		 */		
 		[Embed(source="chart2DConfig.z", mimeType="application/octet-stream")]
 		private var Chart2DConfigXML:Class;
+		
+		/**
+		 */	
+		[Embed(source="license.z", mimeType="application/octet-stream")]
+		private var LicenseXML:Class;
 		
 	}
 }
