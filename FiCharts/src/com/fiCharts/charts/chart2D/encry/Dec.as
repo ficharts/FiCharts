@@ -26,7 +26,7 @@ package com.fiCharts.charts.chart2D.encry
 			configByte = ByteArray(new Config);
 			licenseByte = ByteArray(new License);
 			
-			decryConfigFile(new MD5().hash(licenseByte));
+			//decryConfigFile(new MD5().hash(licenseByte));
 			
 			licenseByte.uncompress();
 			configByte.uncompress();
