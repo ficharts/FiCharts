@@ -5,7 +5,7 @@ package com.fiCharts.charts.chart2D.pie
 	import com.fiCharts.charts.chart2D.pie.series.Series;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.charts.legend.LegendStyle;
-	import com.fiCharts.ui.toolTips.TooltipStyle;
+	import com.fiCharts.charts.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;

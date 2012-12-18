@@ -54,7 +54,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 			if (labelStyle.layout == LabelStyle.WRAP)
 			{
 				textField.wordWrap = true;
-				textField.autoSize = 'center'
+				textField.autoSize = 'center';
 				
 				if (maxLabelWidth - labelStyle.hPadding * 2 < minLabelWidth)
 					textField.width = minLabelWidth;

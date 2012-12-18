@@ -6,14 +6,13 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
-	import com.fiCharts.charts.chart2D.core.series.DataIndexOffseter;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.core.series.SeriesDirectionControl;
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
-	import com.fiCharts.ui.toolTips.TooltipStyle;
+	import com.fiCharts.charts.toolTips.TooltipStyle;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;

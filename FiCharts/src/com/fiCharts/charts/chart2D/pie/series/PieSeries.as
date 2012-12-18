@@ -7,7 +7,7 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
-	import com.fiCharts.ui.toolTips.TooltipStyle;
+	import com.fiCharts.charts.toolTips.TooltipStyle;
 	import com.fiCharts.utils.MathUtil;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;

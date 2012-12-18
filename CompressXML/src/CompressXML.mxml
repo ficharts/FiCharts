@@ -2,51 +2,91 @@
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
-					   creationComplete="windowedapplication1_creationCompleteHandler(event)">
-	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations>
+					   >
 	
 	<fx:Script>
 		<![CDATA[
+			import com.fiCharts.utils.dec.hash.MD5;
+			import com.fiCharts.utils.dec.symmetric.AESKey;
+			import com.fiCharts.utils.dec.symmetric.CBCMode;
+			import com.fiCharts.utils.dec.symmetric.ICipher;
+			import com.fiCharts.utils.dec.symmetric.IPad;
+			import com.fiCharts.utils.dec.symmetric.IVMode;
+			import com.fiCharts.utils.dec.symmetric.PKCS5;
+			import com.fiCharts.utils.dec.symmetric.SimpleIVMode;
+			
 			import mx.events.FlexEvent;
-			protected function button1_clickHandler(event:MouseEvent):void
+			
+			private function compressLicenseXML(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
-				sourceFile.browse();
+				file.addEventListener(Event.SELECT, licenseFileSelected, false, 0, true);
+				file.browse();
 			}
 			
-			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			private function licenseFileSelected(evt:Event):void
 			{
-				sourceFile = new File();
-				sourceFile.addEventListener(Event.SELECT, sourceFileSelected, false, 0, true);
+				var licenseFile:ByteArray = readFile();
+				licenseMD5 = new MD5().hash(licenseFile);
+				file.removeEventListener(Event.SELECT, licenseFileSelected);
+				saveFile(licenseFile);
+				
+				licenseBtn.enabled = false;
+				configBtn.enabled = true;
 			}
 			
+			private var licenseMD5:ByteArray;
+			
+			protected function compressConfigXML(event:MouseEvent):void
+			{
+				file.addEventListener(Event.SELECT, sourceFileSelected, false, 0, true);
+				file.browse();
+			}
+			
+			// 用license文件的MD5码加密配置文件
 			private function sourceFileSelected(evt:Event):void
 			{
-				var pathArrar:Array = sourceFile.nativePath.split('\\');
-				var fileNameFull:String = pathArrar.pop().split('.')[0];
+				var configFile:ByteArray = readFile();
+				var pad:IPad = new PKCS5;
+				var mode:ICipher = new SimpleIVMode(new CBCMode(new AESKey(licenseMD5), pad) as IVMode);
+				pad.setBlockSize(mode.getBlockSize());
+				mode.jj(configFile);
+				
+				saveFile(configFile);
+				file.removeEventListener(Event.SELECT, sourceFileSelected);
+				configBtn.enabled = false;
+			}
+			
+			private function readFile():ByteArray
+			{
+				var pathArrar:Array = file.nativePath.split('\\');
+				fileName = pathArrar.pop().split('.')[0];
 				sourceNativePath = pathArrar.join('\\') + '\\';
 				
-				
 				var myFileStream:FileStream = new FileStream();
-				
 				var sourceCodeBytes:ByteArray = new ByteArray();
-				myFileStream.open(sourceFile, FileMode.READ);
+				myFileStream.open(file, FileMode.READ);
 				myFileStream.readBytes(sourceCodeBytes, 0, myFileStream.bytesAvailable);
 				myFileStream.close();
 				
 				sourceCodeBytes.compress();
 				
-				var productFile:File = File.documentsDirectory.resolvePath(sourceNativePath + fileNameFull + '.z');
+				return sourceCodeBytes;
+			}
+			
+			private function saveFile(fileByte:ByteArray):void
+			{
+				var myFileStream:FileStream = new FileStream();
+				var productFile:File = File.documentsDirectory.resolvePath(sourceNativePath + fileName + '.z');
 				myFileStream.open(productFile, FileMode.WRITE);
-				myFileStream.writeBytes(sourceCodeBytes, 0, sourceCodeBytes.bytesAvailable);
+				myFileStream.writeBytes(fileByte, 0, fileByte.length);
 				myFileStream.close();
 			}
 			
 			private var sourceNativePath:String;
 			
-			private var sourceFile:File;
+			private var fileName:String;
+			
+			private var file:File = new File;
 			
 		]]>
 	</fx:Script>
@@ -55,7 +95,13 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	
-	<s:Label text="将配置文件压缩，用于文件嵌入，降低源程序文件体积" left="5" top="5"/>
-	<s:Button label="压缩XML" click="button1_clickHandler(event)" 
-			  horizontalCenter="0" verticalCenter="0"/>
+	<s:Label text="压缩配置文件和license文件，并用压缩后license的md5码加密压缩后的配置文件" left="5" top="5"/>
+	<mx:VBox verticalCenter="0" horizontalCenter="0">
+		<s:Button id="licenseBtn" label="压缩License" click="compressLicenseXML(event)" 
+				  horizontalCenter="0" verticalCenter="0"/>
+		
+		<s:Button id="configBtn" enabled="false" label="压缩配置文件" click="compressConfigXML(event)" 
+				  horizontalCenter="0" verticalCenter="0"/>
+	</mx:VBox>
+	
 </s:WindowedApplication>

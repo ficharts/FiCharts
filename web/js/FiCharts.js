@@ -213,10 +213,7 @@
 		
 		var chart = FiCharts.getChartByID(id);
 		
-<<<<<<< HEAD
-=======
 		// IE 下 初始化顺序较奇葩，这里处理较稳妥，防止swf为空
->>>>>>> 9f53dc4497b3ac71a0cafa071081c8a32cd35ad6
 		if (chart.swf == null)
 			chart.swf = doc.getElementById(chart.id);
 		
@@ -613,6 +610,15 @@
 		    this.setDataXML(xmlString);
 		    
 		    return this;
+		};
+		
+		that.getChartBase64Data = function(){
+			
+			if (this.ifReady) {
+				return this.swf.getChartBase64Data();
+			}
+			
+			return null;
 		}
 		
 		return that;

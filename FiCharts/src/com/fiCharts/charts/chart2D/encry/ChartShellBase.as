@@ -3,13 +3,14 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.common.IChart;
-	import com.fiCharts.charts.common.language.LanguageConfig;
-	import com.fiCharts.ui.text.Label;
+	import com.fiCharts.charts.common.Menu;
 	import com.fiCharts.utils.ExternalUtil;
-	import com.fiCharts.utils.ImgSaver;
+	import com.fiCharts.utils.graphic.ImgSaver;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.csv.CSVLoader;
 	import com.fiCharts.utils.csv.CSVParseEvent;
 	import com.fiCharts.utils.layout.LayoutManager;
@@ -102,7 +103,7 @@ package com.fiCharts.charts.chart2D.encry
 			for each (var item:XML in defaultConfig.styles.children())
 				Chart2DStyleSheet.pushTheme(XML(item.toXMLString()));
 			
-			languageXML = XML(defaultConfig.menu.toXMLString());
+			XMLVOMapper.fuck(defaultConfig.menu, menu);
 		}
 		
 		
@@ -473,8 +474,6 @@ package com.fiCharts.charts.chart2D.encry
 			if (OS.isWebSystem)
 				Security.allowDomain("*");
 			
-			initLanguage();
-			
 			if (OS.isWebSystem)
 			{
 				initMenu();
@@ -541,21 +540,8 @@ package com.fiCharts.charts.chart2D.encry
 		//-----------------------------------------------
 		
 		/**
-		 * 初始化语言配置
 		 */		
-		private function initLanguage():void
-		{
-			XMLVOMapper.fuck(languageXML, languageConfig);
-		}
-		
-		/**
-		 */		
-		private var languageConfig:LanguageConfig = new LanguageConfig;
-		
-		/**
-		 * 语言配置
-		 */		
-		protected var languageXML:XML;
+		private var menu:Menu = new Menu;
 		
 		/**
 		 * 右键菜单；
@@ -569,15 +555,15 @@ package com.fiCharts.charts.chart2D.encry
 				myContextMenu.hideBuiltInItems();
 				var item:ContextMenuItem;
 				
-				item = new ContextMenuItem(languageConfig.saveAsImage);
+				item = new ContextMenuItem(menu.saveAsImage);
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, saveImageHandler);
 				myContextMenu.customItems.push(item);
 				
-				item = new ContextMenuItem(languageConfig.about + " FiCharts");
+				item = new ContextMenuItem(menu.about + " FiCharts");
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 				myContextMenu.customItems.push(item);
 				
-				item = new ContextMenuItem(languageConfig.version + VARSION);
+				item = new ContextMenuItem(menu.version + VARSION);
 				item.enabled = false;
 				myContextMenu.customItems.push(item);
 				
@@ -659,7 +645,8 @@ package com.fiCharts.charts.chart2D.encry
 			createChart();
 			stage.addEventListener(Event.RESIZE, resizeHandler, false, 0, true);
 			
-			infoLabel = new Label();
+			infoLabel = new LabelUI;
+			infoLabel.style = new LabelStyle;
 			addChild(infoLabel);
 			
 			// 初始化完毕后提示无数据
@@ -798,7 +785,8 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			if(this.infoLabel.visible == false) infoLabel.visible = true;
 				
-			this.infoLabel.reLabel(info);
+			this.infoLabel.text = info;
+			infoLabel.render();
 			LayoutManager.stageCenter(infoLabel, stage);
 		}
 		
@@ -820,7 +808,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 信息提示标签;
 		 */		
-		private var infoLabel:Label;
+		private var infoLabel:LabelUI;
 		
 		/**
 		 */		

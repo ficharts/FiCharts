@@ -1,0 +1,73 @@
+package com.fiCharts.charts.chart2D.encry
+{
+	import flash.display.Sprite;
+	
+	/**
+	 * License信息
+	 */	
+	public class LiInfo extends Sprite
+	{
+		
+		/**
+		 * 试用版
+		 */		
+		public static const TRIAL:String = 'trial';
+		
+		/**
+		 * 客户端方式授权
+		 */		
+		public static const CLIENT:String = 'client';
+		
+		/**
+		 */		
+		public function LiInfo()
+		{
+			
+		}
+		
+		/**
+		 */
+		public function get url():String
+		{
+			return null;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set url(value:String):void
+		{
+			domains.push(value);
+		}
+
+		/**
+		 * 公司名称
+		 */		
+		public var company:String;
+		
+		/**
+		 * 公司地址
+		 */		
+		public var location:String;
+		
+		/**
+		 * 公司联系电话
+		 */		
+		public var telephone:String;
+		
+		/**
+		 * 公司邮箱
+		 */		
+		public var email:String;
+		
+		/**
+		 * 认证类型; Web, Intranet, Enterprise, Enterprise_Plus
+		 */		
+		public var type:String ='Web';
+		
+		/**
+		 * 服务器信息
+		 */		
+		public var domains:Array = [];
+	}
+}

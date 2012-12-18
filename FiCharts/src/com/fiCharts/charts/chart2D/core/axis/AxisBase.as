@@ -7,8 +7,8 @@ package com.fiCharts.charts.chart2D.core.axis
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
+	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.graphic.StyleManager;
-	import com.fiCharts.utils.graphic.TextBitmapUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
@@ -87,7 +87,7 @@ package com.fiCharts.charts.chart2D.core.axis
 							axisLabel.render();
 							
 							// 这里的labelUI可考虑用bitmap data绘制来优化渲染
-							labelUI = labelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
+							labelUI = labelUIs[i] = BitmapUtil.drawBitmap(axisLabel);
 							axisLabel = null;
 						}
 							
@@ -263,7 +263,7 @@ package com.fiCharts.charts.chart2D.core.axis
 						}
 						
 						// 这里的labelUI可考虑用bitmap data绘制来优化渲染
-						labelUI = labelUIs[i] = TextBitmapUtil.drawUI(axisLabel);
+						labelUI = labelUIs[i] = BitmapUtil.drawBitmap(axisLabel);
 						axisLabel = null;
 					}
 					
@@ -426,7 +426,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				titleLabel.style = title;
 				titleLabel.render();
 				
-				titileBitmap = TextBitmapUtil.drawUI(titleLabel);
+				titileBitmap = BitmapUtil.drawBitmap(titleLabel);
 				titileBitmap.rotation =  - 90;
 				
 				if(this.position == "left")

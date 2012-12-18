@@ -2,6 +2,6 @@
 	<!-- web, Intranet, Enterprise, Enterprise_Plus  -->
 	<type></type>
 	<servers>
-		<url>http://www.ficharts.com</url>
+		<url>www.ficharts.com</url>
 	</servers>
 </license>

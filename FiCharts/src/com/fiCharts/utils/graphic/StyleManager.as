@@ -12,7 +12,6 @@ package com.fiCharts.utils.graphic
 	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Cover;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Fill;
-	import com.fiCharts.utils.system.OS;
 	
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
@@ -102,7 +101,7 @@ package com.fiCharts.utils.graphic
 					if (effect is Noise)
 					{
 						if (target is IBitmapDrawable)
-							var bitMapData:BitmapData = BitmapUtil.draw(target);
+							var bitMapData:BitmapData = BitmapUtil.drawBitData(target);
 							
 						bitMapData.noise((effect as Noise).randomSpeed, (effect as Noise).low, (effect as Noise).high,
 							(effect as Noise).channelOptions, (effect as Noise).grayScale as Boolean);
@@ -191,8 +190,13 @@ package com.fiCharts.utils.graphic
 		 */		
 		public static function setLabelUIText(labelUI:LabelUI, mataData:Object = null):void
 		{
+			var value:String;
 			var textStyle:Text = (labelUI.style as LabelStyle).text as Text;
-			var value:String = RexUtil.getTagValueFromMataData(textStyle.value, mataData).toString();
+			
+			if (labelUI.text == null)
+				value = RexUtil.getTagValueFromMataData(textStyle.value, mataData).toString();
+			else
+				value = labelUI.text;
 			
 			if (value.length > textStyle.substr)
 				value = value.substr(0, textStyle.substr) + "..."
@@ -207,18 +211,6 @@ package com.fiCharts.utils.graphic
 		//
 		//--------------------------------------
 		
-		/**
-		 * 设置过度颜色填充;
-		 */		
-		public static function setFill(graphic:Graphics, fillVO:GradientColorStyle):void
-		{
-			var colors:Array = fillVO.fillColors  as Array;
-			var alphas:Array = fillVO.fillAlphas as Array;
-			var ratios:Array = fillVO.fillRatioes as Array;
-			
-			matr.createGradientBox(fillVO.width, fillVO.height, fillVO.fillAngle, fillVO.tx, fillVO.ty);
-			graphic.beginGradientFill(fillVO.fillType, colors, alphas, ratios, matr, SpreadMethod.PAD);  
-		}
 		
 		/**
 		 * 设置形状边框与填充信息, 仅当样式存在时才设置该样式项；

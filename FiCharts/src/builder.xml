@@ -3,7 +3,9 @@
 	<property name="FLEX_HOME" value="D:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.6.0" />
 	<property name="WORK_SPACE" value="G:/FiCharts" />
 	<property name="VER" value="1.2.2.3" />
-	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" /> 
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
+	<taskdef name="protect" classpath="${WORK_SPACE}/secureSWF/secureSWF.jar"
+	classname="secureSWF.ant.ProtectTask"/>
 
 	<!--发布-->
 	<target name="Release FiCharts" depends="fresh release dir,Release Chart2D,Release Pie2D,Release FiCharts.SWC">

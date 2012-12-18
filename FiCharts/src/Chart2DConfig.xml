@@ -8,10 +8,6 @@
         
         <!-- 默认样式  ： 白色系-->
         <white animation='true'>
-        	<dataScale enable='false' zoomScale='0.2' maxScale='10'/>
-        	<scrollBar height='3' radius='3'>
-		    	<fill color='555555' alpha='0.6'/>
-		    </scrollBar>
             <title hAlign='center' vMargin='0' vPadding='0'>
                 <text substr='30'/>
                 <format size='14' color='3C4145' bold='true' font='微软雅黑'/>
@@ -307,10 +303,6 @@
         
         <!-- 黑色  -->
         <black animation='true'>
-        	<dataScale enable='false' zoomScale='0.2' maxScale='10'/>
-        	<scrollBar height='3' radius='3'>
-		    	<fill color='555555' alpha='0.6'/>
-		    </scrollBar>
             <title hAlign='center' vMargin='0' vPadding='0'>
                 <format size='14' color='ADADAD' bold='true' font='微软雅黑'/>
                 <text substr='30'>

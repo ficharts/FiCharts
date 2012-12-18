@@ -3,18 +3,18 @@ package com.fiCharts.charts.chart2D.core.itemRender
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
-	import com.fiCharts.ui.toolTips.ToolTipHolder;
-	import com.fiCharts.ui.toolTips.ToolTipsEvent;
-	import com.fiCharts.ui.toolTips.TooltipDataItem;
-	import com.fiCharts.ui.toolTips.TooltipStyle;
+	import com.fiCharts.charts.toolTips.ToolTipHolder;
+	import com.fiCharts.charts.toolTips.ToolTipsEvent;
+	import com.fiCharts.charts.toolTips.TooltipDataItem;
+	import com.fiCharts.charts.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
+	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.graphic.StyleManager;
-	import com.fiCharts.utils.graphic.TextBitmapUtil;
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -331,7 +331,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 			labelUI.metaData = this.itemVO.metaData;
 			labelUI.render();
 			
-			return TextBitmapUtil.drawUI(labelUI);
+			return BitmapUtil.drawBitmap(labelUI);
 		}
 		
 		/**

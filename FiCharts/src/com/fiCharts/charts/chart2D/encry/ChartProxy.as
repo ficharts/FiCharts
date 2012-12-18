@@ -24,7 +24,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.charts.legend.LegendStyle;
-	import com.fiCharts.ui.toolTips.TooltipStyle;
+	import com.fiCharts.charts.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	
@@ -54,7 +54,7 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.setASLabelStyleKey('subTitle');
 			
 			TooltipStyle;
-			XMLVOLib.registerCustomClasses(<tooltip path='com.fiCharts.ui.toolTips.TooltipStyle'/>);
+			XMLVOLib.registerCustomClasses(<tooltip path='com.fiCharts.charts.toolTips.TooltipStyle'/>);
 			XMLVOLib.setASLabelStyleKey('self');
 			XMLVOLib.setASLabelStyleKey('group');
 			
