@@ -6,16 +6,15 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import com.fiCharts.utils.dec.hash.MD5;
-			import com.fiCharts.utils.dec.symmetric.AESKey;
-			import com.fiCharts.utils.dec.symmetric.CBCMode;
-			import com.fiCharts.utils.dec.symmetric.ICipher;
-			import com.fiCharts.utils.dec.symmetric.IPad;
-			import com.fiCharts.utils.dec.symmetric.IVMode;
-			import com.fiCharts.utils.dec.symmetric.PKCS5;
-			import com.fiCharts.utils.dec.symmetric.SimpleIVMode;
+			import com.fiCharts.utils.dec.CCB;
+			import com.fiCharts.utils.dec.ICipher;
+			import com.fiCharts.utils.dec.IPad;
+			import com.fiCharts.utils.dec.IVMode;
+			import com.fiCharts.utils.dec.KP;
+			import com.fiCharts.utils.dec.Made;
+			import com.fiCharts.utils.dec.SEA;
+			import com.fiCharts.utils.dec.VI;
 			
-			import mx.events.FlexEvent;
 			
 			private function compressLicenseXML(event:MouseEvent):void
 			{
@@ -26,7 +25,7 @@
 			private function licenseFileSelected(evt:Event):void
 			{
 				var licenseFile:ByteArray = readFile();
-				licenseMD5 = new MD5().hash(licenseFile);
+				licenseMD5 = new Made().fuck(licenseFile);
 				file.removeEventListener(Event.SELECT, licenseFileSelected);
 				saveFile(licenseFile);
 				
@@ -46,8 +45,8 @@
 			private function sourceFileSelected(evt:Event):void
 			{
 				var configFile:ByteArray = readFile();
-				var pad:IPad = new PKCS5;
-				var mode:ICipher = new SimpleIVMode(new CBCMode(new AESKey(licenseMD5), pad) as IVMode);
+				var pad:IPad = new KP;
+				var mode:ICipher = new VI(new CCB(new SEA(licenseMD5), pad) as IVMode);
 				pad.setBlockSize(mode.getBlockSize());
 				mode.jj(configFile);
 				
