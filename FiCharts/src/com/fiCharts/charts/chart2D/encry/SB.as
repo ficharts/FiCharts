@@ -29,12 +29,12 @@ package com.fiCharts.charts.chart2D.encry
 	/**
 	 * SeriesBase
 	 */	
-	public class SeriesBase extends Sprite implements IDirectionSeries, IEditableObject, IStyleStatesUI
+	public class SB extends Sprite implements IDirectionSeries, IEditableObject, IStyleStatesUI
 	{
 
 		/**
 		 */		
-		public function SeriesBase()
+		public function SB()
 		{
 			super();
 			

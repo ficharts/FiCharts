@@ -4,21 +4,25 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
-	import com.fiCharts.utils.dec.hash.MD5;
-	import com.fiCharts.utils.dec.symmetric.AESKey;
-	import com.fiCharts.utils.dec.symmetric.CBCMode;
-	import com.fiCharts.utils.dec.symmetric.ICipher;
-	import com.fiCharts.utils.dec.symmetric.IPad;
-	import com.fiCharts.utils.dec.symmetric.IVMode;
-	import com.fiCharts.utils.dec.symmetric.PKCS5;
-	import com.fiCharts.utils.dec.symmetric.SimpleIVMode;
+	import com.fiCharts.utils.dec.CCB;
+	import com.fiCharts.utils.dec.ICipher;
+	import com.fiCharts.utils.dec.IPad;
+	import com.fiCharts.utils.dec.IVMode;
+	import com.fiCharts.utils.dec.KP;
+	import com.fiCharts.utils.dec.Made;
+	import com.fiCharts.utils.dec.SEA;
+	import com.fiCharts.utils.dec.VI;
 	import com.fiCharts.utils.graphic.BitmapUtil;
+	import com.fiCharts.utils.system.OS;
 	
 	import flash.display.Bitmap;
 	import flash.events.Event;
 	import flash.utils.ByteArray;
+	import flash.utils.getDefinitionByName;
 
 	/**
+	 * 
+	 * 负责解密、License验证、水印显示
 	 */	
 	public class Dec
 	{
@@ -28,14 +32,15 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		public function run(shell:ChartShellBase):void
+		public function run(shell:CSB):void
 		{
 			this.shell = shell;
 			
-			configByte = ByteArray(new Config);
-			licenseByte = ByteArray(new License);
+			configByte = ByteArray(new Meta);
+			licenseByte = ByteArray(new Lc);
 			
-			decryConfigFile(new MD5().hash(licenseByte));
+			var md5:Made = new Made;
+			decryConfigFile(md5.fuck(licenseByte));
 			
 			licenseByte.uncompress();
 			configByte.uncompress();
@@ -47,30 +52,69 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private var shell:ChartShellBase;
+		private var shell:CSB;
 		
 		/**
 		 */		
 		private function verify():void
 		{
-			var licenseVO:LiInfo = new LiInfo;
+			var licenseVO:LM = new LM;
 			var liXML:XML = XML(licenseByte.toString());
 			XMLVOMapper.fuck(liXML, licenseVO);
 			XMLVOMapper.fuck(liXML.servers, licenseVO);
+			var ifSuccess:Boolean = false;
 			
-			if (licenseVO.type == LiInfo.TRIAL) // 免费版
+			if (licenseVO.type == LM.TRIAL) // 免费版
 			{
 				createLicenseInfo('www.ficharts.com');
 			}
-			else if (licenseVO.type == LiInfo.CLIENT)
+			else if (licenseVO.type == LM.DESK)// 桌面客户端授权
 			{
+				if (OS.isDesktopSystem)
+				{
+					var netInfo:Object = getDefinitionByName("flash.net.NetworkInfo").networkInfo;
+					var interfaceVector:Object = netInfo.findInterfaces();
+					var mac:String = interfaceVector[0].hardwareAddress;
+					
+					for each (var url:String in licenseVO.domains)
+					{
+						if (url == mac)
+						{
+							ifSuccess = true;
+							break;
+						}
+					}
+					
+					if (ifSuccess == false)
+						createLicenseInfo('www.ficharts.com');
+					
+				}
+				else// web 下想用desk的license， 没门
+				{
+					createLicenseInfo('www.ficharts.com');
+				}
+			}
+			else if (licenseVO.type == LM.APP)// 应用ID授权
+			{
+				// toDO
+				var appID:String = getDefinitionByName("flash.desktop.NativeApplication").nativeApplication.applicationID;
+				for each (var id:String in licenseVO.domains)
+				{
+					if (appID == id)
+					{
+						ifSuccess = true;
+						break;
+					}
+				}
+				
+				if (ifSuccess == false)
+					createLicenseInfo('www.ficharts.com');
 				
 			}
-			else // 正式版
+			else // 服务区授权
 			{
 				var fullURL:String = shell.stage.loaderInfo.url;
 				var serverURL:String = getServerName(fullURL);
-				var ifSuccess:Boolean = false;
 				
 				for each (var domain:String in licenseVO.domains)
 				{
@@ -171,8 +215,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function decryConfigFile(licenseMd5:ByteArray):void
 		{
-			var pad:IPad = new PKCS5;
-			var mode:ICipher = new SimpleIVMode(new CBCMode(new AESKey(licenseMd5), pad) as IVMode);
+			var pad:IPad = new KP;
+			var aesKey:SEA = new SEA(licenseMd5);
+			var cbcMode:CCB = new CCB(aesKey, pad)
+			var mode:ICipher = new VI(cbcMode as IVMode);
 			pad.setBlockSize(mode.getBlockSize());
 			mode.yy(configByte);
 		}
@@ -187,10 +233,10 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		public var License:Class;
+		public var Lc:Class;
 		
 		/**
 		 */		
-		public var Config:Class;
+		public var Meta:Class;
 	}
 }

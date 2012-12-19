@@ -5,22 +5,26 @@ package com.fiCharts.charts.chart2D.encry
 	/**
 	 * License信息
 	 */	
-	public class LiInfo extends Sprite
+	public class LM extends Sprite
 	{
 		
 		/**
 		 * 试用版
 		 */		
-		public static const TRIAL:String = 'trial';
+		public static const TRIAL:String = 'Trial';
 		
 		/**
 		 * 客户端方式授权
 		 */		
-		public static const CLIENT:String = 'client';
+		public static const DESK:String = 'Desk';
 		
 		/**
 		 */		
-		public function LiInfo()
+		public static const APP:String = "App";
+		
+		/**
+		 */		
+		public function LM()
 		{
 			
 		}
@@ -61,7 +65,7 @@ package com.fiCharts.charts.chart2D.encry
 		public var email:String;
 		
 		/**
-		 * 认证类型; Web, Intranet, Enterprise, Enterprise_Plus
+		 * 认证类型; Web, Intranet, Enterprise, Enterprise_Plus, Desk 
 		 */		
 		public var type:String ='Web';
 		

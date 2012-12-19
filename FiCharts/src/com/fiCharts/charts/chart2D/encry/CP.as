@@ -33,9 +33,9 @@ package com.fiCharts.charts.chart2D.encry
 	/**
 	 * Proxy
 	 */	
-	public class ChartProxy extends EventDispatcher
+	public class CP extends EventDispatcher
 	{
-		public function ChartProxy()
+		public function CP()
 		{
 			XMLVOLib.registerCustomClasses(<dataScale path='com.fiCharts.charts.chart2D.core.model.DataScale'/>);
 			

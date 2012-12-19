@@ -45,12 +45,12 @@ package com.fiCharts.charts.chart2D.encry
 	/**
 	 * 这是所有图表的主程序基类，负责初始化过程，包含对外接口；
 	 */	
-	public class ChartShellBase extends Sprite
+	public class CSB extends Sprite
 	{
 		/**
 		 * 版本号 
 		 */	
-		public static const VARSION:String = "1.2.2.3 Beta";
+		public static const VARSION:String = "1.2.3";
 		
 		/**
 		 */		
@@ -58,7 +58,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		public function ChartShellBase()
+		public function CSB()
 		{
 			super();
 			StageUtil.initApplication(this, preInit);
@@ -243,7 +243,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private var _width:Number = ChartShellBase.MIN_SIZE;
+		private var _width:Number = CSB.MIN_SIZE;
 		
 		/**
 		 */		
@@ -274,7 +274,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private var _height:Number = ChartShellBase.MIN_SIZE;
+		private var _height:Number = CSB.MIN_SIZE;
 		
 		/**
 		 * 存储图表截图
@@ -748,7 +748,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			if (ifWebMode)
 			{
-				if (stage.stageWidth <=  ChartShellBase.MIN_SIZE || stage.stageHeight <= ChartShellBase.MIN_SIZE)
+				if (stage.stageWidth <=  CSB.MIN_SIZE || stage.stageHeight <= CSB.MIN_SIZE)
 					return;
 				
 				if (infoLabel.visible)

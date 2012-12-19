@@ -6,10 +6,9 @@
  * Derived from:
  * 		The jsbn library, Copyright (c) 2003-2005 Tom Wu
  */
-package com.fiCharts.utils.dec.prng
+package com.fiCharts.utils.dec
 {
 	import flash.utils.ByteArray;
-	import com.fiCharts.utils.dec.Memory;
 	import flash.system.System;
 	import flash.system.Capabilities;
 	import flash.accessibility.AccessibilityProperties;

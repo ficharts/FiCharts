@@ -3,15 +3,18 @@
  * 
  * An interface for each hash function to implement
  */
-package com.fiCharts.utils.dec.hash
+package com.fiCharts.utils.dec
 {
 	import flash.utils.ByteArray;
 
-	public interface IHash
+	/**
+	 * IHash
+	 */	
+	public interface IMade
 	{
 		function getInputSize():uint;
-		function getHashSize():uint;
-		function hash(src:ByteArray):ByteArray;
+		function getSize():uint;
+		function fuck(src:ByteArray):ByteArray;
 		function toString():String;
 	}
 }

@@ -1,7 +1,7 @@
 package com.fiCharts.charts.chart2D.core.model
 {
 	import com.fiCharts.charts.chart2D.column2D.ColumnSeries2D;
-	import com.fiCharts.charts.chart2D.encry.SeriesBase;
+	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
@@ -23,7 +23,7 @@ package com.fiCharts.charts.chart2D.core.model
 		
 		/**
 		 */
-		public function get line():SeriesBase
+		public function get line():SB
 		{
 			return null;
 		}
@@ -31,26 +31,26 @@ package com.fiCharts.charts.chart2D.core.model
 		/**
 		 * @private
 		 */
-		public function set line(value:SeriesBase):void
+		public function set line(value:SB):void
 		{
 			_items.push(value);
 		}
 		
 		/**
 		 */
-		public function get area():SeriesBase
+		public function get area():SB
 		{
 			return null;
 		}
 
-		public function set area(value:SeriesBase):void
+		public function set area(value:SB):void
 		{
 			_items.push(value);
 		}
 		
 		/**
 		 */
-		public function get bar():SeriesBase
+		public function get bar():SB
 		{
 			return null;
 		}
@@ -58,69 +58,69 @@ package com.fiCharts.charts.chart2D.core.model
 		/**
 		 * @private
 		 */
-		public function set bar(value:SeriesBase):void
+		public function set bar(value:SB):void
 		{
 			_items.push(value);
 		}
 		
 		/**
 		 */
-		public function get stackedBar():SeriesBase
+		public function get stackedBar():SB
 		{
 			return null;
 		}
 
-		public function set stackedBar(value:SeriesBase):void
+		public function set stackedBar(value:SB):void
 		{
 			_items.push(value);
 		}
 		
 		/**
 		 */
-		public function get stackedPercentBar():SeriesBase
+		public function get stackedPercentBar():SB
 		{
 			return null;
 		}
 
-		public function set stackedPercentBar(value:SeriesBase):void
+		public function set stackedPercentBar(value:SB):void
 		{
 			_items.push(value);
 		}
 
 		/**
 		 */		
-		public function get column():SeriesBase
+		public function get column():SB
 		{
 			return null;
 		}
 		
 		/**
 		 */		
-		public function set column(value:SeriesBase):void
+		public function set column(value:SB):void
 		{
 			_items.push(value);
 		}
 		
 		/**
 		 */		
-		public function get stackedColumn():SeriesBase
+		public function get stackedColumn():SB
 		{
 			return null;
 		}
 
-		public function set stackedColumn(value:SeriesBase):void
+		public function set stackedColumn(value:SB):void
 		{
 			_items.push(value);
 		}
 		
 		/**
 		 */		
-		public function get stackedPercentColumn():SeriesBase
+		public function get stackedPercentColumn():SB
 		{
 			return null;
 		}
 
-		public function set stackedPercentColumn(value:SeriesBase):void
+		public function set stackedPercentColumn(value:SB):void
 		{
 			_items.push(value);
 		}
@@ -128,7 +128,7 @@ package com.fiCharts.charts.chart2D.core.model
 		/**
 		 * 
 		 */
-		public function get bubble():SeriesBase
+		public function get bubble():SB
 		{
 			return null;
 		}
@@ -136,30 +136,30 @@ package com.fiCharts.charts.chart2D.core.model
 		/**
 		 * @private
 		 */
-		public function set bubble(value:SeriesBase):void
+		public function set bubble(value:SB):void
 		{
 			_items.push(value);
 		}
 		
 		/**
 		 */
-		public function get marker():SeriesBase
+		public function get marker():SB
 		{
 			return null;
 		}
 
-		public function set marker(value:SeriesBase):void
+		public function set marker(value:SB):void
 		{
 			_items.push(value);
 		}
 
 		/**
 		 */		
-		private var _items:Vector.<SeriesBase>;
+		private var _items:Vector.<SB>;
 
 		/**
 		 */
-		public function get items():Vector.<SeriesBase>
+		public function get items():Vector.<SB>
 		{
 			return _items;
 		}
@@ -168,7 +168,7 @@ package com.fiCharts.charts.chart2D.core.model
 		 */		
 		public function beforeUpdateProperties(xml:* = null):void
 		{
-			_items = new Vector.<SeriesBase>;
+			_items = new Vector.<SB>;
 		}
 		
 		/**
@@ -215,7 +215,7 @@ package com.fiCharts.charts.chart2D.core.model
 				index ++;
 			}
 			
-			for each (var series:SeriesBase in _items)
+			for each (var series:SB in _items)
 			{
 				if (series is ColumnSeries2D)
 				{

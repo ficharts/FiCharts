@@ -4,7 +4,7 @@
  * An interface for classes that can be used a pseudo-random number generators
  * 
  */
-package com.fiCharts.utils.dec.prng
+package com.fiCharts.utils.dec
 {
 	import flash.utils.ByteArray;
 		

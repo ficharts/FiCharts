@@ -4,7 +4,7 @@ package com.fiCharts.charts.chart2D.bubble
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
-	import com.fiCharts.charts.chart2D.encry.SeriesBase;
+	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
@@ -12,7 +12,7 @@ package com.fiCharts.charts.chart2D.bubble
 	
 	/**
 	 */	
-	public class BubbleSeries extends SeriesBase
+	public class BubbleSeries extends SB
 	{
 		public function BubbleSeries()
 		{

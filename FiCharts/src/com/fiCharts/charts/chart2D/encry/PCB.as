@@ -25,10 +25,12 @@ package com.fiCharts.charts.chart2D.encry
 	
 	/**
 	 * 饼图的基类
+	 * 
+	 * PieChartBase
 	 */	
-	public class PieChartBase extends Sprite implements IChart
+	public class PCB extends Sprite implements IChart
 	{
-		public function PieChartBase()
+		public function PCB()
 		{
 			super();
 			

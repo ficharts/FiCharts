@@ -1,6 +1,6 @@
 package com.fiCharts.charts.chart2D.core.series
 {
-	import com.fiCharts.charts.chart2D.encry.SeriesBase;
+	import com.fiCharts.charts.chart2D.encry.SB;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -83,12 +83,12 @@ package com.fiCharts.charts.chart2D.core.series
 		
 		/**
 		 */		
-		public function addSeries(series:Vector.<SeriesBase>):void
+		public function addSeries(series:Vector.<SB>):void
 		{
 			while (seriesCanvas.numChildren)
 				seriesCanvas.removeChildAt(0);
 			
-			for each (var seriesItem:SeriesBase in series)
+			for each (var seriesItem:SB in series)
 				seriesCanvas.addChild(seriesItem);
 		}
 		

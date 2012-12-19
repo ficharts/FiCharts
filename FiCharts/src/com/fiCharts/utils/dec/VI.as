@@ -6,17 +6,16 @@
  * be handled explicitely.
  * 
  */
-package com.fiCharts.utils.dec.symmetric
+package com.fiCharts.utils.dec
 {
 	import flash.utils.ByteArray;
-	import com.fiCharts.utils.dec.Memory;
 	
-	public class SimpleIVMode implements IMode, ICipher
+	public class VI implements IMode, ICipher
 	{
 		protected var mode:IVMode;
 		protected var cipher:ICipher;
 		
-		public function SimpleIVMode(mode:IVMode) {
+		public function VI(mode:IVMode) {
 			this.mode = mode;
 			cipher = mode as ICipher;
 		}

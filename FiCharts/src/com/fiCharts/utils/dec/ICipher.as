@@ -4,7 +4,7 @@
  * A generic interface to use symmetric ciphers
  * 
  */
-package com.fiCharts.utils.dec.symmetric
+package com.fiCharts.utils.dec
 {
 	import flash.utils.ByteArray;
 	

@@ -4,7 +4,7 @@ package com.fiCharts.charts.chart2D.column2D
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
-	import com.fiCharts.charts.chart2D.encry.SeriesBase;
+	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
@@ -13,7 +13,7 @@ package com.fiCharts.charts.chart2D.column2D
 
 	/**
 	 */
-	public class ColumnSeries2D extends SeriesBase implements IDirectionSeries
+	public class ColumnSeries2D extends SB implements IDirectionSeries
 	{
 		/**
 		 */

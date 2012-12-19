@@ -60,12 +60,12 @@ package com.fiCharts.charts.chart2D.encry
 	/**
 	 * ChartBase
 	 */	
-	public class ChartBase extends Sprite implements IChart
+	public class CB extends Sprite implements IChart
 	{
 		/**
 		 *  Constructor.
 		 */
-		public function ChartBase()
+		public function CB()
 		{
 			super();
 			
@@ -414,7 +414,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		protected function renderSeries():void
 		{
-			var seriesItem:SeriesBase;
+			var seriesItem:SB;
 			var itemRender:ItemRenderBace;
 			
 			for each (seriesItem in series)
@@ -646,7 +646,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function openFlash():void
 		{
-			var seriesItem:SeriesBase;
+			var seriesItem:SB;
 			
 			// 为播放动画做准备；
 			if (chartModel.animation && ifFirstRender)
@@ -692,7 +692,7 @@ package com.fiCharts.charts.chart2D.encry
 				flashTimmer.start();
 			}
 			
-			for each (var seriesItem:SeriesBase in series)
+			for each (var seriesItem:SB in series)
 				seriesItem.setPercent(flashSeriesPercent);
 		}
 		
@@ -1079,7 +1079,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 创建序列
 		 */		
-		private function createSeriesHandler(value:Vector.<SeriesBase>):void
+		private function createSeriesHandler(value:Vector.<SB>):void
 		{
 			this.chartCanvas.addSeries(value);
 		}
@@ -1108,7 +1108,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		protected function configSeriesAxis():void
 		{
-			var seriesItem:SeriesBase;
+			var seriesItem:SB;
 			if (chartModel.axis.changed && chartModel.series.changed)
 			{
 				for each (seriesItem in series)
@@ -1142,7 +1142,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			if (chartModel.series.changed || ifSourceDataChanged)
 			{
-				for each (var seriesItem:SeriesBase in series)  
+				for each (var seriesItem:SB in series)  
 				{
 					seriesItem.configed(this.chartModel.series.colorMananger);// 图表整体配置完毕， 可以开始子序列的定义了；					
 					seriesItem.dataProvider = this.dataXML;
@@ -1175,7 +1175,7 @@ package com.fiCharts.charts.chart2D.encry
 					bubbleRadiusAxis.redyToUpdateData();
 					
 				//数据更新后同步刷新坐标轴的数据；
-				for each (var seriesVO:SeriesBase in series)
+				for each (var seriesVO:SB in series)
 					seriesVO.updateAxisValueRange();
 				
 				// 数据更新完毕；	
@@ -1203,7 +1203,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */
-		public function get series():Vector.<SeriesBase>
+		public function get series():Vector.<SB>
 		{
 			return this.chartModel.series.items;
 		}
@@ -1279,7 +1279,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			toolTipManager = new ToolTipsManager(this);
 			
-			chartProxy = new ChartProxy();
+			chartProxy = new CP();
 			initListeners();
 			
 			// 设置当前默认的样式配置
@@ -1404,7 +1404,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */
-		protected var chartProxy:ChartProxy;
+		protected var chartProxy:CP;
 		
 		/**  
 		 * 网格/序列背景

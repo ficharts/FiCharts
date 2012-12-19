@@ -4,15 +4,15 @@
  * A padding implementation of PKCS5.
  * 
  */
-package com.fiCharts.utils.dec.symmetric
+package com.fiCharts.utils.dec
 {
 	import flash.utils.ByteArray;
 	
-	public class PKCS5 implements IPad
+	public class KP implements IPad
 	{
 		private var blockSize:uint;
 		
-		public function PKCS5(blockSize:uint=0) {
+		public function KP(blockSize:uint=0) {
 			this.blockSize = blockSize;
 		}
 		

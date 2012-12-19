@@ -4,7 +4,7 @@
  * A padding class that doesn't pad.
  * 
  */
-package com.fiCharts.utils.dec.symmetric
+package com.fiCharts.utils.dec
 {
 	import flash.utils.ByteArray;
 

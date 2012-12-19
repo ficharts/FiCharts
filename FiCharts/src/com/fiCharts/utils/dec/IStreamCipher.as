@@ -4,7 +4,7 @@
  * A "marker" interface for stream ciphers.
  * 
  */
-package com.fiCharts.utils.dec.symmetric {
+package com.fiCharts.utils.dec {
 	
 	/**
 	 * A marker to indicate how this cipher works.

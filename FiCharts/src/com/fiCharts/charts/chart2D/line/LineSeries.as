@@ -5,7 +5,7 @@ package com.fiCharts.charts.chart2D.line
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.chart2D.core.series.DataIndexOffseter;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
-	import com.fiCharts.charts.chart2D.encry.SeriesBase;
+	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -20,7 +20,7 @@ package com.fiCharts.charts.chart2D.line
 	/**
 	 * 趋势图序列
 	 */	
-	public class LineSeries extends SeriesBase implements IDirectionSeries
+	public class LineSeries extends SB implements IDirectionSeries
 	{
 		/**
 		 */

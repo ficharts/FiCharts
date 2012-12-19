@@ -5,7 +5,7 @@
  * This could become deprecated at some point.
  * 
  */
-package com.fiCharts.utils.dec.symmetric 
+package com.fiCharts.utils.dec 
 {
 	public interface IMode extends ICipher
 	{

@@ -4,17 +4,17 @@
  * An ActionScript 3 implementation of the CBC confidentiality mode
  * 
  */
-package com.fiCharts.utils.dec.symmetric
+package com.fiCharts.utils.dec
 {
 	import flash.utils.ByteArray;
 	
 	/**
-	 * CBC confidentiality mode. why not.
+	 * CBCMode
 	 */
-	public class CBCMode extends IVMode implements IMode
+	public class CCB extends IVMode implements IMode
 	{
 		
-		public function CBCMode(key:ISymmetricKey, padding:IPad = null) {
+		public function CCB(key:ISymmetricKey, padding:IPad = null) {
 			super(key, padding);
 		}
 

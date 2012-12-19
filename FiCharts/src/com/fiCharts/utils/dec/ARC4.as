@@ -6,10 +6,8 @@
  * Derived from:
  * 		The jsbn library, Copyright (c) 2003-2005 Tom Wu
  */
-package com.fiCharts.utils.dec.prng
+package com.fiCharts.utils.dec
 {
-	import com.fiCharts.utils.dec.symmetric.IStreamCipher;
-	import com.fiCharts.utils.dec.Memory;
 	
 	import flash.utils.ByteArray;
 

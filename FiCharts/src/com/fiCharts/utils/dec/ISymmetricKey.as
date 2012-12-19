@@ -4,7 +4,7 @@
  * An interface for symmetric encryption keys to implement.
  * 
  */
-package com.fiCharts.utils.dec.symmetric
+package com.fiCharts.utils.dec
 {
 	import flash.utils.ByteArray;
 	

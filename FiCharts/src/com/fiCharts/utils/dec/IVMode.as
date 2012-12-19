@@ -4,10 +4,8 @@
  * An abstract class for confidentialy modes that rely on an initialization vector.
  * 
  */
-package com.fiCharts.utils.dec.symmetric
+package com.fiCharts.utils.dec
 {
-	import com.fiCharts.utils.dec.prng.Random;
-	import com.fiCharts.utils.dec.Memory;
 	
 	import flash.utils.ByteArray;
 	
@@ -31,7 +29,7 @@ package com.fiCharts.utils.dec.symmetric
 			this.key = key;
 			blockSize = key.getBlockSize();
 			if (padding == null) {
-				padding = new PKCS5(blockSize);
+				padding = new KP(blockSize);
 			} else {
 				padding.setBlockSize(blockSize);
 			}

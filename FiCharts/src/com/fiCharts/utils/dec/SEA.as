@@ -9,15 +9,17 @@
  * 		(http://www.geocities.com/malbrain/aestable_c.html)
  * 
  */
-package com.fiCharts.utils.dec.symmetric
+package com.fiCharts.utils.dec
 {
-	import com.fiCharts.utils.dec.prng.Random;
-	import com.fiCharts.utils.dec.Hex;
-	import com.fiCharts.utils.dec.Memory;
 	
 	import flash.utils.ByteArray;
 
-	public class AESKey implements ISymmetricKey
+	/**
+	 * 
+	 * AESKey
+	 * 
+	 */	
+	public class SEA implements ISymmetricKey
 	{
 		// AES only supports Nb=4
 		private static const Nb:uint = 4;    // number of columns in the state & expanded key
@@ -232,7 +234,7 @@ package com.fiCharts.utils.dec.symmetric
 		private var state:ByteArray;
 		private var tmp:ByteArray;
 
-		public function AESKey(key:ByteArray) {
+		public function SEA(key:ByteArray) {
 			tmp = new ByteArray;
 			state = new ByteArray;
 			keyLength = key.length;

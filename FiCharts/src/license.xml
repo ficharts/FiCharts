@@ -1,7 +1,9 @@
 <license>
-	<!-- web, Intranet, Enterprise, Enterprise_Plus  -->
-	<type></type>
+	<!-- Trial, web, Intranet, Enterprise, Enterprise_Plus, Desk, App-->
+	<type>App</type>
 	<servers>
 		<url>www.ficharts.com</url>
+		<url>00-0B-2F-33-C9-48</url>
+		<url>FEFWFEW_</url>
 	</servers>
 </license>

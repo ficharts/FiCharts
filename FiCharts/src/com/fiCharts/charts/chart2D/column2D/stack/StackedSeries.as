@@ -2,7 +2,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 {
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
-	import com.fiCharts.charts.chart2D.encry.SeriesBase;
+	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -12,7 +12,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	 * @author wallen
 	 * 
 	 */	
-	public class StackedSeries extends SeriesBase
+	public class StackedSeries extends SB
 	{
 		public function StackedSeries()
 		{

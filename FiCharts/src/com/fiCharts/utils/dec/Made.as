@@ -14,12 +14,15 @@
  * included to allow interoperability with existing codes and protocols.
  * 
  */
-package com.fiCharts.utils.dec.hash
+package com.fiCharts.utils.dec
 {
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
 
- 	public class MD5 implements IHash
+	/**
+	 * MD5
+	 */	
+ 	public class Made implements IMade
 	{
 		public static const HASH_SIZE:int = 16;
 		
@@ -28,12 +31,14 @@ package com.fiCharts.utils.dec.hash
 			return 64;
 		}
 		
-		public function getHashSize():uint
+		public function getSize():uint
 		{
 			return HASH_SIZE;
 		}
 		
-		public function hash(src:ByteArray):ByteArray
+		/**
+		 */		
+		public function fuck(src:ByteArray):ByteArray
 		{
 			var len:uint = src.length *8;
 			var savedEndian:String = src.endian;
