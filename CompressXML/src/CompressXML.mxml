@@ -24,7 +24,7 @@
 			
 			private function licenseFileSelected(evt:Event):void
 			{
-				var licenseFile:ByteArray = readFile();
+				var licenseFile:ByteArray = readFile(this.file);
 				licenseMD5 = new Made().fuck(licenseFile);
 				file.removeEventListener(Event.SELECT, licenseFileSelected);
 				saveFile(licenseFile);
@@ -37,25 +37,29 @@
 			
 			protected function compressConfigXML(event:MouseEvent):void
 			{
-				file.addEventListener(Event.SELECT, sourceFileSelected, false, 0, true);
-				file.browse();
+				file.addEventListener(FileListEvent.SELECT_MULTIPLE, multiConfigFileSelected, false, 0, true);
+				file.browseForOpenMultiple("选择多个配置文件");
 			}
 			
 			// 用license文件的MD5码加密配置文件
-			private function sourceFileSelected(evt:Event):void
+			private function multiConfigFileSelected(evt:FileListEvent):void
 			{
-				var configFile:ByteArray = readFile();
-				var pad:IPad = new KP;
-				var mode:ICipher = new VI(new CCB(new SEA(licenseMD5), pad) as IVMode);
-				pad.setBlockSize(mode.getBlockSize());
-				mode.jj(configFile);
+				for each (var file:File in evt.files)
+				{
+					var configFile:ByteArray = readFile(file);
+					var pad:IPad = new KP;
+					var mode:ICipher = new VI(new CCB(new SEA(licenseMD5), pad) as IVMode);
+					pad.setBlockSize(mode.getBlockSize());
+					mode.jj(configFile);
+					
+					saveFile(configFile);
+				}
 				
-				saveFile(configFile);
-				file.removeEventListener(Event.SELECT, sourceFileSelected);
+				file.removeEventListener(Event.SELECT, multiConfigFileSelected);
 				configBtn.enabled = false;
 			}
 			
-			private function readFile():ByteArray
+			private function readFile(file:File):ByteArray
 			{
 				var pathArrar:Array = file.nativePath.split('\\');
 				fileName = pathArrar.pop().split('.')[0];

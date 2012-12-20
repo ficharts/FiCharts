@@ -43,6 +43,40 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			domains.push(value);
 		}
+		
+		/**
+		 */		
+		public function get mac():String
+		{
+			return null;
+		}
+
+		/**
+		 */		
+		public function set mac(value:String):void
+		{
+			macs.push(value);
+		}
+		
+		/**
+		 */		
+		public var macs:Array = [];
+
+		/**
+		 */		
+		public function get app():String
+		{
+			return null;
+		}
+
+		public function set app(value:String):void
+		{
+			apps.push(value);
+		}
+		
+		/**
+		 */		
+		public var apps:Array = [];
 
 		/**
 		 * 公司名称

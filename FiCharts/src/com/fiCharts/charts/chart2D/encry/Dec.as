@@ -28,6 +28,7 @@ package com.fiCharts.charts.chart2D.encry
 	{
 		public function Dec()
 		{
+			
 		}
 		
 		/**
@@ -55,6 +56,15 @@ package com.fiCharts.charts.chart2D.encry
 		private var shell:CSB;
 		
 		/**
+		 * 
+		 * trail 为试用版，永远有水印
+		 * 
+		 * desk 用于AIR客户端，通过mac地址认证
+		 * 
+		 * app  用于客户端和手机端，根据应用ID来认证
+		 * 
+		 * 服务器授权分内网与外网，目前仅能依靠人工方式检验license是否被滥用
+		 * 
 		 */		
 		private function verify():void
 		{
@@ -76,7 +86,7 @@ package com.fiCharts.charts.chart2D.encry
 					var interfaceVector:Object = netInfo.findInterfaces();
 					var mac:String = interfaceVector[0].hardwareAddress;
 					
-					for each (var url:String in licenseVO.domains)
+					for each (var url:String in licenseVO.macs)
 					{
 						if (url == mac)
 						{
@@ -89,26 +99,34 @@ package com.fiCharts.charts.chart2D.encry
 						createLicenseInfo('www.ficharts.com');
 					
 				}
-				else// web 下想用desk的license， 没门
+				else
 				{
+					// web 下想用desk的license， 没门
 					createLicenseInfo('www.ficharts.com');
 				}
 			}
 			else if (licenseVO.type == LM.APP)// 应用ID授权
 			{
-				// toDO
-				var appID:String = getDefinitionByName("flash.desktop.NativeApplication").nativeApplication.applicationID;
-				for each (var id:String in licenseVO.domains)
+				if(OS.isWebSystem)
 				{
-					if (appID == id)
-					{
-						ifSuccess = true;
-						break;
-					}
-				}
-				
-				if (ifSuccess == false)
+					// web 下想用App的license， 没门
 					createLicenseInfo('www.ficharts.com');
+				}
+				else
+				{
+					var appID:String = getDefinitionByName("flash.desktop.NativeApplication").nativeApplication.applicationID;
+					for each (var id:String in licenseVO.apps)
+					{
+						if (appID == id)
+						{
+							ifSuccess = true;
+							break;
+						}
+					}
+					
+					if (ifSuccess == false)
+						createLicenseInfo('www.ficharts.com');
+				}
 				
 			}
 			else // 服务区授权
@@ -156,7 +174,6 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 * 
 		 */		
 		private var waterLabel:Bitmap;
 		

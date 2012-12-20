@@ -3,9 +3,6 @@ package com.fiCharts.utils.system
 	import com.fiCharts.utils.ClassUtil;
 	
 	import flash.net.LocalConnection;
-	import flash.system.ApplicationDomain;
-	import flash.system.Capabilities;
-	import flash.system.System;
 
 	/**
 	 */	
@@ -23,7 +20,7 @@ package com.fiCharts.utils.system
 		{
 			checkSystem();
 			
-			return !ifDeskAIR;
+			return ifWeb;
 		}
 		
 		/**
@@ -38,6 +35,15 @@ package com.fiCharts.utils.system
 		
 		/**
 		 */		
+		public static function get isMobileSystem():Boolean
+		{
+			checkSystem();
+			
+			return ifMobile;
+		}
+		
+		/**
+		 */		
 		private static function checkSystem():void
 		{
 			if (isChecked == false)
@@ -46,6 +52,16 @@ package com.fiCharts.utils.system
 					ifDeskAIR = true;
 				else
 					ifDeskAIR = false;
+				
+				if (LocalConnection.isSupported == false)
+					ifMobile = true;
+				else
+					ifMobile = false;
+				
+				if (ifDeskAIR == false && ifMobile == false)
+					ifWeb = true;
+				else
+					ifWeb = false;
 				
 				isChecked = true;
 			}
@@ -59,6 +75,15 @@ package com.fiCharts.utils.system
 		 * 是否是桌面AIR环境
 		 */		
 		private static var ifDeskAIR:Boolean = false;
+		
+		/**
+		 * 是否是移动环境
+		 */		
+		private static var ifMobile:Boolean = false;
+		
+		/**
+		 */		
+		private static var ifWeb:Boolean = false;
 		
 		
 		

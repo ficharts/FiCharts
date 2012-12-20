@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="Ficharts Builder" basedir="." default="Release FiCharts">
-	<property name="FLEX_HOME" value="I:/flex_sdk_4.6" />
-	<property name="WORK_SPACE" value="I:/project/ficharts/FiCharts" />
+	<property name="FLEX_HOME" value="D:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.6.0" />
+	<property name="WORK_SPACE" value="G:/FiCharts" />
 	<property name="VER" value="1.2.3" />
 	<property name="controlFlowObfuscation" value="20"/>
 	<property name="dynamicCodeWrapping" value="1"/>
@@ -66,6 +66,7 @@
 			preset="best_size" superCompression="true" removeLinesNumbers="true" slr="true">
 			<fileset dir="${WORK_SPACE}/FiCharts/release/ficharts" includes="Chart2D.swf"/>
 
+			<rule filter="com.fiCharts.*" rename="false"/>
 			<rule filter="com.fiCharts.utils.XMLConfigKit.XMLVOMapper.*" rename="true"/>
 			
 			<rule filter="com.fiCharts.charts.chart2D.encry" rename="true"/>
@@ -73,8 +74,6 @@
 				controlFlowObfuscation="${controlFlowObfuscation}" 
 				dynamicCodeWrapping="${dynamicCodeWrapping}"
 				publicOnly="false" rename="true"/>
-			
-			<rule filter="com.fiCharts.*" rename="false"/>
 			
 		</protect>
 	</target>
@@ -94,6 +93,7 @@
 			preset="best_size" superCompression="true" removeLinesNumbers="true" slr="true">
 			<fileset dir="${WORK_SPACE}/FiCharts/release/ficharts" includes="Pie2D.swf"/>
 
+			<rule filter="com.fiCharts.*" rename="false"/>
 			<rule filter="com.fiCharts.utils.XMLConfigKit.XMLVOMapper.*" rename="true"/>
 			
 			<rule filter="com.fiCharts.charts.chart2D.encry" rename="true"/>
@@ -102,7 +102,7 @@
 				dynamicCodeWrapping="${dynamicCodeWrapping}"
 				publicOnly="false" rename="true"/>
 			
-			<rule filter="com.fiCharts.*" rename="false"/>
+			
 		</protect>
 	</target>
 	
@@ -137,7 +137,6 @@
 				publicOnly="false" rename="true"/>
 			
 			<rule filter="com.fiCharts.charts.chart2D.encry" rename="false"/>
-			
 		</protect>
 		
 		<zip destfile="${WORK_SPACE}/FiCharts/release/ficharts/FiCharts.swc"
