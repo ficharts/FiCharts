@@ -1,11 +1,11 @@
 package com.fiCharts.utils.graphic
 {
 	import com.adobe.images.PNGEncoder;
+	import com.fiCharts.utils.Base64;
 	
 	import flash.display.DisplayObject;
 	import flash.net.FileReference;
 	import flash.utils.ByteArray;
-	import com.fiCharts.utils.Base64;
 
 	/**
 	 */	
@@ -22,7 +22,7 @@ package com.fiCharts.utils.graphic
 		{
 			var imageByteArray:ByteArray = PNGEncoder.encode(BitmapUtil.drawBitData(target));
 			var file:FileReference = new FileReference();
-			file.save(imageByteArray, 'name');
+			file.save(imageByteArray, name);
 		}
 		
 		/**
