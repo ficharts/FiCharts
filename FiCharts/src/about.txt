@@ -76,8 +76,9 @@ ficharts为绿色软件，使用时将ficharts文件包放置于任意目录即�
 
 联系我们：
 
-网站：http://www.ficharts.com/ 
-邮箱：ficharts.dev@gmail.com 
+网站：http://www.ficharts.com
+技术支持：support@ficharts.com
+产品购买：sales@ficharts.com 
 新浪微博：http://weibo.com/u/2431448684
 
 ficharts项目组

@@ -16,7 +16,7 @@
 
 		<copy overwrite="true" todir="${WORK_SPACE}/FiCharts/release">
 			<fileset dir="${WORK_SPACE}/FiCharts/src">
-				<include name="version.txt" />
+				<include name="license.txt" />
 			</fileset>
 		</copy>
 
