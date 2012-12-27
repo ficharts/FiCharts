@@ -7,6 +7,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 	import com.fiCharts.charts.toolTips.ToolTipsEvent;
 	import com.fiCharts.charts.toolTips.TooltipDataItem;
 	import com.fiCharts.charts.toolTips.TooltipStyle;
+	import com.fiCharts.utils.XMLConfigKit.shape.IShape;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
@@ -39,9 +40,12 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		}
 		
 		/**
+		 * 
+		 * 这个值在全局判断节点碰撞时会用到
+		 * 
 		 * 渲染节点的半径，  汽包图的气泡半径由Z值决定，默认由样式文件定义 radius 
 		 */		
-		private var _radius:Number;
+		private var _radius:Number = 0;
 
 		/**
 		 */
@@ -196,7 +200,6 @@ package com.fiCharts.charts.chart2D.core.itemRender
 			_tooltipStyle = value;
 		}
 		
-		
 		/**
 		 */		
 		protected function get xTipLabel():String
@@ -247,6 +250,9 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		public function hoverHandler():void
 		{
 			y = _itemVO.dataItemY;
+			
+			for each (var shape:IShape in dataRender.shapes)
+				shape.toHover();
 		}
 		
 		/**
@@ -254,6 +260,15 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		public function normalHandler():void
 		{
 			y = _itemVO.dataItemY;
+			
+			for each (var shape:IShape in dataRender.shapes)
+			{
+				shape.toNormal();
+				
+				if (shape.style.radius > this.radius)
+					this.radius = shape.style.radius;
+			}
+				
 		}
 		
 		/**
@@ -261,6 +276,9 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		public function downHandler():void
 		{
 			this.y = itemVO.dataItemY + 1;
+			
+			for each (var shape:IShape in dataRender.shapes)
+				shape.toDown();
 			
 			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_CLICKED);
 			event.dataItem = this._itemVO;
@@ -294,14 +312,10 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		{
 			if (this.dataRender.enable)
 			{
-				this.radius = style.radius;
-				
-				// 绘制圆圈
-				style.tx = style.ty = - style.radius;
-				style.width = style.height = style.radius * 2;
-				
 				canvas.graphics.clear();
-				StyleManager.drawCircle(this.canvas, style, itemVO.metaData);
+				
+				for each (var shape:IShape in dataRender.shapes)
+					shape.render(this.canvas, itemVO.metaData);
 			}
 		}
 		

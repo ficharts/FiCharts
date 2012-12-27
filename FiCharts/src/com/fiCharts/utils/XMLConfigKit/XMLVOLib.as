@@ -7,6 +7,7 @@ package com.fiCharts.utils.XMLConfigKit
 	import com.fiCharts.utils.XMLConfigKit.effect.Glow;
 	import com.fiCharts.utils.XMLConfigKit.effect.IEffectElement;
 	import com.fiCharts.utils.XMLConfigKit.effect.Shadow;
+	import com.fiCharts.utils.XMLConfigKit.shape.CircleShape;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
@@ -53,6 +54,7 @@ package com.fiCharts.utils.XMLConfigKit
 			Shadow;
 			Blur;
 			Glow;
+			CircleShape;
 		}
 		
 		/**
@@ -281,7 +283,11 @@ package com.fiCharts.utils.XMLConfigKit
 			<shadow path='com.fiCharts.utils.XMLConfigKit.effect.Shadow'/>
 			<blur path='com.fiCharts.utils.XMLConfigKit.effect.Blur'/>
 			<glow path='com.fiCharts.utils.XMLConfigKit.effect.Glow'/>
-			<noise path='com.fiCharts.utils.XMLConfigKit.effect.Noise'/>
+			<noise path='com.fiCharts.utils.XMLConfigKit.effect.Noise'/> 
+			
+			<!--形状-->
+			<circle path='com.fiCharts.utils.XMLConfigKit.shape.CircleShape'/>
+			
 		</classes>
 		
 		

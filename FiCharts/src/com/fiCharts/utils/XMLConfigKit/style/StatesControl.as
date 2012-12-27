@@ -37,8 +37,15 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */
 		public function set states(value:States):void
 		{
-			_states = value;
-			ui.style = states.getNormal;
+			if(value)
+			{
+				_states = value;
+				ui.style = states.getNormal;
+			}
+			else
+			{
+				ui.normalHandler();
+			}
 		}
 
 		/**
@@ -84,10 +91,9 @@ package com.fiCharts.utils.XMLConfigKit.style
 			ui.normalHandler();
 			
 			if (states && states.normal)
-			{
 				ui.style = states.getNormal;
-				ui.render();
-			}
+			
+			ui.render();
 		}
 		
 		/**
@@ -97,10 +103,9 @@ package com.fiCharts.utils.XMLConfigKit.style
 			ui.hoverHandler();
 			
 			if (states && states.hover)
-			{
 				ui.style = states.getHover;
-				ui.render();
-			}
+			
+			ui.render();
 		}
 		
 		/**
@@ -110,10 +115,9 @@ package com.fiCharts.utils.XMLConfigKit.style
 			ui.downHandler();
 			
 			if (states && states.down)
-			{
 				ui.style = states.getDown;
-				ui.render();
-			}
+			
+			ui.render();
 		}
 		
 		/**

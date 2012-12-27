@@ -74,7 +74,7 @@ package com.fiCharts.charts.chart2D.column2D
 				if (Number(_itemVO.yValue) < 0)
 					temY = - valueLabelUI.height - this.style.radius;
 				else
-					temY = this.style.radius;
+					temY = this.radius;
 				
 				// 当柱体太小不能容纳标签时隐藏标签；
 				if (temHeight < valueLabelUI.height)

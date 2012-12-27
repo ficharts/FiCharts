@@ -6,7 +6,228 @@
 	</menu>
     <styles>
     	
-    	
+    	<!-- 默认样式  ： 精简-->
+        <simple animation='true'>
+            <title hAlign='center' vMargin='0' vPadding='0'>
+                <text substr='30'/>
+                <format size='14' color='3C4145' bold='true' font='微软雅黑'/>
+            </title>
+            <subTitle hAlign='center' vMargin='0' vPadding='0'>
+                <text substr='30'/>
+                <format size='12' color='555555' bold='false' font='微软雅黑'/>
+            </subTitle>
+            <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10'>
+                <border color='E2E2E2'/>
+                <fill color='FFFFFF'/>
+            </chartBG>
+            <gridField>
+                <border color='E2E2E2' alpha='1' thikness='1' pixelHinting='true'/>
+                <hGrid>
+                    <border color='E2E2E2' thikness='1'/>
+                </hGrid>
+                <vGrid>
+                     <border color='E2E2E2' thikness='1'/>
+                </vGrid>
+            </gridField>
+            <xAxis type="field" labelDisplay="normal">
+                <title>
+                    <format color='393939' font='微软雅黑'/>
+                </title>
+                <tickMark color='E4E2E2' thikness='1' alpha='0'/>
+                <label>
+                    <format color='9F9F9F' font='微软雅黑'/>
+                    <text value='${label}'/>
+                </label>
+            </xAxis>
+            <yAxis type="linear">
+                <title>
+                    <format color='393939' font='微软雅黑'/>
+                </title>
+                <tickMark color='E4E2E2' alpha='0'/>
+                <label>
+                    <format color='9F9F9F' font='微软雅黑'/>
+                    <text value='${label}'/>
+                </label>
+            </yAxis>
+            
+            <tooltip enable='true' locked='false' self="${tooltip}" group="${tooltip}">
+                <self radius='0' padding='5' vMargin='10'>
+                    <border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
+                    <fill color='FFFFFF' alpha='0.9'/>
+                    <cover>
+                        <border color='FFFFFF'/>
+                    </cover>
+                    <format font='微软雅黑' size='12' color='${color}' bold='false'/>
+                </self>
+                <group radius='0' padding='5' vMargin='10'>
+                    <border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
+                    <fill color='FFFFFF' alpha='0.9'/>
+                    <format font='微软雅黑' size='12' color='${color}' bold='false'/>
+                </group>
+            </tooltip>
+            <legend label="${seriesName}" enable='false' hPadding='5' vPadding='2' vMargin='2' radius='5'>
+                <icon>
+                    <states>
+                        <normal>
+                            <fill color='${color}'/>
+                        </normal>
+                        <hover>
+                            <fill color='${color}{adjustColor : 1.3}'/>
+                        </hover>
+                    </states>
+                </icon>
+                
+                <label>
+                    <text substr='30'/>
+                    <format size='12' color='${color}' font='微软雅黑'/>
+                </label>
+            </legend>
+            
+            <dataRender>
+                <circle>
+                    <states states="shape">
+                        <normal radius='6'>
+                            <fill color='${color}' alpha='0.3'/>
+                        </normal>
+                        <hover radius='8'>
+                            <fill color='${color}' alpha='0.3'/>
+                        </hover>
+                         <down radius='8'>
+                            <fill color='${color}' alpha='0.3'/>
+                        </down>
+                    </states>
+                </circle>
+                <circle>
+                    <states>
+                        <normal radius='3'>
+                            <fill color='${color}{adjustColor:1.3}'/>
+                        </normal>
+                        <hover radius='4'>
+                            <fill color='${color}{adjustColor:1.5}'/>
+                        </hover>
+                         <down radius='4'>
+                            <fill color='${color}'/>
+                        </down>
+                    </states>
+                </circle>
+                 
+
+            </dataRender>
+            
+            <valueLabel margin='0' padding='5'>
+                <format color='${color}' font='微软雅黑'/>
+                <text value='${valueLabel}'/>
+            </valueLabel>
+            
+            <innerValueLabel>
+                <format color='#FFFFFF' font='微软雅黑'/>
+                <text value='${valueLabel}'/>
+            </innerValueLabel>
+            
+            <!-- 序列 -->
+            <line states='line' labelDisplay="none">   
+            </line>
+            <area states='line' labelDisplay="none">
+                <states>
+                    <normal>
+                        <fill  alpha='0.4' color='${color}'/>
+                    </normal>
+                    <hover>
+                        <fill  alpha='0.6' color='${color}'/>
+                    </hover>
+                    <down>
+                        <fill  alpha='0.8' color='${color}'/>
+                    </down>
+                </states>
+            </area>
+            <stackedColumn states='shape' labelDisplay="normal">
+                <dataRender enable='false'/>
+            </stackedColumn>
+            
+            <column states='shape' maxItemSize='100' labelDisplay="inner"/>
+         
+            
+            <bar states='shape' maxItemSize='100' labelDisplay="inner">
+                <states>
+                    <normal>
+                        <fill color='${color}'/>
+                    </normal>
+                    <hover>
+                        <fill color='${color}{adjustColor:1.3}'/>
+                    </hover>
+                    <down>
+                        <fill color='${color}{adjustColor:0.8}'/>
+                    </down>
+                </states>
+            </bar>
+            
+            <stackedBar states='shape' labelDisplay="normal">
+                <dataRender enable='false'/>
+            </stackedBar>
+            
+            <marker labelDisplay="none">
+                <markerRender states='shape'>
+                    
+                </markerRender>
+            </marker>
+            
+            <bubble maxRadius='60' minRadius='5' labelDisplay="inner">
+                <bubbleRender>
+                    <states>
+                        <normal>
+                            <fill color='${color}{adjustColor:1.4}, ${color}' alpha='0.6,0.8' type='radial'/>
+                        </normal>
+                        <hover>
+                            <fill color='${color}{adjustColor:1.5}, ${color}{adjustColor:1.3}' alpha='0.8,0.8' type='radial'/>
+                        </hover>
+                    </states>
+                </bubbleRender>
+            </bubble>
+            
+            <!-- 基础定义 -->
+            <definition>    
+
+                <states id='shape'>
+                    <normal>
+                        <fill color='${color}' alpha='0.8'/>
+                    </normal>
+                    <hover>
+                        <fill color='${color}{adjustColor:1.2}' alpha='0.8'/>
+                    </hover>
+                    <down>
+                        <fill color='${color}{adjustColor:0.8}' alpha='0.8'/>
+                    </down>
+                </states>
+                
+                <states id='line'>
+                    <normal>
+                        <border color='${color}' thikness='2' alpha='0.8'/>
+                    </normal>
+                    <hover>
+                        <border color='${color}{adjustColor:1.3}' thikness='4' alpha='0.8'/>
+                    </hover>
+                    <down>
+                        <border color='${color}{adjustColor:1}' thikness='4' alpha='0.8'/>
+                    </down>
+                </states>
+  
+            </definition>
+            
+            <colors>
+                <color value='0x097DDA'/>
+                <color value='0x728F1C'/>
+                <color value='0xC451C8'/>
+                <color value='0xCCCC99'/>
+                <color value='0x885C88'/>
+                <color value='0xFE5B3B'/>
+                <color value='0x5B7C92'/>
+                <color value='0xAB8718'/>
+                <color value='0x9BD124'/>
+                <color value='0x634BA7'/>
+                <color value='0x017E01'/>
+                <color value='0x2F8A93'/>
+            </colors>
+        </simple>
         
         <!----------------------------------- 默认样式  ： 白色系------------------------------------------------------------>
         <white animation='true'>
