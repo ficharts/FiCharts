@@ -107,5 +107,9 @@ package com.fiCharts.charts.chart2D.encry
 		 * 服务器信息
 		 */		
 		public var domains:Array = [];
+		
+		/**
+		 */		
+		public var desc:String;
 	}
 }

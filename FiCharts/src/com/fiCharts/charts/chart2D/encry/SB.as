@@ -634,6 +634,12 @@ package com.fiCharts.charts.chart2D.encry
 				seriesDataItem.xValue = seriesDataItem.metaData[xField]; // xValue.
 				seriesDataItem.yValue = seriesDataItem.metaData[yField]; // yValue.
 				
+				if (seriesDataItem.xValue == null && seriesDataItem.yValue == null)
+				{
+					seriesDataItem = null;
+					continue;
+				}
+				
 				seriesDataItem.xLabel = horizontalAxis.getXLabel(seriesDataItem.xValue);
 				seriesDataItem.yLabel = verticalAxis.getYLabel(seriesDataItem.yValue);
 				seriesDataItem.xDisplayName = horizontalAxis.displayName;

@@ -7,6 +7,32 @@
 	clear: both;
 }
 
+#desc  {
+
+	text-align: center;
+	float: left;
+	margin: 0px;
+    padding: 150px 0 0 80px;
+    display: block;
+    cursor: pointer;
+}
+
+#desc p {
+
+	margin: 0px;
+}
+
+#desc p.title {
+
+	font-size: 50px;
+}
+
+#desc p.sub {
+
+	color: #888888;
+	text-shadow: 0 1px 0 #FFFFFF;
+}
+
 #links {
 	margin: 10px auto; 
 	padding: 0px;

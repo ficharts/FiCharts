@@ -207,12 +207,17 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function render():void
 		{
+			if (isRendering)
+				return;
+			
 			if (configXML && this.dataXML && chartModel.series.length)
 			{
 				// 为避免重复渲染，这里做了严格的限制条件，
 				if(this.ifSizeChanged || this.ifSourceDataChanged 
 					|| chartModel.axis.changed || chartModel.series.changed) 
 				{
+					isRendering = true;
+					
 					preConfig();
 					preLayout();
 					checkRender();
@@ -221,6 +226,11 @@ package com.fiCharts.charts.chart2D.encry
 				}
 			}
 		}
+		
+		/**
+		 * 防止渲染的过程中， render函数被频繁调用导致的癫狂状况
+		 */		
+		private var isRendering:Boolean = false;
 		
 		/**
 		 * 
@@ -275,6 +285,8 @@ package com.fiCharts.charts.chart2D.encry
 			
 			openFlash();
 			GC.run();
+			
+			isRendering = false;
 		}
 		
 		/**

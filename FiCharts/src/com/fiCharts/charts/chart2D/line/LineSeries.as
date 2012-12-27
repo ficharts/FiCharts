@@ -82,7 +82,9 @@ package com.fiCharts.charts.chart2D.line
 				if (i == 0)
 				{
 					partUIs[i].locX = partUIs[i].dataItem.x;
-					partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i].dataItem.x) / 2;
+					
+					if ((i + 1) <=  itemRenderMaxIndex)//防止一个点的报错
+						partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i].dataItem.x) / 2;
 				}
 				else if (i == itemRenderMaxIndex)
 				{
