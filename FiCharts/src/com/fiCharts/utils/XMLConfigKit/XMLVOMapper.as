@@ -325,5 +325,12 @@ package com.fiCharts.utils.XMLConfigKit
 			return null;
 		}
 		
+		/**
+		 */		
+		public static function getStyleXMLBy_ID(id:String):Object
+		{
+			return XMLVOLib.getXML(id);
+		}
+		
 	}
 }

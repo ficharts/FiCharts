@@ -17,26 +17,64 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		}
 		
 		/**
+		 * 
 		 */		
-		public function toNormal():void
+		private var _offset:Number = 0
+
+		/**
+		 */
+		public function get offsetX():Number
 		{
-			this.style = states.getNormal;
+			return _offset;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set offsetX(value:Number):void
+		{
+			_offset = value;
 		}
 		
 		/**
 		 */		
-		public function toHover():void
+		private var _offsetY:Number = 0;
+
+		/**
+		 */
+		public function get offsetY():Number
 		{
-			this.style = states.getHover;
+			return _offsetY;
 		}
-		
+
+		/**
+		 * @private
+		 */
+		public function set offsetY(value:Number):void
+		{
+			_offsetY = value;
+		}
+
 		/**
 		 */		
-		public function toDown():void
+		private var _offsetRadius:Number = 0;
+
+		/**
+		 */
+		public function get offsetRadius():Number
 		{
-			this.style = states.getDown;
+			return _offsetRadius;
 		}
-			
+
+		/**
+		 * @private
+		 */
+		public function set offsetRadius(value:Number):void
+		{
+			_offsetRadius = value;
+		}
+
+		
 		/**
 		 */		
 		private var _states:States;
@@ -60,10 +98,29 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		 */		
 		public function render(canvas:Sprite, metadata:Object):void
 		{
-			style.tx = style.ty = - style.radius;
+			//百分比与真实数据不同，小于1的按百分比算
+			if (Math.abs(offsetRadius) < 1)
+				style.radius = style.radius + style.radius * offsetRadius;
+			else
+				style.radius = style.radius + offsetRadius;
+			
+			var x:Number = 0 ,y:Number = 0;
+			if (Math.abs(offsetY) < 1)
+				y = - style.radius * offsetY;
+			else
+				y = - offsetY;
+			
+			if (Math.abs(offsetX) < 1)
+				x = style.radius * offsetX;
+			else
+				x = offsetX;
+			
+			style.tx = x - style.radius;
+			style.ty = y - style.radius;
+			
 			style.width = style.height = style.radius * 2;
 			
-			StyleManager.drawCircle(canvas, style, metadata);
+			StyleManager.drawCircle(canvas, style, metadata, x, y);
 		}
 		
 		/**

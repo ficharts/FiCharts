@@ -14,7 +14,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.model.AxisModel;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.ChartBGStyle;
-	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
+	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.chart2D.core.model.GridFieldStyle;
 	import com.fiCharts.charts.chart2D.core.model.Series;
 	import com.fiCharts.charts.chart2D.core.model.XAxis;
@@ -111,10 +111,9 @@ package com.fiCharts.charts.chart2D.encry
 			StackedPercentBarSeries;
 			XMLVOLib.registerCustomClasses(<stackedPercentBar path='com.fiCharts.charts.chart2D.bar.stack.StackedPercentBarSeries'/>);
 			
-			DataRenderStyle;
-			XMLVOLib.registerCustomClasses(<dataRender path='com.fiCharts.charts.chart2D.core.model.DataRenderStyle'/>);
-			XMLVOLib.registerCustomClasses(<bubbleRender path='com.fiCharts.charts.chart2D.core.model.DataRenderStyle'/>);
-			XMLVOLib.registerCustomClasses(<markerRender path='com.fiCharts.charts.chart2D.core.model.DataRenderStyle'/>);
+			DataRender;
+			XMLVOLib.registerCustomClasses(<dataRender path='com.fiCharts.charts.chart2D.core.model.DataRender'/>);
+			XMLVOLib.registerCustomClasses(<markerRender path='com.fiCharts.charts.chart2D.core.model.DataRender'/>);
 			
 			XMLVOLib.setASLabelStyleKey('valueLabel');
 			XMLVOLib.setASLabelStyleKey('innerValueLabel');
@@ -213,7 +212,7 @@ package com.fiCharts.charts.chart2D.encry
 			var seriesDataStyle:XML = <seriesDataStyle/>
 				
 			seriesDataStyle.appendChild(value.child('tooltip'));
-			seriesDataStyle.appendChild(value.child('dataRender'));
+			//seriesDataStyle.appendChild(value.child('dataRender'));
 			seriesDataStyle.appendChild(value.child('valueLabel'));
 			seriesDataStyle.appendChild(value.child('innerValueLabel'));
 			XMLVOLib.setXML(Chart2DModel.SERIES_DATA_STYLE, seriesDataStyle);
@@ -233,7 +232,7 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.setXML(Chart2DModel.BAR_SERIES, value.child('bar'));
 			XMLVOLib.setXML(Chart2DModel.STACKED_BAR_SERIES, value.child('stackedBar'));
 			
-			for each (var item:XML in value.child('definition').children())
+			for each (var item:XML in value.child('styles').children())
 				XMLVOLib.setXML(item.@id, item);
 			
 			XMLVOMapper.fuck(value, chartModel);

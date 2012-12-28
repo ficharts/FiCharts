@@ -3,7 +3,7 @@ package com.fiCharts.charts.chart2D.bubble
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
-	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
+	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
@@ -31,7 +31,6 @@ package com.fiCharts.charts.chart2D.bubble
 		 */		
 		override public function created():void
 		{
-			//stateContorl = new StatesControl(this);
 			chartColorManager = new ChartColorManager
 		}
 		
@@ -79,32 +78,12 @@ package com.fiCharts.charts.chart2D.bubble
 			itemRender.valueLabel = this.innerValueLabel;
 			this.updateLabelDisplay(itemRender);
 			
-			itemRender.dataRender = this.bubbleRender;
+			itemRender.dataRender = this.dataRender;
 			itemRender.tooltip = this.tooltip;
 			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
 		}
-		
-		/**
-		 */		
-		private var _bubbleRender:DataRenderStyle;
-
-		/**
-		 */
-		public function get bubbleRender():DataRenderStyle
-		{
-			return _bubbleRender;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set bubbleRender(value:DataRenderStyle):void
-		{
-			_bubbleRender = value;
-		}
-
 		
 		/**
 		 */		

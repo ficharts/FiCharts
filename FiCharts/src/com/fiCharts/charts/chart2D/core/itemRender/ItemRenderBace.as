@@ -1,7 +1,7 @@
 package com.fiCharts.charts.chart2D.core.itemRender
 {
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
-	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
+	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.toolTips.ToolTipHolder;
 	import com.fiCharts.charts.toolTips.ToolTipsEvent;
@@ -251,8 +251,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		{
 			y = _itemVO.dataItemY;
 			
-			for each (var shape:IShape in dataRender.shapes)
-				shape.toHover();
+			dataRender.toHover();
 		}
 		
 		/**
@@ -261,14 +260,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		{
 			y = _itemVO.dataItemY;
 			
-			for each (var shape:IShape in dataRender.shapes)
-			{
-				shape.toNormal();
-				
-				if (shape.style.radius > this.radius)
-					this.radius = shape.style.radius;
-			}
-				
+			dataRender.toNormal();
 		}
 		
 		/**
@@ -277,8 +269,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		{
 			this.y = itemVO.dataItemY + 1;
 			
-			for each (var shape:IShape in dataRender.shapes)
-				shape.toDown();
+			dataRender.toDown();
 			
 			var event:FiChartsEvent = new FiChartsEvent(FiChartsEvent.ITEM_CLICKED);
 			event.dataItem = this._itemVO;
@@ -313,9 +304,8 @@ package com.fiCharts.charts.chart2D.core.itemRender
 			if (this.dataRender.enable)
 			{
 				canvas.graphics.clear();
-				
-				for each (var shape:IShape in dataRender.shapes)
-					shape.render(this.canvas, itemVO.metaData);
+				this.dataRender.render(this.canvas, itemVO.metaData);
+				this.radius = canvas.width / 2;
 			}
 		}
 		
@@ -373,18 +363,18 @@ package com.fiCharts.charts.chart2D.core.itemRender
 				valueLabelUI.x = - valueLabelUI.width / 2;
 				
 				if (Number(_itemVO.yValue) < 0)
-					valueLabelUI.y = this.style.radius + valueLabelUI.height + this.valueLabel.margin;
+					valueLabelUI.y = this.radius + valueLabelUI.height + this.valueLabel.margin;
 				else
-					valueLabelUI.y = - this.style.radius - this.valueLabel.margin;
+					valueLabelUI.y = - this.radius - this.valueLabel.margin;
 			}
 			else
 			{
 				valueLabelUI.x = - valueLabelUI.width / 2;
 				
 				if (Number(_itemVO.yValue) < 0)
-					valueLabelUI.y = this.style.radius + this.valueLabel.margin;
+					valueLabelUI.y = this.radius + this.valueLabel.margin;
 				else
-					valueLabelUI.y = - this.style.radius - valueLabelUI.height - this.valueLabel.margin;
+					valueLabelUI.y = - this.radius - valueLabelUI.height - this.valueLabel.margin;
 			}
 		}
 		
@@ -417,11 +407,11 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		
 		/**
 		 */		
-		private var _dataRender:DataRenderStyle;
+		private var _dataRender:DataRender;
 
 		/**
 		 */
-		public function get dataRender():DataRenderStyle
+		public function get dataRender():DataRender
 		{
 			return _dataRender;
 		}
@@ -429,11 +419,10 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		/**
 		 * @private
 		 */
-		public function set dataRender(value:DataRenderStyle):void
+		public function set dataRender(value:DataRender):void
 		{
 			_dataRender = value;
-			
-			statesContorl.states = _dataRender.states;
+			_dataRender.toNormal();
 		}
 		
 		/**

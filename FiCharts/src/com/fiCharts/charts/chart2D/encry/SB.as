@@ -5,7 +5,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
-	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
+	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.core.series.SeriesDirectionControl;
 	import com.fiCharts.charts.common.ChartColorManager;
@@ -29,7 +29,7 @@ package com.fiCharts.charts.chart2D.encry
 	/**
 	 * SeriesBase
 	 */	
-	public class SB extends Sprite implements IDirectionSeries, IEditableObject, IStyleStatesUI
+	public class SB extends Sprite implements IDirectionSeries, IEditableObject
 	{
 
 		/**
@@ -50,28 +50,11 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		public function normalHandler():void
-		{
-			
-		}
-		
-		public function hoverHandler():void
-		{
-			
-		}
-		
-		public function downHandler():void
-		{
-			
-		}
-		
-		/**
-		 */		
-		private var _style:Style;
+		protected var _style:String;
 
 		/**
 		 */
-		public function get style():Style
+		public function get style():String
 		{
 			return _style;
 		}
@@ -79,9 +62,11 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * @private
 		 */
-		public function set style(value:Style):void
+		public function set style(value:String):void
 		{
 			_style = value;
+			
+			XMLVOMapper.fuck(XMLVOMapper.getStyleXMLBy_ID(_style), this);
 		}
 		
 		/**
@@ -102,10 +87,6 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			_states = XMLVOMapper.getInstanceFromLib(value) as States;
 		}
-		
-		/**
-		 */		
-		protected var stateControl:StatesControl;
 		
 		/**
 		 */		
@@ -409,11 +390,11 @@ package com.fiCharts.charts.chart2D.encry
 		 * 
 		 * 渲染节点的显示与尺寸；
 		 */		
-		private var _dataRender:DataRenderStyle;
+		private var _dataRender:DataRender;
 
 		/**
 		 */
-		public function get dataRender():DataRenderStyle
+		public function get dataRender():DataRender
 		{
 			return _dataRender;
 		}
@@ -421,7 +402,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * @private
 		 */
-		public function set dataRender(value:DataRenderStyle):void
+		public function set dataRender(value:DataRender):void
 		{
 			_dataRender = value;
 		}
@@ -721,9 +702,6 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			for each (var itemVO:SeriesDataItemVO in dataItemVOs)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_HIDE));
-				
-			if (stateControl)		
-				this.stateControl.toHide();
 			
 			this.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.UPDATE_VALUE_LABEL, false, true));
 		}
@@ -735,9 +713,6 @@ package com.fiCharts.charts.chart2D.encry
 			for each (var itemVO:SeriesDataItemVO in dataItemVOs)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_SHOW));
 				
-			if (stateControl)		
-				this.stateControl.toShow();
-			
 			this.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.UPDATE_VALUE_LABEL, false, true));
 		}
 		
@@ -748,8 +723,6 @@ package com.fiCharts.charts.chart2D.encry
 			for each (var itemVO:SeriesDataItemVO in dataItemVOs)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_OVER));
 			
-			if (stateControl)
-				this.stateControl.toHover();
 		}
 		
 		/**
@@ -758,9 +731,6 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			for each (var itemVO:SeriesDataItemVO in dataItemVOs)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_OUT));
-				
-			if (stateControl)	
-				this.stateControl.toNormal();
 		}
 		
 		

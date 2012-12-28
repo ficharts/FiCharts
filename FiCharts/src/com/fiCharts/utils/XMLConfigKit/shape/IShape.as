@@ -1,5 +1,6 @@
 package com.fiCharts.utils.XMLConfigKit.shape
 {
+	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	
 	import flash.display.Sprite;
@@ -10,23 +11,19 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		
 		/**
 		 */		
-		function toNormal():void
-		
-		/**
-		 */		
-		function toHover():void
-		
-		/**
-		 */		
-		function toDown():void;
-		
-		/**
-		 */		
 		function get style():Style;
 		
 		/**
 		 */		
 		function set style(value:Style):void;
+		
+		/**
+		 */		
+		function get states():States;
+		
+		/**
+		 */		
+		function set states(value:States):void;
 		
 	}
 }

@@ -49,17 +49,10 @@ package com.fiCharts.charts.chart2D.bubble
 		 */		
 		override public function render():void
 		{
-			style.radius = itemVO.z;
-			
 			//更新正确的Radius值， style.radius 是共有的， 每个bubble的radius值不同；
 			this.radius = itemVO.z;
-			
-			// 绘制圆圈
-			style.tx = style.ty = - style.radius;
-			style.width = style.height = style.radius * 2;
-			
 			canvas.graphics.clear();
-			StyleManager.drawCircle(this.canvas, style, itemVO.metaData);
+			this.dataRender.render(this.canvas, itemVO.metaData, this.radius);
 		}
 		
 		/**

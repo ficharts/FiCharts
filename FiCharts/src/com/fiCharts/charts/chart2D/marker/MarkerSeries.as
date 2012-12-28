@@ -2,7 +2,7 @@ package com.fiCharts.charts.chart2D.marker
 {
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
-	import com.fiCharts.charts.chart2D.core.model.DataRenderStyle;
+	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
@@ -33,7 +33,6 @@ package com.fiCharts.charts.chart2D.marker
 		 */		
 		override public function created():void
 		{
-			stateControl = new StatesControl(this);
 			chartColorManager = new ChartColorManager;
 		}
 		
@@ -95,11 +94,11 @@ package com.fiCharts.charts.chart2D.marker
 		
 		/**
 		 */		
-		private var _markerRender:DataRenderStyle
+		private var _markerRender:DataRender
 
 		/**
 		 */
-		public function get markerRender():DataRenderStyle
+		public function get markerRender():DataRender
 		{
 			return _markerRender;
 		}
@@ -107,7 +106,7 @@ package com.fiCharts.charts.chart2D.marker
 		/**
 		 * @private
 		 */
-		public function set markerRender(value:DataRenderStyle):void
+		public function set markerRender(value:DataRender):void
 		{
 			_markerRender = value;
 		}

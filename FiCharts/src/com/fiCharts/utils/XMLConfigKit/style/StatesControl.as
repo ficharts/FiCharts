@@ -33,7 +33,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		}
 
 		/**
-		 * @private
+		 * 当UI没有states和style时， 也生效
 		 */
 		public function set states(value:States):void
 		{
@@ -52,7 +52,6 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function overHandler(evt:MouseEvent):void
 		{
-			//trace(this.ui, 'over', this.enable);
 			if (enable)
 				this.toHover();
 		}
@@ -61,7 +60,6 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function outHandler(evt:MouseEvent):void
 		{
-			//trace(this.ui, 'out', this.enable);
 			if (enable)
 				this.toNormal();
 		}
@@ -70,7 +68,6 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function downHandler(evt:MouseEvent):void
 		{
-			//trace(this.ui, 'down');
 			if (enable)
 				this.toDown();	
 		}
@@ -79,7 +76,6 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function upHandler(evt:MouseEvent):void
 		{
-			//trace(this.ui, 'up');	
 			if (enable)
 				this.toHover();
 		}

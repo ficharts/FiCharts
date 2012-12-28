@@ -73,10 +73,10 @@ package com.fiCharts.utils.graphic
 		
 		/**
 		 */		
-		public static function drawCircle(target:Sprite, style:Style, metaData:Object):void
+		public static function drawCircle(target:Sprite, style:Style, metaData:Object, x:Number = 0, y:Number = 0):void
 		{
 			setShapeStyle(style, target.graphics, metaData);
-			target.graphics.drawCircle(0, 0, style.radius);
+			target.graphics.drawCircle(x, y, style.radius);
 			target.graphics.endFill();
 			
 			drawCircleCover(target.graphics, style.getCover, metaData);
@@ -266,7 +266,7 @@ package com.fiCharts.utils.graphic
 					var ratios:Array = fillStyle.radioes as Array;
 					
 					matr.createGradientBox(style.width, style.height, fillStyle.angle, style.tx, style.ty);
-					graphic.beginGradientFill(fillStyle.type, colors, alphas, ratios, matr, SpreadMethod.REFLECT); 
+					graphic.beginGradientFill(fillStyle.type, colors, alphas, ratios, matr, SpreadMethod.PAD); 
 				}
 				else
 				{

@@ -125,26 +125,6 @@ package com.fiCharts.charts.chart2D.line
 		}
 		
 		/**
-		 * 
-		 * 一次渲染所有节点，此方法用在 simple 类型的的序列中, 最简单方式的渲染，但性能最好
-		 */		
-		protected function renderWholeLine(startIndex:uint, endIndex:uint):void
-		{
-			canvas.graphics.clear();
-			
-			StyleManager.setLineStyle(canvas.graphics, style.getBorder, style, this);
-			this.renderSimleLine(canvas.graphics, startIndex, endIndex, 0);
-			
-			/*if (style.cover && style.cover.border)
-			{
-				StyleManager.setLineStyle(canvas.graphics, style.cover.border, style, this);
-				this.renderSimleLine(canvas.graphics, startIndex, endIndex, style.cover.offset);
-			}*/
-			
-			//StyleManager.setEffects(canvas, style);
-		}
-		
-		/**
 		 */		
 		override public function render():void
 		{

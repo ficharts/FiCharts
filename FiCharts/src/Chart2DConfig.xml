@@ -5,6 +5,19 @@
 		<version>版本</version>
 	</menu>
     <styles>
+
+        <!------------------------------------------------------公共样式----------------------------------------------------------------------------->
+
+
+
+
+
+
+
+
+
+
+        <!---------------------------------------------------------公共样式-------------------------------------------------------------------------->
     	
     	<!-- 默认样式  ： 精简-->
         <simple animation='true'>
@@ -120,7 +133,7 @@
             </valueLabel>
             
             <innerValueLabel>
-                <format color='#FFFFFF' font='微软雅黑'/>
+                <format color='#EEEEEE' font='微软雅黑'/>
                 <text value='${valueLabel}'/>
             </innerValueLabel>
             
@@ -171,21 +184,12 @@
                 </markerRender>
             </marker>
             
-            <bubble maxRadius='60' minRadius='5' labelDisplay="inner">
-                <bubbleRender>
-                    <states>
-                        <normal>
-                            <fill color='${color}{adjustColor:1.4}, ${color}' alpha='0.6,0.8' type='radial'/>
-                        </normal>
-                        <hover>
-                            <fill color='${color}{adjustColor:1.5}, ${color}{adjustColor:1.3}' alpha='0.8,0.8' type='radial'/>
-                        </hover>
-                    </states>
-                </bubbleRender>
+            <bubble maxRadius='60' minRadius='5' labelDisplay="inner" style='bubble'>
+                
             </bubble>
             
             <!-- 基础定义 -->
-            <definition>    
+            <styles>    
 
                 <states id='shape'>
                     <normal>
@@ -210,8 +214,42 @@
                         <border color='${color}{adjustColor:1}' thikness='4' alpha='0.8'/>
                     </down>
                 </states>
+
+                <style id='bubble'> 
+                    <dataRender style='bubble_data'>
+                    </dataRender>
+                </style>
+
+                <style id='bubble_data'> 
+                    <circle>
+                        <states>
+                            <normal>
+                                <fill color='${color}{adjustColor:1.4}, ${color}' alpha='0.6,0.6' type='radial'/>
+                            </normal>
+                            <hover>
+                                <fill color='${color}{adjustColor:1.5}, ${color}{adjustColor:1.3}' alpha='0.8,0.8' type='radial'/>
+                            </hover>
+                             <down>
+                                <fill color='${color}{adjustColor:1.4}, ${color}' alpha='0.8,0.8' type='radial'/>
+                            </down>
+                        </states>
+                    </circle>
+                    <circle offsetRadius='-0.3' offsetX='-0.4' offsetY='0.4'>
+                        <states>
+                            <normal >
+                                <fill angle='90' color='FFFFFF,FFFFFF' alpha='0.6,0' type='radial'/>
+                            </normal>
+                            <hover>
+                                <fill angle='90' color='FFFFFF,FFFFFF' alpha='0.4,0' type='radial'/>
+                            </hover>
+                             <down>
+                                <fill angle='90' color='FFFFFF,FFFFFF' alpha='0.4,0' type='radial'/>
+                            </down>
+                        </states>
+                    </circle>
+                </style>
   
-            </definition>
+            </styles>
             
             <colors>
                 <color value='0x097DDA'/>
