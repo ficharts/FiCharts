@@ -1,9 +1,8 @@
 package com.fiCharts.charts.legend.view
 {
-	import com.fiCharts.charts.legend.LegendIconStyle;
+	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.legend.model.LegendVO;
-	import com.fiCharts.charts.legend.view.itemRender.RecItemRender;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.graphic.StyleManager;
@@ -77,6 +76,8 @@ package com.fiCharts.charts.legend.view
 		private function overHandler(evt:MouseEvent):void
 		{
 			icoRender.toHover();
+			icoRender.render(this, vo.metaData);
+			
 			sourceY = this.y;
 			this.vo.dispatchEvent(new LegendEvent(LegendEvent.LEGEND_ITEM_OVER, vo));
 		}
@@ -86,6 +87,8 @@ package com.fiCharts.charts.legend.view
 		private function outHandler(evt:MouseEvent):void
 		{
 			icoRender.toNormal();
+			icoRender.render(this, vo.metaData);
+			
 			this.y = sourceY;
 			this.vo.dispatchEvent(new LegendEvent(LegendEvent.LEGEND_ITEM_OUT, vo));
 		}
@@ -94,38 +97,46 @@ package com.fiCharts.charts.legend.view
 		 */		
 		public function render(style:LegendStyle):void
 		{
-			var labelStyle:LabelStyle = style.label;
-			var iconStyle:LegendIconStyle = style.icon;
+			this.graphics.clear();
 			
-			icoRender = vo.itemRender as RecItemRender;
-			icoRender.states = iconStyle.states;
-			icoRender.render();
-			addChild(icoRender as DisplayObject);
+			var labelStyle:LabelStyle = style.label;
+			
+			if (vo.iconRender)
+				icoRender = vo.iconRender;
+			else
+				icoRender = style.icon;
+			
+			icoRender.toNormal();
+			icoRender.render(iconShape, vo.metaData);
+			this.addChild(iconShape);
 			
 			var label:LabelUI = new LabelUI();
 			label.metaData = vo.metaData;
 			label.style = labelStyle;
 			label.render();
-			label.x = icoRender.width + style.hPadding;
+			label.x = this.width + style.hPadding;
 			
-			var fullHeight:uint = (label.height > icoRender.height) ? label.height : icoRender.height;
+			var fullHeight:uint = (label.height > iconShape.height) ? label.height : iconShape.height;
 			
-			if (label.height >= icoRender.height)
+			if (label.height >= iconShape.height)
 				label.y = (label.height - fullHeight) / 4;
 			else
 				label.y = (fullHeight - label.height) / 2;
 			
-			(icoRender as DisplayObject).y = (fullHeight - icoRender.height) / 2;
+			iconShape.y = (fullHeight - iconShape.height) / 2;
 			addChild(label);
 			
 			// 绘制填充背景， 
-			this.graphics.clear();
 			this.graphics.beginFill(0, 0);
 			this.graphics.drawRect(0, 0, this.width, this.height);
 		}
 		
 		/**
 		 */		
-		private var icoRender:RecItemRender;
+		private var iconShape:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var icoRender:DataRender;
 	}
 }

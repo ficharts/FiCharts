@@ -259,13 +259,6 @@ package com.fiCharts.charts.chart2D.line
 
 		/**
 		 */		
-		override protected function get itemRender():ItemRenderBace
-		{
-			return new ItemRenderBace;
-		}
-		
-		/**
-		 */		
 		override public function centerBaseLine():void
 		{
 			super.centerBaseLine();

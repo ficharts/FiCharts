@@ -60,6 +60,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			LegendStyle;
 			XMLVOLib.registerCustomClasses(<legend path='com.fiCharts.charts.legend.LegendStyle'/>);
+			XMLVOLib.registerCustomClasses(<icon path='com.fiCharts.charts.chart2D.core.model.DataRender'/>);
 			
 			AxisModel;
 			XMLVOLib.registerCustomClasses(<axis path='com.fiCharts.charts.chart2D.core.model.AxisModel'/>);
@@ -113,11 +114,9 @@ package com.fiCharts.charts.chart2D.encry
 			
 			DataRender;
 			XMLVOLib.registerCustomClasses(<dataRender path='com.fiCharts.charts.chart2D.core.model.DataRender'/>);
-			XMLVOLib.registerCustomClasses(<markerRender path='com.fiCharts.charts.chart2D.core.model.DataRender'/>);
 			
 			XMLVOLib.setASLabelStyleKey('valueLabel');
 			XMLVOLib.setASLabelStyleKey('innerValueLabel');
-			XMLVOLib.setASStyleKey('scrollBar');
 			
 			XMLVOLib.registerObjectToProperty('config', 'title', 'text');
 			XMLVOLib.registerObjectToProperty('config', 'subTitle', 'text');
@@ -212,7 +211,6 @@ package com.fiCharts.charts.chart2D.encry
 			var seriesDataStyle:XML = <seriesDataStyle/>
 				
 			seriesDataStyle.appendChild(value.child('tooltip'));
-			//seriesDataStyle.appendChild(value.child('dataRender'));
 			seriesDataStyle.appendChild(value.child('valueLabel'));
 			seriesDataStyle.appendChild(value.child('innerValueLabel'));
 			XMLVOLib.setXML(Chart2DModel.SERIES_DATA_STYLE, seriesDataStyle);

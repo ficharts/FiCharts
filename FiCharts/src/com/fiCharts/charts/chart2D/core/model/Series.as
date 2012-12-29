@@ -190,7 +190,6 @@ package com.fiCharts.charts.chart2D.core.model
 			var index:uint = 0;
 			var columnSereisIndex:uint = 0;
 			var columnSeriesAmount:uint = 0;
-			var markerSeriesIndex:uint = 0;
 			
 			colorMananger = new ChartColorManager();
 			for (var i:int = 0; i < length; i ++)
@@ -204,13 +203,6 @@ package com.fiCharts.charts.chart2D.core.model
 				
 				if (_items[i] is ColumnSeries2D)
 					columnSeriesAmount += 1;
-				
-				//  记录散点序列的序号， 这将决定点的边数；
-				if (_items[i] is MarkerSeries)
-				{
-					(_items[i] as MarkerSeries).markerSeriesIndex = markerSeriesIndex;
-					markerSeriesIndex += 1;
-				}
 				
 				index ++;
 			}

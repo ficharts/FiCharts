@@ -80,14 +80,16 @@
             </tooltip>
             <legend label="${seriesName}" enable='false' hPadding='5' vPadding='2' vMargin='2' radius='5'>
                 <icon>
-                    <states>
-                        <normal>
-                            <fill color='${color}'/>
-                        </normal>
-                        <hover>
-                            <fill color='${color}{adjustColor : 1.3}'/>
-                        </hover>
-                    </states>
+                    <rect>
+                         <states>
+                            <normal width='25' height='15'>
+                                <fill color='${color}'/>
+                            </normal>
+                            <hover width='25' height='15'>
+                                <fill color='${color}{adjustColor : 1.3}'/>
+                            </hover>
+                        </states>
+                    </rect>
                 </icon>
                 
                 <label>
@@ -95,37 +97,6 @@
                     <format size='12' color='${color}' font='微软雅黑'/>
                 </label>
             </legend>
-            
-            <dataRender>
-                <circle>
-                    <states states="shape">
-                        <normal radius='6'>
-                            <fill color='${color}' alpha='0.3'/>
-                        </normal>
-                        <hover radius='8'>
-                            <fill color='${color}' alpha='0.3'/>
-                        </hover>
-                         <down radius='8'>
-                            <fill color='${color}' alpha='0.3'/>
-                        </down>
-                    </states>
-                </circle>
-                <circle>
-                    <states>
-                        <normal radius='3'>
-                            <fill color='${color}{adjustColor:1.3}'/>
-                        </normal>
-                        <hover radius='4'>
-                            <fill color='${color}{adjustColor:1.5}'/>
-                        </hover>
-                         <down radius='4'>
-                            <fill color='${color}'/>
-                        </down>
-                    </states>
-                </circle>
-                 
-
-            </dataRender>
             
             <valueLabel margin='0' padding='5'>
                 <format color='${color}' font='微软雅黑'/>
@@ -178,17 +149,14 @@
                 <dataRender enable='false'/>
             </stackedBar>
             
-            <marker labelDisplay="none">
-                <markerRender states='shape'>
-                    
-                </markerRender>
+            <marker labelDisplay="none" style='marker'>
             </marker>
             
             <bubble maxRadius='60' minRadius='5' labelDisplay="inner" style='bubble'>
                 
             </bubble>
             
-            <!-- 基础定义 -->
+            <!-- 基础定义 ------------>
             <styles>    
 
                 <states id='shape'>
@@ -216,11 +184,16 @@
                 </states>
 
                 <style id='bubble'> 
-                    <dataRender style='bubble_data'>
+                    <dataRender style='bubble_render'>
                     </dataRender>
                 </style>
 
-                <style id='bubble_data'> 
+                <style id='marker'> 
+                    <dataRender style='data_render'>
+                    </dataRender>
+                </style>
+
+                <style id='bubble_render'> 
                     <circle>
                         <states>
                             <normal>
@@ -244,6 +217,35 @@
                             </hover>
                              <down>
                                 <fill angle='90' color='FFFFFF,FFFFFF' alpha='0.4,0' type='radial'/>
+                            </down>
+                        </states>
+                    </circle>
+                </style>
+
+                <style id='data_render'>
+                    <circle>
+                        <states>
+                            <normal radius='6'>
+                                <fill color='${color}' alpha='0.3'/>
+                            </normal>
+                            <hover radius='8'>
+                                <fill color='${color}' alpha='0.3'/>
+                            </hover>
+                             <down radius='8'>
+                                <fill color='${color}' alpha='0.3'/>
+                            </down>
+                        </states>
+                    </circle>
+                    <circle>
+                        <states>
+                            <normal radius='3'>
+                                <fill color='${color}{adjustColor:1.3}'/>
+                            </normal>
+                            <hover radius='4'>
+                                <fill color='${color}{adjustColor:1.5}'/>
+                            </hover>
+                             <down radius='4'>
+                                <fill color='${color}'/>
                             </down>
                         </states>
                     </circle>

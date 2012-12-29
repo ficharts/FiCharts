@@ -2,13 +2,11 @@ package com.fiCharts.charts.chart2D.marker
 {
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
-	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColorManager;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
-	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
 
 	/**
 	 */	
@@ -80,61 +78,14 @@ package com.fiCharts.charts.chart2D.marker
 			item.metaData.valueLabel = item.yLabel;
 			itemRender.value = value;
 			
-			(itemRender as MarkerSeriesItemRender).edges = this.markerSeriesIndex + 3;
-			
 			itemRender.valueLabel = valueLabel;
 			this.updateLabelDisplay(itemRender);
 			
-			itemRender.dataRender = this.markerRender;
+			itemRender.dataRender = this.dataRender;
 			itemRender.tooltip = this.tooltip;
 			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
-		}
-		
-		/**
-		 */		
-		private var _markerRender:DataRender
-
-		/**
-		 */
-		public function get markerRender():DataRender
-		{
-			return _markerRender;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set markerRender(value:DataRender):void
-		{
-			_markerRender = value;
-		}
-		
-		/**
-		 */		
-		override protected function get itemRender():ItemRenderBace
-		{
-			return new MarkerSeriesItemRender;
-		}
-		
-		/**
-		 */		
-		private var _markerSeriesIndex:uint = 0;
-
-		/**
-		 */
-		public function get markerSeriesIndex():uint
-		{
-			return _markerSeriesIndex;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set markerSeriesIndex(value:uint):void
-		{
-			_markerSeriesIndex = value;
 		}
 
 	}

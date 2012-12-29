@@ -1,11 +1,11 @@
 package com.fiCharts.charts.legend.model
 {
-	import com.fiCharts.charts.legend.view.itemRender.RecItemRender;
-	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
-	import com.fiCharts.utils.XMLConfigKit.style.IStyleUI;
+	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	
 	import flash.events.EventDispatcher;
 
+	/**
+	 */	
 	public class LegendVO extends EventDispatcher
 	{
 		public function LegendVO()
@@ -26,15 +26,24 @@ package com.fiCharts.charts.legend.model
 		{
 			_mataData = value;
 		}
-
+		
 		/**
 		 */		
-		public function get itemRender():IStyleStatesUI
+		private var _iconRender:DataRender;
+
+		/**
+		 */
+		public function get iconRender():DataRender
 		{
-			var result:RecItemRender = new RecItemRender();
-			result.metaData = this.metaData;
-			
-			return result;
+			return _iconRender;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set iconRender(value:DataRender):void
+		{
+			_iconRender = value;
 		}
 		
 	}

@@ -1,23 +1,25 @@
-<config title='数值分布'>
+<config title='数值分布' >
     <axis>
-        <x type="field" title="数值项"/>
-        <y type="linear" title="分布值"/>
+        <x type="field" title='数值项' />
+        <y type="linear" title='分布值'/>
     </axis>
     <series>
-        <bubble xField='label' yField='value' radiusField='radius' zDisplayName='气泡值'/>
+        <marker seriesName="产品A"  xField='label' yField='valueA'/>
+        <marker seriesName="产品B"  xField='label' yField='valueB'/>
     </series>
+    <legend enable='true'/>
     <data>
-        <set label='1' value='279' radius='23'/>
-        <set label='2' value='410' radius='32'/>
-        <set label='3' value='325' radius='65'/>
-        <set label='4' value='572' radius='25'/>
-        <set label='5' value='629' radius='20'/>
-        <set label='6' value='710' radius='5'/>
-        <set label='7' value='489' radius='52'/>
-        <set label='8' value='635' radius='45'/>
-        <set label='9' value='750' radius='20'/>
-        <set label='10' value='600' radius='45'/>
-        <set label='11' value='760' radius='32'/>
-        <set label='12' value='950' radius='30'/>
+        <set label='1月' valueB='279' valueA='400'/>
+        <set label='2月' valueB='410' valueA='300'/>
+        <set label='3月' valueB='325' valueA='250'/>
+        <set label='4月' valueB='572' valueA='100'/>
+        <set label='5月' valueB='629' valueA='300'/>
+        <set label='6月' valueB='710' valueA='400'/>
+        <set label='7月' value='489' valueA='600'/>
+        <set label='8月' valueB='635' valueA='800'/>
+        <set label='9月' valueB='750' valueA='600'/>
+        <set label='10月' valueB='600' valueA='400'/>
+        <set label='11月' valueB='760' valueA='350'/>
+        <set label='12月' valueB='950' valueA='300'/>
     </data>
 </config>

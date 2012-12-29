@@ -2,8 +2,6 @@ package com.fiCharts.charts.chart2D.core.model
 {
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.shape.IShape;
-	import com.fiCharts.utils.XMLConfigKit.style.States;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	
 	import flash.display.Sprite;
 	
@@ -41,7 +39,7 @@ package com.fiCharts.charts.chart2D.core.model
 		
 		/**
 		 */		
-		private var _enable:Boolean
+		private var _enable:Boolean = true;
 
 		/**
 		 */
@@ -109,6 +107,18 @@ package com.fiCharts.charts.chart2D.core.model
 			shapes.push(value);
 		}
 		
+		/**
+		 */
+		public function get rect():IShape
+		{
+			return null;
+		}
+
+		public function set rect(value:IShape):void
+		{
+			shapes.push(value);
+		}
+
 		/**
 		 */		
 		private var shapes:Vector.<IShape> = new Vector.<IShape>;

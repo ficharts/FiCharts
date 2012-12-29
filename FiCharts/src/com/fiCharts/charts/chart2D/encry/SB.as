@@ -313,7 +313,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function get itemRender():ItemRenderBace
 		{
-			return null;
+			return new ItemRenderBace;
 		}
 		
 		/**
