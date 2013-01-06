@@ -45,7 +45,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			licenseByte.uncompress();
 			configByte.uncompress();
-			shell.setDefaultConfig(configByte.toString());
+			shell.initStyleTempalte(configByte.toString());
 			shell.init();
 			
 			verify();

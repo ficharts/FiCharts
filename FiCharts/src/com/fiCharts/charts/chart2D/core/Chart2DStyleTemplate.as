@@ -5,11 +5,11 @@ package com.fiCharts.charts.chart2D.core
 	/**
 	 * 图表的样式控制系统，存储默认的几种样式表；
 	 */	
-	public class Chart2DStyleSheet
+	public class Chart2DStyleTemplate
 	{
 		/**
 		 */		
-		public function Chart2DStyleSheet()
+		public function Chart2DStyleTemplate()
 		{
 		}
 		
@@ -41,9 +41,9 @@ package com.fiCharts.charts.chart2D.core
 		/**
 		 * 序列颜色列表
 		 */		
-		public static function getColors(styleName:String):XML
+		public static function getColors(styleName:String):XMLList
 		{
-			return XML(getTheme(styleName).colors.toXMLString());
+			return getTheme(styleName).colors;
 		}
 		
 		/**
@@ -51,6 +51,7 @@ package com.fiCharts.charts.chart2D.core
 		public static const BLACK:String = 'black';
 		public static const WHITE:String = 'white';
 		public static const CUSTOM:String = 'custom';
+		public static const SIMPLE:String = 'simple';
 			
 		/**
 		 */		

@@ -104,7 +104,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		
 		/**
 		 */		
-		private var _bold:Object;
+		private var _bold:Object = false;
 		
 		/**
 		 * 行距 

@@ -212,7 +212,7 @@ package com.fiCharts.charts.legend
 			index += 1;
 			if (legendY + legendUI.height > panelHeight)
 			{
-				legendX = container.width + style.vPadding;
+				legendX = container.width + style.hPadding;
 				legendY = index = 0;
 			}
 		}
@@ -226,7 +226,7 @@ package com.fiCharts.charts.legend
 			if (legendX + legendUI.width > panelWidth)
 			{
 				legendX = index = 0;
-				legendY = container.height + style.hPadding;
+				legendY = container.height + style.vPadding;
 
 				return;
 			}
@@ -235,7 +235,7 @@ package com.fiCharts.charts.legend
 			if (index >= itemsPerLine)
 			{
 				legendX = index = 0;
-				legendY = container.height + style.hPadding;
+				legendY = container.height + style.vPadding;
 			}
 		}
 

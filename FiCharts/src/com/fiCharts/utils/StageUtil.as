@@ -43,6 +43,7 @@ import flash.display.StageAlign;
 import flash.display.StageQuality;
 import flash.display.StageScaleMode;
 import flash.events.Event;
+import flash.system.IME;
 
 /**
  */

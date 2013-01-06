@@ -6,7 +6,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.encry.CP;
-	import com.fiCharts.charts.common.ChartColorManager;
+	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -51,7 +51,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
-		override public function configed(colorMananger:ChartColorManager):void
+		override public function configed(colorMananger:ChartColors):void
 		{
 			super.configed(colorMananger);
 			

@@ -8,6 +8,7 @@ package com.fiCharts.utils.XMLConfigKit
 	import com.fiCharts.utils.XMLConfigKit.effect.IEffectElement;
 	import com.fiCharts.utils.XMLConfigKit.effect.Shadow;
 	import com.fiCharts.utils.XMLConfigKit.shape.CircleShape;
+	import com.fiCharts.utils.XMLConfigKit.shape.Diamond;
 	import com.fiCharts.utils.XMLConfigKit.shape.RectShape;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
@@ -30,9 +31,9 @@ package com.fiCharts.utils.XMLConfigKit
 		public static const RE_NEW:String = 'reNew';
 		
 		/**
-		 * 若对象拥有此方法时并且已被创建， 重新映射的时候调用此方法刷新对象； 
+		 * 若XML对象拥有此属性，并且为 true， 重新映射的时候刷新对象； 
 		 */		
-		public static const FRESH:String = 'fresh';
+		public static const CLEAR:String = 'fresh';
 		
 		/**
 		 * 如果对象拥有此属性并且值为 false 则重新构建对象；
@@ -58,6 +59,7 @@ package com.fiCharts.utils.XMLConfigKit
 			
 			CircleShape;
 			RectShape;
+			Diamond;
 		}
 		
 		/**
@@ -169,36 +171,68 @@ package com.fiCharts.utils.XMLConfigKit
 		
 		
 		
-		//--------------------------------------------------
+		//----------------------------------------------------------------
+		//
+		// 共享库分全局和局部，局部库会经常变动
 		//
 		// 有一些可共享，可被重复使用或者转接的XML配置需要存储在统一的地方 
 		//
-		//--------------------------------------------------
+		//----------------------------------------------------------------
 		
 		/**
 		 */		
 		public static function isRegistedXML(key:String):Boolean
 		{
-			return xmlLib.containsKey(key);
+			if (partXMLLib.containsKey(key) || wholeXmlLib.containsKey(key))
+				return true;
+			else
+				return false;
 		}
 		
 		/**
 		 */		
-		public static function setXML(key:String, xml:*):void
+		public static function registWholeXML(key:String, xml:*):void
 		{
-			xmlLib.put(key, xml);
+			wholeXmlLib.put(key, xml);
+		}
+		
+		/**
+		 */		
+		public static function registerPartXML(key:String, xml:*):void
+		{
+			partXMLLib.put(key, xml);
 		}
 		
 		/**
 		 */		
 		public static function getXML(key:String):*
 		{
-			return xmlLib.getValue(key);
+			if (partXMLLib.containsKey(key))
+				return partXMLLib.getValue(key);
+			else	
+				return wholeXmlLib.getValue(key);
+		}
+		
+		/**
+		 * 清空临时库
+		 */		
+		public static function clearPartLib():void
+		{
+			partXMLLib.clear();
 		}
 		
 		/**
 		 */		
-		private static var xmlLib:Map = new Map;
+		private static var wholeXmlLib:Map = new Map;
+		
+		/**
+		 */		
+		private static var partXMLLib:Map = new Map;
+		
+		
+		
+		
+		
 		
 		
 		
@@ -264,35 +298,35 @@ package com.fiCharts.utils.XMLConfigKit
 		 * 默认的常见样式类可直接创建， 特定的类需要类信息才可以创建；
 		 */		
 		private static var registedClasses:XML = 
-		<classes>
-			<!--基础样式元素-->
-			<border path='com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine'/>
-			<cover path='com.fiCharts.utils.XMLConfigKit.style.elements.Cover'/>
-			<fill path='com.fiCharts.utils.XMLConfigKit.style.elements.Fill'/>
-			<format path='com.fiCharts.utils.XMLConfigKit.style.elements.TextFormatStyle'/>
-			
-			<!--样式模型-->
-			<label path='com.fiCharts.utils.XMLConfigKit.style.LabelStyle'/>
-			<text path='com.fiCharts.utils.XMLConfigKit.style.Text'/>
-			<states path='com.fiCharts.utils.XMLConfigKit.style.States'/>
-			<bg path='com.fiCharts.utils.XMLConfigKit.style.ContainerStyle'/>
-			<normal path='com.fiCharts.utils.XMLConfigKit.style.Style'/>
-			<hover path='com.fiCharts.utils.XMLConfigKit.style.Style'/>
-			<down path='com.fiCharts.utils.XMLConfigKit.style.Style'/>
-			<style path='com.fiCharts.utils.XMLConfigKit.style.Style'/>
-			
-			<!-- 滤镜效果-->
-			<effects path='com.fiCharts.utils.XMLConfigKit.effect.Effects'/>
-			<shadow path='com.fiCharts.utils.XMLConfigKit.effect.Shadow'/>
-			<blur path='com.fiCharts.utils.XMLConfigKit.effect.Blur'/>
-			<glow path='com.fiCharts.utils.XMLConfigKit.effect.Glow'/>
-			<noise path='com.fiCharts.utils.XMLConfigKit.effect.Noise'/> 
-			
-			<!--形状-->
-			<circle path='com.fiCharts.utils.XMLConfigKit.shape.CircleShape'/>
-			<rect path='com.fiCharts.utils.XMLConfigKit.shape.RectShape'/>
-			
-		</classes>
+							<classes>
+								<!--基础样式元素-->
+								<border path='com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine'/>
+								<cover path='com.fiCharts.utils.XMLConfigKit.style.elements.Cover'/>
+								<fill path='com.fiCharts.utils.XMLConfigKit.style.elements.Fill'/>
+								<format path='com.fiCharts.utils.XMLConfigKit.style.elements.TextFormatStyle'/>
+								
+								<!--样式模型-->
+								<label path='com.fiCharts.utils.XMLConfigKit.style.LabelStyle'/>
+								<text path='com.fiCharts.utils.XMLConfigKit.style.Text'/>
+								<states path='com.fiCharts.utils.XMLConfigKit.style.States'/>
+								<bg path='com.fiCharts.utils.XMLConfigKit.style.ContainerStyle'/>
+								<normal path='com.fiCharts.utils.XMLConfigKit.style.Style'/>
+								<hover path='com.fiCharts.utils.XMLConfigKit.style.Style'/>
+								<down path='com.fiCharts.utils.XMLConfigKit.style.Style'/>
+								<style path='com.fiCharts.utils.XMLConfigKit.style.Style'/>
+								
+								<!-- 滤镜效果-->
+								<effects path='com.fiCharts.utils.XMLConfigKit.effect.Effects'/>
+								<shadow path='com.fiCharts.utils.XMLConfigKit.effect.Shadow'/>
+								<blur path='com.fiCharts.utils.XMLConfigKit.effect.Blur'/>
+								<glow path='com.fiCharts.utils.XMLConfigKit.effect.Glow'/>
+								<noise path='com.fiCharts.utils.XMLConfigKit.effect.Noise'/> 
+								
+								<!--形状-->
+								<circle path='com.fiCharts.utils.XMLConfigKit.shape.CircleShape'/>
+								<rect path='com.fiCharts.utils.XMLConfigKit.shape.RectShape'/>
+								<diamond path='com.fiCharts.utils.XMLConfigKit.shape.Diamond'/>
+							</classes>
 		
 		
 	}

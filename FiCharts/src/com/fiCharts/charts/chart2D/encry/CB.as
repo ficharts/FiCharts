@@ -11,7 +11,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedPercentColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
-	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
+	import com.fiCharts.charts.chart2D.core.Chart2DStyleTemplate;
 	import com.fiCharts.charts.chart2D.core.TitleBox;
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.AxisContianer;
@@ -27,6 +27,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.series.ChartCanvas;
 	import com.fiCharts.charts.chart2D.line.LineSeries;
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
+	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.IChart;
 	import com.fiCharts.charts.legend.LegendPanel;
 	import com.fiCharts.charts.legend.LegendStyle;
@@ -163,6 +164,17 @@ package com.fiCharts.charts.chart2D.encry
 			
 			if (value.hasOwnProperty('data') && value.data.children().length())
 				this.dataXML = XML(value.data.toXMLString());
+			
+			overrideColors();
+		}
+		
+		/**
+		 * 如果用户配置文件中含有colors，则用此重置图表颜色集
+		 */		
+		private function overrideColors():void
+		{
+			if (configXML.colors)
+				ChartColors.colors = configXML.colors;
 		}
 		
 		/**
@@ -1234,11 +1246,15 @@ package com.fiCharts.charts.chart2D.encry
 		public function setStyle(newStyle:String):void
 		{
 			if (chartProxy.currentStyleName == newStyle) return;
-			chartProxy.styleInit(newStyle);
+			chartProxy.setCurStyleTemplate(newStyle);
 			
 			if (configXML)
+			{
 				chartProxy.setConfigCore(XMLVOMapper.extendFrom(
 					chartProxy.currentStyleXML.copy(), configXML.copy()));
+				
+				this.overrideColors();
+			}
 		}
 		
 		/**
@@ -1246,7 +1262,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function setCustomStyle(style:XML):void
 		{
-			chartProxy.currentStyleName = Chart2DStyleSheet.CUSTOM;
+			chartProxy.currentStyleName = Chart2DStyleTemplate.CUSTOM;
 			chartProxy.currentStyleXML = style;
 			
 			if (configXML)
@@ -1295,7 +1311,7 @@ package com.fiCharts.charts.chart2D.encry
 			initListeners();
 			
 			// 设置当前默认的样式配置
-			chartProxy.styleInit();
+			chartProxy.setCurStyleTemplate();
 			chartProxy.setConfigCore(chartProxy.currentStyleXML);
 		}
 		

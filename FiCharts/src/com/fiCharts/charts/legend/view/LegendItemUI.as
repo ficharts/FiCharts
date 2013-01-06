@@ -24,9 +24,10 @@ package com.fiCharts.charts.legend.view
 		public function LegendItemUI(vo:LegendVO)
 		{
 			super();
-			this.vo = vo;
 			
+			this.vo = vo;
 			this.mouseChildren = false;
+			this.addChild(canvas);
 			
 			this.addEventListener(MouseEvent.ROLL_OVER, overHandler);
 			this.addEventListener(MouseEvent.ROLL_OUT, outHandler);
@@ -76,7 +77,8 @@ package com.fiCharts.charts.legend.view
 		private function overHandler(evt:MouseEvent):void
 		{
 			icoRender.toHover();
-			icoRender.render(this, vo.metaData);
+			iconShape.graphics.clear();
+			icoRender.render(iconShape, vo.metaData);
 			
 			sourceY = this.y;
 			this.vo.dispatchEvent(new LegendEvent(LegendEvent.LEGEND_ITEM_OVER, vo));
@@ -87,7 +89,8 @@ package com.fiCharts.charts.legend.view
 		private function outHandler(evt:MouseEvent):void
 		{
 			icoRender.toNormal();
-			icoRender.render(this, vo.metaData);
+			iconShape.graphics.clear();
+			icoRender.render(iconShape, vo.metaData);
 			
 			this.y = sourceY;
 			this.vo.dispatchEvent(new LegendEvent(LegendEvent.LEGEND_ITEM_OUT, vo));
@@ -97,10 +100,9 @@ package com.fiCharts.charts.legend.view
 		 */		
 		public function render(style:LegendStyle):void
 		{
-			this.graphics.clear();
-			
 			var labelStyle:LabelStyle = style.label;
 			
+			// 默认采用全局图例icon，序列可独立定义图例icon
 			if (vo.iconRender)
 				icoRender = vo.iconRender;
 			else
@@ -108,28 +110,29 @@ package com.fiCharts.charts.legend.view
 			
 			icoRender.toNormal();
 			icoRender.render(iconShape, vo.metaData);
-			this.addChild(iconShape);
+			iconShape.x = iconShape.width / 2;
+			iconShape.y = 0;
+			canvas.addChild(iconShape);
 			
 			var label:LabelUI = new LabelUI();
 			label.metaData = vo.metaData;
 			label.style = labelStyle;
 			label.render();
-			label.x = this.width + style.hPadding;
+			label.x = iconShape.width + style.hPadding;
+			label.y = - label.height / 2;
+			canvas.addChild(label);
 			
-			var fullHeight:uint = (label.height > iconShape.height) ? label.height : iconShape.height;
-			
-			if (label.height >= iconShape.height)
-				label.y = (label.height - fullHeight) / 4;
-			else
-				label.y = (fullHeight - label.height) / 2;
-			
-			iconShape.y = (fullHeight - iconShape.height) / 2;
-			addChild(label);
+			canvas.y = canvas.height / 2;
 			
 			// 绘制填充背景， 
+			this.graphics.clear();
 			this.graphics.beginFill(0, 0);
 			this.graphics.drawRect(0, 0, this.width, this.height);
 		}
+		
+		/**
+		 */		
+		private var canvas:Sprite = new Sprite;
 		
 		/**
 		 */		

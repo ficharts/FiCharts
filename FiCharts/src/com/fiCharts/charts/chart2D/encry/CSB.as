@@ -1,18 +1,19 @@
 package com.fiCharts.charts.chart2D.encry
 {
-	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
+	import com.fiCharts.charts.chart2D.core.Chart2DStyleTemplate;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.common.IChart;
 	import com.fiCharts.charts.common.Menu;
 	import com.fiCharts.utils.ExternalUtil;
-	import com.fiCharts.utils.graphic.ImgSaver;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.StageUtil;
+	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.csv.CSVLoader;
 	import com.fiCharts.utils.csv.CSVParseEvent;
+	import com.fiCharts.utils.graphic.ImgSaver;
 	import com.fiCharts.utils.layout.LayoutManager;
 	import com.fiCharts.utils.net.URLService;
 	import com.fiCharts.utils.net.URLServiceEvent;
@@ -96,12 +97,16 @@ package com.fiCharts.charts.chart2D.encry
 		 * 图表初始化时先初始此文件；
 		 * 
 		 */		
-		internal function setDefaultConfig(value:String):void
+		internal function initStyleTempalte(value:String):void
 		{
 			var defaultConfig:XML = XML(value);
 			
 			for each (var item:XML in defaultConfig.styles.children())
-				Chart2DStyleSheet.pushTheme(XML(item.toXMLString()));
+				Chart2DStyleTemplate.pushTheme(XML(item.toXMLString()));
+			
+			//注册全局样式模板
+			for each (item in defaultConfig.child('template').children())
+				XMLVOLib.registWholeXML(item.@id, item);
 			
 			XMLVOMapper.fuck(defaultConfig.menu, menu);
 		}

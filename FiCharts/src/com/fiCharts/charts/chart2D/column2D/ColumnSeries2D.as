@@ -5,7 +5,7 @@ package com.fiCharts.charts.chart2D.column2D
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.encry.SB;
-	import com.fiCharts.charts.common.ChartColorManager;
+	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -63,7 +63,7 @@ package com.fiCharts.charts.chart2D.column2D
 		
 		/**
 		 */		
-		override public function configed(colorMananger:ChartColorManager):void
+		override public function configed(colorMananger:ChartColors):void
 		{
 			if (this.labelDisplay == LabelStyle.NORMAL && verticalAxis is LinearAxis)
 				(verticalAxis as LinearAxis).ifExpend = true;

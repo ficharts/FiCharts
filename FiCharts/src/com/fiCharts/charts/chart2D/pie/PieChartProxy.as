@@ -1,10 +1,10 @@
 package com.fiCharts.charts.chart2D.pie
 {
-	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
+	import com.fiCharts.charts.chart2D.core.Chart2DStyleTemplate;
 	import com.fiCharts.charts.chart2D.core.model.ChartBGStyle;
 	import com.fiCharts.charts.chart2D.pie.series.PieSeries;
 	import com.fiCharts.charts.chart2D.pie.series.Series;
-	import com.fiCharts.charts.common.ChartColorManager;
+	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.toolTips.TooltipStyle;
@@ -59,16 +59,16 @@ package com.fiCharts.charts.chart2D.pie
 		{
 			this._chartModel = new PieChartModel();
 			
-			XMLVOLib.setXML(PieChartModel.PIE_SERIES_STYLE, value.child('pieSeriesStyle'));
+			XMLVOLib.registWholeXML(PieChartModel.PIE_SERIES_STYLE, value.child('pieSeriesStyle'));
 			
 			var seriesDataStyle:XML = <seriesDataStyle/>
 			
 			seriesDataStyle.appendChild(value.child('tooltip'));
 			seriesDataStyle.appendChild(value.child('valueLabel'));
-			XMLVOLib.setXML(PieChartModel.SERIES_DATA_STYLE, seriesDataStyle);
+			XMLVOLib.registWholeXML(PieChartModel.SERIES_DATA_STYLE, seriesDataStyle);
 			
 			for each (var item:XML in value.child('definition').children())
-				XMLVOLib.setXML(item.@id, item);
+				XMLVOLib.registWholeXML(item.@id, item);
 			
 			XMLVOMapper.fuck(value, chartModel);
 		}
@@ -79,8 +79,8 @@ package com.fiCharts.charts.chart2D.pie
 		public function styleInit(styleName:String = 'white'):void
 		{
 			currentStyleName = styleName;
-			currentStyleXML = Chart2DStyleSheet.getTheme(currentStyleName);
-			ChartColorManager.chartColors = Chart2DStyleSheet.getColors(currentStyleName);// TODO
+			currentStyleXML = Chart2DStyleTemplate.getTheme(currentStyleName);
+			ChartColors.colors = Chart2DStyleTemplate.getColors(currentStyleName);// TODO
 		}
 		
 		/**

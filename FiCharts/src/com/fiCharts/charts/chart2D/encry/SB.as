@@ -8,7 +8,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.core.series.SeriesDirectionControl;
-	import com.fiCharts.charts.common.ChartColorManager;
+	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
@@ -99,13 +99,13 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function created():void
 		{
-			chartColorManager = new ChartColorManager;
+			chartColorManager = new ChartColors;
 		}
 		
 		/**
 		 * 序列被创建并配置完毕后回调方法, 此方法在数据设置之前调用；
 		 */		
-		public function configed(colorMananger:ChartColorManager):void
+		public function configed(colorMananger:ChartColors):void
 		{
 			if (this.labelDisplay == LabelStyle.NORMAL && verticalAxis is LinearAxis)
 				(verticalAxis as LinearAxis).ifExpend = true;
@@ -790,7 +790,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		protected var chartColorManager:ChartColorManager;
+		protected var chartColorManager:ChartColors;
 		
 		/**
 		 * 单序列时，柱体是否采用同一种颜色； 
@@ -945,7 +945,21 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			_seriesName = value;
 		}
-
+		
+		/**
+		 */		
+		override public function get name():String
+		{
+			return _seriesName;
+		}
+		
+		/**
+		 */		
+		override public function set name(value:String):void
+		{
+			_seriesName = value;
+		}
+		
 		/**
 		 * the count of series in the chart
 		 */

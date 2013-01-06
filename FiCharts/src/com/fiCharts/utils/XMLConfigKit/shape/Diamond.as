@@ -7,21 +7,23 @@ package com.fiCharts.utils.XMLConfigKit.shape
 	import flash.display.Sprite;
 	
 	/**
+	 * 绘制菱形
 	 */	
-	public class RectShape implements IShape
+	public class Diamond implements IShape
 	{
-		public function RectShape()
+		public function Diamond()
 		{
+			
 		}
 		
 		/**
 		 */		
 		public function render(canvas:Sprite, metadata:Object):void
 		{
-			style.tx = - style.width / 2;
-			style.ty = - style.height / 2;
+			style.tx = - style.radius;
+			style.ty = - style.radius;
 			
-			StyleManager.drawRect(canvas, style, metadata);
+			StyleManager.drawDiamond(canvas, style, metadata);
 		}
 		
 		/**
@@ -31,8 +33,6 @@ package com.fiCharts.utils.XMLConfigKit.shape
 			return _style;
 		}
 		
-		/**
-		 */		
 		public function set style(value:Style):void
 		{
 			_style = value;

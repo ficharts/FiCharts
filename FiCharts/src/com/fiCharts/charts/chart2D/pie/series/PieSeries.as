@@ -3,7 +3,7 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.pie.PieChartModel;
 	import com.fiCharts.charts.chart2D.pie.PieDataFormatter;
-	import com.fiCharts.charts.common.ChartColorManager;
+	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
@@ -161,7 +161,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */		
 		public function created():void
 		{
-			chartColorManager = new ChartColorManager;
+			chartColorManager = new ChartColors;
 		}
 		
 		/**
@@ -194,7 +194,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		
 		/**
 		 */		
-		protected var chartColorManager:ChartColorManager;
+		protected var chartColorManager:ChartColors;
 		
 		
 		

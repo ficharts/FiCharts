@@ -4,8 +4,20 @@
         <y type="linear" title='分布值'/>
     </axis>
     <series>
-        <marker seriesName="产品A"  xField='label' yField='valueA'/>
-        <marker seriesName="产品B"  xField='label' yField='valueB'/>
+        <marker seriesName="产品A"  xField='label' yField='valueA'>
+            <dataRender style='Diamond'/>
+        </marker>
+        <line seriesName="产品B"  xField='label' yField='valueB'>
+             <dataRender enable='true'/>
+             <states>
+                <normal>
+                    <border thikness='1'/>
+                </normal>
+             </states>
+        </line>
+        <bubble xField='label' yField='valueA' bubbleField='valueB'>
+
+        </bubble>
     </series>
     <legend enable='true'/>
     <data>
@@ -15,7 +27,7 @@
         <set label='4月' valueB='572' valueA='100'/>
         <set label='5月' valueB='629' valueA='300'/>
         <set label='6月' valueB='710' valueA='400'/>
-        <set label='7月' value='489' valueA='600'/>
+        <set label='7月' valueB='489' valueA='600'/>
         <set label='8月' valueB='635' valueA='800'/>
         <set label='9月' valueB='750' valueA='600'/>
         <set label='10月' valueB='600' valueA='400'/>

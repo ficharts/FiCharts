@@ -67,11 +67,11 @@ package com.fiCharts.utils
 		{
 			value = value.replace(/\s*/g, '');// 剔除空格
 			
-			/*if (value.indexOf(" ") != - 1)
+			if (value.indexOf(" ") != - 1)
 			{
 				var original:Array = value.split(" ");
 				value = original.join("");
-			}*/
+			}
 			
 			// 属性名称的提取
 			var rex:RegExp = /(?:\$\{\w+\.?\w*\})/g;

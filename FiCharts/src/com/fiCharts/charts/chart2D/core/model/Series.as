@@ -2,8 +2,8 @@ package com.fiCharts.charts.chart2D.core.model
 {
 	import com.fiCharts.charts.chart2D.column2D.ColumnSeries2D;
 	import com.fiCharts.charts.chart2D.encry.SB;
-	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
-	import com.fiCharts.charts.common.ChartColorManager;
+	import com.fiCharts.charts.common.ChartColors;
+	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 
@@ -191,17 +191,24 @@ package com.fiCharts.charts.chart2D.core.model
 			var columnSereisIndex:uint = 0;
 			var columnSeriesAmount:uint = 0;
 			
-			colorMananger = new ChartColorManager();
+			var seriesItem:SB;
+			colorMananger = new ChartColors();
 			for (var i:int = 0; i < length; i ++)
 			{
-				_items[i].seriesIndex = index;
-				_items[i].seriesCount = length;
+				seriesItem = items[i];
+				
+				// 自动分配序列名称
+				if (RexUtil.ifTextNull(seriesItem.name))
+					seriesItem.name = "序列" + (i + 1);
+					
+				seriesItem.seriesIndex = index;
+				seriesItem.seriesCount = length;
 				
 				// 按照序列的顺序指定序列颜色
-				if (!_items[i].color)
-					_items[i].color = colorMananger.chartColor.toString(16);
+				if (!seriesItem.color)
+					seriesItem.color = colorMananger.chartColor.toString(16);
 				
-				if (_items[i] is ColumnSeries2D)
+				if (seriesItem is ColumnSeries2D)
 					columnSeriesAmount += 1;
 				
 				index ++;
@@ -225,7 +232,7 @@ package com.fiCharts.charts.chart2D.core.model
 		/**
 		 * 图表的颜色生成管理， 按顺序生成不同的颜色；
 		 */		
-		public var colorMananger:ChartColorManager;
+		public var colorMananger:ChartColors;
 		
 		/**
 		 */		

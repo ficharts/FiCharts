@@ -5,7 +5,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
-	import com.fiCharts.charts.common.ChartColorManager;
+	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
@@ -314,7 +314,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		/**
 		 * 堆积序列的创建与配置
 		 */		
-		override public function configed(colorMananger:ChartColorManager):void
+		override public function configed(colorMananger:ChartColors):void
 		{
 			if (this.labelDisplay != LabelStyle.NONE && verticalAxis is LinearAxis)
 				(verticalAxis as LinearAxis).ifExpend = true;

@@ -84,6 +84,24 @@ package com.fiCharts.utils.graphic
 		}
 		
 		/**
+		 * 绘制菱形
+		 */		
+		public static function drawDiamond(target:Sprite, style:Style, metaData:Object = null):void
+		{
+			setShapeStyle(style, target.graphics, metaData);
+			
+			target.graphics.moveTo(0, - style.radius);
+			target.graphics.lineTo(style.radius, 0);
+			target.graphics.lineTo(0, style.radius);
+			target.graphics.lineTo( - style.radius, 0)
+			target.graphics.lineTo(0, - style.radius);
+			
+			target.graphics.endFill();
+			
+			StyleManager.setEffects(target, style, metaData);
+		}
+		
+		/**
 		 * 设定滤镜，噪点等效果；
 		 */		
 		public static function setEffects(target:DisplayObject, effectable:IEffectable, metaData:Object = null):void

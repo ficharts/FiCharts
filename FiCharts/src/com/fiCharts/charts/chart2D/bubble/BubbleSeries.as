@@ -3,9 +3,8 @@ package com.fiCharts.charts.chart2D.bubble
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
-	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.chart2D.encry.SB;
-	import com.fiCharts.charts.common.ChartColorManager;
+	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -31,7 +30,7 @@ package com.fiCharts.charts.chart2D.bubble
 		 */		
 		override public function created():void
 		{
-			chartColorManager = new ChartColorManager
+			chartColorManager = new ChartColors
 		}
 		
 		/**
@@ -128,6 +127,20 @@ package com.fiCharts.charts.chart2D.bubble
 		}
 		
 		public function set bubbleField(value:String):void
+		{
+			_radiusField = value;
+		}
+		
+		/**
+		 */		
+		public function get zField():String
+		{
+			return _radiusField;
+		}
+		
+		/**
+		 */		
+		public function set zField(value:String):void
 		{
 			_radiusField = value;
 		}

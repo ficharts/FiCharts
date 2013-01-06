@@ -1,5 +1,6 @@
 package com.fiCharts.utils.XMLConfigKit
 {
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 
 	/**
@@ -50,8 +51,17 @@ package com.fiCharts.utils.XMLConfigKit
 						// 则不继承重新创建对象并赋新值；如果对象上含有reNew， 则也不会被继承;
 						// 字符串类型直接赋值无影响；
 						
-						if (vo[childName])// 此属性已经存在：
+						var attr:Object = vo[childName];
+						if (attr)// 此属性已经存在：
 						{
+							
+							if (attr is IFreshElement)
+							{
+								// 默认不重置对象，仅当XML含有clear节点时才重置对象
+								if (child.hasOwnProperty(XMLVOLib.CLEAR))
+									(attr as IFreshElement).fresh();
+							}
+							
 							// 节点不继承旧节点属性， 重新构建对象
 							if (vo.hasOwnProperty(XMLVOLib.RE_NEW) || child.hasOwnProperty('@' + XMLVOLib.EXTEND) && child.('@' + XMLVOLib.EXTEND) == 'false')
 							{
@@ -61,12 +71,12 @@ package com.fiCharts.utils.XMLConfigKit
 								if (temObject is IEditableObject)
 									(temObject as IEditableObject).created();
 							}
-							else
+							else// 更新对象
 							{
 								if (child.children().length() == 1 && child.hasSimpleContent())// 将字符串值 直接付给对象
 									setObjectProperty(vo, childName, child, voName);
 								else
-									fuck(child, vo[childName], vo);// 将XML值映射给对象
+									fuck(child, attr, vo);// 将XML值映射给对象
 							}
 						}
 						else // 属性对象不存在，创建并赋值对象
@@ -127,9 +137,7 @@ package com.fiCharts.utils.XMLConfigKit
 			{
 				var attributeName:String = attribute.name().toString();
 				if (vo.hasOwnProperty(attributeName))
-				{
 					setObjectProperty(vo, attributeName, attribute, voName);
-				}
 			}
 		}
 		
@@ -315,7 +323,7 @@ package com.fiCharts.utils.XMLConfigKit
 			if (XMLVOLib.isRegistedXML(id))
 			{
 				var result:IStyleElement;
-				var defination:Object = XMLVOLib.getXML(id);
+				var defination:Object = getStyleXMLBy_ID(id);
 				result = XMLVOLib.createRegistedObject(defination.name().toString()) as IStyleElement;
 				fuck(defination, result);
 				

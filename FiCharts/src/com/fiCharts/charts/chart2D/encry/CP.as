@@ -9,7 +9,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedPercentColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
-	import com.fiCharts.charts.chart2D.core.Chart2DStyleSheet;
+	import com.fiCharts.charts.chart2D.core.Chart2DStyleTemplate;
 	import com.fiCharts.charts.chart2D.core.axis.TickMarkStyle;
 	import com.fiCharts.charts.chart2D.core.model.AxisModel;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
@@ -21,7 +21,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.model.YAxis;
 	import com.fiCharts.charts.chart2D.line.LineSeries;
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
-	import com.fiCharts.charts.common.ChartColorManager;
+	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.toolTips.TooltipStyle;
@@ -194,7 +194,11 @@ package com.fiCharts.charts.chart2D.encry
 		public function set configXML(value:XML):void
 		{
 			if (_configXML != value)
+			{
 				_configXML = value;
+				
+				
+			}
 		}
 		
 		/**
@@ -213,25 +217,27 @@ package com.fiCharts.charts.chart2D.encry
 			seriesDataStyle.appendChild(value.child('tooltip'));
 			seriesDataStyle.appendChild(value.child('valueLabel'));
 			seriesDataStyle.appendChild(value.child('innerValueLabel'));
-			XMLVOLib.setXML(Chart2DModel.SERIES_DATA_STYLE, seriesDataStyle);
+			XMLVOLib.registWholeXML(Chart2DModel.SERIES_DATA_STYLE, seriesDataStyle);
 			
-			XMLVOLib.setXML(Chart2DModel.X_AXIS_STYLE, value.child('xAxis'));
-			XMLVOLib.setXML(Chart2DModel.Y_AXIS_STYLE, value.child('yAxis'));
+			XMLVOLib.registWholeXML(Chart2DModel.X_AXIS_STYLE, value.child('xAxis'));
+			XMLVOLib.registWholeXML(Chart2DModel.Y_AXIS_STYLE, value.child('yAxis'));
 			
-			XMLVOLib.setXML(Chart2DModel.LINE_SERIES, value.child('line'));
-			XMLVOLib.setXML(Chart2DModel.AREA_SERIES, value.child('area'));
+			XMLVOLib.registWholeXML(Chart2DModel.LINE_SERIES, value.child('line'));
+			XMLVOLib.registWholeXML(Chart2DModel.AREA_SERIES, value.child('area'));
 			
-			XMLVOLib.setXML(Chart2DModel.COLUMN_SERIES, value.child('column'));
-			XMLVOLib.setXML(Chart2DModel.STACKED_COLUMN_SERIES, value.child('stackedColumn'));
+			XMLVOLib.registWholeXML(Chart2DModel.COLUMN_SERIES, value.child('column'));
+			XMLVOLib.registWholeXML(Chart2DModel.STACKED_COLUMN_SERIES, value.child('stackedColumn'));
 			
-			XMLVOLib.setXML(Chart2DModel.BUBBLE_SERIES, value.child('bubble'));
-			XMLVOLib.setXML(Chart2DModel.MARKER_SERIES, value.child('marker'));
+			XMLVOLib.registWholeXML(Chart2DModel.BUBBLE_SERIES, value.child('bubble'));
+			XMLVOLib.registWholeXML(Chart2DModel.MARKER_SERIES, value.child('marker'));
 			
-			XMLVOLib.setXML(Chart2DModel.BAR_SERIES, value.child('bar'));
-			XMLVOLib.setXML(Chart2DModel.STACKED_BAR_SERIES, value.child('stackedBar'));
+			XMLVOLib.registWholeXML(Chart2DModel.BAR_SERIES, value.child('bar'));
+			XMLVOLib.registWholeXML(Chart2DModel.STACKED_BAR_SERIES, value.child('stackedBar'));
 			
-			for each (var item:XML in value.child('styles').children())
-				XMLVOLib.setXML(item.@id, item);
+			//添加局部样式模板到局部库中
+			XMLVOLib.clearPartLib();
+			for each (var item:XML in value.child('template').children())
+				XMLVOLib.registerPartXML(item.@id, item);
 			
 			XMLVOMapper.fuck(value, chartModel);
 		}
@@ -256,13 +262,13 @@ package com.fiCharts.charts.chart2D.encry
 		}
 
 		/**
-		 * 根据样式名称设置对应的样式表； 
+		 * 根据样式名称设置当前样式模板； 
 		 */		
-		public function styleInit(styleName:String = 'white'):void
+		public function setCurStyleTemplate(styleName:String = 'white'):void
 		{
 			currentStyleName = styleName;
-			currentStyleXML = Chart2DStyleSheet.getTheme(currentStyleName);
-			ChartColorManager.chartColors = Chart2DStyleSheet.getColors(currentStyleName);// TODO
+			currentStyleXML = Chart2DStyleTemplate.getTheme(currentStyleName);
+			ChartColors.colors = Chart2DStyleTemplate.getColors(currentStyleName);// TODO
 		}
 		
 		/**

@@ -4,7 +4,7 @@ package com.fiCharts.charts.common
 
 	/**
 	 */	
-	public class ChartColorManager
+	public class ChartColors
 	{
 		
 		/**
@@ -14,26 +14,13 @@ package com.fiCharts.charts.common
 		/**
 		 * 默认的图表色谱， 共12个；
 		 */		
-		public static var chartColors:XML = <colors>
-												<color value="0x7893a8"/>
-												<color value="0x607e07"/>
-												<color value="0xa65d2f"/>
-												<color value="0x025e5e"/>
-												<color value="0x8c2f2f"/>
-												<color value="0x5f315f"/>
-												<color value="0x3a5719"/>
-												<color value="0xa68111"/>
-												<color value="0x797306"/>
-												<color value="0x045f8e"/>
-												<color value="0x2F8A93"/>
-												<color value="0x4CA0CB"/>
-											 </colors>
+		public static var colors:Object;
 			
 		/**
 		 */		
-		public function ChartColorManager()
+		public function ChartColors()
 		{
-			colorNum = chartColors.children().length() - 1;
+			colorNum = colors.children().length() - 1;
 		}
 		
 		/**
@@ -52,7 +39,7 @@ package com.fiCharts.charts.common
 			}
 			else
 			{
-				resultColor = uint(chartColors.color[chartColorIndex].@value);
+				resultColor = StyleManager.getUintColor(colors.color[chartColorIndex]);
 				chartColorIndex += 1;
 			}
 			
@@ -72,7 +59,7 @@ package com.fiCharts.charts.common
 			}
 			else
 			{
-				singleColor = uint(chartColors.color[_singleIndex].@value);
+				singleColor = StyleManager.getUintColor(colors.color[_singleIndex]);
 				_singleIndex ++;
 			}
 			
@@ -86,7 +73,7 @@ package com.fiCharts.charts.common
 			var resultColor:uint;
 			
 			var random:int = Math.random() * colorNum;
-			resultColor = uint(chartColors.color[random].@value);
+			resultColor = StyleManager.getUintColor(colors.color[random]);
 			
 			var adjustColor:Number = .3 + Math.random() * 1;
 			resultColor = StyleManager.transformColor(resultColor * Math.random(), adjustColor, adjustColor, adjustColor);
