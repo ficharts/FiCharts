@@ -233,7 +233,7 @@ package com.fiCharts.utils.XMLConfigKit
 				 baseXML[attributeName] = node;
 			}
 			
-			var childNodeName:String;
+			var childNodeName:String, preChildNodeName:String;
 			for each (node in targetXML.children())
 			{
 				if (node.nodeKind() == 'element')
@@ -241,12 +241,22 @@ package com.fiCharts.utils.XMLConfigKit
 				
 				if (childNodeName && baseXML.hasOwnProperty(childNodeName))
 				{
-					extendFrom(baseXML.child(childNodeName), node);
+					if (childNodeName == preChildNodeName)
+						baseXML.appendChild(node);
+					else
+						extendFrom(baseXML.child(childNodeName), node);
 				}
 				else
 				{
-					baseXML.appendChild(node);
+					if (node.nodeKind() == 'element')
+						baseXML.appendChild(node);
+					else// 文字类型节点，新的替换旧的，只保留一个
+					{
+						baseXML.setChildren(node);
+					}
 				}
+				
+				preChildNodeName = childNodeName;
 				
 			}
 			
@@ -303,6 +313,9 @@ package com.fiCharts.utils.XMLConfigKit
 		}
 		
 		/**
+		 * 如果传递的是样式对象，直接赋值；
+		 * 
+		 * 如果是样式ID，根据ID全新构建样式元素
 		 */		
 		public static function getInstanceFromLib(value:Object):IStyleElement
 		{

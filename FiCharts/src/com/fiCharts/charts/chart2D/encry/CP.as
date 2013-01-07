@@ -37,6 +37,8 @@ package com.fiCharts.charts.chart2D.encry
 	{
 		public function CP()
 		{
+			XMLVOLib.registerCustomClasses(<colors path='com.fiCharts.utils.XMLConfigKit.style.Colors'/>);
+			
 			XMLVOLib.registerCustomClasses(<dataScale path='com.fiCharts.charts.chart2D.core.model.DataScale'/>);
 			
 			ChartBGStyle;
@@ -196,16 +198,21 @@ package com.fiCharts.charts.chart2D.encry
 			if (_configXML != value)
 			{
 				_configXML = value;
-				
-				
 			}
 		}
 		
 		/**
 		 * 创建新模型，一次性 应用混合好的样式；
 		 */		
-		public function setConfigCore(value:XML):void
+		public function setChartModel(value:XML):void
 		{
+			// 先刷新颜色板，因稍后会构建图表的数据模型
+			if (configXML && configXML.hasOwnProperty("colors"))
+			{
+				ChartColors.clear();
+				XMLVOMapper.fuck(configXML, ChartColors);
+			}
+			
 			YAxis.update();
 			XAxis.update();
 			
@@ -268,7 +275,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			currentStyleName = styleName;
 			currentStyleXML = Chart2DStyleTemplate.getTheme(currentStyleName);
-			ChartColors.colors = Chart2DStyleTemplate.getColors(currentStyleName);// TODO
+			XMLVOMapper.fuck(currentStyleXML, ChartColors);// 映射颜色
 		}
 		
 		/**

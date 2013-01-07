@@ -1,5 +1,7 @@
 package com.fiCharts.charts.common
 {
+	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.XMLConfigKit.style.Colors;
 	import com.fiCharts.utils.graphic.StyleManager;
 
 	/**
@@ -12,20 +14,37 @@ package com.fiCharts.charts.common
 		public static const overBright:uint = 25;
 		
 		/**
+		 */		
+		public static function clear():void
+		{
+			colors.clear();
+		}
+		
+		/**
 		 * 默认的图表色谱， 共12个；
 		 */		
-		public static var colors:Object;
+		public static function set colors(value:Colors):void
+		{
+			_colors = XMLVOMapper.getInstanceFromLib(value) as Colors;
+		}
+		
+		/**
+		 */		
+		public static function get colors():Colors
+		{
+			return _colors;			
+		}
+		
+		/**
+		 */		
+		private static var _colors:Colors;
 			
 		/**
 		 */		
 		public function ChartColors()
 		{
-			colorNum = colors.children().length() - 1;
+			
 		}
-		
-		/**
-		 */		
-		private var colorNum:uint;
 		
 		/**
 		 */		
@@ -33,13 +52,13 @@ package com.fiCharts.charts.common
 		{
 			var resultColor:uint;
 			
-			if (chartColorIndex > colorNum)
+			if (chartColorIndex >= colors.length)
 			{
 				resultColor = radomColor;
 			}
 			else
 			{
-				resultColor = StyleManager.getUintColor(colors.color[chartColorIndex]);
+				resultColor = colors.getColor(chartColorIndex);
 				chartColorIndex += 1;
 			}
 			
@@ -53,13 +72,13 @@ package com.fiCharts.charts.common
 		{
 			var singleColor:uint;
 			
-			if(_singleIndex > colorNum)
+			if(_singleIndex >= colors.length)
 			{
 				singleColor = radomColor;
 			}
 			else
 			{
-				singleColor = StyleManager.getUintColor(colors.color[_singleIndex]);
+				singleColor = colors.getColor(_singleIndex);
 				_singleIndex ++;
 			}
 			
@@ -72,8 +91,8 @@ package com.fiCharts.charts.common
 		{
 			var resultColor:uint;
 			
-			var random:int = Math.random() * colorNum;
-			resultColor = StyleManager.getUintColor(colors.color[random]);
+			var random:int = Math.random() * (colors.length - 1);
+			resultColor = colors.getColor(random);;
 			
 			var adjustColor:Number = .3 + Math.random() * 1;
 			resultColor = StyleManager.transformColor(resultColor * Math.random(), adjustColor, adjustColor, adjustColor);

@@ -80,7 +80,9 @@ package com.fiCharts.charts.chart2D.pie
 		{
 			currentStyleName = styleName;
 			currentStyleXML = Chart2DStyleTemplate.getTheme(currentStyleName);
-			ChartColors.colors = Chart2DStyleTemplate.getColors(currentStyleName);// TODO
+			//ChartColors.colors = Chart2DStyleTemplate.getColors(currentStyleName);// TODO
+			
+			XMLVOMapper.fuck(currentStyleXML, ChartColors);
 		}
 		
 		/**

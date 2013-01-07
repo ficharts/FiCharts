@@ -157,24 +157,14 @@ package com.fiCharts.charts.chart2D.encry
 		public function set configXML(value:XML):void
 		{
 			chartProxy.configXML = value;
+			
 			this.initLegend();
 			
-			chartProxy.setConfigCore(XMLVOMapper.extendFrom(
+			chartProxy.setChartModel(XMLVOMapper.extendFrom(
 				chartProxy.currentStyleXML.copy(), configXML.copy()));
 			
 			if (value.hasOwnProperty('data') && value.data.children().length())
 				this.dataXML = XML(value.data.toXMLString());
-			
-			overrideColors();
-		}
-		
-		/**
-		 * 如果用户配置文件中含有colors，则用此重置图表颜色集
-		 */		
-		private function overrideColors():void
-		{
-			if (configXML.colors)
-				ChartColors.colors = configXML.colors;
 		}
 		
 		/**
@@ -1250,10 +1240,8 @@ package com.fiCharts.charts.chart2D.encry
 			
 			if (configXML)
 			{
-				chartProxy.setConfigCore(XMLVOMapper.extendFrom(
+				chartProxy.setChartModel(XMLVOMapper.extendFrom(
 					chartProxy.currentStyleXML.copy(), configXML.copy()));
-				
-				this.overrideColors();
 			}
 		}
 		
@@ -1266,7 +1254,7 @@ package com.fiCharts.charts.chart2D.encry
 			chartProxy.currentStyleXML = style;
 			
 			if (configXML)
-				chartProxy.setConfigCore(XMLVOMapper.extendFrom(
+				chartProxy.setChartModel(XMLVOMapper.extendFrom(
 					chartProxy.currentStyleXML.copy(), configXML.copy()));
 		}
 			 
@@ -1312,7 +1300,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			// 设置当前默认的样式配置
 			chartProxy.setCurStyleTemplate();
-			chartProxy.setConfigCore(chartProxy.currentStyleXML);
+			chartProxy.setChartModel(chartProxy.currentStyleXML);
 		}
 		
 		/**

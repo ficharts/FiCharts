@@ -140,6 +140,41 @@
 
         <format id='FontFormat' size='12' color='#EEEEEE' font='微软雅黑'/>
 
+
+        <!--------------------颜色板------------------------------->
+        <colors id='Default'>
+			<color>097DDA</color>
+            <color>728F1C</color>
+            <color>C451C8</color>
+            <color>CCCC99</color>
+            <color>885C88</color>
+            <color>FE5B3B</color>
+            <color>5B7C92</color>
+            <color>AB8718</color>
+            <color>9BD124</color>
+            <color>634BA7</color>
+            <color>017E01</color>
+            <color>097DDA</color>
+            <color>2F8A93</color>
+		</colors>
+		<colors id='BlueGray'>
+			<color>30AEE1</color>
+            <color>3588B0</color>
+            <color>50545F</color>
+            <color>919499</color>
+
+            <color>885C88</color>
+            <color>FE5B3B</color>
+            <color>5B7C92</color>
+            <color>AB8718</color>
+            <color>9BD124</color>
+            <color>634BA7</color>
+            <color>017E01</color>
+            <color>097DDA</color>
+            <color>2F8A93</color>
+		</colors>
+
+
 	</template>
 
 
@@ -272,21 +307,7 @@
 			<template>
 
             </template>
-			<colors>
-				<color>097DDA</color>
-                <color>728F1C</color>
-                <color>C451C8</color>
-                <color>CCCC99</color>
-                <color>885C88</color>
-                <color>FE5B3B</color>
-                <color>5B7C92</color>
-                <color>AB8718</color>
-                <color>9BD124</color>
-                <color>634BA7</color>
-                <color>017E01</color>
-                <color>097DDA</color>
-                <color>2F8A93</color>
-			</colors>
+			<colors>Default</colors>
 		</simple>
 
 

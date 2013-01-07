@@ -60,7 +60,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 
 		/**
-		 * @private
+		 *  style 采取的是继承模式，更新原有样式
 		 */
 		public function set style(value:String):void
 		{
@@ -81,7 +81,6 @@ package com.fiCharts.charts.chart2D.encry
 		}
 
 		/**
-		 * @private
 		 */
 		public function set states(value:States):void
 		{
