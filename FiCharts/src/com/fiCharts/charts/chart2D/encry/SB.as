@@ -64,9 +64,15 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set style(value:String):void
 		{
-			_style = value;
-			
-			XMLVOMapper.fuck(XMLVOMapper.getStyleXMLBy_ID(_style), this);
+			if (_style != value)
+			{
+				_style = value;
+				
+				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(_style);
+				
+				if (xml)
+					XMLVOMapper.fuck(xml, this);
+			}
 		}
 		
 		/**
@@ -84,7 +90,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set states(value:States):void
 		{
-			_states = XMLVOMapper.getInstanceFromLib(value) as States;
+			_states = XMLVOMapper.updateObject(value, _states) as States;
 		}
 		
 		/**
@@ -270,7 +276,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set tooltip(value:TooltipStyle):void
 		{
-			_tooltip = value;
+			_tooltip = XMLVOMapper.updateObject(value, _tooltip) as TooltipStyle;
 		}
 
 		

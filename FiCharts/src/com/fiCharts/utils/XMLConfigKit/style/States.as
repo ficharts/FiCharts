@@ -59,7 +59,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */
 		public function set normal(value:Object):void
 		{
-			_out = XMLVOMapper.getInstanceFromLib(value) as Style;
+			_out = XMLVOMapper.updateObject(value, _out) as Style;
 		}
 		
 		/**
@@ -85,7 +85,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */
 		public function set hover(value:Object):void
 		{
-			_hover = XMLVOMapper.getInstanceFromLib(value) as Style;
+			_hover = XMLVOMapper.updateObject(value, _hover) as Style;
 		}
 		
 		/**
@@ -111,7 +111,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */
 		public function set down(value:Object):void
 		{
-			_down = XMLVOMapper.getInstanceFromLib(value) as Style;
+			_down = XMLVOMapper.updateObject(value, _down) as Style;
 		}
 		
 		/**

@@ -432,7 +432,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */		
 		public function set states(value:States):void
 		{
-			_states = XMLVOMapper.getInstanceFromLib(value) as States;;
+			_states = XMLVOMapper.updateObject(value, _states) as States;;
 		}
 		
 		/**

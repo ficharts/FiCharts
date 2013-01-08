@@ -49,7 +49,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */
 		public function set effects(value:Object):void
 		{
-			_effects = XMLVOMapper.getInstanceFromLib(value) as Effects;
+			_effects = XMLVOMapper.updateObject(value, _effects) as Effects;
 		}
 
 		/**
@@ -162,7 +162,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */
 		public function set cover(value:Object):void
 		{
-			_cover = XMLVOMapper.getInstanceFromLib(value) as Cover;
+			_cover = XMLVOMapper.updateObject(value, _cover) as Cover;
 		}
 		
 		/**
@@ -176,7 +176,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 
 		public function set fill(value:Object):void
 		{
-			_fill = XMLVOMapper.getInstanceFromLib(value) as Fill;
+			_fill = XMLVOMapper.updateObject(value, _fill) as Fill;
 		}
 		
 		public function get getFill():Fill
@@ -195,7 +195,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 
 		public function set border(value:Object):void
 		{
-			_line = XMLVOMapper.getInstanceFromLib(value) as BorderLine;
+			_line = XMLVOMapper.updateObject(value, _line) as BorderLine;
 		}
 		
 		/**

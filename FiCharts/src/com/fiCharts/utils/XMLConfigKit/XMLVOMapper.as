@@ -153,7 +153,7 @@ package com.fiCharts.utils.XMLConfigKit
 			catch(e:Error)
 			{
 				if (XMLVOLib.isRegistedXML(value.toString()))
-					vo[property] = getInstanceFromLib(value);// 对象存在于共享库中
+					vo[property] = updateObject(value, null);// 对象存在于共享库中
 				else if (XMLVOLib.isObjectToProperyRegisted(voName + property))// 将值映射到对象上的某个对应属性
 				{
 					if (vo[property] == null) // 先创建后赋值
@@ -315,21 +315,32 @@ package com.fiCharts.utils.XMLConfigKit
 		/**
 		 * 如果传递的是样式对象，直接赋值；
 		 * 
-		 * 如果是样式ID，根据ID全新构建样式元素
+		 * 如果是样式ID，根据ID全新构建样式元素，标签名决定样式对象
 		 */		
-		public static function getInstanceFromLib(value:Object):IStyleElement
+		public static function updateObject(newValue:Object, oldValue:Object):IStyleElement
 		{
 			var target:*;
 			
-			if (value is IStyleElement)
-				target = value;
-			else
-				target = getVOByXML_ID(value.toString());
+			// 原始值不存在， 创建原始值
+			if (oldValue == null)
+			{
+				if (newValue is IStyleElement)
+					target = newValue;
+				else
+					target = getVOByXML_ID(newValue.toString());
+			}
+			else// 原始值存在，更新
+			{
+				
+			}
+			
+			
 			
 			return target;
 		}
 		
 		/**
+		 * 根据标签ID创建映射对象，标签名决定对象类型
 		 */		
 		public static function getVOByXML_ID(id:String):IStyleElement
 		{

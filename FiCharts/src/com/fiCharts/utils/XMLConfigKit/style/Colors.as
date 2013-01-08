@@ -22,6 +22,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		}
 
 		/**
+		 *  完全清空样色，重新添加新色系
 		 */		
 		public function set style(value:String):void
 		{

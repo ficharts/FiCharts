@@ -180,7 +180,7 @@ package com.fiCharts.charts.chart2D.core.model
 		 */
 		public function set legend(value:LegendStyle):void
 		{
-			_legend = value;
+			_legend = XMLVOMapper.updateObject(value, _legend) as LegendStyle;
 			
 			XMLVOLib.dispatchCreation(Chart2DModel.UPDATE_LEGEND_STYLE, value);
 		}

@@ -25,7 +25,10 @@ package com.fiCharts.charts.common
 		 */		
 		public static function set colors(value:Colors):void
 		{
-			_colors = XMLVOMapper.getInstanceFromLib(value) as Colors;
+			if (_colors)
+				_colors.clear();
+			
+			_colors = XMLVOMapper.updateObject(value, _colors) as Colors;
 		}
 		
 		/**

@@ -9,6 +9,16 @@
 
 	<template>
 
+		 <!-------------------字体样式----------------------->
+
+        <format id='FontFormat' font='微软雅黑' size='12' color='${color}'/>
+
+
+
+
+
+
+
         <!----------------------线条形状--------------------------------->
 		<style id='LightShape'>
 			<states>
@@ -30,16 +40,33 @@
 					<border color='${color}' thikness='2' alpha='0.8'/>
 				</normal>
 				<hover>
-					<border color='${color}{adjustColor:1.3}' thikness='4' alpha='0.8'/>
+					<border color='${color}{adjustColor:1.3}' thikness='2' alpha='0.8'/>
 				</hover>
 				<down>
-					<border color='${color}' thikness='4' alpha='0.8'/>
+					<border color='${color}' thikness='2' alpha='0.8'/>
+				</down>
+			</states>
+		</style>
+
+		<style id='TransArea'>
+			<states>
+				<normal>
+					<border color='${color}' thikness='2' alpha='0.8'/>
+					<fill alpha='0.4' color='${color}'/>
+				</normal>
+				<hover>
+					<border color='${color}{adjustColor:1.3}' thikness='2' alpha='0.8'/>
+					<fill alpha='0.6' color='${color}'/>
+				</hover>
+				<down>
+					<border color='${color}' thikness='2' alpha='0.8'/>
+					<fill alpha='0.8' color='${color}'/>
 				</down>
 			</states>
 		</style>
 
         <!----------------------------数据节点------------------------------------------------------------->
-		<style id='Square'>
+		<dataRender id='Square'>
 			<rect>
 				<states>
 					<normal width='5' height='5'>
@@ -56,8 +83,8 @@
 					</down>
 				</states>
 			</rect>
-		</style>
-		<style id='Diamond'>
+		</dataRender>
+		<dataRender id='Diamond'>
 			<diamond>
 				<states>
 					<normal radius='5'>
@@ -74,8 +101,8 @@
 					</down>
 				</states>
 			</diamond>
-		</style>
-		<style id='LightBubble'>
+		</dataRender>
+		<dataRender id='LightBubble'>
 			<circle>
 				<states>
 					<normal>
@@ -104,8 +131,8 @@
 					</states>
 				</circle>
 			</decorate>
-		</style>
-		<style id='LightPoint'>
+		</dataRender>
+		<dataRender id='LightPoint'>
 			<decorate>
 				<circle>
 					<states>
@@ -134,11 +161,44 @@
 					</down>
 				</states>
 			</circle>
-		</style>
+		</dataRender>
 
-        <!-------------------字体样式----------------------->
+		<dataRender id='RectIcon'>
+			<rect>
+				<states>
+					<normal width='20' height='12'>
+						<fill color='${color}'/>
+					</normal>
+					<hover width='20' height='12'>
+						<fill color='${color}{adjustColor:1.3}'/>
+					</hover>
+				</states>
+			</rect>
+		</dataRender>
 
-        <format id='FontFormat' size='12' color='#EEEEEE' font='微软雅黑'/>
+		<!--------------------图例------------------------------------->
+
+		<legend id='SmartLegend' label='${seriesName}' enable='false' hPadding='5' vPadding='0' vMargin='2'>
+				<icon>RectIcon</icon>
+				<label format='FontFormat'/>
+		</legend>
+
+
+		<!--------------------ToolTip----------------------------------------->
+
+		<tooltip id='SmartTip' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
+			<self format='FontFormat' radius='0' padding='5' vMargin='10'>
+				<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
+				<fill color='FFFFFF' alpha='0.9'/>
+				<cover>
+					<border color='FFFFFF'/>
+				</cover>
+			</self>
+			<group format='FontFormat' radius='0' padding='5' vMargin='10'>
+				<border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
+				<fill color='FFFFFF' alpha='0.9'/>
+			</group>
+		</tooltip>
 
 
         <!--------------------颜色板------------------------------->
@@ -185,17 +245,18 @@
 		<!-- 默认样式  ： 精简-->
 		<simple animation='true'>
 			<title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
-				<text substr='30'/>
 				<format size='14' color='3C4145' bold='true'/>
 			</title>
+
 			<subTitle format='FontFormat' hAlign='center' vMargin='0' vPadding='0'>
-				<text substr='30'/>
 				<format color='555555'/>
 			</subTitle>
+
 			<chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10'>
 				<border color='E2E2E2'/>
 				<fill color='FFFFFF'/>
 			</chartBG>
+
 			<gridField>
 				<border color='E2E2E2' alpha='1' thikness='1' pixelHinting='true'/>
 				<hGrid>
@@ -205,6 +266,7 @@
 					<border color='E2E2E2' thikness='1'/>
 				</vGrid>
 			</gridField>
+
 			<xAxis type="field" labelDisplay="normal">
 				<title format='FontFormat'>
 					<format color='393939'/>
@@ -215,6 +277,7 @@
 					<text value='${label}'/>
 				</label>
 			</xAxis>
+
 			<yAxis type="linear">
 				<title format='FontFormat'>
 					<format color='393939'/>
@@ -225,88 +288,60 @@
 					<text value='${label}'/>
 				</label>
 			</yAxis>
-			<tooltip enable='true' locked='false' self="${tooltip}" group="${tooltip}">
-				<self format='FontFormat' radius='0' padding='5' vMargin='10'>
-					<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
-					<fill color='FFFFFF' alpha='0.9'/>
-					<cover>
-						<border color='FFFFFF'/>
-					</cover>
-					<format color='${color}'/>
-				</self>
-				<group format='FontFormat' radius='0' padding='5' vMargin='10'>
-					<border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
-					<fill color='FFFFFF' alpha='0.9'/>
-					<format color='${color}'/>
-				</group>
-			</tooltip>
-			<legend label="${seriesName}" enable='false' hPadding='5' vPadding='0' vMargin='2' radius='5'>
-				<icon>
-					<rect>
-						<states>
-							<normal width='20' height='12'>
-								<fill color='${color}'/>
-							</normal>
-							<hover width='20' height='12'>
-								<fill color='${color}{adjustColor:1.3}'/>
-							</hover>
-						</states>
-					</rect>
-				</icon>
-				<label format='FontFormat'>
-					<text substr='30'/>
-					<format color='${color}'/>
-				</label>
-			</legend>
+
+			<tooltip>SmartTip</tooltip>
+
+			<legend>SmartLegend</legend>
+
 			<valueLabel format='FontFormat' margin='0' padding='5'>
-				<format color='${color}'/>
 				<text value='${valueLabel}'/>
 			</valueLabel>
+
 			<innerValueLabel format='FontFormat'>
 				<format color='#EEEEEE'/>
 				<text value='${valueLabel}'/>
 			</innerValueLabel>
 
-			<!---------------------------- 序列 ------------------->
+			<!---------------------------- 序列 ------------------------->
+
 			<line style='LightLine' labelDisplay="none">
 				<dataRender style='LightPoint' enable='false'/>
 			</line>
-			<area style='LightLine' labelDisplay="none">
+
+			<area style='TransArea' labelDisplay="none">
 				<dataRender style='LightPoint' enable='false'/>
-				<states>
-					<normal>
-						<fill alpha='0.4' color='${color}'/>
-					</normal>
-					<hover>
-						<fill alpha='0.6' color='${color}'/>
-					</hover>
-					<down>
-						<fill alpha='0.8' color='${color}'/>
-					</down>
-				</states>
 			</area>
+
 			<column style='LightShape' maxItemSize='100' labelDisplay="inner">
 				<dataRender style='LightPoint'/>
 			</column>
+
 			<stackedColumn style='LightShape' labelDisplay="normal">
 				<dataRender style='LightPoint'/>
 			</stackedColumn>
+
 			<bar style='LightShape' maxItemSize='100' labelDisplay="inner">
 				<dataRender style='LightPoint'/>
 			</bar>
-			<stackedBar states='LightShape' labelDisplay="normal">
+
+			<stackedBar style='LightShape' labelDisplay="normal">
 				<dataRender enable='false'/>
 			</stackedBar>
+
 			<marker labelDisplay="none">
 				<dataRender style='LightPoint'></dataRender>
 			</marker>
+
 			<bubble maxRadius='60' minRadius='5' labelDisplay="inner">
 				<dataRender style='LightBubble'></dataRender>
 			</bubble>
-			<!-- 基础定义 ------------>
-			<template>
 
+
+			<!--- 模板 ---------------->
+			<template>
             </template>
+
+            <!----色系----------------->
 			<colors>Default</colors>
 		</simple>
 

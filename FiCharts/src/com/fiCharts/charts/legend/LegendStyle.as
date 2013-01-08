@@ -1,12 +1,13 @@
 package com.fiCharts.charts.legend
 {
-	import com.fiCharts.charts.chart2D.core.axis.DataRange;
 	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.ContainerStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	
+	/**
+	 * 图例的样式模型
+	 */	
 	public class LegendStyle extends ContainerStyle
 	{
 		public function LegendStyle()
@@ -16,7 +17,45 @@ package com.fiCharts.charts.legend
 		
 		/**
 		 */		
-		public var icon:DataRender;
+		private var _style:String;
+
+		public function get style():String
+		{
+			return _style;
+		}
+
+		/**
+		 */		
+		public function set style(value:String):void
+		{
+			if (_style != value)
+			{
+				_style = value;
+				
+				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(_style);
+				
+				if (xml)
+					XMLVOMapper.fuck(xml, this);
+			}
+		}
+
+		/**
+		 */		
+		public function get icon():DataRender
+		{
+			return 	_icon;
+		}
+		
+		/**
+		 */		
+		public function set icon(value:DataRender):void
+		{
+			_icon = XMLVOMapper.updateObject(value, _icon) as DataRender;
+		}
+		
+		/**
+		 */		
+		private var _icon:DataRender;
 		
 		/**
 		 */		

@@ -8,14 +8,36 @@ package com.fiCharts.charts.toolTips
 	 * 当同时要显示几个数据节点信息时， 采用  group 样式， 
 	 * 
 	 * 默认仅有一个数据节点信息时采用 self 样式；
-	 *  
-	 * @author wallen
 	 * 
 	 */	
 	public class TooltipStyle extends LabelStyle
 	{
 		public function TooltipStyle()
 		{
+		}
+		
+		/**
+		 */		
+		private var _style:String;
+		
+		public function get style():String
+		{
+			return _style;
+		}
+		
+		/**
+		 */		
+		public function set style(value:String):void
+		{
+			if (_style != value)
+			{
+				_style = value;
+				
+				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(_style);
+				
+				if (xml)
+					XMLVOMapper.fuck(xml, this);
+			}
 		}
 		
 		/**

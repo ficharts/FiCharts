@@ -5,13 +5,14 @@ package com.fiCharts.charts.chart2D.core.model
 	import com.fiCharts.utils.XMLConfigKit.shape.IShape;
 	import com.fiCharts.utils.XMLConfigKit.shape.IShapeGroup;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	
 	import flash.display.Sprite;
 	
 	/**
 	 * 数据节点的样式， 数据节点显示方式有多种形状，也可能由多个形状构成一个节点
 	 */	
-	public class DataRender implements IFreshElement, IShapeGroup
+	public class DataRender implements IFreshElement, IShapeGroup, IStyleElement
 	{
 		public function DataRender()
 		{

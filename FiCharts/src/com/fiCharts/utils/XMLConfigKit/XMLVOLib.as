@@ -5,7 +5,6 @@ package com.fiCharts.utils.XMLConfigKit
 	import com.fiCharts.utils.XMLConfigKit.effect.Blur;
 	import com.fiCharts.utils.XMLConfigKit.effect.Effects;
 	import com.fiCharts.utils.XMLConfigKit.effect.Glow;
-	import com.fiCharts.utils.XMLConfigKit.effect.IEffectElement;
 	import com.fiCharts.utils.XMLConfigKit.effect.Shadow;
 	import com.fiCharts.utils.XMLConfigKit.shape.CircleShape;
 	import com.fiCharts.utils.XMLConfigKit.shape.Diamond;
@@ -17,7 +16,6 @@ package com.fiCharts.utils.XMLConfigKit
 	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Cover;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Fill;
-	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.TextFormatStyle;
 
 	/**
