@@ -1,10 +1,10 @@
 package com.fiCharts.utils.XMLConfigKit.effect
 {
-	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
 
 	/**
 	 */	
-	public class Effects implements IStyleElement
+	public class Effects implements IFiElement
 	{
 		public function Effects()
 		{

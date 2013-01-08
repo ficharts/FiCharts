@@ -1,12 +1,14 @@
 package com.fiCharts.utils.XMLConfigKit.style
 {
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.graphic.StyleManager;
 
 	/**
 	 */	
-	public class Colors implements IStyleElement
+	public class Colors implements IFiElement, IFreshElement, IStyleElement
 	{
 		public function Colors()
 		{
@@ -26,17 +28,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		public function set style(value:String):void
 		{
-			if(_style != value)
-			{
-				_style = value;
-				
-				clear();
-				
-				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(_style);
-				
-				if (xml)
-					XMLVOMapper.fuck(xml, this);
-			}
+			_style = XMLVOMapper.updateStyle(this, value);
 		}
 
 		/**
@@ -55,7 +47,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		
 		/**
 		 */		
-		public function clear():void
+		public function fresh():void
 		{
 			values.length = 0;
 		}

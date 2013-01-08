@@ -4,7 +4,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.graphic.StyleManager;
 
-	public class BorderLine extends Fill implements IStyleElement
+	public class BorderLine extends Fill implements IFiElement
 	{
 		public function BorderLine()
 		{

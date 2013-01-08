@@ -1,11 +1,11 @@
 package com.fiCharts.utils.XMLConfigKit.effect
 {
-	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	
 	import flash.display.DisplayObject;
 
-	public class Noise implements IEffectElement, IStyleElement
+	public class Noise implements IEffectElement, IFiElement
 	{
 		public function Noise()
 		{

@@ -6,12 +6,12 @@ package com.fiCharts.utils.XMLConfigKit.style
 	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Cover;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Fill;
-	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
 	
 	/**
 	 * 通常用来设置矩形或者原型的样式，包含填充，边框及基本的尺寸信息；
 	 */
-	public class Style implements IEffectable, IStyleElement
+	public class Style implements IEffectable, IFiElement
 	{
 		public function Style()
 		{

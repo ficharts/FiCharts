@@ -2,14 +2,14 @@ package com.fiCharts.utils.XMLConfigKit.style
 {
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.effect.IEffectable;
-	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.TextFormatStyle;
 	
 	import flash.text.TextFormat;
 	
 	/**
 	 */	
-	public class LabelStyle extends ContainerStyle implements IEffectable, IStyleElement
+	public class LabelStyle extends ContainerStyle implements IEffectable, IFiElement
 	{
 		/**
 		 */		

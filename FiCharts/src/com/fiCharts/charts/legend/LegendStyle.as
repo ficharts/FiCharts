@@ -4,11 +4,12 @@ package com.fiCharts.charts.legend
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.ContainerStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	
 	/**
 	 * 图例的样式模型
 	 */	
-	public class LegendStyle extends ContainerStyle
+	public class LegendStyle extends ContainerStyle implements IStyleElement
 	{
 		public function LegendStyle()
 		{
@@ -28,15 +29,7 @@ package com.fiCharts.charts.legend
 		 */		
 		public function set style(value:String):void
 		{
-			if (_style != value)
-			{
-				_style = value;
-				
-				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(_style);
-				
-				if (xml)
-					XMLVOMapper.fuck(xml, this);
-			}
+			_style = XMLVOMapper.updateStyle(this, value);
 		}
 
 		/**

@@ -1,10 +1,10 @@
 package com.fiCharts.utils.XMLConfigKit.effect
 {
-	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
 	
 	import flash.filters.BlurFilter;
 
-	public class Blur implements IEffectElement, IStyleElement
+	public class Blur implements IEffectElement, IFiElement
 	{
 		public function Blur()
 		{

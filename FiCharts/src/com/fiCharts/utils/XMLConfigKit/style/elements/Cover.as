@@ -11,7 +11,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 	 * @author wallen
 	 * 
 	 */	
-	public class Cover extends Style implements IStyleElement
+	public class Cover extends Style implements IFiElement
 	{
 		public function Cover()
 		{

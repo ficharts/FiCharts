@@ -6,7 +6,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 	
 	/**
 	 */	
-	public class Fill implements IStyleElement
+	public class Fill implements IFiElement
 	{
 		public function Fill()
 		{

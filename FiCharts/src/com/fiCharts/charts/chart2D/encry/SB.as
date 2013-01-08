@@ -17,11 +17,9 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
-	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
-	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
@@ -29,7 +27,7 @@ package com.fiCharts.charts.chart2D.encry
 	/**
 	 * SeriesBase
 	 */	
-	public class SB extends Sprite implements IDirectionSeries, IEditableObject
+	public class SB extends Sprite implements IDirectionSeries, IEditableObject, IStyleElement
 	{
 
 		/**
@@ -64,15 +62,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set style(value:String):void
 		{
-			if (_style != value)
-			{
-				_style = value;
-				
-				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(_style);
-				
-				if (xml)
-					XMLVOMapper.fuck(xml, this);
-			}
+			_style = XMLVOMapper.updateStyle(this, value);
 		}
 		
 		/**
@@ -409,7 +399,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set dataRender(value:DataRender):void
 		{
-			_dataRender = value;
+			_dataRender = XMLVOMapper.updateObject(value, _dataRender) as DataRender;
 		}
 		
 		

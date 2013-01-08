@@ -1,5 +1,6 @@
 package com.fiCharts.utils.XMLConfigKit
 {
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 
@@ -146,6 +147,12 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		private static function setObjectProperty(vo:Object, property:String, value:Object, voName:String):void
 		{
+			if (vo == null) 
+			{
+				trace("此类映射<icon>RectIcon</icon>因没有父节点，所以失败")
+				return;
+			}
+				
 			try
 			{
 				vo[property] = value;
@@ -153,7 +160,7 @@ package com.fiCharts.utils.XMLConfigKit
 			catch(e:Error)
 			{
 				if (XMLVOLib.isRegistedXML(value.toString()))
-					vo[property] = updateObject(value, null);// 对象存在于共享库中
+					vo[property] = updateObject(value, vo[property]);// 对象存在于共享库中
 				else if (XMLVOLib.isObjectToProperyRegisted(voName + property))// 将值映射到对象上的某个对应属性
 				{
 					if (vo[property] == null) // 先创建后赋值
@@ -317,38 +324,81 @@ package com.fiCharts.utils.XMLConfigKit
 		 * 
 		 * 如果是样式ID，根据ID全新构建样式元素，标签名决定样式对象
 		 */		
-		public static function updateObject(newValue:Object, oldValue:Object):IStyleElement
+		public static function updateObject(newValue:Object, oldValue:Object):IFiElement
 		{
 			var target:*;
 			
 			// 原始值不存在， 创建原始值
 			if (oldValue == null)
 			{
-				if (newValue is IStyleElement)
+				if (newValue is IFiElement)
+				{
 					target = newValue;
+				}
 				else
+				{
 					target = getVOByXML_ID(newValue.toString());
+					fuck(newValue, target);// 此类映射仅跟节点属性可被映射，子项不能，因为没有父节点/没有上下文关系
+				}
 			}
 			else// 原始值存在，更新
 			{
-				
+				if (!(newValue is IFiElement))
+				{
+					var config:Object = getStyleXMLBy_ID(newValue.toString());
+					
+					if(config)
+					{
+						if (oldValue is IFreshElement)
+							(oldValue as IFreshElement).fresh();
+							
+						fuck(config, oldValue);
+						target = oldValue;
+					}
+				}
+				else
+				{
+					target = newValue;
+				}
 			}
-			
-			
 			
 			return target;
 		}
 		
 		/**
+		 * 将新样式应用与可以定义样式的对象上
+		 */		
+		public static function updateStyle(target:IStyleElement, newStyle:String):String
+		{
+			var result:String = target.style;
+			
+			if(newStyle != result)
+			{
+				if (target is IFreshElement)
+					(target as IFreshElement).fresh();
+					
+				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(newStyle);
+				
+				if (xml)
+				{
+					XMLVOMapper.fuck(xml, target);
+					result = newStyle;
+				}
+			}
+			
+			return result;
+		}
+		
+		/**
 		 * 根据标签ID创建映射对象，标签名决定对象类型
 		 */		
-		public static function getVOByXML_ID(id:String):IStyleElement
+		public static function getVOByXML_ID(id:String):IFiElement
 		{
 			if (XMLVOLib.isRegistedXML(id))
 			{
-				var result:IStyleElement;
+				var result:IFiElement;
 				var defination:Object = getStyleXMLBy_ID(id);
-				result = XMLVOLib.createRegistedObject(defination.name().toString()) as IStyleElement;
+				result = XMLVOLib.createRegistedObject(defination.name().toString()) as IFiElement;
 				fuck(defination, result);
 				
 				return result;

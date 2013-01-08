@@ -8,7 +8,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 	/**
 	 * 
 	 */	
-	public class TextFormatStyle implements IStyleElement
+	public class TextFormatStyle implements IFiElement
 	{
 		/**
 		 */		

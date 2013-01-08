@@ -17,7 +17,7 @@
 
         </bubble-->
     </series>
-    <legend enable='true'/>
+    <legend enable='false'/>
     <colors>BlueGray</colors>
     <template>
         <style id='haha'>

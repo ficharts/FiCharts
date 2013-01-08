@@ -17,7 +17,7 @@ package com.fiCharts.charts.common
 		 */		
 		public static function clear():void
 		{
-			colors.clear();
+			colors.fresh();
 		}
 		
 		/**
@@ -25,9 +25,6 @@ package com.fiCharts.charts.common
 		 */		
 		public static function set colors(value:Colors):void
 		{
-			if (_colors)
-				_colors.clear();
-			
 			_colors = XMLVOMapper.updateObject(value, _colors) as Colors;
 		}
 		

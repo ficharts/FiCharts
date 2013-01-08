@@ -1,13 +1,13 @@
 package com.fiCharts.utils.XMLConfigKit.effect
 {
-	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.filters.DropShadowFilter;
 	
 	/**
 	 */	
-	public class Shadow implements IEffectElement, IStyleElement
+	public class Shadow implements IEffectElement, IFiElement
 	{
 		public function Shadow()
 		{
