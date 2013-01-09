@@ -4,6 +4,7 @@ package com.fiCharts.charts.chart2D.marker
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -22,10 +23,17 @@ package com.fiCharts.charts.chart2D.marker
 		
 		/**
 		 */		
+		override protected function get type():String
+		{
+			return "marker";
+		}
+		
+		/**
+		 */		
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
 			super.beforeUpdateProperties(xml);
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.MARKER_SERIES), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.MARKER_SERIES, Model.SYSTEM), this);
 		}
 		/**
 		 */		

@@ -159,8 +159,8 @@ package com.fiCharts.utils.XMLConfigKit
 			}
 			catch(e:Error)
 			{
-				if (XMLVOLib.isRegistedXML(value.toString()))
-					vo[property] = updateObject(value, vo[property]);// 对象存在于共享库中
+				if (XMLVOLib.isRegistedXML(value.toString(), property))
+					vo[property] = updateObject(value, vo[property], property);// 对象存在于共享库中
 				else if (XMLVOLib.isObjectToProperyRegisted(voName + property))// 将值映射到对象上的某个对应属性
 				{
 					if (vo[property] == null) // 先创建后赋值
@@ -324,7 +324,7 @@ package com.fiCharts.utils.XMLConfigKit
 		 * 
 		 * 如果是样式ID，根据ID全新构建样式元素，标签名决定样式对象
 		 */		
-		public static function updateObject(newValue:Object, oldValue:Object):IFiElement
+		public static function updateObject(newValue:Object, oldValue:Object, type:String):IFiElement
 		{
 			var target:*;
 			
@@ -337,7 +337,7 @@ package com.fiCharts.utils.XMLConfigKit
 				}
 				else
 				{
-					target = getVOByXML_ID(newValue.toString());
+					target = getVOByXML_ID(newValue.toString(), type);
 					fuck(newValue, target);// 此类映射仅跟节点属性可被映射，子项不能，因为没有父节点/没有上下文关系
 				}
 			}
@@ -345,7 +345,7 @@ package com.fiCharts.utils.XMLConfigKit
 			{
 				if (!(newValue is IFiElement))
 				{
-					var config:Object = getStyleXMLBy_ID(newValue.toString());
+					var config:Object = getStyleXMLBy_ID(newValue.toString(), type);
 					
 					if(config)
 					{
@@ -368,7 +368,7 @@ package com.fiCharts.utils.XMLConfigKit
 		/**
 		 * 将新样式应用与可以定义样式的对象上
 		 */		
-		public static function updateStyle(target:IStyleElement, newStyle:String):String
+		public static function updateStyle(target:IStyleElement, newStyle:String, type:String):String
 		{
 			var result:String = target.style;
 			
@@ -377,7 +377,7 @@ package com.fiCharts.utils.XMLConfigKit
 				if (target is IFreshElement)
 					(target as IFreshElement).fresh();
 					
-				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(newStyle);
+				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(newStyle, type);
 				
 				if (xml)
 				{
@@ -392,12 +392,12 @@ package com.fiCharts.utils.XMLConfigKit
 		/**
 		 * 根据标签ID创建映射对象，标签名决定对象类型
 		 */		
-		public static function getVOByXML_ID(id:String):IFiElement
+		public static function getVOByXML_ID(id:String, type:String):IFiElement
 		{
-			if (XMLVOLib.isRegistedXML(id))
+			if (XMLVOLib.isRegistedXML(id, type))
 			{
 				var result:IFiElement;
-				var defination:Object = getStyleXMLBy_ID(id);
+				var defination:Object = getStyleXMLBy_ID(id, type);
 				result = XMLVOLib.createRegistedObject(defination.name().toString()) as IFiElement;
 				fuck(defination, result);
 				
@@ -409,9 +409,9 @@ package com.fiCharts.utils.XMLConfigKit
 		
 		/**
 		 */		
-		public static function getStyleXMLBy_ID(id:String):Object
+		public static function getStyleXMLBy_ID(id:String, type:String):Object
 		{
-			return XMLVOLib.getXML(id);
+			return XMLVOLib.getXML(id, type);
 		}
 		
 	}

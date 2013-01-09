@@ -6,6 +6,7 @@ package com.fiCharts.charts.chart2D.line
 	import com.fiCharts.charts.chart2D.core.series.DataIndexOffseter;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.encry.SB;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -34,7 +35,14 @@ package com.fiCharts.charts.chart2D.line
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
 			super.beforeUpdateProperties(xml);
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.LINE_SERIES), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.LINE_SERIES, Model.SYSTEM), this);
+		}
+		
+		/**
+		 */		
+		override protected function get type():String
+		{
+			return "line";
 		}
 		
 		/**

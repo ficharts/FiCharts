@@ -20,39 +20,39 @@
 
 
         <!----------------------线条形状--------------------------------->
-		<style id='LightShape'>
+		<column id='Light'>
 			<states>
 				<normal>
-					<fill color='${color}' alpha='0.8'/>
+					<fill color='${color}' alpha='1'/>
 				</normal>
 				<hover>
-					<fill color='${color}{adjustColor:1.2}' alpha='0.8'/>
+					<fill color='${color}{adjustColor:1.2}' alpha='1'/>
 				</hover>
 				<down>
-					<fill color='${color}{adjustColor:0.8}' alpha='0.8'/>
+					<fill color='${color}{adjustColor:0.8}' alpha='1'/>
 				</down>
 			</states>
-		</style>
+		</column>
 
-		<style id='LightLine'>
+		<line id='Light'>
 			<states>
 				<normal>
-					<border color='${color}' thikness='2' alpha='0.8'/>
+					<border color='${color}' thikness='2' alpha='1'/>
 				</normal>
 				<hover>
-					<border color='${color}{adjustColor:1.3}' thikness='2' alpha='0.8'/>
+					<border color='${color}{adjustColor:1.3}' thikness='2' alpha='1'/>
 				</hover>
 				<down>
-					<border color='${color}' thikness='2' alpha='0.8'/>
+					<border color='${color}' thikness='2' alpha='1'/>
 				</down>
 			</states>
-		</style>
+		</line>
 
-		<style id='TransArea'>
+		<area id='Trans'>
 			<states>
 				<normal>
 					<border color='${color}' thikness='2' alpha='0.8'/>
-					<fill alpha='0.4' color='${color}'/>
+					<fill alpha='0.4' color='${color}'/> 
 				</normal>
 				<hover>
 					<border color='${color}{adjustColor:1.3}' thikness='2' alpha='0.8'/>
@@ -63,7 +63,7 @@
 					<fill alpha='0.8' color='${color}'/>
 				</down>
 			</states>
-		</style>
+		</area>
 
         <!----------------------------数据节点------------------------------------------------------------->
 		<dataRender id='Square'>
@@ -136,34 +136,38 @@
 			<decorate>
 				<circle>
 					<states>
-						<normal radius='3'>
-							<fill color='${color}{adjustColor:1.3}'/>
+						<normal radius='6'>
+							<fill color='${color}' alpha='0.3'/>
 						</normal>
-						<hover radius='4'>
-							<fill color='${color}{adjustColor:1.5}'/>
+						<hover radius='8'>
+							<fill color='${color}' alpha='0.3'/>
 						</hover>
-						<down radius='4'>
-							<fill color='${color}'/>
+						<down radius='8'>
+							<fill color='${color}' alpha='0.3'/>
 						</down>
 					</states>
 				</circle>
 			</decorate>
 			<circle>
 				<states>
-					<normal radius='6'>
-						<fill color='${color}' alpha='0.3'/>
+					<normal radius='3'>
+						<fill color='${color}{adjustColor:1.3}'/>
 					</normal>
-					<hover radius='8'>
-						<fill color='${color}' alpha='0.3'/>
+					<hover radius='4'>
+						<fill color='${color}{adjustColor:1.5}'/>
 					</hover>
-					<down radius='8'>
-						<fill color='${color}' alpha='0.3'/>
+					<down radius='4'>
+						<fill color='${color}'/>
 					</down>
 				</states>
-			</circle>
+			</circle>		
 		</dataRender>
 
-		<dataRender id='RectIcon'>
+		
+
+		<!--------------------图例------------------------------------->
+
+		<icon id='Rect'>
 			<rect>
 				<states>
 					<normal width='20' height='12'>
@@ -174,19 +178,17 @@
 					</hover>
 				</states>
 			</rect>
-		</dataRender>
+		</icon>
 
-		<!--------------------图例------------------------------------->
-
-		<legend id='SmartLegend' label='${seriesName}' enable='false' hPadding='5' vPadding='0' vMargin='2'>
-				<icon>RectIcon</icon>
-				<label format='FontFormat'/>
+		<legend id='Smart' label='${seriesName}' enable='false' hPadding='5' vPadding='0' vMargin='2'>
+			<icon>Rect</icon>
+			<label format='FontFormat'/>
 		</legend>
 
 
 		<!--------------------ToolTip----------------------------------------->
 
-		<tooltip id='SmartTip' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
+		<tooltip id='Smart' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
 			<self format='FontFormat' radius='0' padding='5' vMargin='10'>
 				<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
 				<fill color='FFFFFF' alpha='0.9'/>
@@ -217,21 +219,19 @@
             <color>097DDA</color>
             <color>2F8A93</color>
 		</colors>
-		<colors id='BlueGray'>
-			<color>30AEE1</color>
-            <color>3588B0</color>
-            <color>50545F</color>
-            <color>919499</color>
-
-            <color>885C88</color>
-            <color>FE5B3B</color>
-            <color>5B7C92</color>
-            <color>AB8718</color>
-            <color>9BD124</color>
-            <color>634BA7</color>
-            <color>017E01</color>
-            <color>097DDA</color>
-            <color>2F8A93</color>
+		<colors id='BRG'>
+            <color>#548DCA</color>
+            <color>#EF306A</color>
+            <color>#438071</color>
+            <color>#FDB52F</color>
+            <color>#FBE601</color>
+            <color>#D2E279</color>
+            <color>#4AC0C0</color>
+            <color>#6DCFF6</color>
+            <color>#A085D4</color>
+            <color>#E1E1E0</color>
+            <color>#959595</color>
+            <color>#4E555F</color>
 		</colors>
 
 
@@ -289,9 +289,9 @@
 				</label>
 			</yAxis>
 
-			<tooltip>SmartTip</tooltip>
+			<tooltip>Smart</tooltip>
 
-			<legend>SmartLegend</legend>
+			<legend>Smart</legend>
 
 			<valueLabel format='FontFormat' margin='0' padding='5'>
 				<text value='${valueLabel}'/>
@@ -304,15 +304,15 @@
 
 			<!---------------------------- 序列 ------------------------->
 
-			<line style='LightLine' labelDisplay="none">
+			<line style='Light' labelDisplay="none">
 				<dataRender style='LightPoint' enable='false'/>
 			</line>
 
-			<area style='TransArea' labelDisplay="none">
+			<area style='Trans' labelDisplay="none">
 				<dataRender style='LightPoint' enable='false'/>
 			</area>
 
-			<column style='LightShape' maxItemSize='100' labelDisplay="inner">
+			<column style='Light' maxItemSize='100' labelDisplay="inner">
 				<dataRender style='LightPoint'/>
 			</column>
 

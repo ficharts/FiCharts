@@ -1,6 +1,7 @@
 package com.fiCharts.charts.chart2D.core.model
 {
 	import com.fiCharts.charts.common.ChartDataFormatter;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -180,7 +181,7 @@ package com.fiCharts.charts.chart2D.core.model
 		 */
 		public function set legend(value:LegendStyle):void
 		{
-			_legend = XMLVOMapper.updateObject(value, _legend) as LegendStyle;
+			_legend = XMLVOMapper.updateObject(value, _legend, Model.LEGEND) as LegendStyle;
 			
 			XMLVOLib.dispatchCreation(Chart2DModel.UPDATE_LEGEND_STYLE, value);
 		}

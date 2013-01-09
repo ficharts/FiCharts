@@ -23,6 +23,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.ChartDataFormatter;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
@@ -206,6 +207,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function setChartModel(value:XML):void
 		{
+			XMLVOLib.clearPartLib();
+			
 			// 先刷新颜色板，因稍后会构建图表的数据模型
 			if (configXML && configXML.hasOwnProperty("colors"))
 			{
@@ -224,27 +227,26 @@ package com.fiCharts.charts.chart2D.encry
 			seriesDataStyle.appendChild(value.child('tooltip'));
 			seriesDataStyle.appendChild(value.child('valueLabel'));
 			seriesDataStyle.appendChild(value.child('innerValueLabel'));
-			XMLVOLib.registWholeXML(Chart2DModel.SERIES_DATA_STYLE, seriesDataStyle);
+			XMLVOLib.registerPartXML(Chart2DModel.SERIES_DATA_STYLE, seriesDataStyle, Model.SYSTEM);
 			
-			XMLVOLib.registWholeXML(Chart2DModel.X_AXIS_STYLE, value.child('xAxis'));
-			XMLVOLib.registWholeXML(Chart2DModel.Y_AXIS_STYLE, value.child('yAxis'));
+			XMLVOLib.registerPartXML(Chart2DModel.X_AXIS_STYLE, value.child('xAxis'), Model.SYSTEM);
+			XMLVOLib.registerPartXML(Chart2DModel.Y_AXIS_STYLE, value.child('yAxis'), Model.SYSTEM);
 			
-			XMLVOLib.registWholeXML(Chart2DModel.LINE_SERIES, value.child('line'));
-			XMLVOLib.registWholeXML(Chart2DModel.AREA_SERIES, value.child('area'));
+			XMLVOLib.registerPartXML(Chart2DModel.LINE_SERIES, value.child('line'), Model.SYSTEM);
+			XMLVOLib.registerPartXML(Chart2DModel.AREA_SERIES, value.child('area'), Model.SYSTEM);
 			
-			XMLVOLib.registWholeXML(Chart2DModel.COLUMN_SERIES, value.child('column'));
-			XMLVOLib.registWholeXML(Chart2DModel.STACKED_COLUMN_SERIES, value.child('stackedColumn'));
+			XMLVOLib.registerPartXML(Chart2DModel.COLUMN_SERIES, value.child('column'), Model.SYSTEM);
+			XMLVOLib.registerPartXML(Chart2DModel.STACKED_COLUMN_SERIES, value.child('stackedColumn'), Model.SYSTEM);
 			
-			XMLVOLib.registWholeXML(Chart2DModel.BUBBLE_SERIES, value.child('bubble'));
-			XMLVOLib.registWholeXML(Chart2DModel.MARKER_SERIES, value.child('marker'));
+			XMLVOLib.registerPartXML(Chart2DModel.BUBBLE_SERIES, value.child('bubble'), Model.SYSTEM);
+			XMLVOLib.registerPartXML(Chart2DModel.MARKER_SERIES, value.child('marker'), Model.SYSTEM);
 			
-			XMLVOLib.registWholeXML(Chart2DModel.BAR_SERIES, value.child('bar'));
-			XMLVOLib.registWholeXML(Chart2DModel.STACKED_BAR_SERIES, value.child('stackedBar'));
+			XMLVOLib.registerPartXML(Chart2DModel.BAR_SERIES, value.child('bar'), Model.SYSTEM);
+			XMLVOLib.registerPartXML(Chart2DModel.STACKED_BAR_SERIES, value.child('stackedBar'), Model.SYSTEM);
 			
 			//添加局部样式模板到局部库中
-			XMLVOLib.clearPartLib();
 			for each (var item:XML in value.child('template').children())
-				XMLVOLib.registerPartXML(item.@id, item);
+				XMLVOLib.registerPartXML(item.@id, item, item.name().toString());
 			
 			XMLVOMapper.fuck(value, chartModel);
 		}

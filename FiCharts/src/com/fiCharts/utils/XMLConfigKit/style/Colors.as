@@ -1,5 +1,6 @@
 package com.fiCharts.utils.XMLConfigKit.style
 {
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
@@ -28,7 +29,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		public function set style(value:String):void
 		{
-			_style = XMLVOMapper.updateStyle(this, value);
+			_style = XMLVOMapper.updateStyle(this, value, Model.COLORS);
 		}
 
 		/**

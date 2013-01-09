@@ -5,6 +5,7 @@ package com.fiCharts.charts.chart2D.bubble
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -20,10 +21,17 @@ package com.fiCharts.charts.chart2D.bubble
 		
 		/**
 		 */		
+		override protected function get type():String
+		{
+			return "bubble";
+		}
+		
+		/**
+		 */		
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
 			super.beforeUpdateProperties(xml);
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.BUBBLE_SERIES), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.BUBBLE_SERIES, Model.SYSTEM), this);
 		}
 		
 		/**

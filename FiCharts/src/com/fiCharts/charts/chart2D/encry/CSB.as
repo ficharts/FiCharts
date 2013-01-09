@@ -106,7 +106,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			//注册全局样式模板
 			for each (item in defaultConfig.child('template').children())
-				XMLVOLib.registWholeXML(item.@id, item);
+				XMLVOLib.registWholeXML(item.@id, item, item.name().toString());
 			
 			XMLVOMapper.fuck(defaultConfig.menu, menu);
 		}

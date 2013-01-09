@@ -38,7 +38,15 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static const EXTEND:String = 'extends';
 		
+		
 		/**
+		 * 
+		 * 这里存储着共享库和基础元素类定义，共享库分全局库和临时库
+		 * 
+		 * 全局库随系统初始化建立，临时库会动态改变
+		 * 
+		 * 库元素采用而为结构存储，第一层是所属分类，第二层是具体的值对关系
+		 * 
 		 */			
 		public function XMLVOLib()
 		{
@@ -179,36 +187,80 @@ package com.fiCharts.utils.XMLConfigKit
 		
 		/**
 		 */		
-		public static function isRegistedXML(key:String):Boolean
+		public static function isRegistedXML(key:String, type:String):Boolean
 		{
-			if (partXMLLib.containsKey(key) || wholeXmlLib.containsKey(key))
-				return true;
-			else
+			if (partXMLLib.containsKey(type))
+			{
+				if (partXMLLib.getValue(type)[key])
+					return true;
+				
 				return false;
+			}
+			else if (wholeXmlLib.containsKey(type))
+			{
+				if (wholeXmlLib.getValue(type)[key])
+					return true;
+				
+				return false;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		
 		/**
 		 */		
-		public static function registWholeXML(key:String, xml:*):void
+		public static function registWholeXML(key:String, xml:*, type:String):void
 		{
-			wholeXmlLib.put(key, xml);
+			if (wholeXmlLib.containsKey(type))
+			{
+				wholeXmlLib.getValue(type)[key] = xml;
+			}
+			else
+			{
+				var vo:Object = new Object;
+				vo[key] = xml;
+				wholeXmlLib.put(type, vo);
+			}
 		}
 		
 		/**
 		 */		
-		public static function registerPartXML(key:String, xml:*):void
+		public static function registerPartXML(key:String, xml:*, type:String):void
 		{
-			partXMLLib.put(key, xml);
+			if (partXMLLib.containsKey(type))
+			{
+				partXMLLib.getValue(type)[key] = xml;
+			}
+			else
+			{
+				var vo:Object = new Object;
+				vo[key] = xml;
+				partXMLLib.put(type, vo);
+			}
 		}
 		
 		/**
 		 */		
-		public static function getXML(key:String):*
+		public static function getXML(key:String, type:String):*
 		{
-			if (partXMLLib.containsKey(key))
-				return partXMLLib.getValue(key);
+			var value:Object;
+			
+			if (partXMLLib.containsKey(type))
+			{
+				value = partXMLLib.getValue(type)[key];
+					
+				if (value)
+					return value;
+			}
 			else	
-				return wholeXmlLib.getValue(key);
+			{
+				value = wholeXmlLib.getValue(type)[key];
+				
+				if (value)
+					return value;
+			}
 		}
 		
 		/**

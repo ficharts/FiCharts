@@ -6,6 +6,7 @@ package com.fiCharts.charts.chart2D.column2D
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -51,7 +52,14 @@ package com.fiCharts.charts.chart2D.column2D
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
 			super.beforeUpdateProperties(xml);
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.COLUMN_SERIES), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.COLUMN_SERIES, Model.SYSTEM), this);
+		}
+		
+		/**
+		 */		
+		override protected function get type():String
+		{
+			return "column";
 		}
 		
 		/**

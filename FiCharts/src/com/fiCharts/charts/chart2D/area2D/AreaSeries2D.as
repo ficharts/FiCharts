@@ -4,6 +4,7 @@ package com.fiCharts.charts.chart2D.area2D
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.line.LineSeries;
 	import com.fiCharts.charts.chart2D.line.PartLineUI;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -28,10 +29,17 @@ package com.fiCharts.charts.chart2D.area2D
 		
 		/**
 		 */		
+		override protected function get type():String
+		{
+			return "area";
+		}
+		
+		/**
+		 */		
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.SERIES_DATA_STYLE), this);
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.AREA_SERIES), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.SERIES_DATA_STYLE, Model.SYSTEM), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.AREA_SERIES, Model.SYSTEM), this);
 		}
 		
 		/**

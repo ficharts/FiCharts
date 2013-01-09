@@ -1,18 +1,20 @@
 package com.fiCharts.charts.chart2D.core.model
 {
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.shape.Decorate;
 	import com.fiCharts.utils.XMLConfigKit.shape.IShape;
 	import com.fiCharts.utils.XMLConfigKit.shape.IShapeGroup;
-	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	
 	import flash.display.Sprite;
 	
 	/**
 	 * 数据节点的样式， 数据节点显示方式有多种形状，也可能由多个形状构成一个节点
 	 */	
-	public class DataRender implements IFreshElement, IShapeGroup, IFiElement
+	public class DataRender implements IFreshElement, IShapeGroup, IFiElement, IStyleElement
 	{
 		public function DataRender()
 		{
@@ -55,18 +57,7 @@ package com.fiCharts.charts.chart2D.core.model
 		 */		
 		public function set style(value:String):void
 		{
-			if(_style != value)
-			{
-				_style = value;
-				
-				fresh();
-				
-				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(_style);
-				
-				if (xml)
-					XMLVOMapper.fuck(xml, this);
-			}
-			
+			_style = XMLVOMapper.updateStyle(this, value, Model.DATA_RENDER);
 		}
 		
 		/**

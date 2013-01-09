@@ -179,8 +179,8 @@
 	//------------------------------
 	
 	win.FiCharts = FiCharts;
-	FiCharts.width = '400';
-	FiCharts.height = '300';	
+	FiCharts.width = '100%';
+	FiCharts.height = '100%';	
 	FiCharts.style = 'white';
 	FiCharts.usePreConfig = 1;
 	
@@ -258,41 +258,49 @@
 	
 	// 初始化图表的基本属性；
 	init = function(chart, arg) {
+		
+		var chartW = FiCharts.width;
+		var chartH = FiCharts.height;
+		
+		chart.configFile = '';
+		chart.style = '';
+		
 		if (hasProp(arg.id)){
 			chart.id = arg.id;
 		}
 		
 		// id 参数为必选项， 可以只传递id， 此时arg为字符类型；
 		if (typeof arg === "string") {
-			chart.id = arg;
+			
+			var args = arg.split(",");
+			
+			if (args.length == 1){
+				chart.id = args[0];
+			}else if (args.length == 2){
+				chart.id = args[0];
+				chart.configFile = args[1];
+			}else if (args.length == 3){
+				chart.id = args[0];
+				chartW = args[1];
+				chartH = args[2];
+			}else if (args.length == 4){
+				chart.id = args[0];
+				chartW = args[1];
+				chartH = args[2];
+				chart.configFile = args[3];
+			}
 		};
 		
 		if (hasProp(arg.configFile)) {
 			chart.configFile = arg.configFile;
-		} else {
-			chart.configFile = '';
 		}
 		
 		if (hasProp(arg.style)) {
 			chart.style = arg.style;
-		} else {
-			chart.style = '';
 		}
 		
-		if (hasProp(arg.usePreConfig)) {
-			chart.usePreConfig = arg.usePreConfig;
-		} else {
-			chart.usePreConfig = FiCharts.usePreConfig;
-		}
-		
-		if (hasProp(arg.preConfigFile)) {
-			chart.preConfigFile = arg.preConfigFile;
-		} else {
-			chart.preConfigFile = '';
-		}
-		
-		chart.width = hasProp(arg.width) ? arg.width : FiCharts.width;
-		chart.height = hasProp(arg.height) ? arg.height : FiCharts.height;
+		chart.width = hasProp(arg.width) ? arg.width : chartW;
+		chart.height = hasProp(arg.height) ? arg.height : chartH;
 		
 		chart.message = {};
 		chart.message.init = FiCharts.message.init;

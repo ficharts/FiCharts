@@ -4,6 +4,7 @@ package com.fiCharts.charts.chart2D.core.model
 	import com.fiCharts.charts.chart2D.core.axis.DateAxis;
 	import com.fiCharts.charts.chart2D.core.axis.FieldAxis;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -54,7 +55,7 @@ package com.fiCharts.charts.chart2D.core.model
 			else
 				axis = new DateAxis;
 			
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.Y_AXIS_STYLE), axis);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.Y_AXIS_STYLE, Model.SYSTEM), axis);
 			XMLVOMapper.fuck(xml, axis);
 		}
 		

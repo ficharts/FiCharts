@@ -59,16 +59,16 @@ package com.fiCharts.charts.chart2D.pie
 		{
 			this._chartModel = new PieChartModel();
 			
-			XMLVOLib.registWholeXML(PieChartModel.PIE_SERIES_STYLE, value.child('pieSeriesStyle'));
+			XMLVOLib.registerPartXML(PieChartModel.PIE_SERIES_STYLE, value.child('pieSeriesStyle'), "config");
 			
 			var seriesDataStyle:XML = <seriesDataStyle/>
 			
 			seriesDataStyle.appendChild(value.child('tooltip'));
 			seriesDataStyle.appendChild(value.child('valueLabel'));
-			XMLVOLib.registWholeXML(PieChartModel.SERIES_DATA_STYLE, seriesDataStyle);
+			XMLVOLib.registerPartXML(PieChartModel.SERIES_DATA_STYLE, seriesDataStyle, "config");
 			
 			for each (var item:XML in value.child('definition').children())
-				XMLVOLib.registWholeXML(item.@id, item);
+				XMLVOLib.registerPartXML(item.@id, item, item.name().toString());
 			
 			XMLVOMapper.fuck(value, chartModel);
 		}

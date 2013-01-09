@@ -1,6 +1,7 @@
 package com.fiCharts.charts.legend
 {
 	import com.fiCharts.charts.chart2D.core.model.DataRender;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.ContainerStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -29,7 +30,7 @@ package com.fiCharts.charts.legend
 		 */		
 		public function set style(value:String):void
 		{
-			_style = XMLVOMapper.updateStyle(this, value);
+			_style = XMLVOMapper.updateStyle(this, value, Model.LEGEND);
 		}
 
 		/**
@@ -43,7 +44,7 @@ package com.fiCharts.charts.legend
 		 */		
 		public function set icon(value:DataRender):void
 		{
-			_icon = XMLVOMapper.updateObject(value, _icon) as DataRender;
+			_icon = XMLVOMapper.updateObject(value, _icon, Model.ICON) as DataRender;
 		}
 		
 		/**

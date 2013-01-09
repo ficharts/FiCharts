@@ -115,7 +115,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */
 		public function set format(value:Object):void
 		{
-			_textFormat = XMLVOMapper.updateObject(value, _textFormat) as TextFormatStyle;
+			_textFormat = XMLVOMapper.updateObject(value, _textFormat, "format") as TextFormatStyle;
 		}
 		
 	}

@@ -4,21 +4,22 @@
         <y type="linear" title='分布值'/>
     </axis>
     <series>
-        <column seriesName="产品A"  xField='label' yField='valueA'>
-            <dataRender style='Diamond'/>
-        </column>
+        
         <line seriesName="产品B"  xField='label' yField='valueB'>
              <dataRender enable='true'/>
              <!--states>
                 <hover>fuck</hover>
              </states-->
         </line>
-        <!--bubble xField='label' yField='valueA' bubbleField='valueB'>
+        <column seriesName="产品A"  xField='label' yField='valueA'>
+            <dataRender style='Diamond'/>
+        </column>
+        <bubble xField='label' yField='valueA' bubbleField='valueB'>
 
-        </bubble-->
+        </bubble>
     </series>
-    <legend enable='false'/>
-    <colors>BlueGray</colors>
+    <legend enable='true'/>
+    <colors>BRG</colors>
     <template>
         <style id='haha'>
             <states>

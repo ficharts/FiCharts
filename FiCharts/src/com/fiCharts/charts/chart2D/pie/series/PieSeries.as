@@ -153,8 +153,8 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */		
 		public function beforeUpdateProperties(xml:* = null):void
 		{
-			XMLVOMapper.fuck(XMLVOLib.getXML(PieChartModel.PIE_SERIES_STYLE), this);
-			XMLVOMapper.fuck(XMLVOLib.getXML(PieChartModel.SERIES_DATA_STYLE), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(PieChartModel.PIE_SERIES_STYLE, "config"), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(PieChartModel.SERIES_DATA_STYLE, "config"), this);
 		}
 		
 		/**
@@ -432,7 +432,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */		
 		public function set states(value:States):void
 		{
-			_states = XMLVOMapper.updateObject(value, _states) as States;;
+			_states = XMLVOMapper.updateObject(value, _states, "states") as States;;
 		}
 		
 		/**

@@ -8,6 +8,7 @@ package com.fiCharts.charts.chart2D.bar
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.common.ChartColors;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -22,6 +23,13 @@ package com.fiCharts.charts.chart2D.bar
 			super();
 			
 			this.value = 'xValue';
+		}
+		
+		/**
+		 */		
+		override protected function get type():String
+		{
+			return "bar";
 		}
 		
 		/**
@@ -59,8 +67,8 @@ package com.fiCharts.charts.chart2D.bar
 		 */		
 		override public function beforeUpdateProperties(xml:*= null):void
 		{
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.SERIES_DATA_STYLE), this);
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.BAR_SERIES), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.SERIES_DATA_STYLE, Model.SYSTEM), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.BAR_SERIES, Model.SYSTEM), this);
 		}
 		
 		/**

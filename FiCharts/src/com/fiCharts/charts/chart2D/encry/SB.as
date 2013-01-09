@@ -9,6 +9,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.core.series.SeriesDirectionControl;
 	import com.fiCharts.charts.common.ChartColors;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataItemVO;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
@@ -41,6 +42,13 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
+		protected function get type():String
+		{
+			return null;
+		}
+		
+		/**
+		 */		
 		public function render():void
 		{
 			
@@ -62,7 +70,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set style(value:String):void
 		{
-			_style = XMLVOMapper.updateStyle(this, value);
+			_style = XMLVOMapper.updateStyle(this, value, type);
 		}
 		
 		/**
@@ -80,14 +88,14 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set states(value:States):void
 		{
-			_states = XMLVOMapper.updateObject(value, _states) as States;
+			_states = XMLVOMapper.updateObject(value, _states, "states") as States;
 		}
 		
 		/**
 		 */		
 		public function beforeUpdateProperties(xml:* = null):void
 		{
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.SERIES_DATA_STYLE), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.SERIES_DATA_STYLE, Model.SYSTEM), this);
 		}
 		
 		/**
@@ -266,7 +274,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set tooltip(value:TooltipStyle):void
 		{
-			_tooltip = XMLVOMapper.updateObject(value, _tooltip) as TooltipStyle;
+			_tooltip = XMLVOMapper.updateObject(value, _tooltip, Model.TOOLTIP) as TooltipStyle;
 		}
 
 		
@@ -399,7 +407,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set dataRender(value:DataRender):void
 		{
-			_dataRender = XMLVOMapper.updateObject(value, _dataRender) as DataRender;
+			_dataRender = XMLVOMapper.updateObject(value, _dataRender, Model.DATA_RENDER) as DataRender;
 		}
 		
 		

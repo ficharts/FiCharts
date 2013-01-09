@@ -1,7 +1,9 @@
 package com.fiCharts.charts.toolTips
 {
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 
 	/**
 	 *
@@ -10,7 +12,7 @@ package com.fiCharts.charts.toolTips
 	 * 默认仅有一个数据节点信息时采用 self 样式；
 	 * 
 	 */	
-	public class TooltipStyle extends LabelStyle
+	public class TooltipStyle extends LabelStyle implements IStyleElement
 	{
 		public function TooltipStyle()
 		{
@@ -29,15 +31,7 @@ package com.fiCharts.charts.toolTips
 		 */		
 		public function set style(value:String):void
 		{
-			if (_style != value)
-			{
-				_style = value;
-				
-				var xml:Object = XMLVOMapper.getStyleXMLBy_ID(_style);
-				
-				if (xml)
-					XMLVOMapper.fuck(xml, this);
-			}
+			_style = XMLVOMapper.updateStyle(this, value, Model.TOOLTIP);
 		}
 		
 		/**

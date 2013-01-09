@@ -21,8 +21,8 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		 */		
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.SERIES_DATA_STYLE), this);
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.STACKED_COLUMN_SERIES), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.SERIES_DATA_STYLE, "config"), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.STACKED_COLUMN_SERIES, "config"), this);
 			
 			this.stacks = new Vector.<StackedSeries>;
 		}
