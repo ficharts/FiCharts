@@ -273,7 +273,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 根据样式名称设置当前样式模板； 
 		 */		
-		public function setCurStyleTemplate(styleName:String = 'white'):void
+		public function setCurStyleTemplate(styleName:String = 'Classic'):void
 		{
 			currentStyleName = styleName;
 			currentStyleXML = Chart2DStyleTemplate.getTheme(currentStyleName);
@@ -302,7 +302,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 当前的样式名称， 此名称与样式模板一一对应；
 		 */		
-		public var currentStyleName:String = 'black';
+		public var currentStyleName:String = 'Classic';
 		
 	}
 }

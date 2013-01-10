@@ -57,6 +57,7 @@
 				
 				file.removeEventListener(Event.SELECT, multiConfigFileSelected);
 				configBtn.enabled = false;
+				resetBtn.enabled = true;
 			}
 			
 			private function readFile(file:File):ByteArray
@@ -91,6 +92,12 @@
 			
 			private var file:File = new File;
 			
+			protected function retry(event:MouseEvent):void
+			{
+				resetBtn.enabled = false;
+				this.licenseBtn.enabled = true;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -105,6 +112,8 @@
 		
 		<s:Button id="configBtn" enabled="false" label="压缩配置文件" click="compressConfigXML(event)" 
 				  horizontalCenter="0" verticalCenter="0"/>
+		
+		<s:Button id="resetBtn" label="重置" enabled="false" horizontalCenter="0" verticalCenter="0" click="retry(event)"/>
 	</mx:VBox>
 	
 </s:WindowedApplication>

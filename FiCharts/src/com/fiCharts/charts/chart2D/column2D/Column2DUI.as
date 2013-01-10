@@ -2,7 +2,7 @@ package com.fiCharts.charts.chart2D.column2D
 {
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.series.SeriesItemUIBase;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	/**
@@ -10,7 +10,7 @@ package com.fiCharts.charts.chart2D.column2D
 	 */	
 	public class Column2DUI extends SeriesItemUIBase 
 	{
-		public function Column2DUI(dataItem:SeriesDataItemVO)
+		public function Column2DUI(dataItem:SeriesDataPoint)
 		{
 			super(dataItem);
 		}

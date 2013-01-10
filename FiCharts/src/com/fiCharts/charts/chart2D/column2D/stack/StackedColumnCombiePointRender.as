@@ -1,10 +1,10 @@
 package com.fiCharts.charts.chart2D.column2D.stack
 {
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	
-	public class StackedColumnCombieItemRender extends ItemRenderBace
+	public class StackedColumnCombiePointRender extends PointRenderBace
 	{
-		public function StackedColumnCombieItemRender()
+		public function StackedColumnCombiePointRender()
 		{
 			//super();
 			

@@ -4,9 +4,9 @@ package com.fiCharts.charts.common
 
 	/**
 	 */
-	public class SeriesDataItemVO extends EventDispatcher
+	public class SeriesDataPoint extends EventDispatcher
 	{
-		public function SeriesDataItemVO()
+		public function SeriesDataPoint()
 		{
 		}
 		

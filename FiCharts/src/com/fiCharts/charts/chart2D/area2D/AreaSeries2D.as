@@ -5,7 +5,7 @@ package com.fiCharts.charts.chart2D.area2D
 	import com.fiCharts.charts.chart2D.line.LineSeries;
 	import com.fiCharts.charts.chart2D.line.PartLineUI;
 	import com.fiCharts.charts.common.Model;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
@@ -54,7 +54,7 @@ package com.fiCharts.charts.chart2D.area2D
 				
 				var areaUI:PartLineUI;
 				partUIs = new Vector.<PartLineUI>;
-				for each (var itemDataVO:SeriesDataItemVO in dataItemVOs)
+				for each (var itemDataVO:SeriesDataPoint in dataItemVOs)
 				{
 					areaUI = new PartAreaUI(itemDataVO);
 					areaUI.partUIRender = this;
@@ -97,10 +97,10 @@ package com.fiCharts.charts.chart2D.area2D
 			
 			//绘制闭合区域以便填充
 			canvas.graphics.lineStyle(0, 0, 0);
-			canvas.graphics.lineTo((dataItemVOs[endIndex] as SeriesDataItemVO).x, 0);
-			canvas.graphics.lineTo((dataItemVOs[startIndex] as SeriesDataItemVO).x, 0);
-			canvas.graphics.lineTo((dataItemVOs[startIndex] as SeriesDataItemVO).x, 
-				(dataItemVOs[startIndex] as SeriesDataItemVO).y - this.baseLine);
+			canvas.graphics.lineTo((dataItemVOs[endIndex] as SeriesDataPoint).x, 0);
+			canvas.graphics.lineTo((dataItemVOs[startIndex] as SeriesDataPoint).x, 0);
+			canvas.graphics.lineTo((dataItemVOs[startIndex] as SeriesDataPoint).x, 
+				(dataItemVOs[startIndex] as SeriesDataPoint).y - this.baseLine);
 			
 			canvas.graphics.endFill();
 			

@@ -1,7 +1,7 @@
 package com.fiCharts.charts.chart2D.line
 {
 	import com.fiCharts.charts.chart2D.core.series.SeriesItemUIBase;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
@@ -10,7 +10,7 @@ package com.fiCharts.charts.chart2D.line
 	 */	
 	public class PartLineUI extends SeriesItemUIBase
 	{
-		public function PartLineUI(dataItem:SeriesDataItemVO)
+		public function PartLineUI(dataItem:SeriesDataPoint)
 		{
 			super(dataItem);
 			

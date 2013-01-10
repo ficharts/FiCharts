@@ -1,8 +1,8 @@
 package com.fiCharts.charts.chart2D.column2D.stack
 {
-	public class StackedPercentColumnItemRender extends StackedColumnItemRender
+	public class StackedPercentColumnPointRender extends StackedColumnPointRender
 	{
-		public function StackedPercentColumnItemRender(visible:Boolean = false)
+		public function StackedPercentColumnPointRender(visible:Boolean = false)
 		{
 			super(visible);
 		}

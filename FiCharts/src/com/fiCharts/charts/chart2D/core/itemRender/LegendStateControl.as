@@ -1,6 +1,6 @@
 package com.fiCharts.charts.chart2D.core.itemRender
 {
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
 	import com.fiCharts.utils.graphic.StyleManager;
@@ -11,7 +11,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 
 	public class LegendStateControl
 	{
-		public function LegendStateControl(dataItem:SeriesDataItemVO, target:StatesControl)
+		public function LegendStateControl(dataItem:SeriesDataPoint, target:StatesControl)
 		{
 			dataItem.addEventListener(ItemRenderEvent.SERIES_OVER, overHandler, false, 0, true);
 			dataItem.addEventListener(ItemRenderEvent.SERIES_OUT, outHandler, false, 0, true);

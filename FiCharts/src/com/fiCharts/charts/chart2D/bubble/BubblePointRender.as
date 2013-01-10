@@ -1,13 +1,13 @@
 package com.fiCharts.charts.chart2D.bubble
 {
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	/**
 	 */	
-	public class BubbleItemRender extends ItemRenderBace
+	public class BubblePointRender extends PointRenderBace
 	{
-		public function BubbleItemRender()
+		public function BubblePointRender()
 		{
 			super();
 		}

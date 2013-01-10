@@ -4,14 +4,14 @@ package com.fiCharts.charts.chart2D.bar.stack
 	import com.fiCharts.charts.chart2D.column2D.Column2DUI;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
-	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeriesDataItem;
+	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeriesDataPoint;
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -29,7 +29,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
-		override protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
+		override protected function initItemRender(itemRender:PointRenderBace, item:SeriesDataPoint):void
 		{
 			if (ifNullData(item))
 				return;
@@ -40,7 +40,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 			itemRender.value = value;
 			
 			// 整体数值样式与独立数值样式有分别
-			if (itemRender is StackedBarCombileItemRender)
+			if (itemRender is StackedBarCombilePointRender)
 			{
 				itemRender.valueLabel = this.valueLabel;
 				this.updateLabelDisplay(itemRender);				
@@ -88,11 +88,11 @@ package com.fiCharts.charts.chart2D.bar.stack
 		{
 			adjustColumnWidth();
 			
-			var item:SeriesDataItemVO;
+			var item:SeriesDataPoint;
 			for each (item in dataItemVOs)
 			{
-				item.x = this.horizontalAxis.valueToX((item as StackedSeriesDataItem).startValue) - baseLine;
-				item.dataItemX = horizontalAxis.valueToX((item as StackedSeriesDataItem).endValue);
+				item.x = this.horizontalAxis.valueToX((item as StackedSeriesDataPoint).startValue) - baseLine;
+				item.dataItemX = horizontalAxis.valueToX((item as StackedSeriesDataPoint).endValue);
 				
 				// 数据节点的坐标系与渲染节点不同， 两者相差 值为 baseLine
 				item.y = verticalAxis.valueToY(item.yValue) - columnGoupWidth / 2 +
@@ -117,12 +117,12 @@ package com.fiCharts.charts.chart2D.bar.stack
 		{
 			for each (var columnUI:Column2DUI in this.columnUIs)
 			{
-				columnUI.x = horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataItem).startValue) - baseLine;
+				columnUI.x = horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataPoint).startValue) - baseLine;
 				columnUI.y = columnUI.dataItem.y; //+ partColumnWidth / 2;
 				
-				(columnUI.dataItem as StackedSeriesDataItem).width = 
-				columnUI.columnWidth = horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataItem).endValue) -
-					horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataItem).startValue);;
+				(columnUI.dataItem as StackedSeriesDataPoint).width = 
+				columnUI.columnWidth = horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataPoint).endValue) -
+					horizontalAxis.valueToX((columnUI.dataItem as StackedSeriesDataPoint).startValue);;
 				
 				columnUI.columnHeight = partColumnWidth;
 				columnUI.render();
@@ -131,23 +131,23 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
-		override protected function getSeriesItemUI(dataItem:SeriesDataItemVO):Column2DUI
+		override protected function getSeriesItemUI(dataItem:SeriesDataPoint):Column2DUI
 		{
 			return new BarItemUI(dataItem);
 		}
 		
 		/**
 		 */		
-		override protected function get itemRender():ItemRenderBace
+		override protected function get itemRender():PointRenderBace
 		{
-			return new StackedBarItemRender(false);
+			return new StackedBarPointRender(false);
 		}
 		
 		/**
 		 */		 	
-		override protected function get combileItemRender():ItemRenderBace
+		override protected function get combileItemRender():PointRenderBace
 		{
-			return new StackedBarCombileItemRender;
+			return new StackedBarCombilePointRender;
 		}
 		
 		/**
@@ -157,13 +157,13 @@ package com.fiCharts.charts.chart2D.bar.stack
 			var xValue:Number, yValue:Object, positiveValue:Number, negativeValue:Number;
 			var length:uint = dataProvider.children().length();
 			var stack:StackedSeries;
-			var combleSeriesDataItem:SeriesDataItemVO;
-			var stackedSeriesDataItem:StackedSeriesDataItem;
+			var combleSeriesDataItem:SeriesDataPoint;
+			var stackedSeriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataItemVO>
+			dataItemVOs = new Vector.<SeriesDataPoint>
 			horizontalValues = new Vector.<Object>;
 			verticalValues = new Vector.<Object>;
-			fullDataItems = new Vector.<SeriesDataItemVO>;
+			fullDataItems = new Vector.<SeriesDataPoint>;
 			
 			// 将子序列的数据节点合并到一起；
 			for each (stack in stacks)
@@ -181,7 +181,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 				{
 					xValue = Number(stack.dataItemVOs[i].xValue);
 					yValue = stack.dataItemVOs[i].yValue;
-					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataItem);
+					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataPoint);
 					
 					if (xValue >= 0)
 					{
@@ -204,7 +204,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 				// 求和为正取最大值， 求和为负则取最小值；
 				if (this.valueLabel.enable)
 				{
-					combleSeriesDataItem = new SeriesDataItemVO();
+					combleSeriesDataItem = new SeriesDataPoint();
 					combleSeriesDataItem.metaData = new Object;
 					
 					combleSeriesDataItem.xValue = ((positiveValue + negativeValue) >= 0) ? positiveValue : negativeValue;

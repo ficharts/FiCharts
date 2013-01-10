@@ -1,13 +1,13 @@
 package com.fiCharts.charts.chart2D.line
 {
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.chart2D.core.series.DataIndexOffseter;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.Model;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
@@ -57,7 +57,7 @@ package com.fiCharts.charts.chart2D.line
 				
 				var linePartUI:PartLineUI;
 				partUIs = new Vector.<PartLineUI>;
-				for each (var itemDataVO:SeriesDataItemVO in dataItemVOs)
+				for each (var itemDataVO:SeriesDataPoint in dataItemVOs)
 				{
 					linePartUI = new PartLineUI(itemDataVO);
 					linePartUI.partUIRender = this;
@@ -155,10 +155,10 @@ package com.fiCharts.charts.chart2D.line
 		 */		
 		protected function renderSimleLine(canvas:Graphics, startIndex:uint, endIndex:uint, offset:uint = 0):void
 		{
-			var firstX:Number = (dataItemVOs[startIndex] as SeriesDataItemVO).x; 
-			var firstY:Number = (dataItemVOs[startIndex] as SeriesDataItemVO).y - baseLine - offset;
+			var firstX:Number = (dataItemVOs[startIndex] as SeriesDataPoint).x; 
+			var firstY:Number = (dataItemVOs[startIndex] as SeriesDataPoint).y - baseLine - offset;
 			
-			var item:SeriesDataItemVO;
+			var item:SeriesDataPoint;
 			var i:uint;
 			
 			if (this.step)// 渐进线段方式
@@ -183,8 +183,8 @@ package com.fiCharts.charts.chart2D.line
 				{
 					item = dataItemVOs[i];
 					point = new Point();
-					point.x = (item as SeriesDataItemVO).x;
-					point.y = (item as SeriesDataItemVO).y - baseLine - offset;
+					point.x = (item as SeriesDataPoint).x;
+					point.y = (item as SeriesDataPoint).y - baseLine - offset;
 					pointArr.push(point);
 				}
 				

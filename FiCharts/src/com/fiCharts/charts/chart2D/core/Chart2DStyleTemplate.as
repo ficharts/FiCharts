@@ -35,7 +35,7 @@ package com.fiCharts.charts.chart2D.core
 			if (themeMap.containsKey(styleName))
 				return themeMap.getValue(styleName) as XML;
 			else
-				return themeMap.getValue(WHITE) as XML;
+				return themeMap.getValue(CLASSIC) as XML;
 		}
 		
 		/**
@@ -48,10 +48,10 @@ package com.fiCharts.charts.chart2D.core
 		
 		/**
 		 */		
-		public static const BLACK:String = 'black';
-		public static const WHITE:String = 'white';
+		public static const BLACK:String = 'Black';
+		public static const CLASSIC:String = 'Classic';
+		public static const SIMPLE:String = 'Simple';
 		public static const CUSTOM:String = 'custom';
-		public static const SIMPLE:String = 'simple';
 			
 		/**
 		 */		

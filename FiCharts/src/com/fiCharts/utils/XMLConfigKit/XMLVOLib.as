@@ -186,6 +186,9 @@ package com.fiCharts.utils.XMLConfigKit
 		//----------------------------------------------------------------
 		
 		/**
+		 * 
+		 * 注意： 如果局部不存在某元素，还要在全局区寻找一下
+		 * 
 		 */		
 		public static function isRegistedXML(key:String, type:String):Boolean
 		{
@@ -193,10 +196,9 @@ package com.fiCharts.utils.XMLConfigKit
 			{
 				if (partXMLLib.getValue(type)[key])
 					return true;
-				
-				return false;
 			}
-			else if (wholeXmlLib.containsKey(type))
+			
+			if (wholeXmlLib.containsKey(type))
 			{
 				if (wholeXmlLib.getValue(type)[key])
 					return true;
@@ -242,6 +244,7 @@ package com.fiCharts.utils.XMLConfigKit
 		}
 		
 		/**
+		 * 局部不存在的元素，全局可能存在
 		 */		
 		public static function getXML(key:String, type:String):*
 		{
@@ -254,13 +257,12 @@ package com.fiCharts.utils.XMLConfigKit
 				if (value)
 					return value;
 			}
-			else	
-			{
-				value = wholeXmlLib.getValue(type)[key];
-				
-				if (value)
-					return value;
-			}
+			
+			// 全局无条件排查
+			value = wholeXmlLib.getValue(type)[key];
+			
+			if (value)
+				return value;
 		}
 		
 		/**

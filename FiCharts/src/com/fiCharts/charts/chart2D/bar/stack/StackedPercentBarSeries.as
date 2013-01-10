@@ -1,13 +1,13 @@
 package com.fiCharts.charts.chart2D.bar.stack
 {
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
-	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeriesDataItem;
+	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeriesDataPoint;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.encry.CP;
 	import com.fiCharts.charts.common.ChartColors;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
@@ -22,7 +22,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
-		override protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
+		override protected function initItemRender(itemRender:PointRenderBace, item:SeriesDataPoint):void
 		{
 			itemRender.itemVO = item;
 			
@@ -65,9 +65,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
-		override protected function get itemRender():ItemRenderBace
+		override protected function get itemRender():PointRenderBace
 		{
-			return new StackedPercentBarItemRender(false);
+			return new StackedPercentBarPointRender(false);
 		}
 		
 		/**
@@ -77,12 +77,12 @@ package com.fiCharts.charts.chart2D.bar.stack
 			var xValue:Number, yValue:Object, positiveValue:Number, fullValue:Number, percent:Number;
 			var length:uint = dataProvider.children().length();
 			var stack:StackedSeries;
-			var seriesDataItem:StackedSeriesDataItem;
+			var seriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataItemVO>
+			dataItemVOs = new Vector.<SeriesDataPoint>
 			horizontalValues = new Vector.<Object>;
 			verticalValues = new Vector.<Object>;
-			fullDataItems = new Vector.<SeriesDataItemVO>;
+			fullDataItems = new Vector.<SeriesDataPoint>;
 			
 			// 将子序列的数据节点合并到一起；
 			for each (stack in stacks)
@@ -97,7 +97,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 				fullValue = 0;
 				for each (stack in stacks) // 求和
 				{
-					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataItem;
+					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataPoint;
 					xValue = Number(seriesDataItem.xValue);
 					yValue = seriesDataItem.yValue;
 					fullValue += xValue;
@@ -106,7 +106,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 				positiveValue = percent = 0;
 				for each (stack in stacks)
 				{
-					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataItem;
+					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataPoint;
 					
 					xValue = Number(seriesDataItem.xValue);
 					seriesDataItem.startValue = positiveValue / fullValue * 100;

@@ -1,11 +1,11 @@
 package com.fiCharts.charts.chart2D.marker
 {
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
@@ -57,7 +57,7 @@ package com.fiCharts.charts.chart2D.marker
 			this.canvas.graphics.clear();	
 			canvas.graphics.beginFill(0, 0);
 			
-			for each (var item:SeriesDataItemVO in this.dataItemVOs)
+			for each (var item:SeriesDataPoint in this.dataItemVOs)
 				canvas.graphics.drawCircle(item.x, item.y, 10);// TODO
 		}
 		
@@ -66,7 +66,7 @@ package com.fiCharts.charts.chart2D.marker
 		 */		
 		override protected function layoutDataItems():void
 		{   
-			var item:SeriesDataItemVO;
+			var item:SeriesDataPoint;
 			for (var i:uint = 0; i <= this.itemRenderMaxIndex; i ++)
 			{	
 				item = dataItemVOs[i];
@@ -79,7 +79,7 @@ package com.fiCharts.charts.chart2D.marker
 		
 		/**
 		 */		
-		override protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
+		override protected function initItemRender(itemRender:PointRenderBace, item:SeriesDataPoint):void
 		{
 			itemRender.itemVO = item;
 			

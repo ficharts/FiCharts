@@ -6,9 +6,9 @@ package com.fiCharts.charts.chart2D.column2D
 	/**
 	 * 只做显示用，不接收鼠标事件;
 	 */	
-	public class ColumnItemRender extends ItemRenderProxy
+	public class ColumnPointRender extends ItemRenderProxy
 	{
-		public function ColumnItemRender(visible:Boolean = true)
+		public function ColumnPointRender(visible:Boolean = true)
 		{
 			super(visible);
 		}
@@ -89,9 +89,9 @@ package com.fiCharts.charts.chart2D.column2D
 		
 		/**
 		 */		
-		protected function get columnDataItem():ColumnDataItem
+		protected function get columnDataItem():ColumnDataPoint
 		{
-			return this.itemVO as ColumnDataItem;
+			return this.itemVO as ColumnDataPoint;
 		}
 
 	}

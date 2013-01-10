@@ -1,13 +1,13 @@
 package com.fiCharts.charts.chart2D.area2D
 {
 	import com.fiCharts.charts.chart2D.line.PartLineUI;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	
 	/**
 	 */	
 	public class PartAreaUI extends PartLineUI
 	{
-		public function PartAreaUI(dataItem:SeriesDataItemVO)
+		public function PartAreaUI(dataItem:SeriesDataPoint)
 		{
 			super(dataItem);
 		}

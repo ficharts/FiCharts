@@ -1,10 +1,10 @@
 package com.fiCharts.charts.chart2D.column2D.stack
 {
-	import com.fiCharts.charts.chart2D.column2D.ColumnDataItem;
+	import com.fiCharts.charts.chart2D.column2D.ColumnDataPoint;
 	
-	public class StackedSeriesDataItem extends ColumnDataItem
+	public class StackedSeriesDataPoint extends ColumnDataPoint
 	{
-		public function StackedSeriesDataItem()
+		public function StackedSeriesDataPoint()
 		{
 			super();
 		}

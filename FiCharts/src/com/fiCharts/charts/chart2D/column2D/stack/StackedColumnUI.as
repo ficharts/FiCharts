@@ -3,7 +3,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	import com.fiCharts.charts.chart2D.column2D.Column2DUI;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	
 	import flash.events.MouseEvent;
 	
@@ -11,7 +11,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	 */	
 	public class StackedColumnUI extends Column2DUI
 	{
-		public function StackedColumnUI(dataItem:SeriesDataItemVO)
+		public function StackedColumnUI(dataItem:SeriesDataPoint)
 		{
 			super(dataItem);
 		}

@@ -1,15 +1,15 @@
 package com.fiCharts.charts.chart2D.bar
 {
 	import com.fiCharts.charts.chart2D.column2D.Column2DUI;
-	import com.fiCharts.charts.chart2D.column2D.ColumnDataItem;
+	import com.fiCharts.charts.chart2D.column2D.ColumnDataPoint;
 	import com.fiCharts.charts.chart2D.column2D.ColumnSeries2D;
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -34,7 +34,7 @@ package com.fiCharts.charts.chart2D.bar
 		
 		/**
 		 */		
-		override protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
+		override protected function initItemRender(itemRender:PointRenderBace, item:SeriesDataPoint):void
 		{
 			itemRender.itemVO = item;
 			
@@ -85,7 +85,7 @@ package com.fiCharts.charts.chart2D.bar
 		{
 			adjustColumnWidth();
 			
-			for each (var item:SeriesDataItemVO in dataItemVOs)
+			for each (var item:SeriesDataPoint in dataItemVOs)
 			{
 				item.x = this.horizontalAxis.valueToX(item.xValue);
 				item.y = verticalAxis.valueToY(item.yValue) - columnGoupWidth / 2 +
@@ -98,7 +98,7 @@ package com.fiCharts.charts.chart2D.bar
 		
 		/**
 		 */		
-		override protected function getSeriesItemUI(dataItem:SeriesDataItemVO):Column2DUI
+		override protected function getSeriesItemUI(dataItem:SeriesDataPoint):Column2DUI
 		{
 			return new BarItemUI(dataItem);
 		}
@@ -111,7 +111,7 @@ package com.fiCharts.charts.chart2D.bar
 			{
 				columnUI.x = 0;
 				columnUI.y = columnUI.dataItem.y;
-				(columnUI.dataItem as ColumnDataItem).width = columnUI.columnWidth = columnUI.dataItem.x - baseLine;;
+				(columnUI.dataItem as ColumnDataPoint).width = columnUI.columnWidth = columnUI.dataItem.x - baseLine;;
 				columnUI.columnHeight = partColumnWidth;
 				columnUI.render();
 			}
@@ -119,9 +119,9 @@ package com.fiCharts.charts.chart2D.bar
 		
 		/**
 		 */		
-		override protected function get itemRender():ItemRenderBace
+		override protected function get itemRender():PointRenderBace
 		{
-			var render:BarItemRender = new BarItemRender(false);
+			var render:BarPointRender = new BarPointRender(false);
 			
 			return render;
 		}

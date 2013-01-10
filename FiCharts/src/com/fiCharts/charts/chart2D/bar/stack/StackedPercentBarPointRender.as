@@ -1,8 +1,8 @@
 package com.fiCharts.charts.chart2D.bar.stack
 {
-	public class StackedPercentBarItemRender extends StackedBarItemRender
+	public class StackedPercentBarPointRender extends StackedBarPointRender
 	{
-		public function StackedPercentBarItemRender(visible:Boolean = false)
+		public function StackedPercentBarPointRender(visible:Boolean = false)
 		{
 			super(visible);
 		}

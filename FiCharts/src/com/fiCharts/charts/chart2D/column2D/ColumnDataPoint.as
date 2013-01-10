@@ -1,10 +1,10 @@
 package com.fiCharts.charts.chart2D.column2D
 {
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	
-	public class ColumnDataItem extends SeriesDataItemVO
+	public class ColumnDataPoint extends SeriesDataPoint
 	{
-		public function ColumnDataItem()
+		public function ColumnDataPoint()
 		{
 			super();
 		}

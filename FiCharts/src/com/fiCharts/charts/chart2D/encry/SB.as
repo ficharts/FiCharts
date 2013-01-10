@@ -2,7 +2,7 @@ package com.fiCharts.charts.chart2D.encry
 {
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.DataRender;
@@ -10,7 +10,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.series.SeriesDirectionControl;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
 	import com.fiCharts.charts.toolTips.TooltipStyle;
@@ -307,21 +307,21 @@ package com.fiCharts.charts.chart2D.encry
 		protected function createItemRenders():void
 		{
 			itemRenders = [];
-			for each (var item:SeriesDataItemVO in dataItemVOs)
+			for each (var item:SeriesDataPoint in dataItemVOs)
 				initItemRender(itemRender, item);
 		}
 		
 		/**
 		 * 构造节点渲染器
 		 */		
-		protected function get itemRender():ItemRenderBace
+		protected function get itemRender():PointRenderBace
 		{
-			return new ItemRenderBace;
+			return new PointRenderBace;
 		}
 		
 		/**
 		 */		
-		protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
+		protected function initItemRender(itemRender:PointRenderBace, item:SeriesDataPoint):void
 		{
 			if (ifNullData(item))
 				return;
@@ -343,7 +343,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		protected function updateLabelDisplay(item:ItemRenderBace):void
+		protected function updateLabelDisplay(item:PointRenderBace):void
 		{
 			item.valueLabel.layout = this.labelDisplay;
 			
@@ -379,7 +379,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function layoutDataItems():void
 		{
-			var item:SeriesDataItemVO;
+			var item:SeriesDataPoint;
 			for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
 			{
 				item = dataItemVOs[i];
@@ -603,8 +603,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		protected function initData():void
 		{
-			var seriesDataItem:SeriesDataItemVO
-			dataItemVOs = new Vector.<SeriesDataItemVO>
+			var seriesDataItem:SeriesDataPoint
+			dataItemVOs = new Vector.<SeriesDataPoint>
 			horizontalValues = new Vector.<Object>;
 			verticalValues = new Vector.<Object>;
 			
@@ -652,9 +652,9 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 构建数据节点VO
 		 */		
-		protected function get seriesDataItem():SeriesDataItemVO
+		protected function get seriesDataItem():SeriesDataPoint
 		{
-			return new SeriesDataItemVO();
+			return new SeriesDataPoint();
 		}
 		
 		/**
@@ -679,7 +679,7 @@ package com.fiCharts.charts.chart2D.encry
 			}
 			else
 			{
-				for each(var item:SeriesDataItemVO in dataItemVOs)	
+				for each(var item:SeriesDataPoint in dataItemVOs)	
 				{
 					legendVO = new LegendVO();
 					legendVO.metaData = item; // 用于精确控制节点的状态
@@ -703,7 +703,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		public function seriesHideLegendHandler(evt:LegendEvent):void
 		{
-			for each (var itemVO:SeriesDataItemVO in dataItemVOs)
+			for each (var itemVO:SeriesDataPoint in dataItemVOs)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_HIDE));
 			
 			this.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.UPDATE_VALUE_LABEL, false, true));
@@ -713,7 +713,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function seriesShowLegendHandler(evt:LegendEvent):void
 		{
-			for each (var itemVO:SeriesDataItemVO in dataItemVOs)
+			for each (var itemVO:SeriesDataPoint in dataItemVOs)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_SHOW));
 				
 			this.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.UPDATE_VALUE_LABEL, false, true));
@@ -723,7 +723,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function seriesLegendOverHandler(evt:LegendEvent):void
 		{
-			for each (var itemVO:SeriesDataItemVO in dataItemVOs)
+			for each (var itemVO:SeriesDataPoint in dataItemVOs)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_OVER));
 			
 		}
@@ -732,7 +732,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function seriesLegendOutHandler(evt:LegendEvent):void
 		{
-			for each (var itemVO:SeriesDataItemVO in dataItemVOs)
+			for each (var itemVO:SeriesDataPoint in dataItemVOs)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_OUT));
 		}
 		
@@ -781,7 +781,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		protected function setItemColor(sourceDataItem:Object, seriesDataItem:SeriesDataItemVO):void
+		protected function setItemColor(sourceDataItem:Object, seriesDataItem:SeriesDataPoint):void
 		{
 			if (sourceDataItem[colorField])// Special color of item. 
 				seriesDataItem.color = StyleManager.getUintColor(sourceDataItem[colorField]);
@@ -813,14 +813,14 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * Series items of this series.
 		 */
-		private var _dataItemVOs:Vector.<SeriesDataItemVO>;
+		private var _dataItemVOs:Vector.<SeriesDataPoint>;
 
-		public function get dataItemVOs():Vector.<SeriesDataItemVO>
+		public function get dataItemVOs():Vector.<SeriesDataPoint>
 		{
 			return _dataItemVOs;
 		}
 
-		public function set dataItemVOs(v:Vector.<SeriesDataItemVO>):void
+		public function set dataItemVOs(v:Vector.<SeriesDataPoint>):void
 		{
 			_dataItemVOs = v;
 		}
@@ -1029,7 +1029,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		protected function ifNullData(item:SeriesDataItemVO):Boolean
+		protected function ifNullData(item:SeriesDataPoint):Boolean
 		{
 			//节点字段不存在
 			if (item.xValue == null || item.yValue == null)

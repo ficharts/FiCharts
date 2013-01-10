@@ -1,12 +1,12 @@
 package com.fiCharts.charts.chart2D.bar.stack
 {
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	
 	/**
 	 */	
-	public class StackedBarCombileItemRender extends ItemRenderBace
+	public class StackedBarCombilePointRender extends PointRenderBace
 	{
-		public function StackedBarCombileItemRender()
+		public function StackedBarCombilePointRender()
 		{
 			//super();
 			this._isEnable = true;

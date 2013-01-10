@@ -1,8 +1,8 @@
 package com.fiCharts.charts.chart2D.pie.series
 {
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	
-	public class PieDataItem extends SeriesDataItemVO
+	public class PieDataItem extends SeriesDataPoint
 	{
 		public function PieDataItem()
 		{

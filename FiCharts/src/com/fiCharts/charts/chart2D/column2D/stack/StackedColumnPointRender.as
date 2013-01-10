@@ -1,12 +1,12 @@
 package com.fiCharts.charts.chart2D.column2D.stack
 {
-	import com.fiCharts.charts.chart2D.column2D.ColumnItemRender;
+	import com.fiCharts.charts.chart2D.column2D.ColumnPointRender;
 	
 	/**
 	 */	
-	public class StackedColumnItemRender extends ColumnItemRender
+	public class StackedColumnPointRender extends ColumnPointRender
 	{
-		public function StackedColumnItemRender(visible:Boolean = true)
+		public function StackedColumnPointRender(visible:Boolean = true)
 		{
 			super(visible);
 		}

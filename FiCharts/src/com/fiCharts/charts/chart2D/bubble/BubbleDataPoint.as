@@ -1,10 +1,10 @@
 package com.fiCharts.charts.chart2D.bubble
 {
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	
-	public class BubbleDataItem extends SeriesDataItemVO
+	public class BubbleDataPoint extends SeriesDataPoint
 	{
-		public function BubbleDataItem()
+		public function BubbleDataPoint()
 		{
 			super();
 		}

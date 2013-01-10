@@ -3,7 +3,7 @@ package com.fiCharts.charts.chart2D.core.series
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.LegendStateControl;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
@@ -22,7 +22,7 @@ package com.fiCharts.charts.chart2D.core.series
 	 */	
 	public class SeriesItemUIBase extends Sprite implements IStyleStatesUI
 	{
-		public function SeriesItemUIBase(dataItem:SeriesDataItemVO)
+		public function SeriesItemUIBase(dataItem:SeriesDataPoint)
 		{
 			super();
 			
@@ -156,11 +156,11 @@ package com.fiCharts.charts.chart2D.core.series
 		
 		/**
 		 */		
-		private var _dataItem:SeriesDataItemVO;
+		private var _dataItem:SeriesDataPoint;
 		
 		/**
 		 */
-		public function get dataItem():SeriesDataItemVO
+		public function get dataItem():SeriesDataPoint
 		{
 			return _dataItem;
 		}
@@ -168,7 +168,7 @@ package com.fiCharts.charts.chart2D.core.series
 		/**
 		 * @private
 		 */
-		public function set dataItem(value:SeriesDataItemVO):void
+		public function set dataItem(value:SeriesDataPoint):void
 		{
 			_dataItem = value;
 		}

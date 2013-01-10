@@ -3,7 +3,7 @@ package com.fiCharts.charts.chart2D.bar
 	import com.fiCharts.charts.chart2D.column2D.Column2DUI;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.events.MouseEvent;
@@ -12,7 +12,7 @@ package com.fiCharts.charts.chart2D.bar
 	 */	
 	public class BarItemUI extends Column2DUI
 	{
-		public function BarItemUI(dataItem:SeriesDataItemVO)
+		public function BarItemUI(dataItem:SeriesDataPoint)
 		{
 			super(dataItem);
 		}

@@ -1,13 +1,13 @@
 package com.fiCharts.charts.chart2D.column2D
 {
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -25,7 +25,7 @@ package com.fiCharts.charts.chart2D.column2D
 		
 		/**
 		 */		
-		override protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
+		override protected function initItemRender(itemRender:PointRenderBace, item:SeriesDataPoint):void
 		{
 			itemRender.itemVO = item;
 			
@@ -103,7 +103,7 @@ package com.fiCharts.charts.chart2D.column2D
 		{
 			adjustColumnWidth();
 			
-			var item:SeriesDataItemVO;
+			var item:SeriesDataPoint;
 			for (var i:uint = 0; i <= this.itemRenderMaxIndex; i ++)
 			{
 				item = dataItemVOs[i]
@@ -129,7 +129,7 @@ package com.fiCharts.charts.chart2D.column2D
 				
 				var columnItemUI:Column2DUI;
 				columnUIs = new Vector.<Column2DUI>;
-				for each (var itemDataVO:SeriesDataItemVO in dataItemVOs)
+				for each (var itemDataVO:SeriesDataPoint in dataItemVOs)
 				{
 					//draw column or bar
 					columnItemUI = getSeriesItemUI(itemDataVO);
@@ -150,25 +150,25 @@ package com.fiCharts.charts.chart2D.column2D
 		
 		/**
 		 */		
-		protected function getSeriesItemUI(dataItem:SeriesDataItemVO):Column2DUI
+		protected function getSeriesItemUI(dataItem:SeriesDataPoint):Column2DUI
 		{
 			return new Column2DUI(dataItem);
 		}
 		
 		/**
 		 */		
-		override protected function get itemRender():ItemRenderBace
+		override protected function get itemRender():PointRenderBace
 		{
-			var render:ColumnItemRender = new ColumnItemRender(false);
+			var render:ColumnPointRender = new ColumnPointRender(false);
 			
 			return render;
 		}
 		
 		/**
 		 */		
-		override protected function get seriesDataItem():SeriesDataItemVO
+		override protected function get seriesDataItem():SeriesDataPoint
 		{
-			return new ColumnDataItem
+			return new ColumnDataPoint
 		}
 		
 		/**
@@ -191,10 +191,10 @@ package com.fiCharts.charts.chart2D.column2D
 		 */		
 		protected function setColumnUISize(columnUI:Column2DUI):void
 		{
-			(columnUI.dataItem as ColumnDataItem).width = 
+			(columnUI.dataItem as ColumnDataPoint).width = 
 				columnUI.columnWidth = partColumnWidth;
 			
-			(columnUI.dataItem as ColumnDataItem).height = 
+			(columnUI.dataItem as ColumnDataPoint).height = 
 				columnUI.columnHeight = columnUI.dataItem.y - baseLine;
 		}
 		

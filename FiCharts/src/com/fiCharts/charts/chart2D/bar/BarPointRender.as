@@ -1,12 +1,12 @@
 package com.fiCharts.charts.chart2D.bar
 {
-	import com.fiCharts.charts.chart2D.column2D.ColumnItemRender;
+	import com.fiCharts.charts.chart2D.column2D.ColumnPointRender;
 	
 	/**
 	 */	
-	public class BarItemRender extends ColumnItemRender
+	public class BarPointRender extends ColumnPointRender
 	{
-		public function BarItemRender(visible:Boolean = false)
+		public function BarPointRender(visible:Boolean = false)
 		{
 			super(visible);
 			

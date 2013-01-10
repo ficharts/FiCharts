@@ -1,13 +1,13 @@
 package com.fiCharts.charts.chart2D.core.itemRender
 {
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	
 	import flash.display.Sprite;
 	
 	/**
 	 * 不接收鼠标事件的 ItemRender， 只做显示只用，可以控制工具提示的显示与关闭；
 	 */	
-	public class ItemRenderProxy extends ItemRenderBace
+	public class ItemRenderProxy extends PointRenderBace
 	{
 		public function ItemRenderProxy(ifVisible:Boolean = true)
 		{
@@ -46,7 +46,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		
 		/**
 		 */		
-		override public function set itemVO(value:SeriesDataItemVO):void
+		override public function set itemVO(value:SeriesDataPoint):void
 		{
 			super.itemVO = value;
 			

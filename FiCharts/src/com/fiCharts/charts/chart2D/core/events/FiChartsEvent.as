@@ -1,6 +1,6 @@
 package com.fiCharts.charts.chart2D.core.events
 {
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	
 	import flash.events.Event;
@@ -78,6 +78,6 @@ package com.fiCharts.charts.chart2D.core.events
 		/**
 		 * 图表节点数据 
 		 */		
-		public var dataItem:SeriesDataItemVO;
+		public var dataItem:SeriesDataPoint;
 	}
 }

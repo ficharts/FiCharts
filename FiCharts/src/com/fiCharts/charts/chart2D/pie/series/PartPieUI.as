@@ -2,7 +2,7 @@ package com.fiCharts.charts.chart2D.pie.series
 {
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.series.SeriesItemUIBase;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.toolTips.ToolTipHolder;
 	import com.fiCharts.charts.toolTips.ToolTipsEvent;
 	import com.fiCharts.charts.toolTips.TooltipStyle;
@@ -16,7 +16,7 @@ package com.fiCharts.charts.chart2D.pie.series
 	 */	
 	public class PartPieUI extends SeriesItemUIBase
 	{
-		public function PartPieUI(dataItem:SeriesDataItemVO)
+		public function PartPieUI(dataItem:SeriesDataPoint)
 		{
 			super(dataItem);
 			

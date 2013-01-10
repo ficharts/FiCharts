@@ -1,12 +1,12 @@
 package com.fiCharts.charts.chart2D.bubble
 {
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	
@@ -45,7 +45,7 @@ package com.fiCharts.charts.chart2D.bubble
 		 */		
 		override protected function layoutDataItems():void
 		{
-			var item:SeriesDataItemVO;
+			var item:SeriesDataPoint;
 			for (var i:uint = 0; i <= this.itemRenderMaxIndex; i ++)
 			{
 				item = dataItemVOs[i];
@@ -55,8 +55,8 @@ package com.fiCharts.charts.chart2D.bubble
 					
 				if (ifDataChanged)
 				{
-					(item as BubbleDataItem).percent = this.radiusAxis.valueToZ(item.zValue)					
-					item.z = minRadius + (item as BubbleDataItem).percent * (this.maxRadius - this.minRadius)
+					(item as BubbleDataPoint).percent = this.radiusAxis.valueToZ(item.zValue)					
+					item.z = minRadius + (item as BubbleDataPoint).percent * (this.maxRadius - this.minRadius)
 				}
 			}
 		}
@@ -69,13 +69,13 @@ package com.fiCharts.charts.chart2D.bubble
 			this.canvas.graphics.clear();	
 			canvas.graphics.beginFill(0, 0);
 			
-			for each (var item:SeriesDataItemVO in this.dataItemVOs)
+			for each (var item:SeriesDataPoint in this.dataItemVOs)
 				canvas.graphics.drawCircle(item.x, item.y, item.z);
 		}
 		
 		/**
 		 */		
-		override protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
+		override protected function initItemRender(itemRender:PointRenderBace, item:SeriesDataPoint):void
 		{
 			itemRender.itemVO = item;
 			
@@ -94,9 +94,9 @@ package com.fiCharts.charts.chart2D.bubble
 		
 		/**
 		 */		
-		override protected function get itemRender():ItemRenderBace
+		override protected function get itemRender():PointRenderBace
 		{
-			return new BubbleItemRender;
+			return new BubblePointRender;
 		}
 		
 		/**
@@ -198,16 +198,16 @@ package com.fiCharts.charts.chart2D.bubble
 		 */		
 		override protected function initData():void
 		{
-			var seriesDataItem:SeriesDataItemVO;
+			var seriesDataItem:SeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataItemVO>
+			dataItemVOs = new Vector.<SeriesDataPoint>
 			horizontalValues = new Vector.<Object>;
 			verticalValues = new Vector.<Object>;
 			radiusValues = new Vector.<Object>;
 			
 			for each (var item:XML in dataProvider.children())
 			{
-				seriesDataItem = new BubbleDataItem();
+				seriesDataItem = new BubbleDataPoint();
 				
 				seriesDataItem.metaData = new Object();
 				XMLVOMapper.pushXMLDataToVO(item, seriesDataItem.metaData);//将XML转化为对象

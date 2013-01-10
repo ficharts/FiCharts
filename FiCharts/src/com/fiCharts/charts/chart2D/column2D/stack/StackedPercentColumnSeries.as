@@ -1,10 +1,10 @@
 package com.fiCharts.charts.chart2D.column2D.stack
 {
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.common.ChartColors;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
@@ -43,7 +43,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
-		override protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
+		override protected function initItemRender(itemRender:PointRenderBace, item:SeriesDataPoint):void
 		{
 			itemRender.itemVO = item;
 			
@@ -62,9 +62,9 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
-		override protected function get itemRender():ItemRenderBace
+		override protected function get itemRender():PointRenderBace
 		{
-			return new StackedPercentColumnItemRender(false);
+			return new StackedPercentColumnPointRender(false);
 		}
 		
 		/**
@@ -74,9 +74,9 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			var xValue:Object, yValue:Number, positiveValue:Number, fullValue:Number, percent:Number;
 			var length:uint = dataProvider.children().length();
 			var stack:StackedSeries;
-			var seriesDataItem:StackedSeriesDataItem;
+			var seriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataItemVO>
+			dataItemVOs = new Vector.<SeriesDataPoint>
 			horizontalValues = new Vector.<Object>;
 			verticalValues = new Vector.<Object>;
 			
@@ -93,7 +93,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				fullValue = 0;
 				for each (stack in stacks) // 求和
 				{
-					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataItem;
+					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataPoint;
 					seriesDataItem.index = i;
 					xValue = seriesDataItem.xValue;
 					yValue = Number(seriesDataItem.yValue);
@@ -103,7 +103,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				positiveValue = percent = 0;
 				for each (stack in stacks)
 				{
-					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataItem;
+					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataPoint;
 					
 					yValue = Number(seriesDataItem.yValue);
 					seriesDataItem.startValue = positiveValue / fullValue * 100;

@@ -1,10 +1,10 @@
 package com.fiCharts.charts.chart2D.bar.stack
 {
-	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnItemRender;
+	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnPointRender;
 	
-	public class StackedBarItemRender extends StackedColumnItemRender
+	public class StackedBarPointRender extends StackedColumnPointRender
 	{
-		public function StackedBarItemRender(visible:Boolean = false)
+		public function StackedBarPointRender(visible:Boolean = false)
 		{
 			super(visible);
 			

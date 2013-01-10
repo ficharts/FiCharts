@@ -4,10 +4,10 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.bar.BarSeries;
 	import com.fiCharts.charts.chart2D.bar.stack.StackedBarSeries;
 	import com.fiCharts.charts.chart2D.bar.stack.StackedPercentBarSeries;
-	import com.fiCharts.charts.chart2D.bubble.BubbleItemRender;
+	import com.fiCharts.charts.chart2D.bubble.BubblePointRender;
 	import com.fiCharts.charts.chart2D.bubble.BubbleSeries;
 	import com.fiCharts.charts.chart2D.column2D.ColumnSeries2D;
-	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnCombieItemRender;
+	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnCombiePointRender;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedPercentColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
@@ -19,7 +19,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.backgound.ChartBGUI;
 	import com.fiCharts.charts.chart2D.core.backgound.GridFieldUI;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.model.AxisModel;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
@@ -429,7 +429,7 @@ package com.fiCharts.charts.chart2D.encry
 		protected function renderSeries():void
 		{
 			var seriesItem:SB;
-			var itemRender:ItemRenderBace;
+			var itemRender:PointRenderBace;
 			
 			for each (seriesItem in series)
 			{
@@ -503,7 +503,7 @@ package com.fiCharts.charts.chart2D.encry
 			var bm:Bitmap = new Bitmap(bd);
 			var mar:Matrix = new Matrix;
 			
-			for each (var itemRender:ItemRenderBace in renders)
+			for each (var itemRender:PointRenderBace in renders)
 			{
 				if (itemRender == null) continue;
 				if (itemRender.valueLabel.enable == false) continue;
@@ -543,7 +543,7 @@ package com.fiCharts.charts.chart2D.encry
 			var length:uint = itemRenders.length;
 			for (var i:uint = 0; i < length;)
 			{
-				if (itemRenders[i] is BubbleItemRender)
+				if (itemRenders[i] is BubblePointRender)
 				{
 					bubbles.push(itemRenders[i]);
 					itemRenders.splice(i, 1);
@@ -562,7 +562,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 从大到小排列Bubble,大的在下， 小的在上显示；
 		 */		
-		private function orderBubbles(prev:BubbleItemRender, next:BubbleItemRender):int
+		private function orderBubbles(prev:BubblePointRender, next:BubblePointRender):int
 		{
 			if (Number(prev.itemVO.zValue) < Number(next.itemVO.zValue))
 				return 1;
@@ -578,8 +578,8 @@ package com.fiCharts.charts.chart2D.encry
 		private function combileItemRender():void
 		{
 			var itemRenderLength:uint = itemRenders.length;
-			var prevItemRender:ItemRenderBace;
-			var nextItemRender:ItemRenderBace;
+			var prevItemRender:PointRenderBace;
+			var nextItemRender:PointRenderBace;
 			var prevLabels:Vector.<TooltipDataItem>;
 			var nextLabels:Vector.<TooltipDataItem>;
 			var itemDistance:Number;
@@ -605,7 +605,7 @@ package com.fiCharts.charts.chart2D.encry
 						prevLabels = prevItemRender.toolTipsHolder.tooltips;
 						nextLabels = nextItemRender.toolTipsHolder.tooltips;
 						
-						if (prevItemRender is StackedColumnCombieItemRender || nextItemRender is StackedColumnCombieItemRender)
+						if (prevItemRender is StackedColumnCombiePointRender || nextItemRender is StackedColumnCombiePointRender)
 						{
 							j ++;	
 							continue;	
@@ -619,7 +619,7 @@ package com.fiCharts.charts.chart2D.encry
 						{
 							// 合并节点
 							if (itemDistance <= (prevItemRender.radius + nextItemRender.radius) &&
-								prevLabels.indexOf(labelVO) == - 1 && nextItemRender.isEnable && !(nextItemRender is BubbleItemRender)) 
+								prevLabels.indexOf(labelVO) == - 1 && nextItemRender.isEnable && !(nextItemRender is BubblePointRender)) 
 							{
 								prevLabels.push(labelVO);
 								nextItemRender.disable();// 销毁节点渲染器， 不再接受事件；

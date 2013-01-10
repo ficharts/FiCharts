@@ -4,7 +4,7 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.charts.chart2D.pie.PieChartModel;
 	import com.fiCharts.charts.chart2D.pie.PieDataFormatter;
 	import com.fiCharts.charts.common.ChartColors;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
 	import com.fiCharts.charts.toolTips.TooltipStyle;
@@ -323,7 +323,7 @@ package com.fiCharts.charts.chart2D.pie.series
 			var legendVOes:Vector.<LegendVO> = new Vector.<LegendVO>;
 			var legendVO:LegendVO;
 			
-			for each(var item:SeriesDataItemVO in dataItemVOs)	
+			for each(var item:SeriesDataPoint in dataItemVOs)	
 			{
 				legendVO = new LegendVO();
 				legendVO.metaData = item; // 用于精确控制节点的状态

@@ -3,11 +3,11 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	import com.fiCharts.charts.chart2D.column2D.Column2DUI;
 	import com.fiCharts.charts.chart2D.column2D.ColumnSeries2D;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
 	import com.fiCharts.utils.RexUtil;
@@ -58,7 +58,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				columnUIs = new Vector.<Column2DUI>;
 				for each (var stack:StackedSeries in stacks)
 				{
-					for each (var itemDataVO:SeriesDataItemVO in stack.dataItemVOs)
+					for each (var itemDataVO:SeriesDataPoint in stack.dataItemVOs)
 					{
 						if (ifNullData(itemDataVO))
 							continue;
@@ -99,16 +99,16 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		 */		
 		override protected function setColumnUISize(columnUI:Column2DUI):void
 		{
-			(columnUI.dataItem as StackedSeriesDataItem).width = columnUI.columnWidth = partColumnWidth;
-			(columnUI.dataItem as StackedSeriesDataItem).height = columnUI.columnHeight = 
+			(columnUI.dataItem as StackedSeriesDataPoint).width = columnUI.columnWidth = partColumnWidth;
+			(columnUI.dataItem as StackedSeriesDataPoint).height = columnUI.columnHeight = 
 			
-				verticalAxis.valueToY((columnUI.dataItem as StackedSeriesDataItem).endValue) -
-				verticalAxis.valueToY((columnUI.dataItem as StackedSeriesDataItem).startValue);
+				verticalAxis.valueToY((columnUI.dataItem as StackedSeriesDataPoint).endValue) -
+				verticalAxis.valueToY((columnUI.dataItem as StackedSeriesDataPoint).startValue);
 		}
 		
 		/**
 		 */		
-		override protected function getSeriesItemUI(dataItem:SeriesDataItemVO):Column2DUI
+		override protected function getSeriesItemUI(dataItem:SeriesDataPoint):Column2DUI
 		{
 			return new StackedColumnUI(dataItem);
 		}
@@ -119,7 +119,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		{
 			adjustColumnWidth();
 			
-			var item:SeriesDataItemVO;
+			var item:SeriesDataPoint;
 			for each(item in this.dataItemVOs)
 			{
 				item.x = horizontalAxis.valueToX(item.xValue) - columnGoupWidth / 2 +
@@ -127,8 +127,8 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				item.dataItemX = item.x;
 				
 				// 数据节点的坐标系与渲染节点不同， 两者相差 值为 baseLine
-				item.y = verticalAxis.valueToY((item as StackedSeriesDataItem).startValue) - baseLine;
-				item.dataItemY = verticalAxis.valueToY((item as StackedSeriesDataItem).endValue);
+				item.y = verticalAxis.valueToY((item as StackedSeriesDataPoint).startValue) - baseLine;
+				item.dataItemY = verticalAxis.valueToY((item as StackedSeriesDataPoint).endValue);
 				item.offset = baseLine;
 			}
 			
@@ -152,13 +152,13 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		{
 			super.createItemRenders();
 			
-			for each (var item:SeriesDataItemVO in fullDataItems)
+			for each (var item:SeriesDataPoint in fullDataItems)
 				initItemRender(combileItemRender, item);
 		}
 		
 		/**
 		 */		
-		override protected function initItemRender(itemRender:ItemRenderBace, item:SeriesDataItemVO):void
+		override protected function initItemRender(itemRender:PointRenderBace, item:SeriesDataPoint):void
 		{
 			if (ifNullData(item))
 				return;
@@ -169,7 +169,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			itemRender.value = value;
 			
 			// 整体数值样式与独立数值样式有分别
-			if (itemRender is StackedColumnCombieItemRender)
+			if (itemRender is StackedColumnCombiePointRender)
 			{
 				itemRender.valueLabel = this.valueLabel;
 				this.updateLabelDisplay(itemRender);
@@ -189,9 +189,9 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
-		protected function get combileItemRender():ItemRenderBace
+		protected function get combileItemRender():PointRenderBace
 		{
-			return new StackedColumnCombieItemRender;
+			return new StackedColumnCombiePointRender;
 		}
 		
 		/**
@@ -204,13 +204,13 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			var xValue:Object, yValue:Number, positiveValue:Number, negativeValue:Number;
 			var length:uint = dataProvider.children().length();
 			var stack:StackedSeries;
-			var combleSeriesDataItem:SeriesDataItemVO;
-			var stackedSeriesDataItem:StackedSeriesDataItem;
+			var combleSeriesDataItem:SeriesDataPoint;
+			var stackedSeriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataItemVO>
+			dataItemVOs = new Vector.<SeriesDataPoint>
 			horizontalValues = new Vector.<Object>;
 			verticalValues = new Vector.<Object>;
-			fullDataItems = new Vector.<SeriesDataItemVO>;
+			fullDataItems = new Vector.<SeriesDataPoint>;
 			
 			
 			// 将子序列的数据节点合并到一起；
@@ -226,7 +226,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				positiveValue = negativeValue = 0;
 				for each (stack in stacks)
 				{
-					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataItem);
+					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataPoint);
 					stackedSeriesDataItem.index = i;
 					
 					xValue = stackedSeriesDataItem.xValue;
@@ -253,7 +253,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				// 求和为正取最大值， 求和为负则取最小值；
 				if (this.valueLabel.enable)
 				{
-					combleSeriesDataItem = new SeriesDataItemVO();
+					combleSeriesDataItem = new SeriesDataPoint();
 					combleSeriesDataItem.index = i;
 					combleSeriesDataItem.metaData = new Object;
 					
@@ -341,13 +341,13 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
-		protected var fullDataItems:Vector.<SeriesDataItemVO>;
+		protected var fullDataItems:Vector.<SeriesDataPoint>;
 		
 		/**
 		 */		
-		override protected function get itemRender():ItemRenderBace
+		override protected function get itemRender():PointRenderBace
 		{
-			return new StackedColumnItemRender(false);
+			return new StackedColumnPointRender(false);
 		}
 		
 		/**

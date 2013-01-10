@@ -181,7 +181,7 @@
 	win.FiCharts = FiCharts;
 	FiCharts.width = '100%';
 	FiCharts.height = '100%';	
-	FiCharts.style = 'white';
+	FiCharts.style = 'Classic';
 	FiCharts.usePreConfig = 1;
 	
 	

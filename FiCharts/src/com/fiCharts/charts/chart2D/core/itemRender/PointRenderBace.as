@@ -2,12 +2,11 @@ package com.fiCharts.charts.chart2D.core.itemRender
 {
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.model.DataRender;
-	import com.fiCharts.charts.common.SeriesDataItemVO;
+	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.toolTips.ToolTipHolder;
 	import com.fiCharts.charts.toolTips.ToolTipsEvent;
 	import com.fiCharts.charts.toolTips.TooltipDataItem;
 	import com.fiCharts.charts.toolTips.TooltipStyle;
-	import com.fiCharts.utils.XMLConfigKit.shape.IShape;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
@@ -15,7 +14,6 @@ package com.fiCharts.charts.chart2D.core.itemRender
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.graphic.BitmapUtil;
-	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -25,9 +23,9 @@ package com.fiCharts.charts.chart2D.core.itemRender
 
 	/**
 	 */	
-	public class ItemRenderBace extends Sprite implements IStyleStatesUI
+	public class PointRenderBace extends Sprite implements IStyleStatesUI
 	{
-		public function ItemRenderBace()
+		public function PointRenderBace()
 		{
 			super();
 
@@ -384,14 +382,14 @@ package com.fiCharts.charts.chart2D.core.itemRender
 
 		/**
 		 */
-		protected var _itemVO:SeriesDataItemVO;
+		protected var _itemVO:SeriesDataPoint;
 
-		public function get itemVO():SeriesDataItemVO
+		public function get itemVO():SeriesDataPoint
 		{
 			return _itemVO;
 		}
 
-		public function set itemVO(v:SeriesDataItemVO):void
+		public function set itemVO(v:SeriesDataPoint):void
 		{
 			_itemVO = v;
 			
