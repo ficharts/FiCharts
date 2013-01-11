@@ -58,7 +58,7 @@ package com.fiCharts.charts.chart2D.column2D
 				valueLabelUI.rotation = - 90;
 				temX = - valueLabelUI.width / 2;
 				if (Number(_itemVO.yValue) < 0)
-					temY = - this.style.radius;
+					temY = - this.radius;
 				else
 					temY = this.radius + valueLabelUI.height;
 				
@@ -72,7 +72,7 @@ package com.fiCharts.charts.chart2D.column2D
 			{
 				temX = - valueLabelUI.width / 2;
 				if (Number(_itemVO.yValue) < 0)
-					temY = - valueLabelUI.height - this.style.radius;
+					temY = - valueLabelUI.height - this.radius;
 				else
 					temY = this.radius;
 				

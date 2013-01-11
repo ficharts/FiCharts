@@ -18,9 +18,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 			valueLabelUI.y = - valueLabelUI.height / 2;
 			
 			if (Number(_itemVO.xValue) > 0)
-				valueLabelUI.x = - valueLabelUI.width - this.style.radius;
+				valueLabelUI.x = - valueLabelUI.width - this.radius;
 			else
-				valueLabelUI.x = this.style.radius;
+				valueLabelUI.x = this.radius;
 			
 			// 当柱体太小不能容纳标签时隐藏标签；
 			if (Math.abs(columnDataItem.width) < valueLabelUI.width)

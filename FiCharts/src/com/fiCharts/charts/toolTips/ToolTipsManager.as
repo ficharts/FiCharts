@@ -76,6 +76,8 @@ package com.fiCharts.charts.toolTips
 		{
 			evt.stopPropagation();
 			
+			ifLocked = evt.toolTipsHolder.locked;
+			
 			toolTipUI.tooltipHolder = evt.toolTipsHolder;
 			toolTipUI.updateLabel();
 			
@@ -122,17 +124,22 @@ package com.fiCharts.charts.toolTips
 		}
 		
 		/**
+		 * 非锁定状态下，tip只按先右后左方式布局
 		 */		
 		private function moveHandler(evt:Event):void
 		{
 			if (ifMoving)
 			{
-				toolTipUI.x = container.mouseX;
-				toolTipUI.y = container.mouseY - toolTipUI.height / 2 - toolTipUI.style.vPadding;
+				toolTipUI.x = container.mouseX + toolTipUI.width / 2 + toolTipUI.style.hMargin;
+				toolTipUI.y = container.mouseY;
 				
 				adjustTipUILocation();
 			}
 		}
+		
+		/**
+		 */		
+		private var ifLocked:Boolean = false;
 		
 		/**
 		 * 有时候提示UI会超出边界，需要调整一下； 
@@ -145,7 +152,12 @@ package com.fiCharts.charts.toolTips
 			
 			// 右
 			if (toolTipUI.x + toolTipUI.width / 2 + container.x + edgeGutter > container.stage.stageWidth)
-				toolTipUI.x = container.stage.stageWidth - toolTipUI.width / 2 - container.x - edgeGutter;
+			{
+				if (ifLocked)
+					toolTipUI.x = container.stage.stageWidth - toolTipUI.width / 2 - container.x - edgeGutter;
+				else
+					toolTipUI.x = container.stage.mouseX - toolTipUI.width / 2 - toolTipUI.style.hMargin;
+			}
 			
 			// 上
 			if (toolTipUI.y - toolTipUI.height / 2 - container.y < edgeGutter)
