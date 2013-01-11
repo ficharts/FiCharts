@@ -20,6 +20,10 @@ package com.fiCharts.charts.common
 		
 		/**
 		 */		
+		public static const LABEL:String = 'label';
+		
+		/**
+		 */		
 		public static const LEGEND:String = 'legend';
 		
 		/**

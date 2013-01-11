@@ -20,16 +20,7 @@ package com.fiCharts.charts.toolTips
 		
 		/**
 		 */		
-		private var _style:String;
-		
-		public function get style():String
-		{
-			return _style;
-		}
-		
-		/**
-		 */		
-		public function set style(value:String):void
+		override public function set style(value:String):void
 		{
 			_style = XMLVOMapper.updateStyle(this, value, Model.TOOLTIP);
 		}
@@ -68,7 +59,7 @@ package com.fiCharts.charts.toolTips
 
 		public function set self(value:LabelStyle):void
 		{
-			_normal = value;
+			_normal = value
 		}
 		
 		/**

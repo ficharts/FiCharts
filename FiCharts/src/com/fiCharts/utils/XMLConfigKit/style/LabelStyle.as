@@ -1,15 +1,17 @@
 package com.fiCharts.utils.XMLConfigKit.style
 {
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.effect.IEffectable;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.TextFormatStyle;
 	
 	import flash.text.TextFormat;
 	
 	/**
 	 */	
-	public class LabelStyle extends ContainerStyle implements IEffectable, IFiElement
+	public class LabelStyle extends ContainerStyle implements IEffectable, IFiElement, IStyleElement
 	{
 		/**
 		 */		
@@ -26,6 +28,26 @@ package com.fiCharts.utils.XMLConfigKit.style
 		{
 			super();
 		}
+		
+		/**
+		 */		
+		protected var _style:String
+
+		/**
+		 */
+		public function get style():String
+		{
+			return _style;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set style(value:String):void
+		{
+			_style = XMLVOMapper.updateStyle(this, value, Model.LABEL);
+		}
+
 		
 		/**
 		 * 标签的布局方式：正常，  垂直， 旋转；

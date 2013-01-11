@@ -13,15 +13,59 @@
 
         <format id='FontFormat' font='微软雅黑' size='12' color='${color}'/>
 
+        <label id='Simple_Self' format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20'>
+			<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
+			<fill color='FFFFFF' alpha='0.9'/>
+			<cover>
+				<border color='FFFFFF'/>
+			</cover>
+		</label>
+
+		<label id='Simple_Group' format='FontFormat' radius='0' padding='5' vMargin='10'  hMargin='20'>
+			<border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
+			<fill color='FFFFFF' alpha='0.9'/>
+		</label>
+
+
+		<label id='Classic_Self' format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20'>
+			<format color='FFFFFF'/>
+			<text>
+				<effects>
+					<shadow color='${color}{adjustColor:0.7}' distance='1' angle='90' blur='1' alpha='0.8'/>
+				</effects>
+			</text>
+			<border color='FFFFFF' alpha='0.8' thikness='1' pixelHinting='true' caps='round'/>
+			<fill color='${color}{adjustColor:1.2},${color}' alpha='0.8, 0.8' angle='90'/>
+			<effects>
+				<glow color='${color}{adjustColor:0.8}' angle='45' blur='5' alpha='0.25'/>
+			</effects>
+		</label>
+
+		<label id='Classic_Group' format='FontFormat' radius='0' padding='5' vMargin='10'  hMargin='20'>
+			<format color='${color}{adjustColor:0.8}'/>
+			<text>
+				<effects>
+					<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
+				</effects>
+			</text>
+			<border thikness='1' alpha='0.9' color='FFFFFF' pixelHinting='true'/>
+			<fill color='EEEEEE,EEEEEE' alpha='0.8, 0.8' angle='90'/>
+			<effects>
+				<glow color='${color}{adjustColor:0.8}' angle='45' blur='5' alpha='0.25'/>
+			</effects>
+		</label>
+
 
         <!---------------------效果------------------------------>
 
         <effects id='Series'>
-			<shadow color='${color}{adjustColor:0.5}' alpha='0.3' distance='2' blur='2'/>
+			<shadow color='${color}{adjustColor:0.5}' alpha='0.2' distance='2' blur='2'/>
 		</effects>
+
 		<effects id='Point'>
 			<shadow color='${color}' distance='2' angle='45' blur='2' alpha='0.2'/>
 		</effects>
+
 		<cover id='Point'>
 			<border color='${color}{adjustColor:1.6}' thikness='0.1' alpha='0.8'/>
 		</cover>
@@ -49,13 +93,13 @@
 		<line id='Simple'>
 			<states>
 				<normal>
-					<border color='${color}' thikness='2' alpha='1'/>
+					<border color='${color}' thikness='2' alpha='0.8'/>
 				</normal>
 				<hover>
-					<border color='${color}{adjustColor:1.3}' thikness='2' alpha='1'/>
+					<border color='${color}{adjustColor:1.3}' thikness='2' alpha='0.8'/>
 				</hover>
 				<down>
-					<border color='${color}' thikness='2' alpha='1'/>
+					<border color='${color}' thikness='2' alpha='0.8'/>
 				</down>
 			</states>
 		</line>
@@ -93,15 +137,15 @@
 		<area id='Simple'>
 			<states>
 				<normal>
-					<border color='${color}' thikness='2' alpha='1'/>
+					<border color='${color}' thikness='2' alpha='0.8'/>
 					<fill alpha='0.2' color='${color}'/> 
 				</normal>
 				<hover>
-					<border color='${color}' thikness='2' alpha='1'/>
+					<border color='${color}' thikness='2' alpha='0.8'/>
 					<fill alpha='0.4' color='${color}'/>
 				</hover>
 				<down>
-					<border color='${color}' thikness='2' alpha='1'/>
+					<border color='${color}' thikness='2' alpha='0.8'/>
 					<fill alpha='0.5' color='${color}'/>
 				</down>
 			</states>
@@ -128,13 +172,13 @@
 
 	  	<states id='SimpleShape'>
 			<normal>
-				<fill color='${color}' alpha='1'/>
+				<fill color='${color}{adjustColor:1.3},${color}' alpha='0.8,0.8' angle='90'/>
 			</normal>
 			<hover>
-				<fill color='${color}{adjustColor:1.2}' alpha='1'/>
+				<fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.2}' alpha='0.8,0.8' angle='90'/>
 			</hover>
 			<down>
-				<fill color='${color}{adjustColor:0.8}' alpha='1'/>
+				<<fill color='${color}{adjustColor:1.2},${color}{adjustColor:0.9}' alpha='0.8,0.8' angle='90'/>
 			</down>
 		</states>
 
@@ -263,15 +307,15 @@
 			<circle>
 				<states>
 					<normal radius='3'>
-						<border color='${color}' thikness='1' alpha='1'/>
+						<border color='${color}' thikness='2' alpha='0.8'/>
 						<fill color='FFFFFF'/>
 					</normal>
 					<hover radius='4'>
-						<border color='${color}' thikness='2' alpha='1'/>
+						<border color='${color}' thikness='2' alpha='0.8'/>
 						<fill color='FFFFFF'/>
 					</hover>
 					<down radius='4'>
-						<border color='${color}' thikness='2' alpha='1'/>
+						<border color='${color}' thikness='2' alpha='0.8'/>
 						<fill color='FFFFFF'/>
 					</down>
 				</states>
@@ -281,7 +325,7 @@
 		<dataRender id='ClassicPoint'>
 			<circle>
 				<states>
-					<normal radius='3'>
+					<normal radius='4'>
 						<border color='${color}{adjustColor:0.8}' thikness='0.1' alpha='0.8'/>
 						<cover>Point</cover>
 						<effects>Point</effects>
@@ -308,13 +352,12 @@
 		<!--------------------图例------------------------------------->
 
 		<icon id='Simple'>
-			<rect>
+			<rect states='SimpleShape'>
 				<states>
 					<normal width='20' height='12'>
-						<fill color='${color}'/>
+						<border alpha='1' thikness='1' color='${color}'/>
 					</normal>
 					<hover width='20' height='12'>
-						<fill color='${color}{adjustColor:1.3}'/>
 					</hover>
 				</states>
 			</rect>
@@ -349,49 +392,46 @@
 		<!--------------------ToolTip----------------------------------------->
 
 		<tooltip id='Simple' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
-			<self format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20'>
-				<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
-				<fill color='FFFFFF' alpha='0.9'/>
-				<cover>
-					<border color='FFFFFF'/>
-				</cover>
-			</self>
-			<group format='FontFormat' radius='0' padding='5' vMargin='10'  hMargin='20'>
-				<border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
-				<fill color='FFFFFF' alpha='0.9'/>
-			</group>
+			<self style='Simple_Self'/>
+			<group style='Simple_Group'/>
+		</tooltip>
+
+		<tooltip id='Classic' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
+			<self style='Classic_Self'/>
+			<group style='Classic_Group'/>
 		</tooltip>
 
 
         <!--------------------颜色板------------------------------->
-        <colors id='Default'>
-			<color>097DDA</color>
-            <color>728F1C</color>
-            <color>C451C8</color>
-            <color>CCCC99</color>
-            <color>885C88</color>
-            <color>FE5B3B</color>
-            <color>5B7C92</color>
-            <color>AB8718</color>
-            <color>9BD124</color>
-            <color>634BA7</color>
-            <color>017E01</color>
-            <color>097DDA</color>
-            <color>2F8A93</color>
+        <colors id='Heavy'>
+			<color>#097DDA</color>
+            <color>#017E01</color>
+            <color>#A6403E</color>
+            <color>#634BA7</color>
+            <color>#9B7A15</color>
+            <color>#4E555F</color>
+		</colors>
+		<colors id='Shallow'>
+            <color>#6DCFF6</color>
+            <color>#98C045</color>
+            <color>#FE7C61</color>
+            <color>#A085D4</color>
+            <color>#FDB52F</color>
+            <color>#959595</color>
 		</colors>
 		<colors id='RGB'>
-            <color>#548DCA</color>
+            <color>#097DDA</color>
+            <color>#728F1C</color>
             <color>#EF306A</color>
-            <color>#98C045</color>
-            <color>#FDB52F</color>
             <color>#4AC0C0</color>
-            <color>#A085D4</color>
-            <color>#BD4D4B</color>
-            <color>#959595</color>
-            <color>#6DCFF6</color>
-            <color>#FBE601</color>
-            <color>#438071</color>
+            <color>#C451C8</color>
+            <color>#AB8718</color>
             <color>#4E555F</color>
+            <color>#634BA7</color>
+            <color>#2F8A93</color>
+            <color>#FE5B3B</color>
+            <color>#6DCFF6</color>
+            <color>#9BD124</color>
 		</colors>
 
 
@@ -467,7 +507,7 @@
 			</valueLabel>
 
 			<innerValueLabel format='FontFormat'>
-				<format color='#EEEEEE'/>
+				<format color='#FFFFFF'/>
 				<text value='${valueLabel}'/>
 			</innerValueLabel>
 
@@ -511,7 +551,7 @@
             </template>
 
             <!----色系----------------->
-			<colors>Default</colors>
+			<colors>RGB</colors>
 		</Simple>
 
 
@@ -570,8 +610,6 @@
 			<tooltip>Simple</tooltip>
 			<legend>Classic</legend>
 
-
-
 			<valueLabel margin='0' padding='5' format='FontFormat'>
 				<text value='${valueLabel}'/>
 			</valueLabel>
@@ -620,7 +658,7 @@
 			</bubble>
 
 			<template></template>
-			<colors>Default</colors>
+			<colors>RGB</colors>
 		</Classic>
 
 

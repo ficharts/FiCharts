@@ -1,5 +1,6 @@
 package com.fiCharts.utils.XMLConfigKit.shape
 {
+	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.graphic.StyleManager;
@@ -53,7 +54,7 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		 */		
 		public function set states(value:States):void
 		{
-			_states = value;
+			_states = XMLVOMapper.updateObject(value, _states, "states") as States;
 		}
 		
 		/**

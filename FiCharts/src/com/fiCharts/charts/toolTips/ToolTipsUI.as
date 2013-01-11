@@ -10,7 +10,6 @@ package com.fiCharts.charts.toolTips
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.text.StyleSheet;
 	import flash.text.TextField;

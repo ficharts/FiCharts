@@ -7,7 +7,6 @@ package com.fiCharts.charts.legend.view
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
-	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
