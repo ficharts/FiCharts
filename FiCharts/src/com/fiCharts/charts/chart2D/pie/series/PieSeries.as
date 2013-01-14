@@ -4,6 +4,7 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.charts.chart2D.pie.PieChartModel;
 	import com.fiCharts.charts.chart2D.pie.PieDataFormatter;
 	import com.fiCharts.charts.common.ChartColors;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
@@ -16,13 +17,14 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
 
 	/**
 	 */	
-	public class PieSeries extends Sprite implements IEditableObject, IStyleStatesUI
+	public class PieSeries extends Sprite implements IEditableObject, IStyleElement
 	{
 		public function PieSeries()
 		{
@@ -88,15 +90,45 @@ package com.fiCharts.charts.chart2D.pie.series
 		}
 		
 		/**
-		 * 数值标签的样式 
 		 */		
-		public var valueLabel:LabelStyle;
-		
+		private var _valueLabel:LabelStyle;
+
+		/**
+		 * 数值标签的样式 
+		 */
+		public function get valueLabel():LabelStyle
+		{
+			return _valueLabel;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set valueLabel(value:LabelStyle):void
+		{
+			_valueLabel = value;
+		}
+
+		/**
+		 */		
+		private var _tooltip:TooltipStyle;
+
 		/**
 		 * 信息提示的样式
-		 */		
-		public var tooltip:TooltipStyle;
-		
+		 */
+		public function get tooltip():TooltipStyle
+		{
+			return _tooltip;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set tooltip(value:TooltipStyle):void
+		{
+			_tooltip = XMLVOMapper.updateObject(value, _tooltip, Model.TOOLTIP) as TooltipStyle;
+		}
+
 		/**
 		 */		
 		private function angleToRad(value:Number):Number
@@ -153,8 +185,8 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */		
 		public function beforeUpdateProperties(xml:* = null):void
 		{
-			XMLVOMapper.fuck(XMLVOLib.getXML(PieChartModel.PIE_SERIES_STYLE, "config"), this);
-			XMLVOMapper.fuck(XMLVOLib.getXML(PieChartModel.SERIES_DATA_STYLE, "config"), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(PieChartModel.PIE_SERIES_STYLE, Model.SYSTEM), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(PieChartModel.SERIES_DATA_STYLE, Model.SYSTEM), this);
 		}
 		
 		/**
@@ -441,21 +473,31 @@ package com.fiCharts.charts.chart2D.pie.series
 		
 		/**
 		 */		
-		private var _style:Style;
+		protected var _style:String;
 		
 		/**
 		 */
-		public function get style():Style
+		public function get style():String
 		{
 			return _style;
 		}
 		
 		/**
-		 * @private
+		 *  style 采取的是继承模式，更新原有样式
 		 */
-		public function set style(value:Style):void
+		public function set style(value:String):void
 		{
-			_style = value;
+			_style = XMLVOMapper.updateStyle(this, value, "pie");
+		}
+		
+		/**
+		 * 
+		 * 以id方式定义style和states时，刷新整个states样式
+		 * 
+		 */		
+		public function fresh():void
+		{
+			_states = new States;
 		}
 		
 	}

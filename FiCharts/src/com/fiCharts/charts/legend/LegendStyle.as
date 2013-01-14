@@ -5,16 +5,27 @@ package com.fiCharts.charts.legend
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.ContainerStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	
 	/**
 	 * 图例的样式模型
 	 */	
-	public class LegendStyle extends ContainerStyle implements IStyleElement
+	public class LegendStyle extends ContainerStyle implements IStyleElement, IFreshElement
 	{
 		public function LegendStyle()
 		{
 			super();
+		}
+		
+		/**
+		 */		
+		override public function fresh():void
+		{
+			super.fresh();
+			
+			_icon = new DataRender;
+			_label = new LabelStyle;
 		}
 		
 		/**

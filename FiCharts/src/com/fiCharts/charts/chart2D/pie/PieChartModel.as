@@ -3,7 +3,7 @@ package com.fiCharts.charts.chart2D.pie
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.ChartBGStyle;
 	import com.fiCharts.charts.chart2D.pie.series.Series;
-	import com.fiCharts.charts.common.ChartDataFormatter;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
@@ -74,6 +74,8 @@ package com.fiCharts.charts.chart2D.pie
 		public function set legend(value:LegendStyle):void
 		{
 			_legend = value;
+			
+			_legend = XMLVOMapper.updateObject(value, _legend, Model.LEGEND) as LegendStyle;
 			
 			XMLVOLib.dispatchCreation(Chart2DModel.UPDATE_LEGEND_STYLE, value);
 		}
@@ -198,50 +200,6 @@ package com.fiCharts.charts.chart2D.pie
 		}
 		
 		
-		
-		
-		
-		
-		
-		//------------------------------------------------------------
-		//
-		//
-		// 数值与信息提示
-		//
-		//
-		//-----------------------------------------------------------
-		
-		
-		public function get valueLabel():LabelStyle
-		{
-			return _valueLabel;
-		}
-		
-		public function set valueLabel(value:LabelStyle):void
-		{
-			_valueLabel = value;
-		}
-		
-		/**
-		 *  数值
-		 */		
-		private var _valueLabel:LabelStyle
-		
-		
-		/**
-		 *  信息提示样式
-		 */		
-		private var _tooltip:TooltipStyle
-
-		public function get tooltip():TooltipStyle
-		{
-			return _tooltip;
-		}
-
-		public function set tooltip(value:TooltipStyle):void
-		{
-			_tooltip = value;
-		}
 		
 		
 		

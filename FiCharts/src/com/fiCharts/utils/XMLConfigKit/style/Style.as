@@ -7,14 +7,25 @@ package com.fiCharts.utils.XMLConfigKit.style
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Cover;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Fill;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	
 	/**
 	 * 通常用来设置矩形或者原型的样式，包含填充，边框及基本的尺寸信息；
 	 */
-	public class Style implements IEffectable, IFiElement
+	public class Style implements IEffectable, IFiElement, IFreshElement
 	{
 		public function Style()
 		{
+		}
+		
+		/**
+		 */		
+		public function fresh():void
+		{
+			effects = new Effects;
+			cover = new Cover;
+			fill = new Fill;
+			border = new BorderLine;
 		}
 		
 		/**

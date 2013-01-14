@@ -9,7 +9,48 @@
 
 	<template>
 
-		 <!-------------------字体样式----------------------->
+
+
+		<!---------------------效果----------------------------------------------------->
+
+        <effects id='Series'>
+			<shadow color='${color}{adjustColor:0.5}' alpha='0.2' distance='2' blur='2'/>
+		</effects>
+
+		<effects id='Point'>
+			<shadow color='${color}' distance='2' angle='45' blur='2' alpha='0.2'/>
+		</effects>
+
+		<cover id='Point'>
+			<border color='${color}{adjustColor:1.6}' thikness='0.1' alpha='0.8'/>
+		</cover>
+
+		<effects id='Text_Shadow'>
+			<shadow color='000000' alpha='1' distance='1' blur='1' angle='90'/>
+		</effects>
+
+
+		<style id='HighLight_Series'>
+			<border color='${color}{adjustColor:0.6}' thikness='0.1' alpha='0.8' pixelHinting='false'/>
+			<cover>
+				<border pixelHinting='true' color='${color}{adjustColor:1.8},${color}{adjustColor:1.4}' radioes='0, 150' angle='90' alpha='1,0' thikness='0.1'/>
+			</cover>
+		</style>
+
+		<style id='HighLight_Icon'>
+			<border color='${color}{adjustColor:0.6}' thikness='.5'/>
+			<cover>
+				<border pixelHinting='true' color='${color}{adjustColor:1.8},${color}{adjustColor:1.4}' radioes='0, 200' angle='90' alpha='1,0' thikness='0.1'/>
+			</cover>
+		</style>
+
+
+
+
+
+
+
+		<!-------------------文字样式----------------------------------------------------------------------------------->
 
         <format id='FontFormat' font='微软雅黑' size='12' color='${color}'/>
 
@@ -55,35 +96,20 @@
 			</effects>
 		</label>
 
+		<label id='Black_Self' radius='0' padding='5' vMargin='10' hMargin='20' format='FontFormat'>
+			<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
+			<fill color='333333' alpha='0.7'/>
+			<text effects='Text_Shadow'/>
+		</label>
 
-        <!---------------------效果------------------------------>
-
-        <effects id='Series'>
-			<shadow color='${color}{adjustColor:0.5}' alpha='0.2' distance='2' blur='2'/>
-		</effects>
-
-		<effects id='Point'>
-			<shadow color='${color}' distance='2' angle='45' blur='2' alpha='0.2'/>
-		</effects>
-
-		<cover id='Point'>
-			<border color='${color}{adjustColor:1.6}' thikness='0.1' alpha='0.8'/>
-		</cover>
+		<label id='Black_Group' radius='0' padding='5' vMargin='10' hMargin='20' format='FontFormat'>
+			<border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
+			<fill color='333333' alpha='0.7'/>
+			<text effects='Text_Shadow'/>
+		</label>
 
 
-		<style id='HighLight_Series'>
-			<border color='${color}{adjustColor:0.6}' thikness='0.1' alpha='0.8' pixelHinting='false'/>
-			<cover>
-				<border pixelHinting='true' color='${color}{adjustColor:1.8},${color}{adjustColor:1.4}' radioes='0, 150' angle='90' alpha='1,0' thikness='0.1'/>
-			</cover>
-		</style>
-
-		<style id='HighLight_Icon'>
-			<border color='${color}{adjustColor:0.6}' thikness='.5'/>
-			<cover>
-				<border pixelHinting='true' color='${color}{adjustColor:1.8},${color}{adjustColor:1.4}' radioes='0, 200' angle='90' alpha='1,0' thikness='0.1'/>
-			</cover>
-		</style>
+       
 
 
 
@@ -168,6 +194,8 @@
 			</states>
 		</area>
 
+
+
 	   <!----------------------------柱状图样式--------------------------------------------------------------------->
 
 	  	<states id='SimpleShape'>
@@ -178,7 +206,7 @@
 				<fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.2}' alpha='0.8,0.8' angle='90'/>
 			</hover>
 			<down>
-				<<fill color='${color}{adjustColor:1.2},${color}{adjustColor:0.9}' alpha='0.8,0.8' angle='90'/>
+				<fill color='${color}{adjustColor:1.2},${color}{adjustColor:0.9}' alpha='0.8,0.8' angle='90'/>
 			</down>
 		</states>
 
@@ -358,6 +386,7 @@
 						<border alpha='1' thikness='1' color='${color}'/>
 					</normal>
 					<hover width='20' height='12'>
+						<border alpha='1' thikness='1' color='${color}'/>
 					</hover>
 				</states>
 			</rect>
@@ -377,6 +406,15 @@
                 </states>
              </rect>
         </icon>
+
+        <legend id='Black' label="${seriesName}" enable='false' hPadding='5' vPadding='2' vMargin='2' radius='5'>
+			<border color='000000' thikness='1' alpha='0.5'/>
+			<fill color='25252A' alpha='.5'/>
+			<icon>Classic</icon>
+			<label format='FontFormat'>
+				<text effects='Text_Shadow'/>
+			</label>
+		</legend>
 
 		<legend id='Simple' label='${seriesName}' enable='false' hPadding='5' vPadding='0' vMargin='2'>
 			<icon>Simple</icon>
@@ -399,6 +437,11 @@
 		<tooltip id='Classic' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
 			<self style='Classic_Self'/>
 			<group style='Classic_Group'/>
+		</tooltip>
+
+		<tooltip id='Black' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
+			<self style='Black_Self'/>
+			<group style='Black_Group'/>
 		</tooltip>
 
 
@@ -673,22 +716,20 @@
 
 		<!--------------------------------------- 黑色  ----------------------------------------------------------------------->
 		<Black animation='true'>
-			<title hAlign='center' vMargin='0' vPadding='0'>
-				<format size='14' color='ADADAD' bold='true' font='微软雅黑'/>
-				<text substr='30'>
-					<effects>
-						<shadow color='000000' alpha='1' distance='1' blur='1' angle='90'/>
-					</effects>
-				</text>
+			<title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
+				<format size='14' color='ADADAD' bold='true'/>
+				<text effects='Text_Shadow'/>
 			</title>
-			<subTitle hAlign='center' vMargin='0' vPadding='0'>
-				<text substr='30'/>
-				<format size='12' color='ADADAD' bold='false' font='微软雅黑'/>
+
+			<subTitle hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
+				<format  color='ADADAD'/>
 			</subTitle>
+
 			<chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10'>
 				<border color='595959'/>
 				<fill color='161616'/>
 			</chartBG>
+
 			<gridField radius='10'>
 				<border color='0C0C0C' alpha='1' thikness='2' pixelHinting='true'/>
 				<fill color='25252A,29292A' alpha='1,1' radioes='0,255'/>
@@ -699,268 +740,82 @@
 					<border color='434348' thikness='1'/>
 				</vGrid>
 			</gridField>
+
 			<xAxis type="field" labelDisplay="normal">
-				<title>
-					<format color='ADADAD' font='微软雅黑'/>
+				<title format='FontFormat'>
+					<format color='ADADAD'/>
 				</title>
 				<tickMark color='E4E2E2' thikness='1' alpha='0'/>
-				<label>
-					<format color='626262' font='微软雅黑'/>
-					<text value='${label}'>
-						<effects>
-							<shadow color='000000' alpha='1' distance='1' blur='1' angle='90'/>
-						</effects>
-					</text>
+				<label format='FontFormat'>
+					<format color='626262'/>
+					<text value='${label}' effects='Text_Shadow'/>
 				</label>
 			</xAxis>
+
 			<yAxis type="linear" labelDisplay="normal">
-				<title>
-					<format color='ADADAD' font='微软雅黑'/>
+				<title format='FontFormat'>
+					<format color='ADADAD'/>
 				</title>
 				<tickMark color='E4E2E2' alpha='0'/>
-				<label>
-					<format color='626262' font='微软雅黑'/>
-					<text value='${label}'>
-						<effects>
-							<shadow color='000000' alpha='1' distance='1' blur='1' angle='90'/>
-						</effects>
-					</text>
+				<label format='FontFormat'>
+					<format color='626262'/>
+					<text value='${label}' effects='Text_Shadow'/>
 				</label>
 			</yAxis>
-			<tooltip enable='true' locked='true' self="${tooltip}" group="${tooltip}">
-				<self radius='0' padding='5' vMargin='10'>
-					<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
-					<fill color='333333' alpha='0.7'/>
-					<format font='微软雅黑' size='12' color='${color}' bold='false'/>
-					<text>
-						<effects>
-							<shadow color='000000' alpha='1' distance='1' blur='1' angle='90'/>
-						</effects>
-					</text>
-				</self>
-				<group radius='0' padding='5' vMargin='10'>
-					<border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
-					<fill color='333333' alpha='0.7'/>
-					<format font='微软雅黑' size='12' color='${color}' bold='false'/>
-					<text>
-						<effects>
-							<shadow color='000000' alpha='1' distance='1' blur='1' angle='90'/>
-						</effects>
-					</text>
-				</group>
-			</tooltip>
-			<legend label="${seriesName}" enable='false' hPadding='5' vPadding='2' vMargin='2' radius='5'>
-				<border color='000000' thikness='1' alpha='0.5'/>
-				<fill color='25252A' alpha='.5'/>
-				<icon>
-					<states normal='legendIconStyle' hover='legendIconStyle'>
-						<normal>
-							<fill radioes='0,100,255' alpha='1,1,1' angle='45'
-							color='${color} {adjustColor : 1.1}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
-						</normal>
-						<hover>
-							<fill radioes='0,150,255' alpha='1,1,1' angle='45'
-							color='${color}{adjustColor : 1.5}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
-						</hover>
-					</states>
-				</icon>
-				<label>
-					<format size='12' color='${color}' font='微软雅黑'/>
-					<fill color='FF0000' alpha='0'/>
-					<text substr='30'>
-						<effects>
-							<shadow color='000000' alpha='1' distance='1' blur='1' angle='90'/>
-						</effects>
-					</text>
-				</label>
-			</legend>
-			<dataRender>
-				<states normal='dataRenderStyle' hover='dataRenderStyle'>
-					<normal>
-						<fill color='${color}{adjustColor:1.6}, ${color}' alpha='0.8,0.8' type='radial'/>
-					</normal>
-					<hover radius='6'>
-						<border color='${color}{adjustColor:0.8}' thikness='0.1' alpha='0.5'/>
-						<fill color='${color}{adjustColor:1.6}, ${color}{adjustColor:1.3}' alpha='0.3,0.3' type='radial'/>
-					</hover>
-				</states>
-			</dataRender>
-			<valueLabel margin='0' padding='5'>
-				<format color='${color}' font='微软雅黑'/>
+
+			<tooltip>Black</tooltip>
+			<legend>Black</legend>
+
+			<valueLabel margin='0' padding='5'format='FontFormat'>
 				<text value='${valueLabel}'/>
 			</valueLabel>
-			<innerValueLabel>
-				<format color='${color}{adjustColor:0.5}' font='微软雅黑'/>
+
+			<innerValueLabel format='FontFormat'>
+				<format color='${color}{adjustColor:0.5}'/>
 				<text value='${valueLabel}'>
 					<effects>
 						<shadow color='${color}{adjustColor:1.4}' alpha='1' distance='1' blur='1' angle='90'/>
 					</effects>
 				</text>
 			</innerValueLabel>
+
+
 			<!-- 序列 -->
-			<line states='lineStates' labelDisplay="none">
-				<states>
-					<normal effects='seriesShadowEffect'/>
-					<hover effects='seriesShadowEffect'/>
-					<down effects='seriesShadowEffect'/>
-				</states>
+			<line style='Classic' labelDisplay="none">
+				<dataRender style='ClassicPoint'/>
 			</line>
-			<area states='lineStates' labelDisplay="none">
-				<states>
-					<normal effects='seriesShadowEffect'>
-						<border alpha='0.8'/>
-						<fill radioes='0,255' alpha='0.4,0.1' angle='90'
-						color='${color}{adjustColor:1.3},${color}{adjustColor:1.5}'/>
-					</normal>
-					<hover>
-						<fill radioes='0,255' alpha='0.6,0.4' angle='90'
-						color='${color}{adjustColor:1.5},${color}{adjustColor:1}'/>
-					</hover>
-					<down>
-						<fill radioes='0,255' alpha='0.8,0.5' angle='90'
-						color='${color}{adjustColor:1.2},${color}{adjustColor:1}'/>
-					</down>
-				</states>
+
+			<area style='Classic' labelDisplay="none">
+				<dataRender style='ClassicPoint'/>
 			</area>
-			<stackedColumn states='columnStates' labelDisplay="normal">
-				<dataRender enable='false'/>
-			</stackedColumn>
-			<column states='columnStates' maxItemSize='100' labelDisplay="inner">
-				<states>
-					<normal effects='seriesShadowEffect'/>
-					<hover effects='seriesShadowEffect'/>
-					<down effects='seriesShadowEffect'/>
-				</states>
+
+			<column style='Classic' maxItemSize='100' labelDisplay="inner">
+				<dataRender style='ClassicPoint'/>
 			</column>
-			<bar states='columnStates' maxItemSize='100' labelDisplay="inner">
-				<states>
-					<normal effects='seriesShadowEffect'>
-						<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='-45'
-						color='${color}{adjustColor:0.9},${color}{adjustColor:1.1},${color}{adjustColor:1.5}'/>
-					</normal>
-					<hover effects='seriesShadowEffect'>
-						<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='-45'
-						color='${color}{adjustColor:0.9},${color}{adjustColor:1.3},${color}{adjustColor:1.5}'/>
-					</hover>
-					<down effects='seriesShadowEffect'>
-						<fill radioes='0,255' alpha='0.8,0.8' angle='-45'
-						color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
-					</down>
-				</states>
+
+			<stackedColumn style='Classic' labelDisplay="normal">
+				<dataRender style='ClassicPoint' enable='true'/>
+			</stackedColumn>
+
+			
+			<bar style='Classic' maxItemSize='100' labelDisplay="inner">
+				<dataRender style='ClassicPoint'/>
 			</bar>
-			<stackedBar states='columnStates' labelDisplay="normal">
-				<dataRender enable='false'/>
-				<states>
-					<normal>
-						<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='-45'
-						color='${color}{adjustColor:0.9},${color}{adjustColor:1.1},${color}{adjustColor:1.5}'/>
-					</normal>
-					<hover>
-						<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='-45'
-						color='${color}{adjustColor:0.9},${color}{adjustColor:1.3},${color}{adjustColor:1.5}'/>
-					</hover>
-					<down>
-						<fill radioes='0,255' alpha='0.8,0.8' angle='-45'
-						color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
-					</down>
-				</states>
+
+			<stackedBar style='Classic' labelDisplay="normal">
+				<dataRender style='ClassicPoint' enable='false'/>
 			</stackedBar>
+
 			<marker labelDisplay="none">
-				<markerRender>
-					<states normal='highLineStyle' hover='highLineStyle' down='highLineStyle'>
-						<normal radius='5'>
-							<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='45'
-							color='${color}{adjustColor:1.2},${color}{adjustColor:1.1},${color}{adjustColor:0.9}'/>
-						</normal>
-						<hover radius='6'>
-							<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='45'
-							color='${color}{adjustColor:1.5},${color}{adjustColor:1.3},${color}{adjustColor:0.9}'/>
-						</hover>
-						<down radius='5'>
-							<fill radioes='0,255' alpha='0.8,0.8' angle='45'
-							color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
-						</down>
-					</states>
-				</markerRender>
+				<dataRender style='SimplePoint'></dataRender>
 			</marker>
+
 			<bubble maxRadius='60' minRadius='5' labelDisplay="inner">
-				<bubbleRender>
-					<states normal='dataRenderStyle' hover='dataRenderStyle'>
-						<normal>
-							<fill color='${color}{adjustColor:1.4}, ${color}' alpha='0.6,0.8' type='radial'/>
-						</normal>
-						<hover>
-							<fill color='${color}{adjustColor:1.5}, ${color}{adjustColor:1.3}' alpha='0.8,0.8' type='radial'/>
-						</hover>
-					</states>
-				</bubbleRender>
+				<dataRender style='ClassicBubble'/>
 			</bubble>
-			<!-- 基础定义 -->
-			<template>
-				<style id='dataRenderStyle' radius='3'>
-					<border color='${color}{adjustColor:0.8}' thikness='0.1' alpha='0.8'/>
-					<cover>
-						<border color='${color}{adjustColor:1.6}' thikness='0.1' alpha='0.8'/>
-					</cover>
-					<effects id='dataRenderEffects'>
-						<shadow color='${color}' distance='2' angle='45' blur='2' alpha='0.2'/>
-					</effects>
-				</style>
-				<style id='legendIconStyle' width='15' height='11'>
-					<border color='${color}{adjustColor:0.2}' thikness='1'/>
-				</style>
-				<states id='columnStates' normal='highLineStyle' hover='highLineStyle' down='highLineStyle'>
-					<normal>
-						<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='45'
-						color='${color}{adjustColor:1.5},${color}{adjustColor:1.1},${color}{adjustColor:0.9}'/>
-					</normal>
-					<hover>
-						<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='45'
-						color='${color}{adjustColor:1.5},${color}{adjustColor:1.3},${color}{adjustColor:0.9}'/>
-					</hover>
-					<down>
-						<fill radioes='0,255' alpha='0.8,0.8' angle='45'
-						color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
-					</down>
-				</states>
-				<style id='highLineStyle'>
-					<border color='${color}{adjustColor:0.6}' thikness='0.1' alpha='0.8' pixelHinting='false'/>
-					<cover>
-						<border pixelHinting='true' color='${color}{adjustColor:1.8},${color}{adjustColor:1.4}' radioes='0, 150' angle='90' alpha='1,0' thikness='0.1'/>
-						<fill radioes='0,100' alpha='0.5,0' angle='90'
-						color='${color}{adjustColor:1.5},${color}{adjustColor:1}'/>
-					</cover>
-				</style>
-				<states id='lineStates'>
-					<normal>
-						<border color='${color}' thikness='2' alpha='0.8'/>
-					</normal>
-					<hover>
-						<border color='${color}{adjustColor:1.5}' thikness='2' alpha='0.8'/>
-					</hover>
-					<down>
-						<border color='${color}{adjustColor:1}' thikness='2' alpha='0.8'/>
-					</down>
-				</states>
-				<effects id='seriesShadowEffect'>
-					<shadow color='${color}{adjustColor:0.2}' alpha='0.5' distance='1' blur='1'/>
-				</effects>
-			</template>
-			<colors>
-                <color>00A8FF</color>
-                <color>A97601</color>
-                <color>FF99FF</color>
-                <color>9BD124</color>
-                <color>7967B9</color>
-                <color>B3B3B3</color>
-                <color>CCCC99</color>
-                <color>0A9D0B</color>
-                <color>0B57B2</color>
-                <color>E64826</color>
-                <color>9F21C8</color>
-                <color>2F8A93</color>
-                <color>4B5D84</color>
-			</colors>
+
+			<template></template>
+			<colors>RGB</colors>
 		</Black>
 	</styles>
 </config>

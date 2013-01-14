@@ -20,8 +20,6 @@ package com.fiCharts.charts.legend
 		public function LegendPanel()
 		{
 			super();
-			
-			XMLVOLib.registerCustomClasses(<icon path='com.fiCharts.charts.legend.LegendIconStyle'/>);
 			addChild(container);
 		}
 

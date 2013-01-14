@@ -84,21 +84,37 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function render():void
 		{
-			if (configXML && this.dataXML && chartModel.pieSeries.length)
-				ifRenderable = true;
+			if (isRendering)
+				return;
 			
-			if (ifRenderable)
+			if (configXML && this.dataXML && chartModel.pieSeries.length)
 			{
-				updateSeriesAndLegendData();
-				
-				renderTitle();// 渲染标题
-				renderLegend(); // 渲染图例并调整好位置
-				renderBG();
-				layout();// 调整布局， 计算出饼图位置及半径；
-				openFlash();			
-				ifRenderable = false
+				if(this.ifSizeChanged || this.ifDataChanged) 
+				{
+					isRendering = true
+						
+					updateSeriesAndLegendData();
+					
+					renderTitle();// 渲染标题
+					renderLegend(); // 渲染图例并调整好位置
+					renderBG();
+					layout();// 调整布局， 计算出饼图位置及半径；
+					
+					openFlash();	
+					
+					isRendering = ifSizeChanged = ifDataChanged = false;
+				}
 			}
+			
 		}
+		
+		/**
+		 */		
+		private var isRendering:Boolean = false;
+		
+		/**
+		 */		
+		private var ifSizeChanged:Boolean = false;
 		
 		
 		
@@ -240,7 +256,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function renderTitle():void
 		{
-			if (ifRenderable)
+			if (this.xSize >= 0)
 			{
 				title.boxWidth = this.xSize;
 				this.title.render();
@@ -317,8 +333,6 @@ package com.fiCharts.charts.chart2D.encry
 				
 				if (chartModel.legend.enable)
 					legendPanel.legendData = legends;
-				
-				ifDataChanged = false;
 			}
 		}
 		
@@ -328,10 +342,6 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			return this.chartModel.pieSeries.items;
 		}
-		
-		/**
-		 */		
-		private var ifRenderable:Boolean = false;
 		
 
 		
@@ -347,31 +357,28 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function set configXML(value:XML):void
 		{
-			_configXML = value;
+			chartProxy.configXML = value;
 			
-			chartProxy.setConfigCore(XMLVOMapper.extendFrom(
-				chartProxy.currentStyleXML.copy(), _configXML.copy()));
+			chartProxy.setChartModel(XMLVOMapper.extendFrom(
+				chartProxy.currentStyleXML.copy(), configXML.copy()));
 			
-			if (_configXML.hasOwnProperty('data') && _configXML.data.children().length())
-				this.dataXML = XML(_configXML.data.toXMLString());
+			if (configXML.hasOwnProperty('data') && configXML.data.children().length())
+				this.dataXML = XML(configXML.data.toXMLString());
 		}
 		
 		/**
 		 */		
 		public function get configXML():XML
 		{
-			return _configXML;
+			return chartProxy.configXML;
 		}
-		
-		/**
-		 */		
-		private var _configXML:XML;
 		
 		/**
 		 */		
 		public function set dataXML(value:XML):void
 		{
 			_dataXML = value;
+			
 			ifDataChanged = true;
 		}
 		
@@ -464,6 +471,8 @@ package com.fiCharts.charts.chart2D.encry
 		public function set chartWidth(value:Number):void
 		{
 			_chartWidth = value;
+			
+			this.ifSizeChanged = true;
 		}
 		
 		/**
@@ -489,6 +498,8 @@ package com.fiCharts.charts.chart2D.encry
 		public function set chartHeight(value:Number):void
 		{
 			_chartHeight = value;
+			
+			this.ifSizeChanged = true;
 		}
 		
 		/**
@@ -508,10 +519,10 @@ package com.fiCharts.charts.chart2D.encry
 		public function setStyle(newStyle:String):void
 		{
 			if (chartProxy.currentStyleName == newStyle) return;
-			chartProxy.styleInit(newStyle);
+			chartProxy.setCurStyleTemplate(newStyle);
 			
 			if (configXML)
-				chartProxy.setConfigCore(XMLVOMapper.extendFrom(
+				chartProxy.setChartModel(XMLVOMapper.extendFrom(
 					chartProxy.currentStyleXML.copy(), configXML.copy()));
 		}
 		
@@ -573,8 +584,8 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_LEGEND_STYLE, updateLegendStyleHandler);
 			
 			chartProxy = new PieChartProxy;
-			chartProxy.styleInit();
-			chartProxy.setConfigCore(chartProxy.currentStyleXML);
+			chartProxy.setCurStyleTemplate();
+			chartProxy.setChartModel(chartProxy.currentStyleXML);
 		}
 		
 		/**

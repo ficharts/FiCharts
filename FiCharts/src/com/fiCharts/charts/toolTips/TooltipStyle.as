@@ -3,6 +3,7 @@ package com.fiCharts.charts.toolTips
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 
 	/**
@@ -12,10 +13,23 @@ package com.fiCharts.charts.toolTips
 	 * 默认仅有一个数据节点信息时采用 self 样式；
 	 * 
 	 */	
-	public class TooltipStyle extends LabelStyle implements IStyleElement
+	public class TooltipStyle extends LabelStyle implements IStyleElement, IFreshElement
 	{
 		public function TooltipStyle()
 		{
+		}
+		
+		/**
+		 */		
+		override public function fresh():void
+		{
+			super.fresh();
+			
+			self = new LabelStyle;
+			group = new LabelStyle;
+			
+			self.text.value = _label;
+			group.text.value = _label;
 		}
 		
 		/**
@@ -32,9 +46,15 @@ package com.fiCharts.charts.toolTips
 			if (self == null) self = new LabelStyle;
 			if (group == null) group = new LabelStyle;
 			
-			self.text.value = value;
-			group.text.value = value;
+			_label = value;
+			
+			self.text.value = _label;
+			group.text.value = _label;
 		}
+		
+		/**
+		 */		
+		private var _label:String;
 		
 		/**
 		 */		

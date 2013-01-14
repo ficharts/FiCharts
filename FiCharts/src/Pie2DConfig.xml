@@ -4,49 +4,319 @@
 		<about>关于</about>
 		<version>版本</version>
 	</menu>
+
+	<template>
+
+
+
+		<!---------------------效果----------------------------------------------------->
+
+        <effects id='Series'>
+			<shadow color='${color}{adjustColor:0.5}' alpha='0.2' distance='2' blur='2'/>
+		</effects>
+
+		<effects id='Point'>
+			<shadow color='${color}' distance='2' angle='45' blur='2' alpha='0.2'/>
+		</effects>
+
+		<cover id='Point'>
+			<border color='${color}{adjustColor:1.6}' thikness='0.1' alpha='0.8'/>
+		</cover>
+
+		<effects id='Text_Shadow'>
+			<shadow color='000000' alpha='1' distance='1' blur='1' angle='90'/>
+		</effects>
+
+
+		<style id='HighLight_Series'>
+			<border color='${color}{adjustColor:0.6}' thikness='0.1' alpha='0.8' pixelHinting='false'/>
+			<cover>
+				<border pixelHinting='true' color='${color}{adjustColor:1.8},${color}{adjustColor:1.4}' radioes='0, 150' angle='90' alpha='1,0' thikness='0.1'/>
+			</cover>
+		</style>
+
+		<style id='HighLight_Icon'>
+			<border color='${color}{adjustColor:0.6}' thikness='.5'/>
+			<cover>
+				<border pixelHinting='true' color='${color}{adjustColor:1.8},${color}{adjustColor:1.4}' radioes='0, 200' angle='90' alpha='1,0' thikness='0.1'/>
+			</cover>
+		</style>
+
+
+
+
+
+
+
+		<!-------------------文字样式----------------------------------------------------------------------------------->
+
+        <format id='FontFormat' font='微软雅黑' size='12' color='${color}'/>
+
+        <label id='Simple_Self' format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20'>
+			<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
+			<fill color='FFFFFF' alpha='0.9'/>
+			<cover>
+				<border color='FFFFFF'/>
+			</cover>
+		</label>
+
+		<label id='Simple_Group' format='FontFormat' radius='0' padding='5' vMargin='10'  hMargin='20'>
+			<border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
+			<fill color='FFFFFF' alpha='0.9'/>
+		</label>
+
+
+		<label id='Classic_Self' format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20'>
+			<format color='FFFFFF'/>
+			<text>
+				<effects>
+					<shadow color='${color}{adjustColor:0.7}' distance='1' angle='90' blur='1' alpha='0.8'/>
+				</effects>
+			</text>
+			<border color='FFFFFF' alpha='0.8' thikness='1' pixelHinting='true' caps='round'/>
+			<fill color='${color}{adjustColor:1.2},${color}' alpha='0.8, 0.8' angle='90'/>
+			<effects>
+				<glow color='${color}{adjustColor:0.8}' angle='45' blur='5' alpha='0.25'/>
+			</effects>
+		</label>
+
+		<label id='Classic_Group' format='FontFormat' radius='0' padding='5' vMargin='10'  hMargin='20'>
+			<format color='${color}{adjustColor:0.8}'/>
+			<text>
+				<effects>
+					<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
+				</effects>
+			</text>
+			<border thikness='1' alpha='0.9' color='FFFFFF' pixelHinting='true'/>
+			<fill color='EEEEEE,EEEEEE' alpha='0.8, 0.8' angle='90'/>
+			<effects>
+				<glow color='${color}{adjustColor:0.8}' angle='45' blur='5' alpha='0.25'/>
+			</effects>
+		</label>
+
+		<label id='Black_Self' radius='0' padding='5' vMargin='10' hMargin='20' format='FontFormat'>
+			<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
+			<fill color='333333' alpha='0.7'/>
+			<text effects='Text_Shadow'/>
+		</label>
+
+		<label id='Black_Group' radius='0' padding='5' vMargin='10' hMargin='20' format='FontFormat'>
+			<border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
+			<fill color='333333' alpha='0.7'/>
+			<text effects='Text_Shadow'/>
+		</label>
+
+
+      <!---------------------序列样式----------------------------------------------------------------------->
+
+
+      <pie id='Simple'>
+        <states>
+            <normal>
+                <fill color='${color}{adjustColor:1.3},${color}{adjustColor:1.0}' alpha='0.8,0.8' angle='90'/>
+            </normal>
+            <hover>
+				<fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.0}' alpha='0.8,0.8' angle='0'/>
+			</hover>
+			<down>
+				<fill color='${color}{adjustColor:1.2},${color}{adjustColor:0.8}' alpha='0.8,0.8' angle='90'/>
+			</down>
+        </states>
+     </pie>
+
+     <pie id='Classic'>
+        <states>
+            <normal>
+                <fill type='radial' radioes='0,250,255' alpha='0.8,0.8,0.8' angle='0'
+                color='${color}{adjustColor:1.3},${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
+                <border thikness='1' alpha='0' color='${color}{adjustColor:1.3}' pixelHinting='false'/>
+            </normal>
+            <hover>
+                <fill type='radial' radioes='0,250,255' alpha='0.8,0.8,0.8' angle='0'
+                color='${color}{adjustColor:1.3},${color}{adjustColor:1.3},${color}{adjustColor:0.8}'/>
+                 <border thikness='2' alpha='0' color='${color}{adjustColor:1.3}' pixelHinting='false'/>
+            </hover>
+            <down>
+                <fill type='radial' radioes='0,255' alpha='0.8,0.8' angle='0'
+                color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
+            </down>
+        </states>
+     </pie>
+		
+		
+
+	 
+
+
+		
+
+		<!--------------------图例----------------------------------------------------------------------------------------->
+
+		
+
+
+
+		<icon id='Simple'>
+			<rect>
+				<states>
+					<normal width='20' height='12'>
+						<border alpha='1' thikness='1' color='${color}'/>
+						<fill color='${color}{adjustColor:1.3},${color}' alpha='0.8,0.8' angle='90'/>
+					</normal>
+					<hover width='20' height='12'>
+						<fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.2}' alpha='0.8,0.8' angle='90'/>
+						<border alpha='1' thikness='1' color='${color}'/>
+					</hover>
+				</states>
+			</rect>
+		</icon>
+
+		<icon id='Classic'>
+			<rect>
+	 			<states normal='HighLight_Icon' hover='HighLight_Icon'>
+                    <normal width='20' height='12'>            	
+                        <fill radioes='0,100,255' alpha='1,1,1' angle='45'
+                         color='${color} {adjustColor : 1.1}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
+                    </normal>
+                    <hover width='20' height='12'>
+                        <fill radioes='0,150,255' alpha='1,1,1' angle='45'
+                         color='${color} {adjustColor : 1.5}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
+                    </hover>
+                </states>
+             </rect>
+        </icon>
+
+        <legend id='Black' label="${xLabel}, ${yLabel}" position='right' enable='true' hPadding='5' vPadding='2' vMargin='2' radius='5'>
+			<border color='000000' thikness='1' alpha='0.5'/>
+			<fill color='25252A' alpha='.5'/>
+			<icon>Classic</icon>
+			<label format='FontFormat'>
+				<text effects='Text_Shadow'/>
+			</label>
+		</legend>
+
+		<legend id='Simple' label="${xLabel}, ${yLabel}"  position='right' enable='true' hPadding='5' vPadding='0' vMargin='2'>
+			<icon>Simple</icon>
+			<label format='FontFormat'/>
+		</legend>
+
+		<legend id='Classic' label="${xLabel}, ${yLabel}" position='right' enable='true' hPadding='5' vPadding='0' vMargin='2'>
+			<icon>Classic</icon>
+			<label format='FontFormat'/>
+		</legend>
+
+
+		<!--------------------ToolTip----------------------------------------->
+
+		<tooltip id='Simple' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
+			<self style='Simple_Self'/>
+			<group style='Simple_Group'/>
+		</tooltip>
+
+		<tooltip id='Classic' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
+			<self style='Classic_Self'/>
+			<group style='Classic_Group'/>
+		</tooltip>
+
+		<tooltip id='Black' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
+			<self style='Black_Self'/>
+			<group style='Black_Group'/>
+		</tooltip>
+
+
+        <!--------------------颜色板------------------------------->
+        <colors id='Heavy'>
+			<color>#097DDA</color>
+            <color>#017E01</color>
+            <color>#A6403E</color>
+            <color>#634BA7</color>
+            <color>#9B7A15</color>
+            <color>#4E555F</color>
+		</colors>
+		<colors id='Shallow'>
+            <color>#6DCFF6</color>
+            <color>#98C045</color>
+            <color>#FE7C61</color>
+            <color>#A085D4</color>
+            <color>#FDB52F</color>
+            <color>#959595</color>
+		</colors>
+		<colors id='RGB'>
+            <color>#097DDA</color>
+            <color>#728F1C</color>
+            <color>#EF306A</color>
+            <color>#4AC0C0</color>
+            <color>#C451C8</color>
+            <color>#AB8718</color>
+            <color>#4E555F</color>
+            <color>#634BA7</color>
+            <color>#2F8A93</color>
+            <color>#FE5B3B</color>
+            <color>#6DCFF6</color>
+            <color>#9BD124</color>
+		</colors>
+
+
+	</template>
 	
 	<styles>
 	    <!--默认色： 白色系-->
-	    <white animation='true'>
-	        <pieSeriesStyle>
-	            <states>
-	                <normal>
-	                    <fill type='radial' radioes='0,250,255' alpha='0.8,0.8,0.8' angle='0'
-	                    color='${color}{adjustColor:1.3},${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
-	                    <border thikness='1' alpha='0' color='${color}{adjustColor:1.3}' pixelHinting='false'/>
-	                </normal>
-	                <hover>
-	                    <fill type='radial' radioes='0,250,255' alpha='0.8,0.8,0.8' angle='0'
-	                    color='${color}{adjustColor:1.3},${color}{adjustColor:1.3},${color}{adjustColor:0.8}'/>
-	                     <border thikness='2' alpha='0' color='${color}{adjustColor:1.3}' pixelHinting='false'/>
-	                </hover>
-	                <down>
-	                    <fill type='radial' radioes='0,255' alpha='0.8,0.8' angle='0'
-	                    color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
-	                </down>
-	            </states>
-	        </pieSeriesStyle>
-	            
+	    <Simple animation='true'>
+	        <pieSeriesStyle style='Simple'/>
+	   
 	        <pieSeries>
 	            <pie labelField='label' valueField='value'/>
 	        </pieSeries>
 	        
-	        <title hAlign='center' vMargin='0' vPadding='0'>
-	            <format size='14' color='555555' bold='true' font='微软雅黑'/>
-	            <text substr='30'>
-	            </text>
+	        <title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
+	            <format size='14' color='555555' bold='true'/>
 	        </title>
-	        <subTitle hAlign='center' vMargin='0' vPadding='0'>
-	            <text substr='30'/>
-	            <format size='12' color='555555' bold='false' font='微软雅黑'/>
+
+	        <subTitle hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
+	            <format color='555555'/>
 	        </subTitle>
+
 	        <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10' gutterRight='10'>
 	            <border color='EEEEEE'/>
 	            <fill color='FFFFFF'/>
 	        </chartBG>
 	        
-	        <valueLabel enable='true' margin='0' padding='5' text='${valueLabel}'>
-	            <format color='${color}{adjustColor:0.5}' size='14' font='微软雅黑'/>
+	        <valueLabel enable='true' margin='0' padding='5' text='${valueLabel}' format='FontFormat'>
+	            <format color='${color}{adjustColor:0.5}' size='14'/>
+	        </valueLabel>
+	        
+	        <tooltip>Simple</tooltip>
+			<legend>Simple</legend>
+
+	        <!-- 基础定义 -->
+	        <template>
+	        </template>
+	        
+	        <colors>RGB</colors>
+	    </Simple>
+
+	    <Classic animation='true'>
+	        <pieSeriesStyle style='Classic'/>
+	   
+	        <pieSeries>
+	            <pie labelField='label' valueField='value'/>
+	        </pieSeries>
+	        
+	        <title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
+	            <format size='14' color='555555' bold='true'/>
+	        </title>
+
+	        <subTitle hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
+	            <format color='555555'/>
+	        </subTitle>
+
+	        <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10' gutterRight='10'>
+	            <border color='EEEEEE'/>
+	            <fill color='FFFFFF'/>
+	        </chartBG>
+	        
+	        <valueLabel enable='true' margin='0' padding='5' text='${valueLabel}' format='FontFormat'>
+	            <format color='${color}{adjustColor:0.5}' size='14'/>
 	            <text>
 	            	<effects>
 						<shadow color='${color}{adjustColor:1.4}' alpha='1' distance='1' blur='1' angle='90'/>
@@ -54,73 +324,18 @@
 	            </text>
 	        </valueLabel>
 	        
-	        <tooltip enable='true' locked='false' radius='0' padding='5' vMargin='10'
-	        	text='${tooltip}'>   
-                <border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
-                <fill color='FFFFFF' alpha='0.9'/>
-                <cover>
-                    <border color='FFFFFF'/>
-                </cover>
-                <format font='微软雅黑' size='12' color='${color}{adjustColor:0.8}' bold='false'/>
-                <text substr='30'>
-                    <!--effects>
-                        <shadow color='${color}{adjustColor:0.3}' alpha='1' distance='1' blur='1' angle='90'/>
-                    </effects-->
-                </text>
-	        </tooltip>
-	        
-	        <legend label="${xLabel}, ${yLabel}" enable='false' 
-	        	position='right' hPadding='5' vPadding='0' vMargin='1' radius='5'>
-	            <fill color='EEEEEE' alpha='0'/>
-	            <icon>
-	                <states normal='legendIconStyle' hover='legendIconStyle'>
-	                    <normal>
-	                        <fill radioes='0,100,255' alpha='1,1,1' angle='45' 
-	                        color='${color} {adjustColor : 1.1}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
-	                    </normal>
-	                    <hover>
-	                        <fill radioes='0,150,255' alpha='1,1,1' angle='45' 
-	                        color='${color} {adjustColor : 1.5}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
-	                    </hover>
-	                </states>
-	            </icon>
-	            
-	            <label>
-	                <format size='12' color='${color}' font='微软雅黑'/>
-	                <text substr='30'>
-	                </text>
-	            </label>
-	         </legend>
-	        
-	        
+	        <tooltip>Classic</tooltip>
+			<legend>Classic</legend>
+
 	        <!-- 基础定义 -->
-	        <definition>
-	            
-	            <style id='legendIconStyle' width='15' height='11'>
-	                <border color='${color}{adjustColor:0.2}' thikness='1'/>
-	            </style>
-	 
-	        </definition>
+	        <template>
+	        </template>
 	        
-	        <colors>
-	            <color value='0x00A8FF'/>
-	            <color value='0xA97601'/>
-	            <color value='0xFF99FF'/>
-	            <color value='0x9BD124'/>
-	            <color value='0x7967B9'/>
-	            <color value='0xB3B3B3'/>
-	            <color value='0xCCCC99'/>
-	            <color value='0x0A9D0B'/>
-	            <color value='0x0B57B2'/>
-	            <color value='0xE64826'/>
-	            <color value='0x9F21C8'/>
-	            <color value='0x2F8A93'/>
-	            <color value='0x4B5D84'/>
-	        </colors>
-	    </white>
+	        <colors>RGB</colors>
+	    </Classic>
 	    
 	    <!-- 黑色  -->
-	    <black animation='true'>
+	    <Black animation='true'>
 	        <pieSeriesStyle>
 	            <states>
 	                <normal>
@@ -144,17 +359,16 @@
 	            <pie labelField='label' valueField='value'/>
 	        </pieSeries>
 	        
-	        <title hAlign='center' vMargin='0' vPadding='0'>
-	            <format size='14' color='ADADAD' bold='true' font='微软雅黑'/>
-                <text substr='30'>
+	        <title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
+	            <format size='14' color='ADADAD' bold='true'/>
+                <text>
                     <effects>
                         <shadow color='000000' alpha='1' distance='1' blur='1' angle='90'/>
                     </effects>
                 </text>
 	        </title>
-	        <subTitle hAlign='center' vMargin='0' vPadding='0'>
-	            <text substr='30'/>
-                <format size='12' color='ADADAD' bold='false' font='微软雅黑'/>
+	        <subTitle hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
+                <format color='ADADAD'/>
 	        </subTitle>
 	        
 	        <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10' gutterRight='10'>
@@ -162,8 +376,8 @@
                 <fill color='#53535E,#474752' radioes='0,255' alpha='1,1' angle='0'/>
 	        </chartBG>
 	        
-	        <valueLabel enable='true' margin='0' padding='5' text='${valueLabel}'>
-	            <format color='${color}{adjustColor:0.5}' size='14' font='微软雅黑'/>
+	        <valueLabel enable='true' margin='0' padding='5' text='${valueLabel}' format='FontFormat'>
+	            <format color='${color}{adjustColor:0.5}' size='14'/>
 	            <text>
 	            	<effects>
 						<shadow color='${color}{adjustColor:1.3}' alpha='1' distance='1' blur='1' angle='90'/>
@@ -171,67 +385,18 @@
 	            </text>
 	        </valueLabel>
 	        
-	        <tooltip enable='true' locked='false' radius='0' padding='5' vMargin='10'
-	        	text='${tooltip}'>   
-                <border thikness='1' alpha='1' color='${color}{adjustColor:1.4}' pixelHinting='true'/>
-                <fill color='333333' alpha='0.8'/>
-                <format font='微软雅黑' size='12' color='${color}{adjustColor:1.3}' bold='false'/>
-                <text substr='30'>
-                    <effects>
-                        <shadow color='${color}{adjustColor:0.3}' alpha='1' distance='1' blur='1' angle='90'/>
-                    </effects>
-                </text>
-	        </tooltip>
-	        
-	        <legend label="${xLabel}, ${yLabel}" enable='false' 
-	        	position='right' hPadding='5' vPadding='0' vMargin='1' radius='5'>
-	            <fill color='EEEEEE' alpha='0'/>
-	            <icon>
-	                <states normal='legendIconStyle' hover='legendIconStyle'>
-	                    <normal>
-	                        <fill radioes='0,100,255' alpha='1,1,1' angle='45' 
-	                        color='${color} {adjustColor : 1.1}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
-	                    </normal>
-	                    <hover>
-	                        <fill radioes='0,150,255' alpha='1,1,1' angle='45' 
-	                        color='${color} {adjustColor : 1.5}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
-	                    </hover>
-	                </states>
-	            </icon>
-	            
-	            <label>
-	                <format size='12' color='${color}{adjustColor:1.3}' font='微软雅黑'/>
-	                <text substr='30'>
-	                	<effects>
-							<shadow color='${color}{adjustColor:0.3}' alpha='1' distance='1' blur='1' angle='90'/>
-						</effects>
-	                </text>
-	            </label>
-	         </legend>
+	        <tooltip>Black</tooltip>   
+	        <legend>Black</legend>
 	        
 	        <!-- 基础定义 -->
-	        <definition>
+	        <template>
 	            <style id='legendIconStyle' width='15' height='11'>
 	                <border color='${color}{adjustColor:0.2}' thikness='1'/>
 	            </style>
-	        </definition>
+	        </template>
 	        
-	        <colors>
-	            <color value='0x00A8FF'/>
-	            <color value='0xA97601'/>
-	            <color value='0xFF99FF'/>
-	            <color value='0x9BD124'/>
-	            <color value='0x7967B9'/>
-	            <color value='0xB3B3B3'/>
-	            <color value='0xCCCC99'/>
-	            <color value='0x0A9D0B'/>
-	            <color value='0x0B57B2'/>
-	            <color value='0xE64826'/>
-	            <color value='0x9F21C8'/>
-	            <color value='0x2F8A93'/>
-	            <color value='0x4B5D84'/>
-	        </colors>
-	    </black>
+	        <colors>RGB</colors>
+	    </Black>
 	    
 	</styles> 
 </theme>    

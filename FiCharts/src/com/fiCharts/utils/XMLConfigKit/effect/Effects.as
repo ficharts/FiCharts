@@ -1,13 +1,22 @@
 package com.fiCharts.utils.XMLConfigKit.effect
 {
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 
 	/**
 	 */	
-	public class Effects implements IFiElement
+	public class Effects implements IFiElement,  IFreshElement
 	{
 		public function Effects()
 		{
+		}
+		
+		/**
+		 */		
+		public function fresh():void
+		{
+			noise = shadow = blur = glow = null;
+			_effects.length = 0;
 		}
 		
 		/**
@@ -26,6 +35,8 @@ package com.fiCharts.utils.XMLConfigKit.effect
 		 */
 		public function set noise(value:Object):void
 		{
+			_noise = value;
+			
 			_effects.push(value);
 		}
 
@@ -33,6 +44,8 @@ package com.fiCharts.utils.XMLConfigKit.effect
 		 */		
 		public function set shadow(value:Object):void
 		{
+			_shadow = value;
+			
 			_effects.push(value);
 		}
 		
@@ -41,8 +54,12 @@ package com.fiCharts.utils.XMLConfigKit.effect
 		 */		
 		public function get shadow():Object
 		{
-			return null;
+			return _shadow;
 		}
+		
+		/**
+		 */		
+		private var _shadow:Object;
 		
 		/**
 		 */		
@@ -56,26 +73,38 @@ package com.fiCharts.utils.XMLConfigKit.effect
 		 */		
 		public function set blur(value:Object):void
 		{
+			_blur = value;
+			
 			_effects.push(value);
 		}
 		
 		public function get blur():Object
 		{
-			return null;
+			return _blur;
 		}
+		
+		/**
+		 */		
+		private var _blur:Object;
 		
 		/**
 		 * 高光效果
 		 */		
 		public function set glow(value:Object):void
 		{
+			_glow = value;
+			
 			_effects.push(value);
 		}
 		
 		public function get glow():Object
 		{
-			return null;
+			return _glow;
 		}
+		
+		/**
+		 */		
+		private var _glow:Object;
 		
 		/**
 		 */		

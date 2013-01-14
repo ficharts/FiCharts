@@ -4,6 +4,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.effect.IEffectable;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.TextFormatStyle;
 	
@@ -11,7 +12,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 	
 	/**
 	 */	
-	public class LabelStyle extends ContainerStyle implements IEffectable, IFiElement, IStyleElement
+	public class LabelStyle extends ContainerStyle implements IEffectable, IFiElement, IStyleElement, IFreshElement
 	{
 		/**
 		 */		
@@ -27,6 +28,20 @@ package com.fiCharts.utils.XMLConfigKit.style
 		public function LabelStyle()
 		{
 			super();
+		}
+		
+		/**
+		 */		
+		override public function fresh():void
+		{
+			super.fresh();
+			
+			var label:String = text.value;
+			
+			text = new Text;
+			text.value = label;
+			
+			format = new TextFormatStyle;
 		}
 		
 		/**

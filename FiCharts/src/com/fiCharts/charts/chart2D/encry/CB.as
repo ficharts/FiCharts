@@ -177,7 +177,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			_dataXML = value;
 
-			ifSourceDataChanged = true;
+			ifDataChanged = true;
 		}
 		
 		/**
@@ -189,7 +189,7 @@ package com.fiCharts.charts.chart2D.encry
 
 		/**
 		 */		
-		private var ifSourceDataChanged:Boolean = false;
+		private var ifDataChanged:Boolean = false;
 		
 		
 		
@@ -215,7 +215,7 @@ package com.fiCharts.charts.chart2D.encry
 			if (configXML && this.dataXML && chartModel.series.length)
 			{
 				// 为避免重复渲染，这里做了严格的限制条件，
-				if(this.ifSizeChanged || this.ifSourceDataChanged 
+				if(this.ifSizeChanged || this.ifDataChanged 
 					|| chartModel.axis.changed || chartModel.series.changed) 
 				{
 					isRendering = true;
@@ -283,7 +283,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function renderEnd():void
 		{
-			this.chartModel.axis.changed = chartModel.series.changed = ifSourceDataChanged = false;
+			this.chartModel.axis.changed = chartModel.series.changed = ifDataChanged = false;
 			
 			openFlash();
 			GC.run();
@@ -438,7 +438,7 @@ package com.fiCharts.charts.chart2D.encry
 				seriesItem.renderSeries();
 			}
 			
-			if (chartModel.series.changed || ifSourceDataChanged)
+			if (chartModel.series.changed || ifDataChanged)
 			{
 				itemRenders = [];
 				chartCanvas.clearItemRenders();
@@ -468,8 +468,6 @@ package com.fiCharts.charts.chart2D.encry
 						this.chartCanvas.addItemRender(itemRender);
 					}
 				}
-				
-				
 			}
 			
 			for each (itemRender in itemRenders)
@@ -1154,7 +1152,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			var legends:Vector.<LegendVO> = new Vector.<LegendVO>();
 			
-			if (chartModel.series.changed || ifSourceDataChanged)
+			if (chartModel.series.changed || ifDataChanged)
 			{
 				for each (var seriesItem:SB in series)  
 				{
@@ -1174,7 +1172,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function updateAxisData():void
 		{
-			if (chartModel.axis.changed || chartModel.series.changed || ifSourceDataChanged)
+			if (chartModel.axis.changed || chartModel.series.changed || ifDataChanged)
 			{
 				var axis:AxisBase;
 				

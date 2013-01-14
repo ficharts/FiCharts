@@ -2,8 +2,8 @@ package com.fiCharts.charts.chart2D.encry
 {
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
-	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
@@ -20,6 +20,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
@@ -28,7 +29,7 @@ package com.fiCharts.charts.chart2D.encry
 	/**
 	 * SeriesBase
 	 */	
-	public class SB extends Sprite implements IDirectionSeries, IEditableObject, IStyleElement
+	public class SB extends Sprite implements IDirectionSeries, IEditableObject, IStyleElement, IFreshElement
 	{
 
 		/**
@@ -71,6 +72,16 @@ package com.fiCharts.charts.chart2D.encry
 		public function set style(value:String):void
 		{
 			_style = XMLVOMapper.updateStyle(this, value, type);
+		}
+		
+		/**
+		 * 
+		 * 以id方式定义style和states时，刷新整个states样式
+		 * 
+		 */		
+		public function fresh():void
+		{
+			_states = new States;
 		}
 		
 		/**

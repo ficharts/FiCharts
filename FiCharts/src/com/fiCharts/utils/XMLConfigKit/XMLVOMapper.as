@@ -55,14 +55,6 @@ package com.fiCharts.utils.XMLConfigKit
 						var attr:Object = vo[childName];
 						if (attr)// 此属性已经存在：
 						{
-							
-							if (attr is IFreshElement)
-							{
-								// 默认不重置对象，仅当XML含有clear节点时才重置对象
-								if (child.hasOwnProperty(XMLVOLib.CLEAR))
-									(attr as IFreshElement).fresh();
-							}
-							
 							// 节点不继承旧节点属性， 重新构建对象
 							if (vo.hasOwnProperty(XMLVOLib.RE_NEW) || child.hasOwnProperty('@' + XMLVOLib.EXTEND) && child.('@' + XMLVOLib.EXTEND) == 'false')
 							{
