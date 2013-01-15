@@ -124,11 +124,11 @@ package com.fiCharts.utils.XMLConfigKit.style
 		/**
 		 * 如果是圆形则代表半径， 举行则代表圆角半径；
 		 */		
-		private var _radius:uint = 0;
+		private var _radius:Number = 0;
 		
 		/**
 		 */
-		public function get radius():uint
+		public function get radius():Number
 		{
 			return _radius;
 		}
@@ -136,7 +136,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		/**
 		 * @private
 		 */
-		public function set radius(value:uint):void
+		public function set radius(value:Number):void
 		{
 			_radius = value;
 		}

@@ -11,7 +11,13 @@
         	}
         </style>
         <script type="text/javascript">
-            new Pie2D('chartID, pieData.xml').setStyle('Simple');
+        
+        	//一下任何一种方式都可以创建图表
+        	//new Chart2D('chartID, data.xml');
+        	//new Chart2D('chartID,500,500,data.xml');
+        	//new Chart2D('chartID').setSize(500, 500).setConfigFile('data.xml');
+            new Pie2D('chartID, pieData.xml').setStyle('Black');
+            
         </script>
     </head>
     <body>

@@ -17,6 +17,7 @@ package com.fiCharts.utils.graphic
 	import flash.display.DisplayObject;
 	import flash.display.Graphics;
 	import flash.display.IBitmapDrawable;
+	import flash.display.InterpolationMethod;
 	import flash.display.SpreadMethod;
 	import flash.display.Sprite;
 	import flash.filters.ColorMatrixFilter;
@@ -41,21 +42,31 @@ package com.fiCharts.utils.graphic
 		public static function drawArc(canvas:Sprite, style:Style, 
 									   radius:Number, rads:Vector.<Number>, metaData:Object = null):void
 		{
-			style.radius = radius;
-			setShapeStyle(style, canvas.graphics, metaData);
 			
-			canvas.graphics.moveTo(0, 0);
+			_drawArc(canvas.graphics, style, radius, rads, metaData);
+			drawArcCover(canvas.graphics, style.getCover, radius, rads, metaData);
+			
+			StyleManager.setEffects(canvas, style, metaData);
+		}
+		
+		/**
+		 */		
+		private static function _drawArc(canvas:Graphics, style:Style, 
+										radius:Number, rads:Vector.<Number>, metaData:Object = null):void
+		{
+			style.radius = radius;
+			setShapeStyle(style, canvas, metaData);
+			
+			canvas.moveTo(0, 0);
 			
 			for each (var rad:Number in rads)
 			{
-				canvas.graphics.lineTo(radius * Math.cos(rad), 
+				canvas.lineTo(radius * Math.cos(rad), 
 					- radius * Math.sin(rad));
 			}
 			
-			canvas.graphics.lineTo(0, 0);
-			canvas.graphics.endFill();
-			
-			StyleManager.setEffects(canvas, style, metaData);
+			canvas.lineTo(0, 0);
+			canvas.endFill();
 		}
 		
 		
@@ -175,6 +186,15 @@ package com.fiCharts.utils.graphic
 		}
 		
 		/**
+		 */		
+		public static function drawArcCover(canvas:Graphics, cover:Cover, 
+											radius:Number ,rads:Vector.<Number>, metaData:Object = null):void
+		{
+			if (cover)
+				_drawArc(canvas, cover, radius - cover.offset, rads, metaData);
+		}
+		
+		/**
 		 *  绘制矩形高光
 		 */		
 		public static function drawRectCover(canvas:Graphics, cover:Cover, metaData:Object):void
@@ -284,7 +304,8 @@ package com.fiCharts.utils.graphic
 					var ratios:Array = fillStyle.radioes as Array;
 					
 					matr.createGradientBox(style.width, style.height, fillStyle.angle, style.tx, style.ty);
-					graphic.beginGradientFill(fillStyle.type, colors, alphas, ratios, matr, SpreadMethod.PAD); 
+					graphic.beginGradientFill(fillStyle.type, colors, alphas, ratios, matr, 
+						SpreadMethod.PAD, InterpolationMethod.RGB, 0); 
 				}
 				else
 				{

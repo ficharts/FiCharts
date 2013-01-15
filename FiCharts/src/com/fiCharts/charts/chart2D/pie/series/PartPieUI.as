@@ -20,7 +20,8 @@ package com.fiCharts.charts.chart2D.pie.series
 		{
 			super(dataItem);
 			
-			midRad = pieDataItem.startRad + (pieDataItem.endRad - pieDataItem.startRad) / 2;
+			radDis = (pieDataItem.endRad - pieDataItem.startRad);
+			midRad = pieDataItem.startRad + radDis / 2;
 		}
 		
 		/**
@@ -131,8 +132,11 @@ package com.fiCharts.charts.chart2D.pie.series
 		{
 			if (ifSizeChanged)
 			{
-				valueLabelUI.layout(radius * 0.8 * Math.cos(midRad), - radius * 0.8 * Math.sin(midRad));
-				if (valueLabelUI.width > radius)
+				var radius:Number = this.radius - valueLabelUI.width / 2;
+					
+				valueLabelUI.layout(radius * Math.cos(midRad), - radius * Math.sin(midRad));
+				
+				if (valueLabelUI.height * 0.5 > radDis * radius)
 					valueLabelUI.visible = false;
 				else
 					valueLabelUI.visible = true;
@@ -156,6 +160,11 @@ package com.fiCharts.charts.chart2D.pie.series
 		 * 扇形弧度的中间值， 用来定位数值标签的位置； 
 		 */		
 		private var midRad:Number;
+		
+		/**
+		 * 弧度间隔， 
+		 */		
+		private var radDis:Number;
 		
 		
 		/**

@@ -147,7 +147,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		/**
 		 * 弧线的等分距离，决定了弧线的光滑度，
 		 */		
-		private var precisionLength:uint = 1;
+		private var precisionLength:Number = 0.5;
 		
 		/**
 		 */		

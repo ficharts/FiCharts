@@ -21,6 +21,7 @@ package com.fiCharts.charts.chart2D.core.backgound
 			
 			var thikness:Number = style.border.thikness;
 			StyleManager.setShapeStyle(style, this.graphics);
+			
 			graphics.drawRoundRect(thikness / 2, thikness / 2, style.width - thikness, 
 				style.height - thikness, style.radius, style.radius);
 			graphics.endFill();
