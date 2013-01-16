@@ -26,7 +26,7 @@
 		</style>
 
 		<style id='HighLight'>
-			<cover>
+			<cover offset='0'>
 				<fill color='${color}{adjustColor:2},${color}{adjustColor:1.2}' radioes='0, 50' angle='75' alpha='1,0.2'/>
 			</cover>
 		</style>
@@ -43,7 +43,7 @@
 
 
       <pie id='Simple'>
-        <states>
+        <states normal='HighLight' hover='HighLight' down='HighLight'>
             <normal>
                 <fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.2}' alpha='1,1' angle='90'/>
             </normal>
@@ -54,6 +54,9 @@
 				<fill color='${color}{adjustColor:1.2},${color}{adjustColor:0.8}' alpha='1,1' angle='90'/>
 			</down>
         </states>
+         <effects>
+			<glow color='000000' alpha='0.3' blur='6'/>
+		</effects>
      </pie>
 
 
@@ -74,6 +77,9 @@
                 color='${color}{adjustColor:1.3},${color}{adjustColor:1.5}'/>
             </down>
         </states>
+         <effects>
+			<glow color='000000' alpha='0.3' blur='5'/>
+		</effects>
      </pie>
 
 
@@ -189,7 +195,7 @@
 			<border color='FFFFFF' alpha='0.8' thikness='1' pixelHinting='false' caps='round'/>
 			<fill color='${color}{adjustColor:1.2},${color}' alpha='0.8, 0.8' angle='90'/>
 			<effects>
-				<glow color='${color}{adjustColor:0.8}' angle='45' blur='5' alpha='0.25'/>
+				<glow color='${color}{adjustColor:0.8}' angle='45' blur='5' alpha='0.3'/>
 			</effects>
 		</tooltip>
 

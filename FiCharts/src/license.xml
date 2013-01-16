@@ -2,6 +2,7 @@
 	<!-- Trial, web, Intranet, Enterprise, Enterprise_Plus, Desk, App-->
 	<type>Intranet</type>
 	<servers>
+		<url>127.0.0.1/</url>
 		<url>lingtu.com/</url>
 	</servers>
 	<desc>未授权版本,内部试用</desc>
