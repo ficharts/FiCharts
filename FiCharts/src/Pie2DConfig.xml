@@ -7,12 +7,8 @@
 
 	<template>
 
-
-
 		<!---------------------效果----------------------------------------------------->
-
-        
-
+		
 		<effects id='Text_Shadow'>
 			<shadow color='000000' alpha='1' distance='1' blur='1' angle='90'/>
 		</effects>
@@ -43,7 +39,7 @@
 
 
       <pie id='Simple'>
-        <states normal='HighLight' hover='HighLight' down='HighLight'>
+        <states>
             <normal>
                 <fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.2}' alpha='1,1' angle='90'/>
             </normal>
@@ -55,27 +51,22 @@
 			</down>
         </states>
          <effects>
-			<glow color='000000' alpha='0.3' blur='6'/>
+			<glow color='000000' alpha='0' blur='6'/>
 		</effects>
      </pie>
 
 
      <pie id='Classic'>
-        <states>
-            <normal>
-                <fill type='radial' radioes='0,250,255' alpha='1,1,1' angle='0'
-                color='${color}{adjustColor:1.3},${color}{adjustColor:1.5},${color}{adjustColor:1}'/>
-                <border thikness='1' alpha='0' color='${color}{adjustColor:1.3}' pixelHinting='false'/>
+        <states  normal='HighLight' hover='HighLight' down='HighLight'>
+             <normal>
+                <fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.2}' alpha='1,1' angle='90'/>
             </normal>
             <hover>
-                <fill type='radial' radioes='0,240,255' alpha='1,1,1' angle='0'
-                color='${color}{adjustColor:1.5},${color}{adjustColor:1.3},${color}{adjustColor:1}'/>
-                 <border thikness='2' alpha='0' color='${color}{adjustColor:1.3}' pixelHinting='false'/>
-            </hover>
-            <down>
-                <fill type='radial' radioes='0,255' alpha='1,1' angle='0'
-                color='${color}{adjustColor:1.3},${color}{adjustColor:1.5}'/>
-            </down>
+				<fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.2}' alpha='1,1' angle='-90'/>
+			</hover>
+			<down>
+				<fill color='${color}{adjustColor:1.2},${color}{adjustColor:0.8}' alpha='1,1' angle='90'/>
+			</down>
         </states>
          <effects>
 			<glow color='000000' alpha='0.3' blur='5'/>
@@ -136,13 +127,14 @@
 		<icon id='Classic'>
 			<circle>
 	 			<states normal='HighLight_Icon' hover='HighLight_Icon'>
-                    <normal radius='8'>            	
+                    <normal radius='8'> 
+                    	<border color='${color} {adjustColor:0.5}' thikness='1' alpha='0.5'/>              	
                         <fill radioes='0,100,255' alpha='1,1,1' angle='45'
-                         color='${color} {adjustColor : 1.1}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
+                         color='${color} {adjustColor : 1.5}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
                     </normal>
                     <hover radius='8'>
                         <fill radioes='0,150,255' alpha='1,1,1' angle='45'
-                         color='${color} {adjustColor : 1.5}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
+                         color='${color} {adjustColor : 1.1}, ${color}{adjustColor:1.5} ,${color}{adjustColor:0.9}'/>
                     </hover>
                 </states>
              </circle>
@@ -245,6 +237,8 @@
             <color>#6DCFF6</color>
             <color>#9BD124</color>
 		</colors>
+
+		
 	</template>
 	
 
