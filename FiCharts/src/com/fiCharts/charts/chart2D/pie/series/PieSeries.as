@@ -13,6 +13,8 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.XMLConfigKit.effect.Effects;
+	import com.fiCharts.utils.XMLConfigKit.effect.IEffectable;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
@@ -24,7 +26,7 @@ package com.fiCharts.charts.chart2D.pie.series
 
 	/**
 	 */	
-	public class PieSeries extends Sprite implements IEditableObject, IStyleElement
+	public class PieSeries extends Sprite implements IEditableObject, IStyleElement, IEffectable
 	{
 		public function PieSeries()
 		{
@@ -81,6 +83,8 @@ package com.fiCharts.charts.chart2D.pie.series
 					}
 					
 					partUI.render();
+					
+					StyleManager.setEffects(this, this, this);
 					
 					this.ifDataChanged = this.ifSizeChanged = false;
 				}
@@ -432,26 +436,6 @@ package com.fiCharts.charts.chart2D.pie.series
 		//
 		//------------------------------------------------
 		
-		/**
-		 */		
-		public function normalHandler():void
-		{
-			
-		}
-		
-		/**
-		 */		
-		public function hoverHandler():void
-		{
-			
-		}
-		
-		/**
-		 */		
-		public function downHandler():void
-		{
-			
-		}
 		
 		/**
 		 */		
@@ -498,6 +482,26 @@ package com.fiCharts.charts.chart2D.pie.series
 		public function fresh():void
 		{
 			_states = new States;
+			_effects = new Effects;
+		}
+		
+		/**
+		 */		
+		private var _effects:Effects;
+		
+		/**
+		 */
+		public function get effects():Object
+		{
+			return _effects;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set effects(value:Object):void
+		{
+			_effects = XMLVOMapper.updateObject(value, _effects, "effects") as Effects;
 		}
 		
 	}

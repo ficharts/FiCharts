@@ -161,8 +161,6 @@ package com.fiCharts.utils.graphic
 			{
 				target.filters = null;
 			}
-			
-			//new BitmapData(200, 200).draw(target);
 		}
 		
 		

@@ -12,12 +12,32 @@
         </style>
         <script type="text/javascript">
         	
-            var chart2D = new Chart2D({id: 'chart2D_div', width: '100%', height: '100%', style: 'white'});
-            chart2D.setConfigFile('data.xml');
+        	
+        	//一下任何一种方式都可以创建图表
+        	
+        	new Chart2D('chartID, data.xml')
+        	
+        	//new Chart2D('chartID,500,500,data.xml');
+        	
+        	//new Chart2D({id:"chartID", configFile:"data.xml"})
+        	
+        	//new Chart2D('chartID').setSize(500, 500).setConfigFile('data.xml');
+        	
+            //new Pie2D('chartID, pieData.xml').setStyle('Black');
+            
+            /*var chart2D = new Chart2D({id: 'chartID', width: '100%', height: '100%', style: 'white'});
+            chart2D.setConfigFile('data.xml');*/
+           
+           /* 
+            * var chart2D = new Chart2D('chartID');
+            * chart2D.setSize(500, 500);
+            * chart2D.setConfigFile('data.xml');
+            *
+            * */
             
         </script>
     </head>
     <body>
-        <div id="chart2D_div"></div>
+        <div id="chartID"></div>
     </body>
 </html>

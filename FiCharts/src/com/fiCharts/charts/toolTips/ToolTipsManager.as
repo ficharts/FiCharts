@@ -76,6 +76,7 @@ package com.fiCharts.charts.toolTips
 		{
 			evt.stopPropagation();
 			
+			toolTipUI.visible = false;
 			ifLocked = evt.toolTipsHolder.locked;
 			
 			toolTipUI.tooltipHolder = evt.toolTipsHolder;
@@ -170,6 +171,8 @@ package com.fiCharts.charts.toolTips
 				toolTipUI.y = container.stage.height - toolTipUI.height / 2 - container.y - 1 - edgeGutter;
 				time ++;
 			}
+			
+			toolTipUI.visible = true;
 		}
 		
 		/**

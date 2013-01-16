@@ -21,19 +21,15 @@
 		<style id='HighLight_Icon'>
 			<border color='${color}{adjustColor:0.6}' thikness='.5'/>
 			<cover>
-				<border pixelHinting='true' color='${color}{adjustColor:1.8},${color}{adjustColor:1.4}' radioes='0, 200' angle='90' alpha='1,0' thikness='0.1'/>
+				<border pixelHinting='true' color='${color}{adjustColor:1.8},${color}{adjustColor:1.4}' radioes='0, 200' angle='65' alpha='1,0' thikness='0.1'/>
 			</cover>
 		</style>
 
 		<style id='HighLight'>
 			<cover>
-				<fill type='radial' color='${color}{adjustColor:1.8},${color}{adjustColor:1.4}' radioes='0, 200' angle='90' alpha='0.6,0.2'/>
+				<fill color='${color}{adjustColor:2},${color}{adjustColor:1.2}' radioes='0, 50' angle='75' alpha='1,0.2'/>
 			</cover>
 		</style>
-
-
-
-
 
 
 
@@ -41,63 +37,7 @@
 
         <format id='FontFormat' font='微软雅黑' size='12' color='${color}'/>
 
-        <label id='Simple_Self' format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20'>
-			<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
-			<fill color='FFFFFF' alpha='0.9'/>
-			<cover>
-				<border color='FFFFFF'/>
-			</cover>
-		</label>
-
-		<label id='Simple_Group' format='FontFormat' radius='0' padding='5' vMargin='10'  hMargin='20'>
-			<border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
-			<fill color='FFFFFF' alpha='0.9'/>
-		</label>
-
-
-		<label id='Classic_Self' format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20'>
-			<format color='FFFFFF'/>
-			<text>
-				<effects>
-					<shadow color='${color}{adjustColor:0.7}' distance='1' angle='90' blur='1' alpha='0.8'/>
-				</effects>
-			</text>
-			<border color='FFFFFF' alpha='0.8' thikness='1' pixelHinting='true' caps='round'/>
-			<fill color='${color}{adjustColor:1.2},${color}' alpha='0.8, 0.8' angle='90'/>
-			<effects>
-				<glow color='${color}{adjustColor:0.8}' angle='45' blur='5' alpha='0.25'/>
-			</effects>
-		</label>
-
-		<label id='Classic_Group' format='FontFormat' radius='0' padding='5' vMargin='10'  hMargin='20'>
-			<format color='${color}{adjustColor:0.8}'/>
-			<text>
-				<effects>
-					<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
-				</effects>
-			</text>
-			<border thikness='1' alpha='0.9' color='FFFFFF' pixelHinting='true'/>
-			<fill color='EEEEEE,EEEEEE' alpha='0.8, 0.8' angle='90'/>
-			<effects>
-				<glow color='${color}{adjustColor:0.8}' angle='45' blur='5' alpha='0.25'/>
-			</effects>
-		</label>
-
-		<label id='Black_Self' radius='0' padding='5' vMargin='10' hMargin='20' format='FontFormat'>
-			<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
-			<fill color='333333' alpha='0.7'/>
-			<text effects='Text_Shadow'/>
-		</label>
-
-		<label id='Black_Group' radius='0' padding='5' vMargin='10' hMargin='20' format='FontFormat'>
-			<border thikness='1' alpha='1' color='CCCCCC' pixelHinting='true'/>
-			<fill color='333333' alpha='0.7'/>
-			<text effects='Text_Shadow'/>
-		</label>
-
-
-
-
+        
 
       <!---------------------序列样式----------------------------------------------------------------------->
 
@@ -105,35 +45,59 @@
       <pie id='Simple'>
         <states>
             <normal>
-                <fill color='${color}{adjustColor:1.3},${color}{adjustColor:1.0}' alpha='0.8,0.8' angle='90'/>
+                <fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.2}' alpha='1,1' angle='90'/>
             </normal>
             <hover>
-				<fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.0}' alpha='0.8,0.8' angle='0'/>
+				<fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.2}' alpha='1,1' angle='-90'/>
 			</hover>
 			<down>
-				<fill color='${color}{adjustColor:1.2},${color}{adjustColor:0.8}' alpha='0.8,0.8' angle='90'/>
+				<fill color='${color}{adjustColor:1.2},${color}{adjustColor:0.8}' alpha='1,1' angle='90'/>
 			</down>
         </states>
      </pie>
 
+
      <pie id='Classic'>
         <states>
             <normal>
-                <fill type='radial' radioes='0,250,255' alpha='0.8,0.8,0.8' angle='0'
-                color='${color}{adjustColor:1.3},${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
+                <fill type='radial' radioes='0,250,255' alpha='1,1,1' angle='0'
+                color='${color}{adjustColor:1.3},${color}{adjustColor:1.5},${color}{adjustColor:1}'/>
                 <border thikness='1' alpha='0' color='${color}{adjustColor:1.3}' pixelHinting='false'/>
             </normal>
             <hover>
-                <fill type='radial' radioes='0,250,255' alpha='0.8,0.8,0.8' angle='0'
-                color='${color}{adjustColor:1.3},${color}{adjustColor:1.3},${color}{adjustColor:0.8}'/>
+                <fill type='radial' radioes='0,240,255' alpha='1,1,1' angle='0'
+                color='${color}{adjustColor:1.5},${color}{adjustColor:1.3},${color}{adjustColor:1}'/>
                  <border thikness='2' alpha='0' color='${color}{adjustColor:1.3}' pixelHinting='false'/>
             </hover>
             <down>
-                <fill type='radial' radioes='0,255' alpha='0.8,0.8' angle='0'
-                color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
+                <fill type='radial' radioes='0,255' alpha='1,1' angle='0'
+                color='${color}{adjustColor:1.3},${color}{adjustColor:1.5}'/>
             </down>
         </states>
      </pie>
+
+
+	<pie id='Black'>
+	    <states normal='HighLight' hover='HighLight' down='HighLight'>
+	        <normal>
+	            <fill type='radial' radioes='0,200,255' alpha='1,1,1' angle='0'
+	            color='${color}{adjustColor:1.5},${color}{adjustColor:1.2},${color}{adjustColor:1}'/>
+	           
+	        </normal>
+	        <hover>
+	            <fill type='radial' radioes='0,230,255' alpha='1,1,1' angle='0'
+	            color='${color}{adjustColor:1.2},${color}{adjustColor:1.3},${color}{adjustColor:1}'/>
+	            
+	        </hover>
+	        <down>
+	            <fill type='radial' radioes='0,180' alpha='1,1' angle='0'
+	            color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
+	        </down>
+	    </states>
+	    <effects>
+			<glow color='000000' alpha='0.6' blur='6'/>
+		</effects>
+	</pie>
 		
 		
 
@@ -152,12 +116,12 @@
 			<circle>
 				<states>
 					<normal radius='8'>
-						<border alpha='1' thikness='1' color='${color}'/>
+						<border alpha='0' thikness='1' color='${color}'/>
 						<fill color='${color}{adjustColor:1.3},${color}' alpha='0.8,0.8' angle='90'/>
 					</normal>
 					<hover radius='8' width='20' height='12'>
 						<fill color='${color}{adjustColor:1.5},${color}{adjustColor:1.2}' alpha='0.8,0.8' angle='90'/>
-						<border alpha='1' thikness='1' color='${color}'/>
+						<border alpha='0' thikness='1' color='${color}'/>
 					</hover>
 				</states>
 			</circle>
@@ -178,12 +142,23 @@
              </circle>
         </icon>
 
-        <legend id='Black' label="${xLabel}, ${yLabel}" position='right' enable='true' hPadding='5' vPadding='2' vMargin='2' radius='5'>
-			<icon>Classic</icon>
-			<label format='FontFormat'/>
-		</legend>
+        <icon id='Black'>
+			<circle>
+	 			<states normal='HighLight_Icon' hover='HighLight_Icon'>
+                    <normal radius='8'>       
+                    	<border color='${color} {adjustColor:0.5}' thikness='1' alpha='1'/>    	
+                        <fill radioes='0,100,255' alpha='1,1,1' angle='45'
+                         color='${color} {adjustColor : 1.1}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
+                    </normal>
+                    <hover radius='8'>
+                        <fill radioes='0,150,255' alpha='1,1,1' angle='45'
+                         color='${color} {adjustColor : 1.5}, ${color}{adjustColor:1.1} ,${color}{adjustColor:0.9}'/>
+                    </hover>
+                </states>
+             </circle>
+        </icon>
 
-		<legend id='Simple' label="${xLabel}, ${yLabel}"  position='right' enable='true' hPadding='5' vPadding='0' vMargin='2'>
+        <legend id='Simple' label="${xLabel}, ${yLabel}"  position='right' enable='true' hPadding='5' vPadding='0' vMargin='2'>
 			<icon>Simple</icon>
 			<label format='FontFormat'/>
 		</legend>
@@ -193,22 +168,43 @@
 			<label format='FontFormat'/>
 		</legend>
 
+        <legend id='Black' label="${xLabel}, ${yLabel}" position='right' enable='true' hPadding='5' vPadding='2' vMargin='2' radius='5'>
+			<icon>Black</icon>
+			<label format='FontFormat'/>
+		</legend>
+
+		
+		
+
 
 		<!--------------------ToolTip----------------------------------------->
 
-		<tooltip id='Simple' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
-			<self style='Simple_Self'/>
-			<group style='Simple_Group'/>
+		<tooltip id='Simple' enable='true' locked='false' format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20' text="${tooltip}">
+			<format color='FFFFFF'/>
+			<text>
+				<effects>
+					<shadow color='${color}{adjustColor:0.7}' distance='1' angle='90' blur='1' alpha='0.8'/>
+				</effects>
+			</text>
+			<border color='FFFFFF' alpha='0.8' thikness='1' pixelHinting='false' caps='round'/>
+			<fill color='${color}{adjustColor:1.2},${color}' alpha='0.8, 0.8' angle='90'/>
+			<effects>
+				<glow color='${color}{adjustColor:0.8}' angle='45' blur='5' alpha='0.25'/>
+			</effects>
 		</tooltip>
 
-		<tooltip id='Classic' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
-			<self style='Classic_Self'/>
-			<group style='Classic_Group'/>
+		<tooltip id='Classic' enable='true' locked='false' format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20' text="${tooltip}">
+			<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
+			<fill color='FFFFFF' alpha='0.9'/>
+			<cover>
+				<border color='FFFFFF'/>
+			</cover>
 		</tooltip>
 
-		<tooltip id='Black' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
-			<self style='Black_Self'/>
-			<group style='Black_Group'/>
+		<tooltip id='Black' enable='true' locked='false' format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20' text="${tooltip}">
+			<border thikness='1' alpha='1' color='${color}{adjustColor:1.5}' pixelHinting='true'/>
+			<fill color='333333' alpha='0.7'/>
+			<format color='${color}{adjustColor:1.5}'/>
 		</tooltip>
 
 
@@ -243,10 +239,17 @@
             <color>#6DCFF6</color>
             <color>#9BD124</color>
 		</colors>
-
-
 	</template>
 	
+
+
+
+
+
+
+
+
+
 	<styles>
 	    <!--默认色： 简单--------------------------------------------------------------------------------------->
 	    <Simple animation='true'>
@@ -270,7 +273,12 @@
 	        </chartBG>
 	        
 	        <valueLabel enable='true' margin='0' padding='5' text='${valueLabel}' format='FontFormat'>
-	            <format color='${color}{adjustColor:0.5}' size='14'/>
+	            <format color='FFFFFF' size='14'/>
+	            <text>
+	            	<effects>
+						<shadow color='${color}{adjustColor:0.5}' alpha='0.8' distance='1' blur='1' angle='90'/>
+					</effects>
+	            </text>
 	        </valueLabel>
 	        
 	        <tooltip>Simple</tooltip>
@@ -316,10 +324,10 @@
 	        </chartBG>
 	        
 	        <valueLabel enable='true' margin='0' padding='5' text='${valueLabel}' format='FontFormat'>
-	            <format color='${color}{adjustColor:0.5}' size='14'/>
+	            <format color='${color}{adjustColor:0.6}' size='14'/>
 	            <text>
 	            	<effects>
-						<shadow color='${color}{adjustColor:1.4}' alpha='1' distance='1' blur='1' angle='90'/>
+						<shadow color='${color}{adjustColor:1.8}' alpha='1' distance='1' blur='1' angle='90'/>
 					</effects>
 	            </text>
 	        </valueLabel>
@@ -344,24 +352,7 @@
 
 	    <!-- 黑色  ------------------------------------------------------------------>
 	    <Black animation='true'>
-	        <pieSeriesStyle>
-	            <states normal='HighLight' hover='HighLight' down='HighLight'>
-	                <normal>
-	                    <fill type='radial' radioes='0,200,255' alpha='1,1,1' angle='0'
-	                    color='${color}{adjustColor:1.5},${color}{adjustColor:1.2},${color}{adjustColor:1}'/>
-	                   
-	                </normal>
-	                <hover>
-	                    <fill type='radial' radioes='0,230,255' alpha='1,1,1' angle='0'
-	                    color='${color}{adjustColor:1.2},${color}{adjustColor:1.3},${color}{adjustColor:1}'/>
-	                    
-	                </hover>
-	                <down>
-	                    <fill type='radial' radioes='0,180' alpha='1,1' angle='0'
-	                    color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
-	                </down>
-	            </states>
-	        </pieSeriesStyle>
+	        <pieSeriesStyle style='Black'/>
 	            
 	        <pieSeries>
 	            <pie labelField='label' valueField='value'/>
@@ -382,11 +373,11 @@
 	        
 	        <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10' gutterRight='10'>
 	            <border color='595959'/>
-                <fill type='radial' color='#616161,#1E1E1E' alpha='1,1' radioes='0,255'/>
+                <fill type='radial' color='#757575,#1E1E1E' alpha='1,1' radioes='0,255'/>
 	        </chartBG>
 	        
 	        <valueLabel enable='true' margin='0' padding='5' text='${valueLabel}' format='FontFormat'>
-	            <format color='${color}{adjustColor:0.4}' size='14'/>
+	            <format color='${color}{adjustColor:0.6}' size='14'/>
 	            <text>
 	            	<effects>
 						<shadow color='${color}{adjustColor:1.3}' alpha='1' distance='1' blur='1' angle='90'/>

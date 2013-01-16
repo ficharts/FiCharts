@@ -130,7 +130,7 @@ package com.fiCharts.charts.toolTips
 				labelsContainer.x = - labelsContainer.width / 2;
 				labelsContainer.y = labelsContainer.height / 2;
 			}
-			else
+			else// 饼图的tips直接以holder为载体
 			{
 				this.style = tooltipHolder.style;
 				updateBgSize();
