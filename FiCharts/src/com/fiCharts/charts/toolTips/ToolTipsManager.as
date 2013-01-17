@@ -64,6 +64,7 @@ package com.fiCharts.charts.toolTips
 		 */		
 		private function init():void
 		{
+			toolTipUI.visible = false;
 			container.addChild(toolTipUI);
 			container.addEventListener(ToolTipsEvent.SHOW_TOOL_TIPS, showToolTipsHandler, false, 0, true);
 			container.addEventListener(ToolTipsEvent.HIDE_TOOL_TIPS, hideToolTipsHandler, false, 0, true);
