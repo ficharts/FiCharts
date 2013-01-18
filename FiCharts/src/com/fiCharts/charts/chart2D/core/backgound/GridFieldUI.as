@@ -55,38 +55,43 @@ package com.fiCharts.charts.chart2D.core.backgound
 		public function render(horiTicks:Vector.<Number>, vertiTicks:Vector.<Number>, 
 							   style:GridFieldStyle):void
 		{
-			drawVGidLine(vertiTicks, style);
-			drawHGidLine(horiTicks, style);
 			
-			graphics.clear();
-			StyleManager.setFillStyle(graphics, style);
-			graphics.drawRoundRect(0, 0, style.width, style.height, style.radius, style.radius);
-			
-			border.graphics.clear();
-			StyleManager.setLineStyle(border.graphics, style.getBorder);
-			border.graphics.drawRoundRect(0, 0, style.width, style.height, style.radius, style.radius);
-			
-			var borderThikness:Number = 0;
-			
-			if (style.vGrid.border)
-				borderThikness = style.vGrid.getBorder.thikness;
-			else
-				borderThikness = 0;
-			
-			vGridMask.graphics.clear();
-			vGridMask.graphics.beginFill(0, 0);
-			vGridMask.graphics.drawRoundRect( - borderThikness, 0, 
-				style.width + borderThikness * 2, style.height, style.radius, style.radius);
-			
-			if (style.hGrid.border)
-				borderThikness = style.hGrid.getBorder.thikness;
-			else
-				borderThikness = 0;
+			if (style.enable)
+			{
+				drawVGidLine(vertiTicks, style);
+				drawHGidLine(horiTicks, style);
 				
-			hGridMask.graphics.clear();
-			hGridMask.graphics.beginFill(0,0);
-			hGridMask.graphics.drawRoundRect(0, - borderThikness, 
-				style.width, style.height + borderThikness * 2, style.radius, style.radius);
+				graphics.clear();
+				StyleManager.setFillStyle(graphics, style);
+				graphics.drawRoundRect(0, 0, style.width, style.height, style.radius, style.radius);
+				
+				border.graphics.clear();
+				StyleManager.setLineStyle(border.graphics, style.getBorder);
+				border.graphics.drawRoundRect(0, 0, style.width, style.height, style.radius, style.radius);
+				
+				var borderThikness:Number = 0;
+				
+				if (style.vGrid.border)
+					borderThikness = style.vGrid.getBorder.thikness;
+				else
+					borderThikness = 0;
+				
+				vGridMask.graphics.clear();
+				vGridMask.graphics.beginFill(0, 0);
+				vGridMask.graphics.drawRoundRect( - borderThikness, 0, 
+					style.width + borderThikness * 2, style.height, style.radius, style.radius);
+				
+				if (style.hGrid.border)
+					borderThikness = style.hGrid.getBorder.thikness;
+				else
+					borderThikness = 0;
+				
+				hGridMask.graphics.clear();
+				hGridMask.graphics.beginFill(0,0);
+				hGridMask.graphics.drawRoundRect(0, - borderThikness, 
+					style.width, style.height + borderThikness * 2, style.radius, style.radius);
+			}
+			
 		}
 
 		/**

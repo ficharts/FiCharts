@@ -1,0 +1,63 @@
+
+
+#content{
+
+	padding: 20px 0px;
+	height: auto;
+
+
+}
+
+.section {
+
+	clear: both;
+    content: ".";
+    display: block;
+    margin: 20px 0;
+    height: 380px;
+}
+
+img.left {
+
+	  position: relative;
+	  float: left;
+}
+
+div.right {
+
+	position: relative;
+    text-align: center;
+    float: right;
+    width: 300px;
+    margin: 100px 100px 0 0; 
+}
+
+img.right{
+
+	position: relative;
+    float: right;
+}
+
+
+div.left {
+
+	position: relative;
+    text-align: center;
+    float: left;
+    width: 300px;
+    margin: 100px 100px 0 0; 
+}
+
+
+ p.title {
+
+ 	margin: 0px;
+	font-size: 30px;
+}
+
+ p.sub {
+ 	margin: 0px;
+	color: #888888;
+	text-shadow: 0 1px 0 #FFFFFF;
+	font-size: 15px;
+}

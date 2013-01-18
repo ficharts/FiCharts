@@ -5,7 +5,6 @@ package com.fiCharts.charts.chart2D.pie
 	import com.fiCharts.charts.chart2D.pie.series.Series;
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.legend.LegendStyle;
-	import com.fiCharts.charts.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -73,8 +72,6 @@ package com.fiCharts.charts.chart2D.pie
 		 */
 		public function set legend(value:LegendStyle):void
 		{
-			_legend = value;
-			
 			_legend = XMLVOMapper.updateObject(value, _legend, Model.LEGEND) as LegendStyle;
 			
 			XMLVOLib.dispatchCreation(Chart2DModel.UPDATE_LEGEND_STYLE, value);
@@ -269,6 +266,18 @@ package com.fiCharts.charts.chart2D.pie
 		 * 是否开启开场动画
 		 */		
 		private var _animation:Object = true;
+		
+		/**
+		 */		
+		public function get bgVisible():Object
+		{
+			return this.chartBG.enable;
+		}
+		
+		public function set bgVisible(value:Object):void
+		{
+			this.chartBG.enable = value;
+		}
 		
 
 	}

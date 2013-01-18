@@ -427,7 +427,7 @@ package com.fiCharts.charts.chart2D.core.model
 		
 		/**
 		 */		
-		private var _gridField:GridFieldStyle;
+		private var _gridField:GridFieldStyle = new GridFieldStyle;
 
 		public function get gridField():GridFieldStyle
 		{
@@ -457,5 +457,24 @@ package com.fiCharts.charts.chart2D.core.model
 		{
 			_scrollBar = value;
 		}
+		
+		/**
+		 */		
+		private var _bgVisible:Object
+
+		public function get bgVisible():Object
+		{
+			return _bgVisible;
+		}
+
+		public function set bgVisible(value:Object):void
+		{
+			_bgVisible = XMLVOMapper.boolean(value);
+			
+			gridField.enable = _bgVisible;
+			this.chartBG.enable = _bgVisible;
+		}
+
+		
 	}
 }

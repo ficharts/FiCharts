@@ -19,14 +19,18 @@ package com.fiCharts.charts.chart2D.core.backgound
 		{
 			graphics.clear();
 			
-			var thikness:Number = style.border.thikness;
-			StyleManager.setShapeStyle(style, this.graphics);
+			if (style.enable)
+			{
+				var thikness:Number = style.border.thikness;
+				StyleManager.setShapeStyle(style, this.graphics);
+				
+				graphics.drawRoundRect(thikness / 2, thikness / 2, style.width - thikness, 
+					style.height - thikness, style.radius, style.radius);
+				graphics.endFill();
+				
+				StyleManager.setEffects(this, style);
+			}
 			
-			graphics.drawRoundRect(thikness / 2, thikness / 2, style.width - thikness, 
-				style.height - thikness, style.radius, style.radius);
-			graphics.endFill();
-			
-			StyleManager.setEffects(this, style);
 		}
 		
 	}

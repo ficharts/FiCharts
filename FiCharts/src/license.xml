@@ -4,6 +4,7 @@
 	<servers>
 		<url>127.0.0.1/</url>
 		<url>lingtu.com/</url>
+		<url>202.204.71.211</url>
 	</servers>
 	<desc>未授权版本,内部试用</desc>
 </license>

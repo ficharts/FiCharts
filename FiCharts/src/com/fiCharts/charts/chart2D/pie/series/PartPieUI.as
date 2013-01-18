@@ -139,12 +139,14 @@ package com.fiCharts.charts.chart2D.pie.series
 				if (valueLabelUI.height * 0.5 > radDis * radius)
 					valueLabelUI.visible = false;
 				else
-					valueLabelUI.visible = true;
+				{
+					if (labelStyle.enable)
+						valueLabelUI.visible = true;
+				}
 				
 				ifSizeChanged = false;
 			}
 		}
-		
 		
 		
 		/**
