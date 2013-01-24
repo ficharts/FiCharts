@@ -1,40 +1,26 @@
-<config bgVisible='false'>
+<?xml version="1.0" encoding="UTF-8"?>
+<config precision="2" title="2011年全球手机销量" ySuffix="亿部">
     <axis>
-        <x enable='false' type="field" title='月份'/>
-        <y enable='false' id='a' type="linear" title='产量'>
-            <label text='${value}K'>
-                <format color='${color}'/>
-            </label>
-            <title>
-                <format color='${color}'/>
-            </title>
-        </y>
-        <y enable='false' id='b' type="linear" title='销售额'>
-            <label text='${value}{useGrouping: true}万'>
-                <format color='${color}'/>
-            </label>
-            <title>
-                <format color='${color}'/>
-            </title>
-        </y>
+        <x title="厂商" type="field"/>
+        <y title="销量" type="linear"/>
     </axis>
     <series>
-        <line seriesName="产品A"  xField='label' yField='valueA' yAxis='a'/>
-        <column seriesName="产品B"  xField='label' yField='valueB' yAxis='b' labelDisplay='none'/>
+        <column xField="label" yField="value" singleColor="false">
+            <label><![CDATA[${yValue}{round: 1}亿部]]></label>
+        </column>
     </series>
-    <legend enable='false'/>
+    <legend enable="true">
+         <label><![CDATA[${xLabel}, ${yValue}{round: 1}亿部]]></label>
+    </legend>
+    <tooltip>
+        <label><![CDATA[${xLabel}<br/>${yValue}{round: 3}亿部]]></label>
+    </tooltip>
     <data>
-        <set label='1月' valueA='279' valueB='4000'/>
-        <set label='2月' valueA='410' valueB='2000'/>
-        <set label='3月' valueA='325' valueB='1500'/>
-        <set label='4月' valueA='572' valueB='1000'/>
-        <set label='5月' valueA='629' valueB='3000'/>
-        <set label='6月' valueA='710' valueB='4000'/>
-        <set label='7月' valueA='489' valueB='6000'/>
-        <set label='8月' valueA='635' valueB='8000'/>
-        <set label='9月' valueA='750' valueB='6000'/>
-        <set label='10月' valueA='600' valueB='4000'/>
-        <set label='11月' valueA='760' valueB='3500'/>
-        <set label='12月' valueA='950' valueB='3000'/>
+        <set label="Nokia" value="4.171"/>
+        <set label="Samsung" value="3.294"/>
+        <set label="Apple" value="0.932"/>
+        <set label="LG" value="0.881"/>
+        <set label="ZTE" value="0.661"/>
+        <set label="Others" value="5.521"/>
     </data>
 </config>

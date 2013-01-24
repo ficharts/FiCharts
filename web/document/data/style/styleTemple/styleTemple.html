@@ -7,7 +7,7 @@
 		<script type="text/javascript">
 			$(function(){
 
-				var blackChart = new Chart2D({id: 'black', width: '100%', height: 500, configFile: './data/style/styleTemple/blackChartConfig.xml', style: 'black'})
+				var blackChart = new Chart2D({id: 'black', width: '100%', height: 500, configFile: './data/style/styleTemple/blackChartConfig.xml', style: 'Black'})
 
 				$.get("./data/style/styleTemple/demo.html", function(data){
 
@@ -30,13 +30,16 @@
 		<div id="data">
 			<div id="title">样式模板</div>
 			<div id="content">
-				<p>黑与白，这是<span class='code'>ficharts</span>内嵌的两套标准样式模板，默认为白色，前面看到的所有图表都是采用默认的白色模板，是时候换个口味了：</p>
+				<p>样式模板分系统样式模板和自定义样式模板，我们先以系统样式为例描述其使用方法：</p>
 				<div id='black'></div>
-				<p>样式模板需在图表创建时指定：</p>
+				<p>上图中是应用了<span class='code'>Black</span>系统样式的图表，构建代码如下：</p>
 				<div class="codeWrapper"><pre id="configDemo" class="prettyprint"></pre></div>
-				<p>构造函数中的<span class='code'>style</span>参数用来定义样式, 值为<span class='code'>white/black</span>, <span class='code'>white</span>默认为图表配置文件是无辜的，不信您看：</p>
+				<p>构造函数中的<span class='code'>style</span>参数用来定义样式, 可选参数为：<span class='code'>Simple、Classic、Black</span>。</p>
+
+
+				<p></p>
 				<div class="codeWrapper"><pre id="configFile" class="prettyprint"></pre></div>
-				<p>同样的配置文件，只要构造函数中<span class='code'>style</span>参数一遍，整体样式全变，不信您再试试？</p>
+				<p></p>
 			</div>
 		</div>
 	</body>

@@ -10,8 +10,8 @@
 			<div id="title">方法</div>
 			<div id="content">
 				<p class='subTitle'>构造函数</p>
-				<p>图表创建从构造函数开始，目前<span class='code'>ficharts</span>中所有图表创建源自<span class='code'>Chart2D</span>，是的<span class='code'>2D</span>图表，也是经常会用到的图表类型。未来<span class='code'>ficharts</span>发展的一是把 <span class='code'>2D</span>图表先做精，做全，其次是开辟<span class='code'>Chart3D</span>等新篇章。</p>
-				<p><span class='code'>Chart2D</span>构造函数只接受一个参数, 通常是一个对象，包含如下属性：</p>
+				<p>图表创建从构造函数开始，目前<span class='code'>ficharts</span>支持两种构造函数：<span class='code'>Pie2D</span>和<span class='code'>Chart2D</span>。前者用于构建2D饼状图，后者构建除此以外的其他2D图表，但他们的属性和方法是一致的，<span class='code'>ficharts</span>的对外接口适用于所有图表类型。
+				<p>构造函数通常只接受一个参数, 对象，其包含如下属性：</p>
 				<div class="tableWrapper">
 					<table width="100%">
 						<tbody>
@@ -38,8 +38,8 @@
 						
 							<tr>
 								<td><span class='code'>style</span></td>
-								<td><span class='code'>white/black</span></td>
-								<td>图表样式，决定图表整体视觉风格，默认为<span class='code'>white</span></td>
+								<td><span class='code'>Simple/Classic/Black</span></td>
+								<td>图表样式，决定图表整体视觉风格，默认为<span class='code'>Simple</span></td>
 							</tr>
 
 							<tr>
@@ -52,6 +52,17 @@
 				</div>
 
 				<p>例如<span class='code'>New Chart2D({id: 'myChart', width: '100%', height: 500})</span>定义了一个<span class='code'>id</span>为<span class='code'>myChart</span>, 宽度占满容器且高度为<span class='code'>500</span>像素的<span class='code'>2D</span>类型图表。如果构造函数仅包含一个字符串类型的参数，它既是图表<span class='code'>id</span>。</p>
+
+				<p>除此方式还有几种更简化的方式：</p>
+				<ul>
+					<li>1.仅传递图表的id，当构造函数只包含一个字符串类型的参数，并且未被逗号隔开，表示图表的id。例如：<span class='code'>Chart2D('myChart')</span>
+					</li>
+					<li>2.传递图表id和配置文件，当仅有的一个参数被逗号隔开为2份时，第一个是图表id，第二个是配置文件路径。例如：<span class='code'>Chart2D("myChart,data.xml")</span>
+					</li>
+					<li>
+						3.传递图表id，宽高和配置文件，当仅有的一个参数被逗号隔开为4份时，依次是：图表id、宽、高、配置文件路径。例如：<span class='code'>Chart2D("myChart,500,500,data.xml")</span>
+					</li>
+				</ul>
 
 				<p class='subTitle'>实例函数</p>
 				<p>图表创建好了便可以调用如下方法，操控图表行为和属性：</p>
@@ -81,7 +92,7 @@
 						
 							<tr>
 								<td><span class='code'>setStyle</span></td>
-								<td><span class='code'>white/black</span></td>
+								<td><span class='code'>Simple/Classic/Black</span></td>
 								<td>图表样式，决定图表整体视觉风格。当初始化完毕后调用此方法只是改变样式配置文件， 如果需要看到效果还需要调用 render()方法</td>
 							</tr>
 
@@ -108,6 +119,13 @@
 								<td>null</td>
 								<td>渲染图表</td>
 							</tr>
+
+							<tr>
+								<td><span class='code'>getChartBase64Data</span></td>
+								<td>null</td>
+								<td>获取图表截图的Base64编码数据，利用此数据可以在服务端生成图表截图，或其他文件格式。因为处于安全考虑，浏览器不允许直接调用接口方式在客户端生成文件，故开放此接口弥补此缺陷。</td>
+							</tr>
+							
 						</tbody>
 					</table>
 				</div>

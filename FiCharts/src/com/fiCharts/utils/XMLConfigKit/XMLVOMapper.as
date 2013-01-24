@@ -141,7 +141,7 @@ package com.fiCharts.utils.XMLConfigKit
 		{
 			if (vo == null) 
 			{
-				trace("此类映射<icon>RectIcon</icon>因没有父节点，所以失败")
+				trace("此类映射" + voName + "因没有父节点，所以失败");
 				return;
 			}
 				
