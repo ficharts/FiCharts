@@ -7,6 +7,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.encry.CP;
 	import com.fiCharts.charts.common.ChartColors;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -43,8 +44,8 @@ package com.fiCharts.charts.chart2D.bar.stack
 		 */		
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.SERIES_DATA_STYLE, "config"), this);
-			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.STACKED_BAR_SERIES, "config"), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.SERIES_DATA_STYLE, Model.SYSTEM), this);
+			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.STACKED_BAR_SERIES, Model.SYSTEM), this);
 			
 			this.stacks = new Vector.<StackedSeries>;
 		}

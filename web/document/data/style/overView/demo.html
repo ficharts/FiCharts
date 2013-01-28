@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>www.ficharts.com</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript" src="./ficharts/FiCharts.js"></script>
+    <script type="text/javascript">
+            (function() {
+
+                var chart = new Chart2D({
+                    id : 'myChart',
+                    width : 500,
+                    height : 500,
+                    configFile : './config.xml',
+                    style : 'Classic'
+                });
+
+            })()
+        </script>
+</head>
+<body>
+    <div id="myChart"/>
+</body>
+</html>

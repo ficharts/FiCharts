@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config precision="2" title="2011年全球手机销量" ySuffix="亿部">
+    <axis>
+        <x title="厂商" type="field"/>
+        <y title="销量" type="linear"/>
+    </axis>
+    <series>
+        <column xField="label" yField="value" singleColor="false">   
+        </column>
+    </series>
+    <legend enable="true" style='my'>
+         <border thikness='2' alpha='1'/>
+         <label><![CDATA[${xLabel}, ${yValue}{round: 1}亿部]]></label>
+    </legend>
+    <template>
+        <legend id='my'>
+            <border color='EE0000' thikness='1' alpha='0'/>
+            <fill color='FFFF00' alpha='0.5'/>
+            <icon>Simple</icon>
+            <label format='FontFormat'/>
+        </legend>
+    </template>
+    <data>
+        <set label="Nokia" value="4.171"/>
+        <set label="Samsung" value="3.294"/>
+        <set label="Apple" value="0.932"/>
+        <set label="LG" value="0.881"/>
+        <set label="ZTE" value="0.661"/>
+        <set label="Others" value="5.521"/>
+    </data>
+</config>

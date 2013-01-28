@@ -72,7 +72,7 @@ package com.fiCharts.charts.chart2D.pie
 		 */
 		public function set legend(value:LegendStyle):void
 		{
-			_legend = XMLVOMapper.updateObject(value, _legend, Model.LEGEND) as LegendStyle;
+			_legend = XMLVOMapper.updateObject(value, _legend, Model.LEGEND, this) as LegendStyle;
 			
 			XMLVOLib.dispatchCreation(Chart2DModel.UPDATE_LEGEND_STYLE, value);
 		}

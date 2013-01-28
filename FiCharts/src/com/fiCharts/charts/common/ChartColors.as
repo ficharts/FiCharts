@@ -25,7 +25,7 @@ package com.fiCharts.charts.common
 		 */		
 		public static function set colors(value:Colors):void
 		{
-			_colors = XMLVOMapper.updateObject(value, _colors, Model.COLORS) as Colors;
+			_colors = XMLVOMapper.updateObject(value, _colors, Model.COLORS, null) as Colors;
 		}
 		
 		/**

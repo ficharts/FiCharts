@@ -5,8 +5,8 @@
 		<item title='拐点型' desc='' imgURL='./gallery/line/step.gif' demoURL='line/stepLine.xml'/>
 		<item title='多序列' desc='' imgURL='./gallery/line/multiSeries.gif' demoURL='line/multiSeries.xml'/>
 		<item title='多轴' desc='' imgURL='./gallery/line/multiAxis.gif' demoURL='line/multiAxis.xml'/>
-		<item title='曲面(黑色风格)' desc='' imgURL='./gallery/area/area.gif' demoURL='area/area.xml' style='black'/>
-		<item title='曲面多轴(黑色风格)' desc='' imgURL='./gallery/area/multiAxis.gif' demoURL='area/multiAxis.xml' style='black'/>
+		<item title='曲面(黑色风格)' desc='' imgURL='./gallery/area/area.gif' demoURL='area/area.xml' style='Black'/>
+		<item title='曲面多轴(黑色风格)' desc='' imgURL='./gallery/area/multiAxis.gif' demoURL='area/multiAxis.xml' style='Black'/>
 	</chart>
 
 	<chart title='柱状/条形图'>
@@ -23,7 +23,7 @@
 		<item title='默认' desc='' imgURL='./gallery/pie/default.png' demoURL='pie/default.xml' type='pie'/>
 		<item title='有图例' desc='' imgURL='./gallery/pie/legend.png' demoURL='pie/legend.xml' type='pie'/>
 		<item title='改变了数值显示' desc='' imgURL='./gallery/pie/configLabel.png' demoURL='pie/configLabel.xml' type='pie'/>
-		<item title='黑色系' desc='' imgURL='./gallery/pie/black.png' demoURL='pie/black.xml' type='pie' style='black'/>
+		<item title='黑色系' desc='' imgURL='./gallery/pie/black.png' demoURL='pie/black.xml' type='pie' style='Black'/>
 	</chart>
 
 	<chart title='堆积图'>

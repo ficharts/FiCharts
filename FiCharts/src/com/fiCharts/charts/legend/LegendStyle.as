@@ -55,7 +55,7 @@ package com.fiCharts.charts.legend
 		 */		
 		public function set icon(value:DataRender):void
 		{
-			_icon = XMLVOMapper.updateObject(value, _icon, Model.ICON) as DataRender;
+			_icon = XMLVOMapper.updateObject(value, _icon, Model.ICON, this) as DataRender;
 		}
 		
 		/**

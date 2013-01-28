@@ -99,7 +99,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set states(value:States):void
 		{
-			_states = XMLVOMapper.updateObject(value, _states, "states") as States;
+			_states = XMLVOMapper.updateObject(value, _states, "states", this) as States;
 		}
 		
 		/**
@@ -285,7 +285,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set tooltip(value:TooltipStyle):void
 		{
-			_tooltip = XMLVOMapper.updateObject(value, _tooltip, Model.TOOLTIP) as TooltipStyle;
+			_tooltip = XMLVOMapper.updateObject(value, _tooltip, Model.TOOLTIP, this) as TooltipStyle;
 		}
 
 		
@@ -418,7 +418,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function set dataRender(value:DataRender):void
 		{
-			_dataRender = XMLVOMapper.updateObject(value, _dataRender, Model.DATA_RENDER) as DataRender;
+			_dataRender = XMLVOMapper.updateObject(value, _dataRender, Model.DATA_RENDER, this) as DataRender;
 		}
 		
 		

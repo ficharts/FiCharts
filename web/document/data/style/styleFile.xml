@@ -1,18 +1,6 @@
 <config>
-	<menu>
-		<saveAsImage>存储为图片</saveAsImage>
-		<about>关于</about>
-		<version>版本</version>
-	</menu>
-	<!------------------------------------------------------公共样式----------------------------------------------------------------------------->
-
 
 	<template>
-
-
-
-		<!---------------------效果----------------------------------------------------->
-
         <effects id='Series'>
 			<shadow color='${color}{adjustColor:0.5}' alpha='0.2' distance='2' blur='2'/>
 		</effects>
@@ -44,13 +32,6 @@
 			</cover>
 		</style>
 
-
-
-
-
-
-
-		<!-------------------文字样式----------------------------------------------------------------------------------->
 
         <format id='FontFormat' font='微软雅黑' size='12' color='${color}'/>
 
@@ -109,13 +90,6 @@
 		</label>
 
 
-       
-
-
-
-
-        <!----------------------趋势图样式--------------------------------->
-
 		<line id='Simple'>
 			<states>
 				<normal>
@@ -156,10 +130,6 @@
 		</line>
 
 
-
-		<!----------------------------区域图样式--------------------------------------------------------------------->
-
-
 		<area id='Simple'>
 			<states>
 				<normal>
@@ -195,8 +165,6 @@
 		</area>
 
 
-
-	   <!----------------------------柱状图样式--------------------------------------------------------------------->
 
 	  	<states id='SimpleShape'>
 			<normal>
@@ -237,8 +205,6 @@
 		<stackedBar id='Simple' states='SimpleShape'/>
 		<stackedBar id='Classic' states='ClassicShape'/>
 
-
-        <!----------------------------数据节点------------------------------------------------------------->
 		<dataRender id='Square'>
 			<rect>
 				<states>
@@ -375,9 +341,6 @@
 			</circle>
 		</dataRender>
 
-		
-
-		<!--------------------图例------------------------------------->
 
 		<icon id='Simple'>
 			<rect states='SimpleShape'>
@@ -431,8 +394,6 @@
 		</legend>
 
 
-		<!--------------------ToolTip----------------------------------------->
-
 		<tooltip id='Simple' enable='true' locked='false' self="${tooltip}" group="${tooltip}">
 			<self style='Simple_Self'/>
 			<group style='Simple_Group'/>
@@ -449,7 +410,6 @@
 		</tooltip>
 
 
-        <!--------------------颜色板------------------------------->
         <colors id='Heavy'>
 			<color>#097DDA</color>
             <color>#017E01</color>
@@ -485,21 +445,12 @@
 	</template>
 
 
-	<!---------------------------------------------------------公共样式-------------------------------------------------------------------------->
 
 
 
 
-
-
-
-
-
-
-    <!------------------------------------------------------------------------------------------------------------------------------------------->
 	<styles>
 
-		<!-- 默认样式  ： 精简-->
 		<Simple animation='true'>
 			<title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
 				<format size='14' color='3C4145' bold='true'/>
@@ -558,7 +509,6 @@
 				<text value='${valueLabel}'/>
 			</innerValueLabel>
 
-			<!---------------------------- 序列 ------------------------->
 
 			<line style='Simple' labelDisplay="none">
 				<dataRender style='SimplePoint'/>
@@ -592,30 +542,12 @@
 				<dataRender style='SimpleBubble'></dataRender>
 			</bubble>
 
-
-			<!--- 模板 ---------------->
-			<template>
-            </template>
-
-            <!----色系----------------->
 			<colors>RGB</colors>
 		</Simple>
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-		<!----------------------------------- 默认样式  ： 经典色系-------------------------------------------------------------------------------->
 		<Classic animation='true'>
 			<title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
 				<format size='14' color='3C4145' bold='true'/>
@@ -711,14 +643,6 @@
 
 
 
-
-
-
-
-
-
-
-		<!--------------------------------------- 黑色  ----------------------------------------------------------------------->
 		<Black animation='true'>
 			<title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
 				<format size='14' color='ADADAD' bold='true'/>
@@ -770,7 +694,7 @@
 			<tooltip style='Black'/>
 			<legend style='Black'/>
 
-			<valueLabel margin='0' padding='5'format='FontFormat'>
+			<valueLabel margin='0' padding='5' format='FontFormat'>
 				<text value='${valueLabel}'/>
 			</valueLabel>
 
@@ -784,7 +708,6 @@
 			</innerValueLabel>
 
 
-			<!-- 序列 -->
 			<line style='Classic' labelDisplay="none">
 				<dataRender style='ClassicPoint'/>
 			</line>

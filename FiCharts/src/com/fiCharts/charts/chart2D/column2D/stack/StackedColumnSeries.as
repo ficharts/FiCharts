@@ -10,7 +10,6 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
-	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;

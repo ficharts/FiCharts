@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config precision="2" title="2011年全球手机销量" ySuffix="亿部">
+    <axis>
+        <x title="厂商" type="field"/>
+        <y title="销量" type="linear"/>
+    </axis>
+    <series>
+        <column style='custom' xField="label" yField="value">   
+        </column>
+    </series>
+    <template>
+        <column id='custom'>
+            <states>
+                <normal>
+                    <border color='AAAAAA' thikness='2' alpha='0.8'/>
+                    <fill color='${color}'/>
+                </normal>
+                <hover>
+                    <border color='CCCC00' thikness='2' alpha='1'/>
+                    <fill color='FF0000 '/>
+                </hover>
+                <down>
+                    <border color='CCCCCC' thikness='2' alpha='1'/>
+                    <fill color='${color}' alpha='0.5'/>
+                </down>
+            </states>
+        </column>
+    </template>
+    <data>
+        <set label="Nokia" value="4.171"/>
+        <set label="Samsung" value="3.294"/>
+        <set label="Apple" value="0.932"/>
+        <set label="LG" value="0.881"/>
+        <set label="ZTE" value="0.661"/>
+        <set label="Others" value="5.521"/>
+    </data>
+</config>

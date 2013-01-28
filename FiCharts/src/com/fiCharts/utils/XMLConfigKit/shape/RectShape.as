@@ -54,7 +54,7 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		 */		
 		public function set states(value:States):void
 		{
-			_states = XMLVOMapper.updateObject(value, _states, "states") as States;
+			_states = XMLVOMapper.updateObject(value, _states, "states", this) as States;
 		}
 		
 		/**

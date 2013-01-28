@@ -97,7 +97,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */
 		public function set effects(value:Object):void
 		{
-			_effects = XMLVOMapper.updateObject(value, _effects, "effects") as Effects;
+			_effects = XMLVOMapper.updateObject(value, _effects, "effects", this) as Effects;
 		}
 		
 

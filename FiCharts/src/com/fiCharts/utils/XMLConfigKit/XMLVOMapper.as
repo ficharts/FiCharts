@@ -1,5 +1,6 @@
 package com.fiCharts.utils.XMLConfigKit
 {
+	import com.adobe.utils.XMLUtil;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
@@ -18,8 +19,11 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function fuck(xml:*, vo:Object, parentVo:Object = null):void
 		{
-			transformNodeAttributes(xml.attributes(), vo, xml.name().toString());
-			ransfromNodeChild(xml, vo, parentVo, xml.name().toString());
+			if (xml.attributes()&& xml.name())
+			{
+				transformNodeAttributes(xml.attributes(), vo, xml.name().toString());
+				ransfromNodeChild(xml, vo, parentVo, xml.name().toString());
+			}
 		}
 		
 		/**
@@ -37,9 +41,17 @@ package com.fiCharts.utils.XMLConfigKit
 						childName = child.name().toString();
 					else
 					{
-						//  当此节点是字符串值时则直接付给父节点对象上
-						setObjectProperty(parentVo, voName, child, voName);
-						break;
+						if (parentVo == null)
+						{
+							updateObject(child, vo, voName, parentVo);
+							transformNodeAttributes(xml.attributes(), vo, xml.name().toString());
+						}
+						else
+						{
+							//  当此节点是字符串值时则直接付给父节点对象上
+							setObjectProperty(parentVo, voName, child, voName);
+							break;
+						}
 					}
 						
 					if (vo.hasOwnProperty(childName))
@@ -142,9 +154,10 @@ package com.fiCharts.utils.XMLConfigKit
 			if (vo == null) 
 			{
 				trace("此类映射" + voName + "因没有父节点，所以失败");
+				
 				return;
 			}
-				
+			
 			try
 			{
 				vo[property] = value;
@@ -152,7 +165,7 @@ package com.fiCharts.utils.XMLConfigKit
 			catch(e:Error)
 			{
 				if (XMLVOLib.isRegistedXML(value.toString(), property))
-					vo[property] = updateObject(value, vo[property], property);// 对象存在于共享库中
+					vo[property] = updateObject(value, vo[property], property, vo);// 对象存在于共享库中
 				else if (XMLVOLib.isObjectToProperyRegisted(voName + property))// 将值映射到对象上的某个对应属性
 				{
 					if (vo[property] == null) // 先创建后赋值
@@ -316,7 +329,7 @@ package com.fiCharts.utils.XMLConfigKit
 		 * 
 		 * 如果是样式ID，根据ID全新构建样式元素，标签名决定样式对象
 		 */		
-		public static function updateObject(newValue:Object, oldValue:Object, type:String):IFiElement
+		public static function updateObject(newValue:Object, oldValue:Object, type:String, parent:Object):IFiElement
 		{
 			var target:*;
 			
@@ -330,7 +343,7 @@ package com.fiCharts.utils.XMLConfigKit
 				else
 				{
 					target = getVOByXML_ID(newValue.toString(), type);
-					fuck(newValue, target);// 此类映射仅跟节点属性可被映射，子项不能，因为没有父节点/没有上下文关系
+					fuck(newValue, target, parent);// 此类映射仅跟节点属性可被映射，子项不能，因为没有父节点/没有上下文关系
 				}
 			}
 			else// 原始值存在，更新

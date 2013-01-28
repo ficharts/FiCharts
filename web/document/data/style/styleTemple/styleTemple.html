@@ -9,6 +9,8 @@
 
 				var blackChart = new Chart2D({id: 'black', width: '100%', height: 500, configFile: './data/style/styleTemple/blackChartConfig.xml', style: 'Black'})
 
+				var newColumn = new Chart2D({id: 'newColumn', width: '100%', height: 500, configFile: './data/style/styleTemple/configColumn.xml', style: 'Simple'})
+
 				$.get("./data/style/styleTemple/demo.html", function(data){
 
 					$('pre#configDemo').text($.xmlToString(data));
@@ -18,6 +20,13 @@
 				$.get("./data/style/styleTemple/blackChartConfig.xml", function(data){
 
 					$('pre#configFile').text($.xmlToString(data));
+					prettyPrint();
+				});
+
+
+				$.get("./data/style/styleTemple/configColumn.xml", function(data){
+
+					$('pre#configColumn').text($.xmlToString(data));
 					prettyPrint();
 				});
 				
@@ -39,7 +48,12 @@
 
 				<p></p>
 				<div class="codeWrapper"><pre id="configFile" class="prettyprint"></pre></div>
-				<p></p>
+				<p>自定义样式模板与系统样式模板本质相同，由基本样式元素有机组成；不同的是系统样式系统自带，大写字母开头命名；自定义样式小写字母开头命名，被优先匹配。在图表配置文件中<span class='code'>template</span>节点下定义样式模板，必须包含<span class='code'>id</span>。应用时需满足两个匹配：<span class='code'>id</span>匹配和类型匹配，<span class='code'>id</span>匹配是要与模板中同名样式对应；看类型匹配是指：您不能将图例<span class='code'>legend</span>类型的样式匹配给工具提示<span class='code'>tooltip</span>。</p>
+
+				<p>下面将采用自定义模板方式重写柱状图样式，先看配置文件：</p>
+				<div class="codeWrapper"><pre id="configColumn" class="prettyprint"></pre></div>
+				<p>结果如下：</p>
+				<div id='newColumn'></div>
 			</div>
 		</div>
 	</body>

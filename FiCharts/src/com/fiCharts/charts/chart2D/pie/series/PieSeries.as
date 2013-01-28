@@ -130,7 +130,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */
 		public function set tooltip(value:TooltipStyle):void
 		{
-			_tooltip = XMLVOMapper.updateObject(value, _tooltip, Model.TOOLTIP) as TooltipStyle;
+			_tooltip = XMLVOMapper.updateObject(value, _tooltip, Model.TOOLTIP, this) as TooltipStyle;
 		}
 
 		/**
@@ -448,7 +448,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */		
 		public function set states(value:States):void
 		{
-			_states = XMLVOMapper.updateObject(value, _states, "states") as States;;
+			_states = XMLVOMapper.updateObject(value, _states, "states", this) as States;;
 		}
 		
 		/**
@@ -501,7 +501,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */
 		public function set effects(value:Object):void
 		{
-			_effects = XMLVOMapper.updateObject(value, _effects, "effects") as Effects;
+			_effects = XMLVOMapper.updateObject(value, _effects, "effects", this) as Effects;
 		}
 		
 	}
