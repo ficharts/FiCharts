@@ -232,10 +232,10 @@
 		<colors id='RGB'>
             <color>#097DDA</color>
             <color>#728F1C</color>
-            <color>#EF306A</color>
-            <color>#4AC0C0</color>
             <color>#C451C8</color>
-            <color>#AB8718</color>
+            <color>#4AC0C0</color>
+			<color>#AB8718</color>
+            <color>#EF306A</color>
             <color>#4E555F</color>
             <color>#634BA7</color>
             <color>#2F8A93</color>

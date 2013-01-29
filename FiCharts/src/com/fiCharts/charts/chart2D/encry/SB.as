@@ -42,6 +42,17 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 序列自动计算名称，避免空值引起的图例排版问题
+		 */		
+		public function initSeriesName(index:uint):uint
+		{
+			if (RexUtil.ifTextNull(name))
+				name = "序列" + index;
+			
+			return index + 1;
+		}
+		
+		/**
 		 */		
 		protected function get type():String
 		{

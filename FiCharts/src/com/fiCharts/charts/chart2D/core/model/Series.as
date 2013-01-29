@@ -2,6 +2,7 @@ package com.fiCharts.charts.chart2D.core.model
 {
 	import com.fiCharts.charts.chart2D.column2D.ColumnSeries2D;
 	import com.fiCharts.charts.chart2D.encry.SB;
+	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
@@ -169,6 +170,8 @@ package com.fiCharts.charts.chart2D.core.model
 		public function beforeUpdateProperties(xml:* = null):void
 		{
 			_items = new Vector.<SB>;
+			
+			MarkerSeries.markerSeriesIndex = 0;
 		}
 		
 		/**
@@ -190,19 +193,18 @@ package com.fiCharts.charts.chart2D.core.model
 			var index:uint = 0;
 			var columnSereisIndex:uint = 0;
 			var columnSeriesAmount:uint = 0;
+			var seriesIndex:uint = 1;
 			
 			var seriesItem:SB;
 			colorMananger = new ChartColors();
 			for (var i:int = 0; i < length; i ++)
 			{
 				seriesItem = items[i];
-				
-				// 自动分配序列名称
-				if (RexUtil.ifTextNull(seriesItem.name))
-					seriesItem.name = "序列" + (i + 1);
-					
 				seriesItem.seriesIndex = index;
 				seriesItem.seriesCount = length;
+				
+				// 设置序列的默认序列名称
+				seriesIndex = seriesItem.initSeriesName(seriesIndex);
 				
 				// 按照序列的顺序指定序列颜色
 				if (!seriesItem.color)

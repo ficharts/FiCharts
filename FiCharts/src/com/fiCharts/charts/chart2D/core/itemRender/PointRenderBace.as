@@ -32,7 +32,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 			this.hitArea = canvas;
 			addChild(canvas);
 			
-			statesContorl = new StatesControl(this);
+			statesControl = new StatesControl(this);
 			canvas.addEventListener(MouseEvent.ROLL_OVER, rollOverHandler, false, 0, true);
 			canvas.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler, false, 0, true);
 		}
@@ -102,7 +102,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		 */		
 		public function disable():void
 		{
-			this.statesContorl.enable = canvas.visible = _isEnable = false;
+			this.statesControl.enable = canvas.visible = _isEnable = false;
 			
 			_itemVO.removeEventListener(ItemRenderEvent.SHOW_TOOLTIP, showTooltipHandler);
 			_itemVO.removeEventListener(ItemRenderEvent.HIDE_TOOLTIP, hideTooltipHandler);
@@ -112,7 +112,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		 */		
 		public function enable():void
 		{
-			this.statesContorl.enable = canvas.visible = _isEnable = true;
+			this.statesControl.enable = canvas.visible = _isEnable = true;
 			
 			_itemVO.addEventListener(ItemRenderEvent.SHOW_TOOLTIP, showTooltipHandler, false, 0, true);
 			_itemVO.addEventListener(ItemRenderEvent.HIDE_TOOLTIP, hideTooltipHandler, false, 0, true);
@@ -123,7 +123,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		private function showTooltipHandler(evt:Event):void
 		{
 			this.showToolTips();
-			statesContorl.toHover();
+			statesControl.toHover();
 		}
 		
 		/**
@@ -131,7 +131,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		private function hideTooltipHandler(evt:Event):void
 		{
 			this.hideToolTips();
-			statesContorl.toNormal();
+			statesControl.toNormal();
 		}
 		
 		/**
@@ -393,7 +393,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		{
 			_itemVO = v;
 			
-			legendStateContorl = new LegendStateControl(_itemVO, this.statesContorl);
+			legendStateContorl = new LegendStateControl(_itemVO, this.statesControl);
 			
 			_itemVO.addEventListener(ItemRenderEvent.SHOW_TOOLTIP, showTooltipHandler, false, 0, true);
 			_itemVO.addEventListener(ItemRenderEvent.HIDE_TOOLTIP, hideTooltipHandler, false, 0, true);
@@ -478,7 +478,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		
 		/**
 		 */		
-		protected var statesContorl:StatesControl;;
+		protected var statesControl:StatesControl;;
 
 	}
 }

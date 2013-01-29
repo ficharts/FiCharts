@@ -17,6 +17,13 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		}
 		
 		/**
+		 */		
+		public function setSize(value:uint):void
+		{
+			states.radius = value / 2;
+		}
+		
+		/**
 		 * 
 		 */		
 		private var _offset:Number = 0

@@ -18,6 +18,13 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		
 		/**
 		 */		
+		public function setSize(value:uint):void
+		{
+			states.radius = value / 2;
+		}
+		
+		/**
+		 */		
 		public function render(canvas:Sprite, metadata:Object):void
 		{
 			style.tx = - style.radius;

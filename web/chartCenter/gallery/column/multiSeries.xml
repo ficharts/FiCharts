@@ -4,8 +4,8 @@
         <y type="linear" title='产量' displayName='实际产量'/>
     </axis>
     <series>
-        <column seriesName="A序列"  xField='label' yField='valueA'/>
-        <column seriesName="B序列"  xField='label' yField='value'/>
+        <column xField='label' yField='valueA'/>
+        <column xField='label' yField='value'/>
     </series>
     <legend enable='true'/>
     <data>

@@ -28,14 +28,14 @@ package com.fiCharts.charts.chart2D.core.itemRender
 			_itemVO.removeEventListener(ItemRenderEvent.SHOW_ITEM_RENDER, showItemRenderHandler);
 			_itemVO.removeEventListener(ItemRenderEvent.HIDE_ITEM_RENDER, hideItemRenderHandler);
 			
-			this.statesContorl.enable = this._isEnable = false;
+			this.statesControl.enable = this._isEnable = false;
 		}
 		
 		/**
 		 */		
 		override public function enable():void
 		{
-			this.statesContorl.enable = this._isEnable = true;
+			this.statesControl.enable = this._isEnable = true;
 			
 			_itemVO.addEventListener(ItemRenderEvent.SHOW_TOOLTIP, showTooltipHandler, false, 0, true);
 			_itemVO.addEventListener(ItemRenderEvent.HIDE_TOOLTIP, hideTooltipHandler, false, 0, true);

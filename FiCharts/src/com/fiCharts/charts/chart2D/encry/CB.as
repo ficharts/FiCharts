@@ -19,8 +19,8 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.backgound.ChartBGUI;
 	import com.fiCharts.charts.chart2D.core.backgound.GridFieldUI;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
-	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
+	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.AxisModel;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.Series;
@@ -29,6 +29,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.IChart;
+	import com.fiCharts.charts.common.ICombilePointRender;
 	import com.fiCharts.charts.legend.LegendPanel;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.legend.model.LegendVO;
@@ -603,7 +604,7 @@ package com.fiCharts.charts.chart2D.encry
 						prevLabels = prevItemRender.toolTipsHolder.tooltips;
 						nextLabels = nextItemRender.toolTipsHolder.tooltips;
 						
-						if (prevItemRender is StackedColumnCombiePointRender || nextItemRender is StackedColumnCombiePointRender)
+						if (prevItemRender is ICombilePointRender || nextItemRender is ICombilePointRender)
 						{
 							j ++;	
 							continue;	

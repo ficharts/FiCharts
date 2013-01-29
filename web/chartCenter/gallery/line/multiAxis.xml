@@ -27,9 +27,9 @@
         </y>
     </axis>
     <series>
-        <line seriesName="产品A"  xField='label' yField='value' yAxis='a'/>
-        <line seriesName="产品B"  xField='label' yField='valueA' yAxis='b'/>
-        <line seriesName="产品C"  xField='label' yField='valueB' yAxis='c' />
+        <line xField='label' yField='value' yAxis='a'/>
+        <line xField='label' yField='valueA' yAxis='b'/>
+        <line xField='label' yField='valueB' yAxis='c' />
     </series>
     <legend enable='true'/>
     <data>

@@ -5,13 +5,15 @@ package com.fiCharts.charts.chart2D.bar.stack
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
-	import com.fiCharts.charts.chart2D.encry.CP;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
+	/**
+	 * 
+	 */	
 	public class StackedPercentBarSeries extends StackedBarSeries
 	{
 		public function StackedPercentBarSeries()

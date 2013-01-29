@@ -4,8 +4,8 @@
         <x type="linear" title='产量'/>
     </axis>
     <series>
-        <bar seriesName="产品A"  xField='value' yField='label'/>
-        <bar seriesName="产品B"  xField='valueB' yField='label'/>
+        <bar xField='value' yField='label'/>
+        <bar xField='valueB' yField='label'/>
     </series>
     <legend enable='true'/>
     <data>

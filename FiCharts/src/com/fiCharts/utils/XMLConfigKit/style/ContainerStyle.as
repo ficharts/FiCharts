@@ -3,6 +3,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 	import com.fiCharts.utils.XMLConfigKit.effect.IEffectable;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Cover;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 
 	/**
 	 * 
@@ -11,7 +12,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 	 * @author wallen
 	 * 
 	 */	
-	public class ContainerStyle extends Style implements IEffectable, IFiElement
+	public class ContainerStyle extends Style implements IEffectable, IFiElement, IFreshElement
 	{
 		public function ContainerStyle()
 		{

@@ -11,7 +11,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		 */		
 		override protected function get xTipLabel():String
 		{
-			return itemVO.xLabel;
+			return itemVO.xValue.toString();
 		}
 		
 		/**

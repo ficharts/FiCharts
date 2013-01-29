@@ -245,6 +245,11 @@ package com.fiCharts.utils.XMLConfigKit
 		
 		/**
 		 * 局部不存在的元素，全局可能存在
+		 * 
+		 * type 为类型
+		 * 
+		 * key 为具体的id
+		 * 
 		 */		
 		public static function getXML(key:String, type:String):*
 		{

@@ -79,7 +79,7 @@ package com.fiCharts.utils.graphic
 			target.graphics.endFill();
 			
 			drawRectCover(target.graphics, style.getCover, metaData);
-			StyleManager.setEffects(target, style, metaData);
+			StyleManager.setEffects(target, style, metaData); 
 		}
 		
 		/**
@@ -175,7 +175,7 @@ package com.fiCharts.utils.graphic
 		 */		
 		public static function drawCircleCover(canvas:Graphics, cover:Cover, metaData:Object = null):void
 		{
-			if (cover)
+			if (cover && cover.enable)
 			{
 				setShapeStyle(cover, canvas, metaData);
 				canvas.drawCircle(0, 0, cover.radius - cover.offset);
@@ -188,7 +188,7 @@ package com.fiCharts.utils.graphic
 		public static function drawArcCover(canvas:Graphics, cover:Cover, 
 											radius:Number ,rads:Vector.<Number>, metaData:Object = null):void
 		{
-			if (cover)
+			if (cover && cover.enable)
 				_drawArc(canvas, cover, radius - cover.offset, rads, metaData);
 		}
 		
@@ -197,7 +197,7 @@ package com.fiCharts.utils.graphic
 		 */		
 		public static function drawRectCover(canvas:Graphics, cover:Cover, metaData:Object):void
 		{
-			if (cover)
+			if (cover && cover.enable)
 			{
 				var xOffset:Number;
 				var yOffset:Number;

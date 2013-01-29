@@ -13,6 +13,15 @@ package com.fiCharts.utils.XMLConfigKit.style
 		
 		/**
 		 */		
+		override public function set radius(value:Number):void
+		{
+			super.radius = value;
+			
+			this._out.radius = this._hover.radius = this._down.radius = value; 
+		}
+		
+		/**
+		 */		
 		override public function set width(value:Number):void
 		{
 			super.width = value;

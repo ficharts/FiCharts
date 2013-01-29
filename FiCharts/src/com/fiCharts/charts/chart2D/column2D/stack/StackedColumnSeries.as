@@ -5,6 +5,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
+	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataPoint;
@@ -303,6 +304,18 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			}
 				
 			return legendVOes;
+		}
+		
+		/**
+		 */		
+		override public function initSeriesName(index:uint):uint
+		{
+			var seriesIndex:uint = index;
+			var len:uint = stacks.length;
+			for (var i:int = len - 1; i >= 0; i --)
+				seriesIndex = stacks[i].initSeriesName(seriesIndex);
+				
+			return seriesIndex;
 		}
 		
 		/**

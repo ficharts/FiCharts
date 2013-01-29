@@ -4,8 +4,8 @@
         <y type="linear" title="分布值"/>
     </axis>
     <series>
-        <bubble xField='label' seriesName='A序列' yField='valueA' radiusField='radiusA' zDisplayName='气泡值A'/>
-        <bubble xField='label' seriesName='B序列' yField='valueB' radiusField='radiusB' zDisplayName='气泡值B'/>
+        <bubble xField='label' yField='valueA' radiusField='radiusA' zDisplayName='气泡值A'/>
+        <bubble xField='label' yField='valueB' radiusField='radiusB' zDisplayName='气泡值B'/>
     </series>
     <legend enable='true'/>
     <data>

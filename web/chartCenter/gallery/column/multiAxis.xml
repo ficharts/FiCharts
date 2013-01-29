@@ -20,8 +20,8 @@
         </y>
     </axis>
     <series>
-        <column seriesName="产品A"  xField='label' yField='valueA' yAxis='a'/>
-        <column seriesName="产品B"  xField='label' yField='valueB' yAxis='b'/>
+        <column xField='label' yField='valueA' yAxis='a'/>
+        <column xField='label' yField='valueB' yAxis='b'/>
     </series>
     <legend enable='true'/>
     <data>

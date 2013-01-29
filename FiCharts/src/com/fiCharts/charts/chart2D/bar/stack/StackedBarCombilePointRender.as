@@ -1,10 +1,11 @@
 package com.fiCharts.charts.chart2D.bar.stack
 {
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
+	import com.fiCharts.charts.common.ICombilePointRender;
 	
 	/**
 	 */	
-	public class StackedBarCombilePointRender extends PointRenderBace
+	public class StackedBarCombilePointRender extends PointRenderBace implements ICombilePointRender
 	{
 		public function StackedBarCombilePointRender()
 		{
@@ -16,14 +17,12 @@ package com.fiCharts.charts.chart2D.bar.stack
 		 */		
 		override public function enable():void
 		{
-			
 		}
 		
 		/**
 		 */		
 		override public function disable():void
 		{
-			
 		}
 		
 		/**
@@ -33,9 +32,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 			valueLabelUI.y = - valueLabelUI.height / 2;
 			
 			if (Number(_itemVO.xValue) < 0)
-				valueLabelUI.x = - this.style.radius - valueLabelUI.width - this.valueLabel.hMargin;
+				valueLabelUI.x = - this.radius - valueLabelUI.width - this.valueLabel.hMargin;
 			else
-				valueLabelUI.x = this.style.radius + this.valueLabel.hMargin;
+				valueLabelUI.x = this.radius + this.valueLabel.hMargin;
 		}
 	}
 }

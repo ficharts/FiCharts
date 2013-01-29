@@ -2,6 +2,7 @@ package com.fiCharts.charts.chart2D.marker
 {
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
+	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
@@ -21,6 +22,45 @@ package com.fiCharts.charts.chart2D.marker
 			super();
 		}
 		
+		
+		
+		//----------------------------------------------
+		//
+		//
+		//
+		// 三点类型计算
+		//
+		//
+		//
+		//------------------------------------------------
+		
+		
+		private function getMarkerType():String
+		{
+			var len:uint = makerType.length;
+				
+			if (markerSeriesIndex < len)
+			{
+				return makerType[markerSeriesIndex];
+			}
+			else
+			{
+				return makerType[(markerSeriesIndex + 1) % len - 1]
+			}
+		}
+		
+		/**
+		 * 全局控制散点序列排位, 每次序列重建时需刷新
+		 */
+		public static var markerSeriesIndex:uint = 0;
+		
+		/**
+		 */		
+		private static var makerType:Array = ['Diamond', 'Square', 'Circle']
+		
+			
+			
+			
 		/**
 		 */		
 		override protected function get type():String
@@ -34,6 +74,10 @@ package com.fiCharts.charts.chart2D.marker
 		{
 			super.beforeUpdateProperties(xml);
 			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.MARKER_SERIES, Model.SYSTEM), this);
+			
+			dataRender = new DataRender;
+			XMLVOMapper.fuck(XMLVOLib.getXML(getMarkerType(), Model.DATA_RENDER), this.dataRender);
+			markerSeriesIndex += 1;
 		}
 		/**
 		 */		

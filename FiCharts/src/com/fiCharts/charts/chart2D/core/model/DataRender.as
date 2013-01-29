@@ -24,6 +24,31 @@ package com.fiCharts.charts.chart2D.core.model
 		}
 		
 		/**
+		 */		
+		private var _size:uint = 0
+
+		/**
+		 */
+		public function get size():uint
+		{
+			return _size;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set size(value:uint):void
+		{
+			_size = value;
+			
+			ifSetSize = true;
+		}
+		
+		/**
+		 */		
+		private var ifSetSize:Boolean = false;
+
+		/**
 		 */			
 		private var _decorate:Decorate;
 
@@ -50,6 +75,7 @@ package com.fiCharts.charts.chart2D.core.model
 			_decorate.fresh();
 			
 			shapes.length = 0;
+			ifSetSize = false;
 		}
 		
 		/**
@@ -99,6 +125,9 @@ package com.fiCharts.charts.chart2D.core.model
 			{
 				if (isNaN(radius) == false)
 					shape.style.radius = radius;
+					
+				if (ifSetSize)
+					shape.setSize(size);
 					
 				shape.render(canvas, metadata);
 			}

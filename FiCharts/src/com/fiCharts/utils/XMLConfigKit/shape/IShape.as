@@ -25,5 +25,9 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		 */		
 		function set states(value:States):void;
 		
+		/**
+		 */		
+		function setSize(value:uint):void;
+		
 	}
 }

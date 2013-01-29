@@ -11,7 +11,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		 */		
 		override protected function get yTipLabel():String
 		{
-			return '<b>' + itemVO.yValue + '</b>';
+			return itemVO.yValue.toString();
 		}
 		
 		/**
@@ -19,7 +19,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		override protected function get zTipLabel():String
 		{
 			var percentTip:String;
-			percentTip = '<b>' + itemVO.zLabel + '<b>';
+			percentTip = itemVO.zLabel;
 			
 			if (itemVO.zDisplayName)
 				percentTip = itemVO.zDisplayName + ':' + percentTip;

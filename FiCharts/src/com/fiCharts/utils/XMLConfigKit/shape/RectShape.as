@@ -17,6 +17,13 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		
 		/**
 		 */		
+		public function setSize(value:uint):void
+		{
+			states.width = states.height = value;
+		}
+		
+		/**
+		 */		
 		public function render(canvas:Sprite, metadata:Object):void
 		{
 			style.tx = - style.width / 2;

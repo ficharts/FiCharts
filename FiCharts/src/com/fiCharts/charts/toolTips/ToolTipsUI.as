@@ -125,7 +125,7 @@ package com.fiCharts.charts.toolTips
 				updateBgSize();
 				
 				StyleManager.drawRect(this.bg, style, tooltipHolder.tooltips[0].metaData);
-				StyleManager.setEffects(bg, style);
+				//StyleManager.setEffects(bg, style);
 				
 				labelsContainer.x = - labelsContainer.width / 2;
 				labelsContainer.y = labelsContainer.height / 2;

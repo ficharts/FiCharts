@@ -19,8 +19,8 @@
         </y>
     </axis>
     <series>
-        <area seriesName="产品A" xField="label" yAxis="a" yField="value"/>
-        <area seriesName="产品B" xField="label" yAxis="b" yField="valueA"/>
+        <area xField="label" yAxis="a" yField="value"/>
+        <area xField="label" yAxis="b" yField="valueA"/>
     </series>
     <legend enable="true"/>
     <data>

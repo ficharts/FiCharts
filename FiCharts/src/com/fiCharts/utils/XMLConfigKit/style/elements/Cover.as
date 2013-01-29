@@ -19,6 +19,18 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		}
 		
 		/**
+		 * 
+		 * 在没有填充和边框的情况下，因为之前已设置了填充和边框，
+		 * 
+		 * 这会导致即便无效的cover也会被借助之前的设置而绘制
+		 * 
+		 */		
+		override public function get enable():Object
+		{
+			return (this.border || this.fill);
+		}
+		
+		/**
 		 */		
 		private var _reverse:Object = false;
 

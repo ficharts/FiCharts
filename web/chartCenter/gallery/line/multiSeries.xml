@@ -4,8 +4,8 @@
         <y type="linear" title='产量'/>
     </axis>
     <series>
-        <line seriesName="产品A"  xField='label' yField='value' title="月份 "/>
-        <line seriesName="产品B"  xField='label' yField='valueA' title="产量(K)"/>
+        <line xField='label' yField='value' title="月份 "/>
+        <line xField='label' yField='valueA' title="产量(K)"/>
     </series>
     <legend enable='true'/>
     <data>

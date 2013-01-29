@@ -5,9 +5,9 @@
     </axis>
     <series>
         <stackedPercentBar>
-            <stack seriesName="产品A" xField='valueA' yField='label'/>
-            <stack seriesName="产品B" xField='valueB' yField='label'/>
-            <stack seriesName="产品C" xField='valueC' yField='label'/>
+            <stack xField='valueA' yField='label'/>
+            <stack xField='valueB' yField='label'/>
+            <stack xField='valueC' yField='label'/>
         </stackedPercentBar>
     </series>
     <legend enable='true'/>
