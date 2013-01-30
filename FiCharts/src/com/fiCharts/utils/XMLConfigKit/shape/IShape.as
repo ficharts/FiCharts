@@ -27,7 +27,19 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		
 		/**
 		 */		
-		function setSize(value:uint):void;
+		function set size(value:uint):void;
+		
+		/**
+		 */		
+		function get size():uint;
+		
+		/**
+		 */		
+		function set angle(value:int):void;
+		
+		/**
+		 */		
+		function get angle():int
 		
 	}
 }

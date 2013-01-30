@@ -71,7 +71,7 @@ package com.fiCharts.charts.chart2D.core.model
 		 */		
 		public function fresh():void
 		{
-			_circle = _rect = _diamond = null;
+			_circle = _rect = _diamond = _triangle = null;
 			_decorate.fresh();
 			
 			shapes.length = 0;
@@ -127,10 +127,31 @@ package com.fiCharts.charts.chart2D.core.model
 					shape.style.radius = radius;
 					
 				if (ifSetSize)
-					shape.setSize(size);
+					shape.size = size;
+				
+				shape.angle = this.angle;
 					
 				shape.render(canvas, metadata);
 			}
+		}
+		
+		/**
+		 */		
+		private var _angle:int = 0;
+		
+		/**
+		 */
+		public function get angle():int
+		{
+			return _angle;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set angle(value:int):void
+		{
+			_angle = - value;
 		}
 		
 		/**
@@ -216,6 +237,22 @@ package com.fiCharts.charts.chart2D.core.model
 		/**
 		 */		
 		private var _diamond:IShape;
+		
+		/**
+		 */		
+		private var _triangle:IShape
+
+		public function get triangle():IShape
+		{
+			return _triangle;
+		}
+
+		public function set triangle(value:IShape):void
+		{
+			_triangle = value;
+			
+			shapes.push(value);
+		}
 
 		/**
 		 */		

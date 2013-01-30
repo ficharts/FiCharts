@@ -8,55 +8,43 @@ package com.fiCharts.utils.XMLConfigKit.shape
 	import flash.display.Sprite;
 	
 	/**
-	 * 矩形
+	 * 三角形
 	 */	
-	public class RectShape implements IShape
+	public class Triangle implements IShape
 	{
-		public function RectShape()
+		public function Triangle()
 		{
-		}
-		
-		/**
-		 */		
-		private var _angle:int = 0;
-		
-		/**
-		 */
-		public function get angle():int
-		{
-			return _angle;
-		}
-		
-		/**
-		 * @private
-		 */
-		public function set angle(value:int):void
-		{
-			_angle = value;
-		}
-		
-		/**
-		 */		
-		public function set size(value:uint):void
-		{
-			states.width = states.height = value * Math.sin(Math.PI / 4);
-		}
-		
-		/**
-		 */		
-		public function get size():uint
-		{
-			return 0;
 		}
 		
 		/**
 		 */		
 		public function render(canvas:Sprite, metadata:Object):void
 		{
-			style.tx = - style.width / 2;
-			style.ty = - style.height / 2;
+			style.tx = - style.radius;
+			style.ty = - style.radius;
 			
-			StyleManager.drawRect(canvas, style, metadata);
+			style.width = style.height = style.radius * 2;
+			
+			StyleManager.drawTriangle(canvas, style, style.radius, this.angle, metadata);
+		}
+		
+		/**
+		 */		
+		private var _angle:int = 0;
+
+		/**
+		 */
+		public function get angle():int
+		{
+			return _angle;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set angle(value:int):void
+		{
+			_angle = value;
 		}
 		
 		/**
@@ -86,6 +74,10 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		
 		/**
 		 */		
+		private var _states:States;
+		
+		/**
+		 */		
 		public function set states(value:States):void
 		{
 			_states = XMLVOMapper.updateObject(value, _states, "states", this) as States;
@@ -93,6 +85,16 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		
 		/**
 		 */		
-		private var _states:States;
+		public function set size(value:uint):void
+		{
+			states.radius = value / 2;
+		}
+		
+		/**
+		 */		
+		public function get size():uint
+		{
+			return 0;
+		}
 	}
 }

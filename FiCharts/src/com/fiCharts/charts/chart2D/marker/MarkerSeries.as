@@ -56,10 +56,8 @@ package com.fiCharts.charts.chart2D.marker
 		
 		/**
 		 */		
-		private static var makerType:Array = ['Diamond', 'Square', 'Circle']
+		private static var makerType:Array = ['Diamond', 'Square', 'Circle', 'Triangle'];
 		
-			
-			
 			
 		/**
 		 */		
@@ -138,6 +136,14 @@ package com.fiCharts.charts.chart2D.marker
 			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
+		}
+		
+		/**
+		 * 构造节点渲染器
+		 */		
+		override protected function get itemRender():PointRenderBace
+		{
+			return new MarkerPointRender;
 		}
 
 	}

@@ -1,11 +1,11 @@
 package com.fiCharts.charts.chart2D.bar.stack
 {
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
-	import com.fiCharts.charts.common.ICombilePointRender;
+	import com.fiCharts.charts.common.IDisCombilePointRender;
 	
 	/**
 	 */	
-	public class StackedBarCombilePointRender extends PointRenderBace implements ICombilePointRender
+	public class StackedBarCombilePointRender extends PointRenderBace implements IDisCombilePointRender
 	{
 		public function StackedBarCombilePointRender()
 		{

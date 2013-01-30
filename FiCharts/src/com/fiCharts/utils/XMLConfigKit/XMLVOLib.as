@@ -9,6 +9,7 @@ package com.fiCharts.utils.XMLConfigKit
 	import com.fiCharts.utils.XMLConfigKit.shape.CircleShape;
 	import com.fiCharts.utils.XMLConfigKit.shape.Diamond;
 	import com.fiCharts.utils.XMLConfigKit.shape.RectShape;
+	import com.fiCharts.utils.XMLConfigKit.shape.Triangle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
@@ -66,6 +67,7 @@ package com.fiCharts.utils.XMLConfigKit
 			CircleShape;
 			RectShape;
 			Diamond;
+			Triangle;
 		}
 		
 		/**
@@ -383,6 +385,8 @@ package com.fiCharts.utils.XMLConfigKit
 								<circle path='com.fiCharts.utils.XMLConfigKit.shape.CircleShape'/>
 								<rect path='com.fiCharts.utils.XMLConfigKit.shape.RectShape'/>
 								<diamond path='com.fiCharts.utils.XMLConfigKit.shape.Diamond'/>
+								<triangle path='com.fiCharts.utils.XMLConfigKit.shape.Triangle'/>
+		
 							</classes>
 		
 		

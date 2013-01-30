@@ -53,7 +53,8 @@
 	height: 174px;
 	background: url("../images/frameBG.png") no-repeat 0 0 scroll;
 	float: left;
-	margin-right: 10px;
+	margin-right: 1px;
+	margin-left: 8px;
 }
 
 .quickLink img {
@@ -87,5 +88,48 @@
 #version {
 
 	font-size: 12px;
+
+}
+
+#contact div {
+
+	display: inline;
+	float: left;
+	padding-right: 10px;
+}
+
+
+#contact {
+
+	color: #666;
+	text-decoration: none;
+	text-shadow: 0 1px 0 #FFFFFF;
+}
+
+#contact a {
+  color: #0088cc;
+  text-decoration: none;
+}
+
+#contact a:hover {
+	color: #35BDFF;
+}
+
+
+#mail p {
+
+	margin: 0px 0;
+
+}
+
+#mail {
+
+	margin: 50px 0 0px 0;
+}
+
+
+#sina {
+
+    margin: 40px 0 0px 50px;
 
 }

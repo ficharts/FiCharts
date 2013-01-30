@@ -18,9 +18,35 @@ package com.fiCharts.utils.XMLConfigKit.shape
 		
 		/**
 		 */		
-		public function setSize(value:uint):void
+		private var _angle:int = 0;
+		
+		/**
+		 */
+		public function get angle():int
+		{
+			return _angle;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set angle(value:int):void
+		{
+			_angle = value;
+		}
+		
+		/**
+		 */		
+		public function set size(value:uint):void
 		{
 			states.radius = value / 2;
+		}
+		
+		/**
+		 */		
+		public function get size():uint
+		{
+			return 0;
 		}
 		
 		/**

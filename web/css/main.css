@@ -100,9 +100,10 @@ ul {
 #contact {
  clear: both;
  border-top: 1px solid #DDDDDD;
- width: 800px;
- height: 200px;
+ width: 820px;
+ height: 160px;
  margin: 0 auto;
+ padding-left: 20px;
  
 
 }
@@ -112,7 +113,7 @@ ul {
     clear: both;
     margin-bottom: 50px;
     margin: 0 auto;
-    width: 940px;
+    width: 820px;
     text-align: center;
 }
 

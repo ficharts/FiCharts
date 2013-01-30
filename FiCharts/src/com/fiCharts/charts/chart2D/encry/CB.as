@@ -29,7 +29,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.IChart;
-	import com.fiCharts.charts.common.ICombilePointRender;
+	import com.fiCharts.charts.common.IDisCombilePointRender;
 	import com.fiCharts.charts.legend.LegendPanel;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.legend.model.LegendVO;
@@ -604,7 +604,7 @@ package com.fiCharts.charts.chart2D.encry
 						prevLabels = prevItemRender.toolTipsHolder.tooltips;
 						nextLabels = nextItemRender.toolTipsHolder.tooltips;
 						
-						if (prevItemRender is ICombilePointRender || nextItemRender is ICombilePointRender)
+						if (prevItemRender is IDisCombilePointRender || nextItemRender is IDisCombilePointRender)
 						{
 							j ++;	
 							continue;	

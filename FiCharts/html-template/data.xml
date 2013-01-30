@@ -5,11 +5,11 @@
     </axis>
     <series>
         <marker xField='label' yField='valueA'>
-            <dataRender size='20'/>
+            <dataRender/>
         </marker>
-        <marker xField='label' yField='valueB'>
-            <dataRender style='Circle' size='20'/>
-        </marker>
+        <line xField='label' yField='valueB'>
+            <dataRender style='Triangle' size='30' angle='90'/>
+        </line>
     </series>
     <legend enable='true'/>
     <data>

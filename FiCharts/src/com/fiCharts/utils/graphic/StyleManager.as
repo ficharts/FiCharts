@@ -29,6 +29,53 @@ package com.fiCharts.utils.graphic
 	dynamic public class StyleManager extends Array
 	{
 		
+		
+		/**
+		 *
+		 * 绘制三角形
+		 *  
+		 * @param canvas
+		 * @param style
+		 * @param radius
+		 * @param angle
+		 * @param metaData
+		 * 
+		 */		
+		public static function drawTriangle(canvas:Sprite, style:Style, radius:Number, angle:int, metaData:Object = null):void
+		{
+			_drawTriangle(canvas.graphics, style, radius, angle, metaData);
+			
+			var cover:Cover = style.getCover;
+			
+			if (cover && cover.enable)
+				_drawTriangle(canvas.graphics, cover, radius - cover.offset, angle, metaData);
+			
+			StyleManager.setEffects(canvas, style, metaData);
+		}
+		
+		/**
+		 */		
+		private static function _drawTriangle(canvas:Graphics, style:Style, radius:Number, angle:int, metaData:Object = null):void
+		{
+			style.radius = radius;
+			setShapeStyle(style, canvas, metaData);
+			
+			var rad:Number = angle / 180 * Math.PI;
+			canvas.moveTo(Math.cos(rad) * radius, Math.sin(rad) * radius);
+			
+			rad = (angle + 120) / 180 * Math.PI;
+			canvas.lineTo(Math.cos(rad) * radius, Math.sin(rad) * radius);
+			
+			rad = (angle + 240) / 180 * Math.PI;
+			canvas.lineTo(Math.cos(rad) * radius, Math.sin(rad) * radius);
+			
+			rad = angle / 180 * Math.PI;
+			canvas.lineTo(Math.cos(rad) * radius, Math.sin(rad) * radius);
+			
+			canvas.endFill();
+		}
+		
+		
 		/**
 		 * 
 		 * 绘制圆弧
