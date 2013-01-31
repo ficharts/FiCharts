@@ -12,7 +12,12 @@
         </style>
         <script type="text/javascript">
             
-            new Chart2D('chartID, data.xml')//.setStyle('Classic');
+           var chart = new Chart2D('chartID, data2.xml').setStyle('Black').onRendered(function(){
+            	
+            	
+            	chart.setDataFile('data.xml')
+            	
+            });
             //new Pie2D('chartID, pieData.xml').setStyle('Simple');
             
         </script>

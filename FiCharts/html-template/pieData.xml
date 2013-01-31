@@ -1,4 +1,4 @@
-<config valueSuffix='亿部' precision="2" bgVisible='false'>
+<config valueSuffix='亿部' precision="2" bgVisible='true'>
 	<legend enable='true'/>
     <data>
         <set label="Nokia" value="4.171"/>
@@ -8,6 +8,5 @@
         <set label="ZTE" value="0.661"/>
         <set label="Others" value="5.521"/>
     </data>
-    <valueLabel enable='false'/>
  </config>
                 

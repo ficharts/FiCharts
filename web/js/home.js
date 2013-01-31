@@ -15,6 +15,13 @@
 				$('a.label', this).css('color', '#888')
 			})
 		})
+
+
+		$('#sina img').mouseover(function(){
+			$(this).attr('src', './images/sina_over.jpg')
+		}).mouseout(function(){
+			$(this).attr('src', './images/sina_up.jpg')
+		})
 		
 	})
 	

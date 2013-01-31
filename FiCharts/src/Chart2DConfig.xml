@@ -125,7 +125,7 @@
 					<border color='${color}{adjustColor:1.3}' thikness='2' alpha='0.8'/>
 				</hover>
 				<down>
-					<border color='${color}' thikness='2' alpha='0.8'/>
+					<border color='${color}' thikness='2' alpha='1'/>
 				</down>
 			</states>
 		</line>
@@ -164,11 +164,11 @@
 			<states>
 				<normal>
 					<border color='${color}' thikness='2' alpha='0.8'/>
-					<fill alpha='0.2' color='${color}'/> 
+					<fill alpha='0.2,0.2' color='${color}{adjustColor:1.3},${color}{adjustColor:1.5}'/> 
 				</normal>
 				<hover>
 					<border color='${color}' thikness='2' alpha='0.8'/>
-					<fill alpha='0.4' color='${color}'/>
+					<fill alpha='0.4' color='${color}{adjustColor:1.5}'/>
 				</hover>
 				<down>
 					<border color='${color}' thikness='2' alpha='0.8'/>
@@ -178,6 +178,24 @@
 		</area>
 
 		<area id='Classic' states='ClassicLine'>
+			<states>
+				<normal>
+					<fill radioes='0,255' alpha='0.6,0.8' angle='90'
+					color='${color}{adjustColor:1.3},${color}{adjustColor:1.5}'/>
+				</normal>
+				<hover>
+					<fill radioes='0,255' alpha='0.8,0.8' angle='90'
+					color='${color}{adjustColor:1.5},${color}{adjustColor:1}'/>
+				</hover>
+				<down>
+					<fill radioes='0,255' alpha='0.8,0.8' angle='90'
+					color='${color}{adjustColor:1.2},${color}{adjustColor:1}'/>
+				</down>
+			</states>
+		</area>
+
+
+		<area id='Black' states='ClassicLine'>
 			<states>
 				<normal>
 					<fill radioes='0,255' alpha='0.4,0.2' angle='90'
@@ -193,6 +211,8 @@
 				</down>
 			</states>
 		</area>
+
+
 
 
 
@@ -819,7 +839,7 @@
 				<dataRender style='ClassicPoint'/>
 			</line>
 
-			<area style='Classic' labelDisplay="none">
+			<area style='Black' labelDisplay="none">
 				<dataRender style='ClassicPoint'/>
 			</area>
 
