@@ -67,10 +67,8 @@ package com.fiCharts.charts.chart2D.column2D.stack
 						columnItemUI.states = this.states;//样式统一定义
 						columnItemUI.metaData = itemDataVO.metaData;
 						columnUIs.push(columnItemUI);
-						stack.addChild(columnItemUI);
+						canvas.addChild(columnItemUI);
 					}
-					
-					canvas.addChild(stack);
 				}
 			}
 			
@@ -311,9 +309,9 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		override public function initSeriesName(index:uint):uint
 		{
 			var seriesIndex:uint = index;
-			var len:uint = stacks.length;
-			for (var i:int = len - 1; i >= 0; i --)
-				seriesIndex = stacks[i].initSeriesName(seriesIndex);
+			
+			for each(var item:SB in stacks)
+				seriesIndex = item.initSeriesName(seriesIndex)
 				
 			return seriesIndex;
 		}
@@ -348,7 +346,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				series.verticalAxis = this.verticalAxis;
 			}
 			
-			stacks.reverse();
+			//stacks.reverse();
 		}
 		
 		/**

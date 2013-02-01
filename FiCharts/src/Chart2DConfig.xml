@@ -625,7 +625,7 @@
 			</column>
 
 			<stackedColumn style='Simple' labelDisplay="normal">
-				<dataRender style='SimplePoint' enable='true'/>
+				<dataRender style='SimplePoint' enable='false'/>
 			</stackedColumn>
 
 			<bar style='Simple' maxItemSize='100' labelDisplay="inner">
@@ -633,7 +633,7 @@
 			</bar>
 
 			<stackedBar style='Simple' labelDisplay="normal">
-				<dataRender style='SimplePoint' enable='true'/>
+				<dataRender style='SimplePoint' enable='false'/>
 			</stackedBar>
 
 			<marker labelDisplay="none">
@@ -683,7 +683,9 @@
 				<hGrid>
 					<border color='E2E2E2' thikness='1'/>
 				</hGrid>
-				<vGrid></vGrid>
+				<vGrid>
+					<border color='E2E2E2' thikness='1'/>
+				</vGrid>
 			</gridField>
 			<xAxis type="field" labelDisplay="normal">
 				<title format='FontFormat'>
@@ -735,7 +737,7 @@
 			</column>
 
 			<stackedColumn style='Classic' labelDisplay="normal">
-				<dataRender style='ClassicPoint' enable='true'/>
+				<dataRender style='ClassicPoint' enable='false'/>
 			</stackedColumn>
 
 			
@@ -744,7 +746,7 @@
 			</bar>
 
 			<stackedBar style='Classic' labelDisplay="normal">
-				<dataRender style='ClassicPoint' enable='true'/>
+				<dataRender style='ClassicPoint' enable='false'/>
 			</stackedBar>
 
 			<marker labelDisplay="none">
@@ -848,7 +850,7 @@
 			</column>
 
 			<stackedColumn style='Classic' labelDisplay="normal">
-				<dataRender style='ClassicPoint' enable='true'/>
+				<dataRender style='ClassicPoint' enable='false'/>
 			</stackedColumn>
 
 			
@@ -857,7 +859,7 @@
 			</bar>
 
 			<stackedBar style='Classic' labelDisplay="normal">
-				<dataRender style='ClassicPoint' enable='true'/>
+				<dataRender style='ClassicPoint' enable='false'/>
 			</stackedBar>
 
 			<marker labelDisplay="none">
