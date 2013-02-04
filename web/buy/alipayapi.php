@@ -34,7 +34,7 @@ require_once("lib/alipay_submit.class.php");
         //需http://格式的完整路径，不能加?id=123这类自定义参数
 
         //页面跳转同步通知页面路径
-        $return_url = "http://www.ficharts.com/buy/return_url.php";
+        $return_url = "";
         //需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
 
         //卖家支付宝帐户
@@ -92,6 +92,8 @@ require_once("lib/alipay_submit.class.php");
         $receive_mobile = $_POST['WIDreceive_mobile'];
         //如：13312341234
 
+        $license_type = $_POST['WIDlicense_type'];
+
 
 /************************************************************/
 
@@ -117,6 +119,7 @@ $parameter = array(
 		"receive_zip"	=> $receive_zip,
 		"receive_phone"	=> $receive_phone,
 		"receive_mobile"	=> $receive_mobile,
+                "license_type"  => $license_type,
 		"_input_charset"	=> trim(strtolower($alipay_config['input_charset']))
 );
 

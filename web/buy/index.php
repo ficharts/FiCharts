@@ -7,7 +7,9 @@
  * 以下代码只是为了方便商户测试而提供的样例代码，商户可以根据自己网站的需要，按照技术文档编写,并非一定要使用该代码。
  */
 
+    require_once("order.php");
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
@@ -175,27 +177,32 @@ ul,ol{
                     <dd>
                         <span class="null-star">*</span>
                         <input size="30" name="WIDseller_email" />
-                        <span>必填</span>
+                        <span>必填
+</span>
                     </dd>
                     <dt>商户订单号：</dt>
                     <dd>
                         <span class="null-star">*</span>
-                        <input size="30" name="WIDout_trade_no" />
-                        <span>商户网站订单系统中唯一订单号，必填</span>
+                        <input size="30" name="WIDout_trade_no" value='<?php generateOrder();?>'/>
+                        <span>商户网站订单系统中唯一订单号，必填
+</span>
                     </dd>
                     <dt>订单名称：</dt>
                     <dd>
                         <span class="null-star">*</span>
                         <input size="30" name="WIDsubject" />
-                        <span>必填</span>
+                        <span>必填
+</span>
                     </dd>
                     <dt>付款金额：</dt>
                     <dd>
                         <span class="null-star">*</span>
                         <input size="30" name="WIDprice" />
-                        <span>必填</span>
+                        <span>必填
+</span>
                     </dd>
-                    <dt>订单描述：</dt>
+                    <dt>订单描述
+：</dt>
                     <dd>
                         <span class="null-star">*</span>
                         <input size="30" name="WIDbody" />
@@ -205,31 +212,36 @@ ul,ol{
                     <dd>
                         <span class="null-star">*</span>
                         <input size="30" name="WIDshow_url" />
-                        <span>需以http://开头的完整路径，如：http://www.xxx.com/myorder.html</span>
+                        <span>需以http://开头的完整路径，如：http://www.xxx.com/myorder.html
+</span>
                     </dd>
                     <dt>收货人姓名：</dt>
                     <dd>
                         <span class="null-star">*</span>
                         <input size="30" name="WIDreceive_name" />
-                        <span>如：张三</span>
+                        <span>如：张三
+</span>
                     </dd>
                     <dt>收货人地址：</dt>
                     <dd>
                         <span class="null-star">*</span>
                         <input size="30" name="WIDreceive_address" />
-                        <span>如：XX省XXX市XXX区XXX路XXX小区XXX栋XXX单元XXX号</span>
+                        <span>如：XX省XXX市XXX区XXX路XXX小区XXX栋XXX单元XXX号
+</span>
                     </dd>
                     <dt>收货人邮编：</dt>
                     <dd>
                         <span class="null-star">*</span>
                         <input size="30" name="WIDreceive_zip" />
-                        <span>如：123456</span>
+                        <span>如：123456
+</span>
                     </dd>
                     <dt>收货人电话号码：</dt>
                     <dd>
                         <span class="null-star">*</span>
                         <input size="30" name="WIDreceive_phone" />
-                        <span>如：0571-88158090</span>
+                        <span>如：0571-88158090
+</span>
                     </dd>
                     <dt>收货人手机号码：</dt>
                     <dd>
@@ -238,6 +250,14 @@ ul,ol{
                         <span>如：13312341234</span>
                     </dd>
 					<dt></dt>
+
+                    <dt>license类型：</dt>
+                    <dd>
+                        <span class="null-star">*</span>
+                        <input size="30" name="WIDlicense_type" />
+                        <span>如：13312341234</span>
+                    </dd>
+                    <dt></dt>
                     <dd>
                         <span class="new-btn-login-sp">
                             <button class="new-btn-login" type="submit" style="text-align:center;">确 认</button>
@@ -255,5 +275,7 @@ ul,ol{
 			</ul>
 		</div>
 	</div>
+
+    
 </body>
 </html>
