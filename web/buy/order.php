@@ -1,14 +1,6 @@
 <?php
 
 
-function logResult($word='') {
-	$fp = fopen("log.txt","a");
-	flock($fp, LOCK_EX) ;
-	fwrite($fp,"执行日期：".strftime("%Y%m%d%H%M%S",time())."\n".$word."\n");
-	flock($fp, LOCK_UN);
-	fclose($fp);
-}
-
 
 function generateOrder(){
 
@@ -19,6 +11,9 @@ function generateOrder(){
 
 	// 获取旧数据记录
 	$result = mysql_query("SELECT * FROM record where name = 'order'");
+
+
+	
 
 	while($row = mysql_fetch_array($result)){
 	 
@@ -37,6 +32,7 @@ function generateOrder(){
 	mysql_close($db);
 	
 	return $new_order_no;
+
 }
 
 

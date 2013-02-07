@@ -68,6 +68,7 @@ require_once("lib/alipay_submit.class.php");
         //订单描述
 
         $body = $_POST['WIDbody'];
+        
         //商品展示地址
         $show_url = $_POST['WIDshow_url'];
         //需以http://开头的完整路径，如：http://www.xxx.com/myorder.html
@@ -91,8 +92,6 @@ require_once("lib/alipay_submit.class.php");
         //收货人手机号码
         $receive_mobile = $_POST['WIDreceive_mobile'];
         //如：13312341234
-
-        $license_type = $_POST['WIDlicense_type'];
 
 
 /************************************************************/
@@ -119,7 +118,6 @@ $parameter = array(
 		"receive_zip"	=> $receive_zip,
 		"receive_phone"	=> $receive_phone,
 		"receive_mobile"	=> $receive_mobile,
-                "license_type"  => $license_type,
 		"_input_charset"	=> trim(strtolower($alipay_config['input_charset']))
 );
 

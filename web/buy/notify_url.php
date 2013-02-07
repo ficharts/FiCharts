@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /* *
  * 功能：支付宝服务器异步通知页面
  * 版本：3.3
@@ -42,8 +42,18 @@ if($verify_result) {//验证成功
 	//交易状态
 	$trade_status = $_POST['trade_status'];
 
-	$license_type = $_POST['license_type'];
+	//用户邮箱
+	$user_email = $_POST['receive_address'];
 
+	//用户名
+	$user_name = $_POST['receive_name'];
+
+
+	//认证内容
+	$license = $_POST['body'];
+
+	//价格
+	$price = $_POST['price'];
 
 	if($_POST['trade_status'] == 'WAIT_BUYER_PAY') {
 	//该判断表示买家已在支付宝交易管理中产生了交易记录，但没有付款
@@ -55,13 +65,13 @@ if($verify_result) {//验证成功
 		$db = mysql_connect("localhost", "u115139", "t4yp6KgA");
 		mysql_select_db("u115139", $db);
 
-		//mysql_query("INSERT INTO order (out_trade_no, li_type) VALUES ($out_trade_no, $license_type)");
-		mysql_query("INSERT INTO record (name, value, date) VALUES ('test', 1, now())");
 
+		mysql_query("INSERT INTO orders (out_trade_no, email, name, servers, price) VALUES ('$out_trade_no','2b','$user_name','$license','$price')");
+		
 		mysql_close($db);
-
 			
-        echo "success";		//请不要修改或删除
+        echo "success";//请不要修改或删除
+
 
         //调试用，写文本函数记录程序运行情况是否正常
         //logResult("这里写入想要调试的代码变量值，或其他运行的结果记录");
@@ -69,6 +79,18 @@ if($verify_result) {//验证成功
 	else if($_POST['trade_status'] == 'WAIT_SELLER_SEND_GOODS') {
 	//该判断表示买家已在支付宝交易管理中产生了交易记录且付款成功，但卖家没有发货
 	
+		$db = mysql_connect("localhost", "u115139", "t4yp6KgA");
+		mysql_select_db("u115139", $db);
+
+		
+
+		mysql_query("INSERT INTO orders (out_trade_no, email, name) VALUES ('$out_trade_no','$license_type','日了')");
+
+		mysql_query("INSERT INTO orders (out_trade_no, email, name) VALUES (888, '42ff15','日了')");
+	
+
+		mysql_close($db);
+
 		//判断该笔订单是否在商户网站中已经做过处理
 			//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
 			//如果有做过处理，不执行商户的业务程序
@@ -96,6 +118,18 @@ if($verify_result) {//验证成功
 		//判断该笔订单是否在商户网站中已经做过处理
 			//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
 			//如果有做过处理，不执行商户的业务程序
+
+
+		$db = mysql_connect("localhost", "u115139", "t4yp6KgA");
+		mysql_select_db("u115139", $db);
+
+		//mysql_query("INSERT INTO order (out_trade_no, li_type) VALUES ($out_trade_no, $license_type)");
+
+		mysql_query("INSERT INTO record (name, value, date) VALUES ('finish', 1, now())");
+
+		//mysql_query("INSERT INTO order (out_trade_no) VALUES ("1000")");
+
+		mysql_close($db);
 			
         echo "success";		//请不要修改或删除
 
@@ -115,10 +149,55 @@ if($verify_result) {//验证成功
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 else {
+
+	$db = mysql_connect("localhost", "u115139", "t4yp6KgA");
+		mysql_select_db("u115139", $db);
+
+		
+		//mysql_query("UPDATE record SET value = 2 WHERE name = 'finish'");
+
+		mysql_query("SET NAMES utf-8");
+
+
+
+		mysql_query("INSERT INTO orders (out_trade_no, email, name) VALUES (5043, '42ff15','日了')");
+
+
+		$result  = mysql_query("select * from orders where out_trade_no = 5043");
+
+
+		echo mysql_numrows($result);
+
+		echo $result;
+
+		echo mysql_result($result,0);
+
+		$record = mysql_result($result,0);
+
+		echo $record['name'];
+
+		mysql_close($db);
+
+
     //验证失败
     echo "fail";
 
     //调试用，写文本函数记录程序运行情况是否正常
     //logResult("这里写入想要调试的代码变量值，或其他运行的结果记录");
 }
+
+
+function ifHasRecord($id, $fieldName, $table){
+
+	$result  = mysql_query("select * from $table where $fieldName = $id");
+
+	if (mysql_result($result,0))
+		return true;
+	else
+		return false;
+
+
+}
+
+
 ?>
