@@ -43,6 +43,12 @@
 				<include name="data.xml" />
 			</fileset>
 		</copy>
+		
+		<copy overwrite="true" todir="${WORK_SPACE}/FiCharts/release">
+			<fileset dir="${WORK_SPACE}/FiCharts/html-template">
+				<include name="pieData.xml" />
+			</fileset>
+		</copy>
 
 		<zip destfile="${WORK_SPACE}/FiCharts/release/FiCharts(${VER}).zip"
 		       basedir="${WORK_SPACE}/FiCharts/release"
