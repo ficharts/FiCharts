@@ -3,6 +3,7 @@
 	<type>Intranet</type>
 	<servers>
 		<url>www.ficharts.com</url>
+		<url>ficharts.com</url>
 		
 		<!---试用版License-->
 		<url>127.0.0.1</url>
