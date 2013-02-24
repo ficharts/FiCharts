@@ -1,0 +1,14 @@
+a {
+  color: #0088cc;
+  text-decoration: none;
+}
+
+ a:hover {
+	color: #35BDFF;
+}
+
+td.price {
+
+	color: #ff0000;
+	font-size: 20px;
+}
