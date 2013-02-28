@@ -1,9 +1,9 @@
  <config precision="2" title="数据缩放" subTitle='鼠标滚动缩放，拖拽查看，背景双击全屏'>
-   <tooltip>
+   <!--tooltip>
    	<label><![CDATA[日期:${xValue}{formatDate:YYYYMMDD,YYYY-MM-DD}<br>数值:${yLabel}]]></label>
-   </tooltip>
+   </tooltip-->
    <axis>
-     <x title="A" type="date" input="YYYYMMDD"/> 
+     <x title="A" type="linear" input="YYYYMMDD"/> 
      <y title="B" type="linear" baseAtZero='false'/> 
    </axis>
    <gridField radius='0'>
@@ -13,14 +13,14 @@
     </gridField>
    <legend enable="false"/>
    <series>
-     <!--area name="a" xField="label" yField="value"/--> 
-     <line name="b" xField="label" yField="valueB"/> 
+     <area name="a" xField="label" yField="value"/> 
+     <!--line name="b" xField="label" yField="valueB"/--> 
    </series>
    <zoom enable='true'/> 
    <zoomBar height='50'>
 	    <barBG>
 	    	<border color="CCCCCC"/>
-	        <fill color='EEEEEE'/>
+	        <fill color='EEEEEE'/> 
 	    </barBG>
 	    <chart>
 	    	<border color='097DDA' thikness='1.5' alpha='1' pixelHinting='false'/>

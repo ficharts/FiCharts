@@ -187,9 +187,13 @@ package com.fiCharts.charts.chart2D.core.axis
 			var length:uint = dataScaleProxy.maxIndex;
 			var step:uint = Math.ceil(axis.temUintSize / axis.unitSize);
 			var i:uint = 0, j:uint = 0;
+			
+			if (step == 0) 
+				step = 1;
+			
 			for (i = 0; i <= length; i += step)
 			{
-				labelVO = new AxisLabelData()
+				labelVO = new AxisLabelData();
 				labelVO.value = dataScaleProxy.currentSourceData[i];
 				axis.labelVOes[j] = labelVO;
 				labelIndexInfo[j] = i;

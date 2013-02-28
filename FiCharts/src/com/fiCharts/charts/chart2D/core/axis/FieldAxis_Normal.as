@@ -2,6 +2,8 @@ package com.fiCharts.charts.chart2D.core.axis
 {
 	import com.fiCharts.charts.chart2D.core.model.Zoom;
 	
+	import flash.text.TextField;
+	
 	/**
 	 * 字符坐标轴正常模式
 	 */	
@@ -89,7 +91,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			axis.labelVOes.length = axis.labelUIs.length = 0;
 			
 			var length:uint = axis.sourceValues.length;
-			var step:uint = axis.size / length
+			var step:uint = Math.ceil(axis.size / length);
 			
 			for (var i:Number = 0; i < length; i += step)
 			{

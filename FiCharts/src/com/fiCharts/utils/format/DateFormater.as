@@ -168,7 +168,7 @@ package com.fiCharts.utils.format
 				monthNum = 1;
 			
 			if (yearString.length == 2 && yearNum < 70)
-				yearNum+=2000;
+				yearNum += 2000;
 			
 			
 			var newDate:Date;
@@ -178,6 +178,8 @@ package com.fiCharts.utils.format
 			else
 				newDate = new Date();
 			
+			newDate.fullYear = yearNum;
+			
 			newDate.seconds = secondNum;
 			newDate.minutes = minNum;
 			newDate.hours = hourNum;
@@ -186,10 +188,12 @@ package com.fiCharts.utils.format
 			newDate.date = dayNum;
 			newDate.month = monthNum - 1;
 			
-			newDate.fullYear = yearNum;
 			
 			if (dayNum != newDate.date || (monthNum - 1) != newDate.month)
+			{
+				trace(dayNum, newDate.date, monthNum, newDate.month);
 				return null;
+			}
 			
 			return newDate;
 		}
