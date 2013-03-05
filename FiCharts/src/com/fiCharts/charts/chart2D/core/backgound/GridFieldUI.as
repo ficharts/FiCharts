@@ -35,21 +35,6 @@ package com.fiCharts.charts.chart2D.core.backgound
 		}
 		
 		/**
-		 * 大范围背景网格的移动很耗性能
-		 */		
-		public function scrollHGrid(pos:Number):void
-		{
-			hGrid.x = pos;
-		}
-		
-		/**
-		 */		
-		public function scrollVGrid(pos:Number):void
-		{
-			vGrid.y = pos;
-		}
-		
-		/**
 		 *  Draw series BG.
 		 */
 		public function render(horiTicks:Vector.<Number>, vertiTicks:Vector.<Number>, 
@@ -114,6 +99,9 @@ package com.fiCharts.charts.chart2D.core.backgound
 				if (i % 2 != 0 && i <= departs)
 				{
 					vGrid.graphics.lineStyle(0, 0, 0);
+					
+					style.hGrid.width = style.width;
+					style.hGrid.height = partHeight;
 					StyleManager.setFillStyle(vGrid.graphics, style.hGrid);
 					vGrid.graphics.drawRect(0, lineY, style.width, partHeight);
 					vGrid.graphics.endFill();
@@ -138,39 +126,45 @@ package com.fiCharts.charts.chart2D.core.backgound
 		 */
 		public function drawHGidLine(ticks:Vector.<Number>, style:GridFieldStyle):void
 		{
-			hGrid.cacheAsBitmap = false;
-			
 			var i:uint;
-			var departs:uint = ticks.length - 1;
+			var departs:int = ticks.length - 1;
 			var partLength:Number = style.width / departs;
 			var lineX:Number;
 			
 			hGrid.graphics.clear();
-			for (i = 0; i <= departs; i++)
+			
+			if (style.vGrid && style.vGrid.fill)
 			{
-				lineX = ticks[i];
-				
-				if (i % 2 != 0 && i <= departs)
+				for (i = 0; i <= departs; i++)
 				{
-					hGrid.graphics.lineStyle(0, 0, 0);
-					StyleManager.setFillStyle(hGrid.graphics, style.vGrid);
-					hGrid.graphics.drawRect(lineX, 0, partLength, style.height);
-					hGrid.graphics.endFill();
+					lineX = ticks[i];
+					
+					if (i % 2 != 0 && i <= departs)
+					{
+						hGrid.graphics.lineStyle(0, 0, 0);
+						
+						style.vGrid.width = partLength;
+						style.vGrid.height = style.height;
+						StyleManager.setFillStyle(hGrid.graphics, style.vGrid);
+						hGrid.graphics.drawRect(lineX, 0, partLength, style.height);
+						hGrid.graphics.endFill();
+					}
 				}
 			}
 			
 			StyleManager.setLineStyle(hGrid.graphics, style.vGrid.getBorder);
+			
+			var cmds:Vector.<int> = new Vector.<int>;
+			var data:Vector.<Number> = new Vector.<Number>;
 			for (i = 0; i <= departs; i++)
 			{
 				lineX = ticks[i];
-				
-				hGrid.graphics.moveTo(lineX, 0);
-				hGrid.graphics.lineTo(lineX, style.height);
+				cmds.push(1, 2);
+				data.push(lineX, 0, lineX, style.height);
 			}
 			
+			hGrid.graphics.drawPath(cmds, data);
 			StyleManager.setEffects(hGrid, style.vGrid);
-			
-			hGrid.cacheAsBitmap = true;
 		}
 		
 		/**

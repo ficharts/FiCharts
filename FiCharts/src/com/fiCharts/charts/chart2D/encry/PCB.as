@@ -24,7 +24,7 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.utils.Timer;
 	
 	/**
-	 * 饼图的基类
+	 * 饼图的基�
 	 * 
 	 * PieChartBase
 	 */	
@@ -35,6 +35,25 @@ package com.fiCharts.charts.chart2D.encry
 			super();
 			
 			init();
+		}
+		
+		/**
+		 */		
+		private var _dataVOes:Vector.<Object>;
+		
+		/**
+		 */
+		public function get dataVOes():Vector.<Object>
+		{
+			return _dataVOes;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set dataVOes(value:Vector.<Object>):void
+		{
+			_dataVOes = value;
 		}
 		
 		/**
@@ -98,7 +117,7 @@ package com.fiCharts.charts.chart2D.encry
 					renderTitle();// 渲染标题
 					renderLegend(); // 渲染图例并调整好位置
 					renderBG();
-					layout();// 调整布局， 计算出饼图位置及半径；
+					layout();// 调整布局�计算出饼图位置及半径�
 					
 					openFlash();	
 					
@@ -130,7 +149,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			var seriesItem:PieSeries;
 			
-			// 为播放动画做准备；
+			// 为播放动画做准备�
 			if (chartModel.animation && ifFirstRender)
 			{
 				flashSeriesPercent = 0;
@@ -349,7 +368,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		//-----------------------------------------------
 		//
-		// 配置与数据
+		// 配置与数�
 		//
 		//-----------------------------------------------
 		
@@ -548,7 +567,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 * 背景区域点击后全屏模式控制
+		 * 背景区域点击后全屏模式控�
 		 */		
 		private function fullScreenHandler(evt:Event):void
 		{
@@ -562,7 +581,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 * 初始化
+		 * 初始�
 		 */		
 		private function init():void
 		{

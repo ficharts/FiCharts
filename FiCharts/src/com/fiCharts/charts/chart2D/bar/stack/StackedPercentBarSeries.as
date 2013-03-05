@@ -13,6 +13,8 @@ package com.fiCharts.charts.chart2D.bar.stack
 
 	/**
 	 * 
+	 * @author wallen
+	 * 
 	 */	
 	public class StackedPercentBarSeries extends StackedBarSeries
 	{
@@ -37,6 +39,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 			
 			itemRender.dataRender = this.dataRender;
 			itemRender.tooltip = this.tooltip;
+			
+			initTipString(item, itemRender.xTipLabel, 
+				itemRender.yTipLabel, this.getZTip(item),itemRender.isHorizontal);
 			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
@@ -75,10 +80,10 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */			
-		override protected function initData():void
+		override protected function preInitData():void
 		{
 			var xValue:Number, yValue:Object, positiveValue:Number, fullValue:Number, percent:Number;
-			var length:uint = dataProvider.children().length();
+			var length:uint = dataProvider.length
 			var stack:StackedSeries;
 			var seriesDataItem:StackedSeriesDataPoint;
 			
@@ -94,7 +99,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
 			
-			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量；
+			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
 			for (var i:uint = 0; i < length; i++)
 			{
 				fullValue = 0;
@@ -132,10 +137,23 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
+		override protected function getZTip(itemVO:SeriesDataItemVO):String
+		{
+			var percentTip:String;
+			percentTip = itemVO.zLabel;
+			
+			if (itemVO.zDisplayName)
+				percentTip = itemVO.zDisplayName + ':' + percentTip;
+			
+			return '<br>' + percentTip;
+		}
+		
+		/**
+		 */		
 		private var _percentLabel:String
 		
 		/**
-		 * 百分比数值之前的标签; 在  toolTip 中会用到;
+		 * 百分比数值之前的标签; � toolTip 中会用到;
 		 */
 		public function get zDisplayName():String
 		{

@@ -18,13 +18,14 @@ package com.fiCharts.utils.graphic
 	import flash.display.Graphics;
 	import flash.display.IBitmapDrawable;
 	import flash.display.InterpolationMethod;
+	import flash.display.Shape;
 	import flash.display.SpreadMethod;
 	import flash.display.Sprite;
 	import flash.filters.ColorMatrixFilter;
 	import flash.geom.Matrix;
 
 	/**
-	 * 定义应用各种样式的  样式控制器；负责具体的绘制工作
+	 * 定义应用各种样式� 样式控制器；负责具体的绘制工�
 	 */	
 	dynamic public class StyleManager extends Array
 	{
@@ -32,8 +33,8 @@ package com.fiCharts.utils.graphic
 		
 		/**
 		 *
-		 * 绘制三角形
-		 *  
+		 * 绘制三角�
+		 * 
 		 * @param canvas
 		 * @param style
 		 * @param radius
@@ -131,6 +132,18 @@ package com.fiCharts.utils.graphic
 		
 		/**
 		 */		
+		public static function drawRectOnShape(target:Shape, style:Style, metaData:Object = null):void
+		{
+			setShapeStyle(style, target.graphics, metaData);
+			target.graphics.drawRoundRect(style.tx, style.ty, style.width, style.height, style.radius, style.radius);
+			target.graphics.endFill();
+			
+			drawRectCover(target.graphics, style.getCover, metaData);
+			StyleManager.setEffects(target, style, metaData);
+		}
+		
+		/**
+		 */		
 		public static function drawCircle(target:Sprite, style:Style, metaData:Object, x:Number = 0, y:Number = 0):void
 		{
 			setShapeStyle(style, target.graphics, metaData);
@@ -160,11 +173,11 @@ package com.fiCharts.utils.graphic
 		}
 		
 		/**
-		 * 设定滤镜，噪点等效果；
+		 * 设定滤镜，噪点等效果�
 		 */		
 		public static function setEffects(target:DisplayObject, effectable:IEffectable, metaData:Object = null):void
 		{
-			// 移动平台下为了提升性能，去除一些滤镜效果
+			// 移动平台下为了提升性能，去除一些滤镜效�
 			/*if (OS.isDesktopSystem == false)
 				return;*/ 
 			
@@ -288,15 +301,16 @@ package com.fiCharts.utils.graphic
 		}
 		
 		
+		
+		
 		//--------------------------------------
 		//
 		// 应用样式
 		//
 		//--------------------------------------
 		
-		
 		/**
-		 * 设置形状边框与填充信息, 仅当样式存在时才设置该样式项；
+		 * 设置形状边框与填充信� 仅当样式存在时才设置该样式项�
 		 */		
 		public static function setShapeStyle(style:Style, target:Graphics, 
 										metaData:Object = null):void
@@ -312,7 +326,7 @@ package com.fiCharts.utils.graphic
 		{
 			if (lineStyle)
 			{
-				//动态获取到填充色
+				//动态获取到填充�
 				var lineColor:Object = getColor(metaData, lineStyle.color);
 				if (lineColor is Array)
 				{
@@ -339,7 +353,7 @@ package com.fiCharts.utils.graphic
 			
 			if (fillStyle)
 			{
-				//动态获取到填充色
+				//动态获取到填充�
 				var fillColor:Object = getColor(metaData, fillStyle.color);
 				
 				if (fillColor is Array)
@@ -463,7 +477,7 @@ package com.fiCharts.utils.graphic
 		}
 		
 		/**
-		 * 将数组中颜色值格式化为正确值
+		 * 将数组中颜色值格式化为正确�
 		 */		
 		private static function formatColorArray(item:Object, index:uint, array:Array):void
 		{
@@ -493,7 +507,7 @@ package com.fiCharts.utils.graphic
 		}
 		
 		/**
-		 * 调节颜色亮度， 数值越高越亮；
+		 * 调节颜色亮度�数值越高越亮；
 		 */		
 		public static function transformBright(baseColor:Object, factor:Number):uint
 		{

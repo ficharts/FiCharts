@@ -70,10 +70,10 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */			
-		override protected function initData():void
+		override protected function preInitData():void
 		{
 			var xValue:Object, yValue:Number, positiveValue:Number, fullValue:Number, percent:Number;
-			var length:uint = dataProvider.children().length();
+			var length:uint = dataProvider.length;
 			var stack:StackedSeries;
 			var seriesDataItem:StackedSeriesDataPoint;
 			
@@ -88,7 +88,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
 			
-			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量；
+			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
 			for (var i:uint = 0; i < length; i++)
 			{
 				fullValue = 0;
@@ -124,7 +124,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				verticalValues.push(positiveValue / fullValue * 100);
 			}
 			
-			itemRenderMaxIndex = length - 1;
+			dataOffsetter.maxIndex = maxDataItemIndex = length - 1;
 		}
 		
 		/**
@@ -132,7 +132,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		private var _percentLabel:String
 
 		/**
-		 * 百分比数值之前的标签; 在  toolTip 中会用到;
+		 * 百分比数值之前的标签; � toolTip 中会用到;
 		 */
 		public function get zDisplayName():String
 		{

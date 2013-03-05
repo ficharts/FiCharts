@@ -1,11 +1,12 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
+	import com.fiCharts.utils.ArrayUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
 	/**
 	 * 
-	 * 字符类型的坐标轴， 数据节点均匀分部
+	 * 字符类型的坐标轴�数据节点均匀分部
 	 * 
 	 * @author wallen
 	 * 
@@ -15,6 +16,30 @@ package com.fiCharts.charts.chart2D.core.axis
 		public function FieldAxis()
 		{
 			super();
+		}
+		
+		/**
+		 */		
+		override public function clone():AxisBase
+		{
+			var axis:AxisBase = new FieldAxis;
+			initClone(axis);
+			
+			return axis;
+		}
+		
+		/**
+		 */		
+		override internal function getZoomPattern():IAxisPattern
+		{
+			return new FieldAxis_DataScale(this);
+		}
+		
+		/**
+		 */		
+		override internal function getNormalPatter():IAxisPattern
+		{
+			return new FieldAxis_Normal(this);
 		}
 		
 		/**
@@ -31,61 +56,51 @@ package com.fiCharts.charts.chart2D.core.axis
 
 		/**
 		 */
-		override public function valueToX(value:Object):Number
+		override public function valueToX(value:Object, index:uint):Number
 		{
-			return valueToSize(value);
+			return valueToSize(value, index);
 		}
 
 		/**
 		 */
 		override public function valueToY(value:Object):Number
 		{
-			return - valueToSize(value);
-		}
-
-		/**
-		 */
-		override protected function valueToSize(value:Object):Number
-		{
-			var result:Number = unitSize * .5 + 
-				sourceValues.indexOf(value.toString()) * this.unitSize
-			
-			if (inverse)
-				return size - result;
-			
-			return result;
+			return - valueToSize(value, NaN);
 		}
 		
 		/**
 		 */		
-		override protected function adjustHoriTicks():void
+		override internal function adjustHoriTicks():void
 		{
+			var start:Number = ticks[0];
+			var end:Number = ticks[ticks.length - 1];
+				
 			if (ifTickCenter)
 			{
-				ticks.unshift(0);
-				ticks.push(this.size);
+				ticks.unshift(start);
+				ticks.push(end);
 			}
 			else
 			{
 				if (this.inverse)
-					ticks.forEach(shiftRight);
+					ticks.forEach(shiftUp);
 				else
-					ticks.forEach(shiftLeft);
+					ticks.forEach(shiftDown);
 				
-				ticks.push(size);
+				ticks.push(end);
 			}
 		}
 		
 		/**
 		 */		
-		private function shiftLeft(item:Number, index:uint, array:Vector.<Number>):void
+		internal function shiftLeft(item:Number, index:uint, array:Vector.<Number>):void
 		{
 			array[index] = item - unitSize * .5;
 		}
 		
 		/**
 		 */		
-		private function shiftRight(item:Number, index:uint, array:Vector.<Number>):void
+		internal function shiftRight(item:Number, index:uint, array:Vector.<Number>):void
 		{
 			array[index] = item + unitSize * .5;
 		}
@@ -150,7 +165,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			var seriesDataFeature:SeriesDataFeature = new SeriesDataFeature;
 			
-			// 单值的情况；
+			// 单值的情况�
 			if (seriesData.length == 1)
 			{
 				seriesDataFeature.maxValue = seriesDataFeature.minValue = seriesData.pop();
@@ -168,40 +183,20 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */
 		override public function pushValues(values:Vector.<Object>):void
 		{
-			for each (var item:String in values)
+			var item:String, i:uint = sourceValues.length;
+			for each (item in values)
 			{
-				if (sourceValues.indexOf(item) == - 1)
-					sourceValues.push(item);
-			}
-		}
-		
-		/**
-		 * 数据源与label节点一一对应；
-		 */		
-		override public function beforeRender():void
-		{
-			if (changed)
-			{
-				createLabelsData();
-				this.unitSize = size / this.labelsData.length;
+				sourceValues[i] = item;
+				i ++;				
 			}
 		}
 		
 		/**
 		 */		
-		private function createLabelsData():void
+		override public function dataUpdated():void
 		{
-			var labelData:AxisLabelData;
-			labelsData = new Vector.<AxisLabelData>;
-			for each (var value:String in sourceValues)
-			{
-				labelData = new AxisLabelData();
-				labelData.value = value;
-				labelsData.push(labelData);
-			}
-			
-			labelUIs.length = 0;
-			clearLabels();
+			ArrayUtil.removeDubItem(this.sourceValues);
+			super.dataUpdated();
 		}
 		
 	}

@@ -51,6 +51,9 @@ package com.fiCharts.charts.chart2D.bar
 			itemRender.dataRender = this.dataRender;
 			itemRender.tooltip = this.tooltip;
 			
+			initTipString(item, itemRender.xTipLabel, 
+				itemRender.yTipLabel,itemRender.zTipLabel,itemRender.isHorizontal);
+			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
 		}
@@ -79,15 +82,18 @@ package com.fiCharts.charts.chart2D.bar
 		}
 		
 		/**
-		 * 更新数据节点的布局信息；
+		 * 更新数据节点的布局信息�
 		 */		
-		override protected function layoutDataItems():void
+		override public function layoutDataItems(startIndex:int, endIndex:int, step:uint = 1):void
 		{
 			adjustColumnWidth();
 			
-			for each (var item:SeriesDataPoint in dataItemVOs)
+			var item:SeriesDataItemVO;
+			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{
-				item.x = this.horizontalAxis.valueToX(item.xValue);
+				item = dataItemVOs[i];
+					
+				item.x = this.horizontalAxis.valueToX(item.xValue, i);
 				item.y = verticalAxis.valueToY(item.yValue) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint)// 
 				
@@ -129,11 +135,11 @@ package com.fiCharts.charts.chart2D.bar
 		
 		//---------------------------------------------
 		//
-		// 数值分布特征
+		// 数值分布特�
 		//
 		//---------------------------------------------
 		
-		override protected function applyDataFeature():void
+		override public function applyDataFeature():void
 		{
 			this.directionControl.dataFeature = this.horizontalAxis.getSeriesDataFeature(
 				this.horizontalValues.concat());
@@ -148,16 +154,16 @@ package com.fiCharts.charts.chart2D.bar
 		override public function upBaseLine():void
 		{
 			if ((horizontalAxis as LinearAxis).baseAtZero)
-				directionControl.baseLine = horizontalAxis.valueToX(0);
+				directionControl.baseLine = horizontalAxis.valueToX(0, NaN);
 			else
-				directionControl.baseLine = horizontalAxis.valueToX(directionControl.dataFeature.minValue);
+				directionControl.baseLine = horizontalAxis.valueToX(directionControl.dataFeature.minValue, NaN);
 		}
 		
 		/**
 		 */		
 		override public function centerBaseLine():void
 		{
-			directionControl.baseLine = horizontalAxis.valueToX(0);
+			directionControl.baseLine = horizontalAxis.valueToX(0, NaN);
 		}
 		
 		/**
@@ -165,9 +171,9 @@ package com.fiCharts.charts.chart2D.bar
 		override public function downBaseLine():void
 		{
 			if ((horizontalAxis as LinearAxis).baseAtZero)
-				directionControl.baseLine = horizontalAxis.valueToX(0);
+				directionControl.baseLine = horizontalAxis.valueToX(0, NaN);
 			else
-				directionControl.baseLine = horizontalAxis.valueToX(directionControl.dataFeature.maxValue);
+				directionControl.baseLine = horizontalAxis.valueToX(directionControl.dataFeature.maxValue, NaN);
 		}
 		
 		/**
@@ -178,7 +184,7 @@ package com.fiCharts.charts.chart2D.bar
 		}
 		
 		/**
-		 * 根据最大允许的单个柱体宽度调整柱体群宽度和单个柱体实际宽度；
+		 * 根据最大允许的单个柱体宽度调整柱体群宽度和单个柱体实际宽度�
 		 */		
 		override protected function adjustColumnWidth():void
 		{
@@ -198,7 +204,7 @@ package com.fiCharts.charts.chart2D.bar
 		}
 		
 		/**
-		 * 柱体群内部的单元间隙，个数为群柱体个数 - 1；
+		 * 柱体群内部的单元间隙，个数为群柱体个�- 1�
 		 */		
 		override protected function get columnGroupInnerSpaceUint():Number
 		{
@@ -206,7 +212,7 @@ package com.fiCharts.charts.chart2D.bar
 		}
 		
 		/**
-		 * 柱体群外单元空隙，每个柱体群有两个此间隙；
+		 * 柱体群外单元空隙，每个柱体群有两个此间隙�
 		 */
 		override public function get columnGroupOuterSpaceUint():Number
 		{

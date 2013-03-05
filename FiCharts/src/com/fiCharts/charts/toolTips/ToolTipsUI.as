@@ -25,7 +25,7 @@ package com.fiCharts.charts.toolTips
 		}
 		
 		/**
-		 * 信息提示的样式取决于节点，而非统一设置；
+		 * 信息提示的样式取决于节点，而非统一设置�
 		 */		
 		private var _style:LabelStyle = new LabelStyle;
 
@@ -69,6 +69,10 @@ package com.fiCharts.charts.toolTips
 		
 		/**
 		 */		
+		private var label:TextField = new TextField;
+		
+		/**
+		 */		
 		private function get thisHeight():int
 		{
 			return labelsContainer.height + style.vPadding * 2
@@ -108,10 +112,7 @@ package com.fiCharts.charts.toolTips
 		}
 		
 		/**
-		 */		
 		private var label:TextField = new TextField;
-		
-		/**
 		 * 有两种信息提示模式，一是含有多个一是只有一项内容；
 		 */		
 		public function updateLabel():void
@@ -130,12 +131,11 @@ package com.fiCharts.charts.toolTips
 				labelsContainer.x = - labelsContainer.width / 2;
 				labelsContainer.y = labelsContainer.height / 2;
 			}
-			else// 饼图的tips直接以holder为载体
+			else// 饼图的tips直接以holder为载�
 			{
 				this.style = tooltipHolder.style;
 				updateBgSize();
 				
-				var labelUI:LabelUI = new LabelUI();
 				labelUI.style = this.style;
 				labelUI.metaData = tooltipHolder.metaData;
 				labelUI.render();
@@ -148,16 +148,20 @@ package com.fiCharts.charts.toolTips
 		
 		/**
 		 */		
+		private var labelUI:LabelUI = new LabelUI();
+		
+		/**
+		 */		
 		private function updateMultiDataLabel():void
 		{
-			// 动态调整颜色
+			// 动态调整颜�
 			var fontColor:uint;
 			var bm:Bitmap;
 			var labelY:Number = 0;
 			
 			for each (var tooltipItem:TooltipDataItem  in tooltipHolder.tooltips)
 			{
-				// 可以独立设置tooltip的样式
+				// 可以独立设置tooltip的样�
 				if (tooltipItem.style)
 				{
 					if (tooltipHolder.tipLength > 1)

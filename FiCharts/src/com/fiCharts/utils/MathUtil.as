@@ -9,6 +9,16 @@ package com.fiCharts.utils
 		
 		/**
 		 */		
+		public static function ifOddNumber(value:uint):Boolean
+		{
+			if (value % 2)
+				return false;
+			
+			return true; 
+		}
+		
+		/**
+		 */		
 		public static function numChange(value:String, from:uint, to:uint):String
 		{
 			var num:Number = parseInt(value, from); 

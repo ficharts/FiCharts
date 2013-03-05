@@ -18,5 +18,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		
 		function get visible():Boolean;
 		function set visible(value:Boolean):void;
+		
+		
 	}
 }

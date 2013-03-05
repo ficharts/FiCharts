@@ -1,0 +1,55 @@
+ <config precision="2" title="数据缩放" subTitle='鼠标滚动缩放，拖拽查看，背景双击全屏'>
+   <!--tooltip>
+   	<label><![CDATA[日期:${xValue}{formatDate:YYYYMMDD,YYYY-MM-DD}<br>数值:${yLabel}]]></label>
+   </tooltip-->
+   <axis>
+     <x title="A" type="linear" input="YYYYMMDD"/> 
+     <y title="B" type="linear" baseAtZero='false'/> 
+   </axis>
+   <gridField radius='0'>
+        <vGrid>
+        	<border color='E2E2E2' thikness='1'/>
+        </vGrid>
+    </gridField>
+   <legend enable="false"/>
+   <series>
+     <area name="a" xField="label" yField="value"/> 
+     <!--line name="b" xField="label" yField="valueB"/--> 
+   </series>
+   <zoom enable='true'/> 
+   <zoomBar height='50'>
+	    <barBG>
+	    	<border color="CCCCCC"/>
+	        <fill color='EEEEEE'/> 
+	    </barBG>
+	    <chart>
+	    	<border color='097DDA' thikness='1.5' alpha='1' pixelHinting='false'/>
+            <fill color='097DDA' alpha='0.3'/>
+            <xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
+	            <tickMark color='E4E2E2' thikness='1' alpha='1'/>
+	            <label margin='0'>
+	                <format color='9F9F9F' font='微软雅黑'/>
+	                <text value='${label}'>
+	                	<effects>
+	                        <shadow color='FFFFFF' alpha='1' distance='1' blur='1' angle='90'/>
+	                    </effects>
+	                </text>
+	            </label>
+	         </xAxis>
+	         <yAxis/>
+	    </chart>
+	    <window>
+	    	<states>
+	    		<normal>
+	    			<fill color='FF0000' alpha='0.5'/>
+	    		</normal>
+	    		<hover>
+	    			<fill color='FFFF00' alpha='0.5'/>
+	    		</hover>
+	    		<down>
+	    			<fill color='FF00FF' alpha='0.5'/>
+	    		</down>
+	    	</states>
+	    </window>
+   </zoomBar>
+ </config>

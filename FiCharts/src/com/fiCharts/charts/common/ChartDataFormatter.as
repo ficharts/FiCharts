@@ -24,12 +24,12 @@ package com.fiCharts.charts.common
 		 */		
 		public function formatXString(value:Object):String
 		{
-			return this.xPrefix.concat(value, xSuffix);
+			return this.xPrefix + value +  xSuffix;
 		}
 		
 		public function formatYString(value:Object):String
 		{
-			return this.yPrefix.concat(value, ySuffix);
+			return this.yPrefix + value + ySuffix;
 		}
 		
 		/**
@@ -37,10 +37,11 @@ package com.fiCharts.charts.common
 		public function formatXNumber(value:Object):String
 		{
 			var result:Number = Number(value);
+			
 			if (result >= 0)
 				return xPrefix + formatter.formatNumber(result) + xSuffix;
 			else
-				return "-".concat(xPrefix, formatter.formatNumber(- result), xSuffix);
+				return "-" + (xPrefix + formatter.formatNumber(- result) + xSuffix);
 		}
 		
 		/**
@@ -49,9 +50,9 @@ package com.fiCharts.charts.common
 		{
 			var result:Number = Number(value);
 			if (result >= 0)
-				return yPrefix.concat(formatter.formatNumber(result), ySuffix);
+				return yPrefix + formatter.formatNumber(result) + ySuffix;
 			else
-				return "-".concat(yPrefix, formatter.formatNumber(- result), ySuffix);
+				return "-" + (yPrefix + formatter.formatNumber(- result) + ySuffix);
 		}
 		
 		/**
@@ -60,9 +61,9 @@ package com.fiCharts.charts.common
 		{
 			var result:Number = Number(value);
 			if (result >= 0)
-				return zPrefix.concat(formatter.formatNumber(result), zSuffix);
+				return zPrefix + formatter.formatNumber(result) + zSuffix;
 			else
-				return "-".concat(zPrefix, formatter.formatNumber(- result), zSuffix);
+				return "-" (zPrefix + formatter.formatNumber(- result) + zSuffix);
 		}
 		
 		/**

@@ -1,6 +1,7 @@
 package com.fiCharts.utils
 {
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.format.DateFormater;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.globalization.LocaleID;
@@ -61,5 +62,16 @@ package com.fiCharts.utils
 		{
 			return StyleManager.transformBright(sourceColor, Number(value));
 		}
+		
+		/**
+		 * 将日期字符串（原始）转换为需要的格式输出 
+		 */		
+		public function formatDate(sourceDateString:String, rule:String):String
+		{
+			var rules:Array = rule.split(",");
+			
+			return DateFormater.dateToString(DateFormater.stringToDate(sourceDateString, rules[0]), rules[1]);
+		}
+		
 	}
 }

@@ -2,21 +2,25 @@ package com.fiCharts.utils.csv
 {
 	import flash.events.Event;
 	
+	/**
+	 */	
 	public class CSVParseEvent extends Event
 	{
 		public static const PARSE_COMPLETE : String = 'parseComplete';
 		
-		public var parsedXML : XML;
+		/**
+		 */		
+		public var parsedVOes:Vector.<Object>;
 		
 		/**
 		 * @param type
 		 * @param xml
 		 */		
-		public function CSVParseEvent( type:String, xml : XML )
+		public function CSVParseEvent(type:String, voes:Vector.<Object>)
 		{
 			super( type );
 			
-			parsedXML = xml;
+			parsedVOes = voes;
 		}
 	}
 }

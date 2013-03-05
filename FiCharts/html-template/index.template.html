@@ -2,22 +2,24 @@
     <head>
         <title>www.ficharts.com</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <script type="text/javascript" src="./FiCharts.js">
+        <script type="text/javascript" src="FiCharts.js">
         </script>
         <style>
-            body, html {
-                margin: 0;
-                padding: 0;
-            }
+        	body, html {
+        		margin: 0;
+        		padding: 0;
+        	}
         </style>
         <script type="text/javascript">
-           
-        	new Chart2D('chartID, data.xml').setStyle('Classic')
-            //new Pie2D('chartID, pieData.xml').setStyle('Simple');
-            
+        	
+            var chartDemo = new Chart2D({id: 'chart', width: '100%', height: '100%', style: 'white'});
+            chartDemo.setStyle("simple")
+            chartDemo.setConfigFile('stockConfig.xml');
+            chartDemo.setCSVData("numberData.csv", ["label", "value", "valueB"])
+			
         </script>
     </head>
     <body>
-        <div id="chartID"></div>
+        <div id="chart"></div>
     </body>
 </html>

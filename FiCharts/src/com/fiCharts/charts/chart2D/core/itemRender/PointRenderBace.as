@@ -16,6 +16,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 	import com.fiCharts.utils.graphic.BitmapUtil;
 	
 	import flash.display.Bitmap;
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -29,7 +30,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		{
 			super();
 
-			this.hitArea = canvas;
+			//this.hitArea = canvas;
 			addChild(canvas);
 			
 			statesControl = new StatesControl(this);
@@ -41,7 +42,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		 * 
 		 * 这个值在全局判断节点碰撞时会用到
 		 * 
-		 * 渲染节点的半径，  汽包图的气泡半径由Z值决定，默认由样式文件定义 radius 
+		 * 渲染节点的半径，  汽包图的气泡半径由Z值决定，默认由样式文件定�radius 
 		 */		
 		private var _radius:Number = 0;
 
@@ -84,10 +85,10 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		
 		/**
 		 */		
-		protected var isHorizontal:Boolean = false;
+		public var isHorizontal:Boolean = false;
 		
 		/**
-		 * 判断当前渲染器是否有效。
+		 * 判断当前渲染器是否有效�
 		 */
 		public function get isEnable():Boolean
 		{
@@ -150,27 +151,6 @@ package com.fiCharts.charts.chart2D.core.itemRender
 				
 				toolTipsHolder.isHorizontal = isHorizontal;
 				
-				var fullTip:String;
-				var xTip:String = xTipLabel;
-				var yTip:String = yTipLabel;
-				var zTip:String = zTipLabel;
-				
-				if (itemVO.xDisplayName && itemVO.xDisplayName != '')
-					xTip = itemVO.xDisplayName + ':' + xTip;
-				
-				if (itemVO.yDisplayName && itemVO.yDisplayName != '')
-					yTip = itemVO.yDisplayName + ':' + yTip;
-				
-				if (this.isHorizontal)
-					fullTip = yTip + '<br>' + xTip + zTip;
-				else
-					fullTip = xTip + '<br>' + yTip + zTip;
-				
-				if (itemVO.seriesName && itemVO.seriesName != '')
-					fullTip = itemVO.seriesName + '<br>' + fullTip;
-				
-				itemVO.metaData.tooltip = fullTip;
-				
 				var tooltipItem:TooltipDataItem = new TooltipDataItem;
 				tooltipItem.metaData = itemVO.metaData;
 				tooltipItem.style = this.tooltip;
@@ -200,21 +180,21 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		
 		/**
 		 */		
-		protected function get xTipLabel():String
+		public function get xTipLabel():String
 		{
 			return itemVO.xLabel;
 		}
 		
 		/**
 		 */		
-		protected function get yTipLabel():String
+		public function get yTipLabel():String
 		{
 			return itemVO.yLabel;
 		}
 		
 		/**
 		 */		
-		protected function get zTipLabel():String
+		public function get zTipLabel():String
 		{
 			return '';
 		}

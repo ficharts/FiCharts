@@ -220,7 +220,8 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function pushAttributesToObject(sourceVO:Object, target:Object, attributes:Array):void
 		{
-			for each (var attribute:String in attributes)
+			var attribute:String;
+			for each (attribute in attributes)
 			{
 				target[attribute] = sourceVO[attribute];
 			}

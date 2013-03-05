@@ -44,12 +44,12 @@ package com.fiCharts.charts.chart2D.encry
 
 	
 	/**
-	 * 这是所有图表的主程序基类，负责初始化过程，包含对外接口；
+	 * 这是所有图表的主程序基类，负责初始化过程，包含对外接口�
 	 */	
 	public class CSB extends Sprite
 	{
 		/**
-		 * 版本号 
+		 * 版本�
 		 */	
 		public static const VARSION:String = "1.2.4";
 		
@@ -92,9 +92,9 @@ package com.fiCharts.charts.chart2D.encry
 		
 		
 		/**
-		 * 注入图表的基础配置文件， 此配置文件包含默认的样式模板, 菜单语言配置等；
+		 * 注入图表的基础配置文件�此配置文件包含默认的样式模板, 菜单语言配置等；
 		 * 
-		 * 图表初始化时先初始此文件；
+		 * 图表初始化时先初始此文件�
 		 * 
 		 */		
 		internal function initStyleTempalte(value:String):void
@@ -120,9 +120,9 @@ package com.fiCharts.charts.chart2D.encry
 		
 		//-----------------------------------------------------------------------------
 		//
-		// 公共接口, 这些接口可以用在AS项目或者AIR移动项目中
+		// 公共接口, 这些接口可以用在AS项目或者AIR移动项目�
 		//
-		// 这里用了预处理，即便图表没有初始化完毕也可定义其属性和配置， 初始化完毕后自动生效
+		// 这里用了预处理，即便图表没有初始化完毕也可定义其属性和配置�初始化完毕后自动生效
 		//
 		//-----------------------------------------------------------------------------
 		
@@ -130,7 +130,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 在被添加到显示列表之前就要设置用户配置文件， 
 		 * 
-		 * 只要一被添加进显示列表则开始初始化 Chart， 将用户配置文件作为参数传入；
+		 * 只要一被添加进显示列表则开始初始化 Chart�将用户配置文件作为参数传入；
 		 */		
 		public function setUserConfig(value:XML):void
 		{
@@ -144,6 +144,71 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 */		
 		protected var customConfig:XML;
+		
+		
+		/**
+		 */		
+		private var _ifDataScalable:Boolean = false;
+
+		/**
+		 * 是否开启数据缩放，开启后<code>scaleData</code>方法才会生效
+		 */
+		public function get ifDataScalable():Boolean
+		{
+			return _ifDataScalable;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set ifDataScalable(value:Boolean):void
+		{
+			_ifDataScalable = value;
+			
+			if (ifReady)
+				chart.setDataScalable(_ifDataScalable);
+			else
+				ifDataScalableChanged = true;
+		}
+		
+		/**
+		 */		
+		private var ifDataScalableChanged:Boolean = false;
+		
+		/**
+		 * 
+		 * 根据数据范围缩放图表
+		 * 
+		 * @param valueFrom 数据范围的起点�
+		 * @param valueTo   数据范围的终点�
+		 * 
+		 */		
+		public function scaleData(valueFrom:Object, valueTo:Object):void
+		{
+			if (ifReady)
+			{
+				chart.scaleData(valueFrom, valueTo);
+			}
+			else
+			{
+				dataScaleForm = valueFrom;
+				dataScaleTo = valueTo;
+				ifScaleDataChanged = true;
+			}
+		}
+		
+		/**
+		 */		
+		private var ifScaleDataChanged:Boolean = false;
+		
+		/**
+		 */		
+		private var dataScaleForm:Object;
+		
+		/**
+		 */		
+		private var dataScaleTo:Object;
+		
 		
 		
 		/**
@@ -209,7 +274,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 * 设置图表样式   white 或者  black 默认为 white
+		 * 设置图表样式   white 或� black 默认�white
 		 */		
 		public function setStyle(value:String):void
 		{
@@ -225,7 +290,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 * 渲染图表， 图表在改变了尺寸， 配置文件， 数据后都需重新渲染；
+		 * 渲染图表�图表在改变了尺寸�配置文件�数据后都需重新渲染�
 		 */		
 		public function render():void
 		{
@@ -386,11 +451,13 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private function requestCSVData(value:String):void
+		private function requestCSVData(value:String, columns:Array):void
 		{
+			updateInfoLabel(loadingDataInfo);
+			
 			csvLoader = new CSVLoader;
 			csvLoader.addEventListener(CSVParseEvent.PARSE_COMPLETE, csvDataLoaded, false, 0, true);
-			csvLoader.columnNames = ['label', 'value']
+			csvLoader.columnNames = columns;
 			csvLoader.loadCVS(value);
 		}
 		
@@ -398,6 +465,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function csvDataLoaded(evt:CSVParseEvent):void
 		{
+			chart.dataVOes = evt.parsedVOes;
+			renderHandler();
+			ExternalUtil.call("FiCharts.csvFileLoaded", id);
+			
 		}
 		
 		/**
@@ -416,7 +487,7 @@ package com.fiCharts.charts.chart2D.encry
 		//-------------------------------------------
 		//
 		// 
-		//  渲染及交互事件
+		//  渲染及交互事�
 		//
 		//
 		//-------------------------------------------
@@ -467,7 +538,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		//---------------------------------------------------------
 		//
-		// 初始化
+		// 初始�
 		//
 		//---------------------------------------------------------
 		
@@ -485,8 +556,8 @@ package com.fiCharts.charts.chart2D.encry
 				initInterfaces();
 			}
 			
-			// 存在外部配置文件的话， 先加载外部配置文件， 加载成功后
-			// 应用配置文件， 如果存在嵌入配置文件， 则外部配置文件需要继承
+			// 存在外部配置文件的话�先加载外部配置文件， 加载成功�
+			// 应用配置文件�如果存在嵌入配置文件�则外部配置文件需要继�
 			// 嵌入的配置文件；嵌入配置文件优先级最高；
 			if (RexUtil.ifTextNull(customStyleFileURL) == false)
 				loadCustomStyle(customStyleFileURL);
@@ -520,7 +591,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			// 
 			// 预先配置文件有两种： 嵌入式和外部加载方式，且嵌入优先于外部加载方式；
-			// 两者同时存在时， 外部加载的要继承预先嵌入的， 作为自定义样式附给图表
+			// 两者同时存在时�外部加载的要继承预先嵌入的， 作为自定义样式附给图�
 			//
 			if (this.embedCustomConfig)
 				this.customConfig = XMLVOMapper.extendFrom(embedCustomConfig, externalCustomConfig);
@@ -540,7 +611,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		//-----------------------------------------------
 		//
-		// 语言与邮件菜单
+		// 语言与邮件菜�
 		//
 		//-----------------------------------------------
 		
@@ -549,7 +620,7 @@ package com.fiCharts.charts.chart2D.encry
 		private var menu:Menu = new Menu;
 		
 		/**
-		 * 右键菜单；
+		 * 右键菜单�
 		 */		
 		private function initMenu():void
 		{
@@ -577,8 +648,9 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 保存图片
 		 */		
-		private function saveImageHandler(evt:Event):void
+		public function saveImage():void
 		{
 			ImgSaver.saveImg(this, "ficharts.png");
 		}
@@ -593,6 +665,13 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
+		private function saveImageHandler(evt:Event):void
+		{
+			saveImage();
+		}
+		
+		/**
+		 */		
 		private function menuItemSelectHandler(evt:ContextMenuEvent):void
 		{
 			flash.net.navigateToURL(new URLRequest('http://www.ficharts.com'), '_blank');
@@ -600,11 +679,13 @@ package com.fiCharts.charts.chart2D.encry
 		
 		//----------------------------------------------------
 		//
-		// 外部配置及数据接口处理
+		// 外部配置及数据接口处�
 		//
 		//-----------------------------------------------------
 		protected function initInterfaces():void
 		{
+			ExternalUtil.addCallback("ifDataScalable", ifChartDataScalable);
+			
 			ExternalUtil.addCallback("setConfigXML", setConfigXMLHandler);
 			ExternalUtil.addCallback("setConfigFile", requestConfigURL);
 			
@@ -634,19 +715,32 @@ package com.fiCharts.charts.chart2D.encry
 			ExternalUtil.call("FiCharts.beforeInit", id);
 		}
 		
+		/**
+		 */		
+		private function ifChartDataScalable():Boolean
+		{
+			return chart.ifDataScalable();
+		}
+		
 		
 		
 		
 		//------------------------------------
 		//
-		// 图表构建与启动
+		// 图表构建与启�
 		//
 		//------------------------------------
 		/**
-		 * 应用图表初始化配置项， 创建并 启动图表；
+		 * 应用图表初始化配置项�创建�启动图表�
 		 */		
 		private function lauchApp():void
 		{
+			// 桌面环境下图表默认自适应舞台，移动平台下需手动设置
+			if (OS.isDesktopSystem)
+				ifAutoResizeToStage = true;
+			else
+				ifAutoResizeToStage = false;
+			
 			createChart();
 			stage.addEventListener(Event.RESIZE, resizeHandler, false, 0, true);
 			
@@ -654,7 +748,7 @@ package com.fiCharts.charts.chart2D.encry
 			infoLabel.style = new LabelStyle;
 			addChild(infoLabel);
 			
-			// 初始化完毕后提示无数据
+			// 初始化完毕后提示无数�
 			updateInfoLabel(noDataInfo);
 			
 			resizeChart();
@@ -662,7 +756,7 @@ package com.fiCharts.charts.chart2D.encry
 			if (OS.isWebSystem)
 			{
 				//
-				// 如果有预先设置好的自定义配置， 将其设置为自定义样式；
+				// 如果有预先设置好的自定义配置�将其设置为自定义样式�
 				//
 				if (this.customConfig)
 					chart.setCustomStyle(customConfig);
@@ -670,7 +764,7 @@ package com.fiCharts.charts.chart2D.encry
 				if (RexUtil.ifTextNull(_style) == false)
 					setStyleHandler(_style);
 				
-				//如果配置了配置文件的路径，则直接加载；
+				//如果配置了配置文件的路径，则直接加载�
 				if (RexUtil.ifTextNull(_configFileURL) == false)
 					requestConfigURL(_configFileURL);
 				
@@ -678,7 +772,7 @@ package com.fiCharts.charts.chart2D.encry
 			}
 			
 			// 
-			// 如果图表未添加仅显示列表前调用配置渲染接口
+			// 如果图表未添加仅显示列表前调用配置渲染接�
 			// 此时调用生效
 			//
 			//
@@ -708,27 +802,39 @@ package com.fiCharts.charts.chart2D.encry
 				ifPreRender = false;
 			}
 			
+			if (ifDataScalableChanged)
+			{
+				this.chart.setDataScalable(this.ifDataScalable);
+				ifDataScalableChanged = false;
+			}
+			
+			if (this.ifScaleDataChanged && this.ifDataScalable)
+			{
+				this.scaleData(this.dataScaleTo, dataScaleTo);
+				ifScaleDataChanged = false;
+			}
+			
 			if (this.ifConfigFileURLChanged)
 			{
 				this.setConfigFileURL(this._configFileURL);
 				ifConfigFileURLChanged = false;
 			}
 			
-			// 初始化过程完毕
+			// 初始化过程完�
 			this.dispatchEvent(new FiChartsEvent(FiChartsEvent.READY));
 		}
 		
 		/**
-		 *  如果为 true 表明初始化已完毕
+		 *  如果�true 表明初始化已完毕
 		 */		
 		public var ifReady:Boolean = false;
 		
 		/**
-		 * 初始化一些全局事件， 当图表被添加进显示列表以后才开始创建图表；
+		 * 初始化一些全局事件�当图表被添加进显示列表以后才开始创建图表；
 		 */		
 		protected function createChart():void
 		{
-			// 子类需先创建图表
+			// 子类需先创建图�
 			addChild(chart as DisplayObject);
 			(chart as EventDispatcher).addEventListener(FiChartsEvent.RENDERED, renderedHandler, false, 0, true);
 			
@@ -804,7 +910,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 *  网页模式下, 图表的宽高会自动适应容器尺寸
+		 *  网页模式� 图表的宽高会自动适应容器尺寸
 		 * 
 		 *  Flash项目中，图表的宽高随用户设置
 		 */		
@@ -831,6 +937,13 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private var id:String;
 		
+		
+		/**
+		 * 默认图表会自动适应舞台尺寸，无需设置宽高，可自适应网页中的容器尺寸�
+		 * 
+		 * Flash/AIR项目中根据需要关闭此特性，手动设置图表尺寸�
+		 */		
+		public var ifAutoResizeToStage:Boolean = true;
 		
 		/**
 		 */		

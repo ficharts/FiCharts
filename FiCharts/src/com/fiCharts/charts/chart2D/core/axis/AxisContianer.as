@@ -8,7 +8,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			super();
 			
-			this.mouseEnabled = this.mouseChildren = false;
+			//this.mouseEnabled = this.mouseChildren = false;
 		}
 		
 		/**

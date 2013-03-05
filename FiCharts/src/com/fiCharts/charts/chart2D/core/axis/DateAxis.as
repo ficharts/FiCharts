@@ -1,7 +1,6 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
-	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.format.DateFormater;
 	
@@ -28,130 +27,34 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		private var _input:String = 'YYYY/MM/DD';
-
-		/**
-		 * 输入格式
-		 */
-		public function get input():String
+		override public function clone():AxisBase
 		{
-			return _input;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set input(value:String):void
-		{
-			_input = value;
+			var axis:AxisBase = new DateAxis;
+			initClone(axis);
+			
+			return axis;
 		}
 		
 		/**
+		 * 
+		 * 数据滚动过程中，label数据不变，仅动态更新显�
+		 * 
 		 */		
-		private var _output:String = 'YYYY/MM/DD';
-
-		/**
-		 * 输出格式
-		 */
-		public function get output():String
+		override internal function createLabelsData(max:Number, min:Number):void
 		{
-			return _output;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set output(value:String):void
-		{
-			_output = value;
-		}
-
-		/**
-		 * 将传进来的字符串转化为时间对象，然后再将时间对象转化为毫秒数值；
-		 */
-		override public function pushValues(values:Vector.<Object>):void
-		{
-			var dateTimers:Vector.<Object> = new Vector.<Object>;
-			for each (var item:String in values)
-				dateTimers.push(stringDateToDateTimer(item));
-			
-			super.pushValues(dateTimers);
-		}
-		
-		/**
-		 */		
-		override public function getSeriesDataFeature(seriesData:Vector.<Object>):SeriesDataFeature
-		{
-			var seriesDataFeature:SeriesDataFeature = new SeriesDataFeature;
-				
-			
-			DateFormater
-			
-			//TODO
-			return seriesDataFeature;
-		}
-		
-		/**
-		 */		
-		override public function dataUpdated():void
-		{
-			sourceValues.sort(Array.NUMERIC);
-			
-			if (!isNaN(assignedMinimum))
-				sourceMin = assignedMinimum;
-			else
-				sourceMin = Number(sourceValues[0]);
-			
-			if (!isNaN(assignedMaximum))
-				sourceMax = assignedMaximum;
-			else
-				sourceMax = Number(sourceValues[sourceValues.length - 1]);
-			
-			// 单值的情况；
-			if (sourceValues.length == 1)
-				sourceMin = sourceMax = Number(sourceValues[0]);
-			
-			if (autoAdjust == false)
-			{
-				_maximum = sourceMax;
-				_minimum = sourceMin;
-				
-				this.changed = false;
-				
-				// 气泡图的控制气泡大小的轴无需渲染，原始刻度间距即为确认的间距
-				confirmedDis = _maximum - _minimum;
-				return; 
-			}
-			
-			sourceValueDis = sourceMax - sourceMin;
-			
-			this.label.layout = this.labelDisplay;
-			
-			if (label.layout == LabelStyle.NONE)
-				label.enable = false;
-			else 
-				label.enable = true;
-			
-			changed = true;
-		}
-		
-		/**
-		 */		
-		override protected function createLabelsData():void
-		{
-			labelsData = new Vector.<AxisLabelData>;
 			var labelValue:String;
-			
+			labelVOes.length = labelUIs.length = labelValues.length = 0;
 			var startDate:Date = new Date();
 			var currenDate:Date = new Date;
 			var labelData:AxisLabelData;
+			var i:uint;
+			startDate.setTime(min);
 			
-			startDate.setTime(this.minimum);
-			
-			for (var i:uint = 0; i < uintAmount; i ++)
+			for (i = 0; i < uintAmount; i ++)
 			{
 				labelData = new AxisLabelData;
-				currenDate.setTime(this.minimum);
+				currenDate.setTime(min);
+				
 				switch (lastValidUnits)
 				{
 					case "seconds":
@@ -186,20 +89,126 @@ package com.fiCharts.charts.chart2D.core.axis
 					}
 				}
 				
-				labelData.value = dateTimerToLabel(currenDate);
-				labelsData.push(labelData);
+				labelData.value = currenDate.time;
+				labelVOes[i] = labelData;
+				labelValues[i] = labelData.value;
 			}
 			
-			labelUIs.length = 0;
-			clearLabels();
+		}
+			
+		override internal function getNormalPatter():IAxisPattern
+		{
+			return new DateAxis_Normal(this);
 		}
 		
 		/**
 		 */		
-		override protected function preMaxMin(max:Number, min:Number):void
+		override internal function getZoomPattern():IAxisPattern
 		{
-			//最小单位值
-			var minUintValue:Number = 0;
+			return new DateAxis_DataScale(this);
+		}
+		
+		private var _input:String = 'YYYY/MM/DD';
+
+		/**
+		 * 输入格式
+		 */
+		public function get input():String
+		{
+			return _input;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set input(value:String):void
+		{
+			_input = value;
+		}
+		
+		/**
+		 * 输出格式
+		 */
+		public function get output():String
+		{
+			return (this.curPattern as IDateAxisPattern).output;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set output(value:String):void
+		{
+			(this.curPattern as IDateAxisPattern).output = value;
+		}
+
+		/**
+		 */		
+		override public function getSeriesDataFeature(seriesData:Vector.<Object>):SeriesDataFeature
+		{
+			var seriesDataFeature:SeriesDataFeature = new SeriesDataFeature;
+				
+			
+			DateFormater
+			
+			//TODO
+			return seriesDataFeature;
+		}
+		
+		/**
+		 */		
+		override public function dataUpdated():void
+		{
+			sourceValues.sort(Array.NUMERIC);
+			
+			if (!isNaN(assignedMinimum))
+				sourceMin = assignedMinimum;
+			else
+				sourceMin = Number(sourceValues[0]);
+			
+			if (!isNaN(assignedMaximum))
+				sourceMax = assignedMaximum;
+			else
+				sourceMax = Number(sourceValues[sourceValues.length - 1]);
+			
+			// 单值的情况�
+			if (sourceValues.length == 1)
+				sourceMin = sourceMax = Number(sourceValues[0]);
+			
+			if (autoAdjust == false)
+			{
+				_maximum = sourceMax;
+				_minimum = sourceMin;
+				
+				this.changed = false;
+				
+				// 气泡图的控制气泡大小的轴无需渲染，原始刻度间距即为确认的间距
+				sourceValueDis = _maximum - _minimum;
+				return; 
+			}
+			
+			sourceValueDis = sourceMax - sourceMin;
+			
+			if (label)
+			{
+				this.label.layout = this.labelDisplay;
+				
+				if (label.layout == LabelStyle.NONE)
+					label.enable = false;
+				else 
+					label.enable = true;
+			}
+			
+			changed = true;
+		}
+		
+		/**
+		 */		
+		override internal function preMaxMin(max:Number, min:Number):void
+		{
+			miniUnitCount = Math.floor(this.size / maxUnitSize);
+			
+			//最小单位�
 			var minD:Date = new Date(max);
 			var maxD:Date = new Date(min);
 			var minMilli:Number = preMax;
@@ -247,134 +256,75 @@ package com.fiCharts.charts.chart2D.core.axis
 		}
 		
 		/**
-		 * 核定，确定最大最小值
+		 * 核定，确定最大最小�
 		 */		
-		override protected function confirmMaxMin():void
+		override internal function confirmMaxMin(axisLen:Number):void
 		{
 			confirmedDis = _maximum - _minimum;
 			uintAmount = Math.ceil(this.sourceValueDis / interval) + 1;
 		}
 		
 		/**
+		 * 单元刻度的总数
 		 */		
-		private var uintAmount:uint;
+		internal var uintAmount:uint;
 		
 		/**
 		 */		
-		private var lastValidUnits:String;
+		private var miniUnitCount:uint = 0;
+		
+		/**
+		 * 最大单元刻度， 单元刻度大于其时，时间间隔进入下一层级，避免时间间隔过�
+		 */		
+		private var maxUnitSize:uint = 180;
+		
+		/**
+		 * 当前时间跨度下最小的刻度间隔
+		 */		
+		internal var lastValidUnits:String;
 		
 		/**
 		 */		
 		override public function getXLabel(value:Object):String
 		{
-			return dataFormatter.formatXString(formatDate(value));
+			return dataFormatter.formatXString(dateTimeToString(value));
 		}
 		
 		/**
 		 */		
 		override public function getYLabel(value:Object):String
 		{
-			return dataFormatter.formatYString(formatDate(value));
+			return dataFormatter.formatYString(dateTimeToString(value));
 		}
 		
 		/**
-		 * 将原始的字符串类型的时间转换为合理的时间显示格式；
+		 * 将Time类型的时间转换为合理的时间显示格式；
 		 */		
-		private function formatDate(value:Object):String
+		internal function dateTimeToString(value:Object):String
 		{
-			if (!RexUtil.ifTextNull(output))
-			{
-				return DateFormater.dateToString(DateFormater.stringToDate(value.toString(), this.input), this.output);
-			}
-			
-			if (confirmedDis > MILLISECONDS_IN_MINUTE && confirmedDis <= MILLISECONDS_IN_HOUR)
-			{
-				return DateFormater.stringDateToMinuetString(String(value), this.input);
-			}
-			else if (confirmedDis > MILLISECONDS_IN_HOUR && confirmedDis <= MILLISECONDS_IN_DAY)
-			{
-				return DateFormater.stringDateToTimeString(String(value), this.input);
-			}
-			else if (confirmedDis > MILLISECONDS_IN_DAY && confirmedDis <= MILLISECONDS_IN_MONTH)
-			{
-				return DateFormater.stringDateToDayString(String(value), this.input);
-			}
-			else if (confirmedDis > MILLISECONDS_IN_MONTH && confirmedDis <= MILLISECONDS_IN_YEAR)
-			{
-				return DateFormater.stringDateToMonthString(String(value), this.input);
-			}
-			else if (confirmedDis > MILLISECONDS_IN_YEAR)
-			{
-				return DateFormater.stringDateToYearString(String(value), this.input);
-			}
-			
-			return value.toString();
+			return (this.curPattern as IDateAxisPattern).dateTimeToString(value);
 		}
 		
 		/**
-		 * 根据当前的时间跨度计算出合理的单元单位；
 		 */		
-		private function getMiniInternalUint(dis:Number):String
+		override public function getVerifyData(data:Object):Object
 		{
-			if (Math.floor(dis / MILLISECONDS_IN_YEAR) >= miniUnitCount)
-			{
-				return 'years'
-			}
-			else if (Math.floor(dis / MILLISECONDS_IN_MONTH) >= miniUnitCount)
-			{
-				return 'months';
-			}
-			else if (Math.floor(dis / MILLISECONDS_IN_DAY) >= miniUnitCount)
-			{
-				return 'days'
-			}
-			else if (Math.floor(dis / MILLISECONDS_IN_HOUR) >= miniUnitCount)
-			{
-				return 'hours'
-			}
-			else if (Math.floor(dis / MILLISECONDS_IN_MINUTE) >= miniUnitCount)
-			{
-				return 'minutes';
-			}
-			else
-			{
-				return 'seconds';
-			}
+			return stringDateToDateTimer(data);
 		}
 		
 		/**
-		 * 
-		 */		
-		private var miniUnitCount:uint = 2;
-		
-		/**
-		 */		
-		override protected function getValuePercent(value:Object):Number
-		{
-			if (value == null)
-				return 0;
-			else
-				return (stringDateToDateTimer(value) - this.minimum) / confirmedDis;
-		}
-		
-		/**
-		 * 将毫秒类型的时间对象转化为时间轴上的字符串标签；
-		 */		
-		private function dateTimerToLabel(value:Object):String
-		{
-			var date:Date = new Date();
-			date.setTime(value);
-			return DateFormater.dateToString(date, this.input);;
-		}
-		
-		/**
-		 * 将字符串转换为毫秒类型的时间；
+		 * 将字符串转换为毫秒类型的时间�
 		 */
-		private function stringDateToDateTimer(value:Object):Number
+		internal function stringDateToDateTimer(value:Object):Number
 		{
-			var date:Date = DateFormater.stringToDate(value.toString(), this.input);
-			return date.getTime();
+			return DateFormater.stringToDate(value.toString(), this.input).time;
+			return dateForTransform.getTime();
 		}
+		
+		/**
+		 * 用来辅助时间数值的转换，避免重复构建Date对象消耗性能 
+		 */		
+		internal var dateForTransform:Date = new Date;
 		
 		/**
 		 */		
@@ -468,6 +418,40 @@ package com.fiCharts.charts.chart2D.core.axis
 					break;
 			}                                                                           
 		}
+		
+		/**
+		 * 根据当前的时间跨度计算出合理的单元单位；
+		 */		
+		private function getMiniInternalUint(dis:Number):String
+		{
+			if (Math.floor(dis / MILLISECONDS_IN_YEAR) >= miniUnitCount)
+			{
+				return 'years'
+			}
+			else if (Math.floor(dis / MILLISECONDS_IN_MONTH) >= miniUnitCount)
+			{
+				return 'months';
+			}
+			else if (Math.floor(dis / MILLISECONDS_IN_DAY) >= miniUnitCount)
+			{
+				return 'days'
+			}
+			else if (Math.floor(dis / MILLISECONDS_IN_HOUR) >= miniUnitCount)
+			{
+				return 'hours'
+			}
+			else if (Math.floor(dis / MILLISECONDS_IN_MINUTE) >= miniUnitCount)
+			{
+				return 'minutes';
+			}
+			else
+			{
+				return 'seconds';
+			}
+		}
+		
+		/**
+		 */		
 		private function roundDateDown(d:Date,units:String):void
 		{
 			switch (units)
@@ -608,32 +592,32 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 *  @private
 		 */
-		private static const MILLISECONDS_IN_MINUTE:Number = 1000 * 60;
+		internal static const MILLISECONDS_IN_MINUTE:Number = 1000 * 60;
 		
 		/**
 		 *  @private
 		 */
-		private static const MILLISECONDS_IN_HOUR:Number = 1000 * 60 * 60;
+		internal static const MILLISECONDS_IN_HOUR:Number = 1000 * 60 * 60;
 		
 		/**
 		 *  @private
 		 */
-		private static const MILLISECONDS_IN_DAY:Number = 1000 * 60 * 60 * 24;
+		internal static const MILLISECONDS_IN_DAY:Number = 1000 * 60 * 60 * 24;
 		
 		/**
 		 *  @private
 		 */
-		private static const MILLISECONDS_IN_WEEK:Number = 1000 * 60 * 60 * 24 * 7;
+		internal static const MILLISECONDS_IN_WEEK:Number = 1000 * 60 * 60 * 24 * 7;
 		
 		/**
 		 *  @private
 		 */
-		private static const MILLISECONDS_IN_MONTH:Number = 1000 * 60 * 60 * 24 * 30;
+		internal static const MILLISECONDS_IN_MONTH:Number = 1000 * 60 * 60 * 24 * 30;
 		
 		/**
 		 *  @private
 		 */
-		private static const MILLISECONDS_IN_YEAR:Number = 1000 * 60 * 60 * 24 * 365;
+		internal static const MILLISECONDS_IN_YEAR:Number = 1000 * 60 * 60 * 24 * 365;
 		
 		/**
 		 */		

@@ -1,5 +1,6 @@
 package com.fiCharts.utils.XMLConfigKit.style
 {
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 
@@ -22,36 +23,20 @@ package com.fiCharts.utils.XMLConfigKit.style
 		private var ui:IStyleStatesUI;
 		
 		/**
-		 */		
-		private var _states:States;
-
-		/**
 		 */
-		public function get states():States
+		private function get states():States
 		{
-			return _states;
+			return ui.states;
 		}
-
-		/**
-		 * 当UI没有states和style时， 也生效
-		 */
-		public function set states(value:States):void
-		{
-			if(value)
-			{
-				_states = value;
-				ui.style = states.getNormal;
-			}
-			else
-			{
-				ui.normalHandler();
-			}
-		}
-
+		
 		/**
 		 */		
 		private function overHandler(evt:MouseEvent):void
 		{
+			isOut = false;
+			
+			if (isDowning) return;
+			
 			if (enable)
 				this.toHover();
 		}
@@ -60,24 +45,49 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function outHandler(evt:MouseEvent):void
 		{
+			isOut = true;
+			
+			if (isDowning) return;
+			
 			if (enable)
 				this.toNormal();
 		}
 		
 		/**
 		 */		
+		private var isOut:Boolean = true;
+		
+		/**
+		 */		
 		private function downHandler(evt:MouseEvent):void
 		{
+			(ui as DisplayObject).stage.addEventListener(MouseEvent.MOUSE_UP, upHandler, false, 0, true);
+			
+			isDowning = true;
+			
 			if (enable)
 				this.toDown();	
 		}
 		
 		/**
 		 */		
+		private var isDowning:Boolean = false;
+		
+		/**
+		 */		
 		private function upHandler(evt:MouseEvent):void
 		{
+			(ui as DisplayObject).stage.removeEventListener(MouseEvent.MOUSE_UP, upHandler);
+			
+			isDowning = false;
+			
 			if (enable)
-				this.toHover();
+			{
+				if (isOut)
+					toNormal();
+				else
+					this.toHover();
+			}
 		}
 		
 		/**
