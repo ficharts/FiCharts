@@ -259,10 +259,13 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 * 数据滚动过程中，仅需要绘制显示范围内的Label
+		 * */
 		public function scrollingByChartCanvas(offset:Number):void
 		{
 			curPattern.scrollingByChartCanvas(offset);
 		}
+		 
+		 /** 
 		 * 对于每此数据缩放，坐标轴仅需绘制一次，子数据的滚动只是移动label容器的位置而已
 		 */		
 		public function renderHoriticalAxis():void
@@ -373,6 +376,7 @@ package com.fiCharts.charts.chart2D.core.axis
 					drawHoriLabelUI(labelUI, valuePositon);
 				}
 			}
+			
 		}
 		
 		/**
@@ -678,7 +682,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				else
 					titileBitmap.x = labelUIsCanvas.width + title.margin;
 				
-				titileBitmap.y = - size * .5 + titileBitmap.height * .5 ;
+				titileBitmap.y = - size * .5 + titileBitmap.height * .5;
 				addChild(titileBitmap);
 			}
 		}

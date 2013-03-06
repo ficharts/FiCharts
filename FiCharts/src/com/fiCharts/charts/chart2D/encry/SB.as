@@ -26,6 +26,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
+	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.graphic.StyleManager;
@@ -127,6 +128,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 子类需重写此方法，应对两种渲染模式
 		 */		
 		protected function getClassicPattern():ISeriesRenderPattern
 		{
@@ -134,6 +136,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 子类需重写此方法，应对两种渲染模式
 		 */		
 		protected function getSimplePattern():ISeriesRenderPattern
 		{

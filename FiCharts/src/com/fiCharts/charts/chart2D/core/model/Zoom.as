@@ -1,6 +1,6 @@
 package com.fiCharts.charts.chart2D.core.model
 {
-	import com.fiCharts.charts.chart2D.encry.ChartMain;
+	import com.fiCharts.charts.chart2D.encry.CB;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
@@ -100,9 +100,9 @@ package com.fiCharts.charts.chart2D.core.model
 			_enable = XMLVOMapper.boolean(value);
 			
 			if (_enable)
-				XMLVOLib.dispatchCreation(ChartMain.TO_ZOOM_PATTERN);
+				XMLVOLib.dispatchCreation(CB.TO_ZOOM_PATTERN);
 			else
-				XMLVOLib.dispatchCreation(ChartMain.TO_CLASSIC_PATTERN);
+				XMLVOLib.dispatchCreation(CB.TO_CLASSIC_PATTERN);
 		}
 		
 		/**

@@ -92,6 +92,8 @@ package com.fiCharts.charts.chart2D.core.series
 		public function set states(value:States):void
 		{
 			_states = value;
+			
+			statesControl.states = this.states;
 		}
 		
 		/**

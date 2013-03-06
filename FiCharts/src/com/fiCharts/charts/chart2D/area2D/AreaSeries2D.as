@@ -74,7 +74,7 @@ package com.fiCharts.charts.chart2D.area2D
 		{
 			canvas.graphics.clear();
 			
-			StyleManager.setFillStyle(canvas.graphics, style, this);
+			/*StyleManager.setFillStyle(canvas.graphics, style, this);
 			StyleManager.setLineStyle(canvas.graphics, style.getBorder, style, this);
 			this.renderSimleLine(canvas.graphics, startIndex, endIndex, 0);
 			
@@ -84,7 +84,7 @@ package com.fiCharts.charts.chart2D.area2D
 			canvas.graphics.lineTo((dataItemVOs[endIndex] as SeriesDataItemVO).x, 0);
 			canvas.graphics.lineTo((dataItemVOs[startIndex] as SeriesDataItemVO).x, 0);
 			canvas.graphics.lineTo((dataItemVOs[startIndex] as SeriesDataItemVO).x, 
-				(dataItemVOs[startIndex] as SeriesDataItemVO).y - this.baseLine);
+				(dataItemVOs[startIndex] as SeriesDataItemVO).y - this.baseLine);*/
 			
 			canvas.graphics.endFill();
 		}

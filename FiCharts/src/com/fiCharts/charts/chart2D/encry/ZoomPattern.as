@@ -8,7 +8,9 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBar;
 	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBarStyle;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.toolTips.ToolTipHolder;
+	import com.fiCharts.charts.toolTips.ToolTipsEvent;
 	import com.fiCharts.utils.ExternalUtil;
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
@@ -72,7 +74,7 @@ package com.fiCharts.charts.chart2D.encry
 	{
 		/**
 		 */		
-		public function ZoomPattern(base:ChartMain)
+		public function ZoomPattern(base:CB)
 		{
 			this.chartMain = base;
 			init();
@@ -181,12 +183,12 @@ package com.fiCharts.charts.chart2D.encry
 			zoomAxis.ifHideEdgeLabel = true;
 			
 			var dataBarStyle:ZoomBarStyle = new ZoomBarStyle;
-			var config:* = XMLVOLib.getXML(Chart2DModel.ZOOM_BAR)
+			var config:* = XMLVOLib.getXML(Chart2DModel.ZOOM_BAR, Model.SYSTEM)
 			XMLVOMapper.fuck(config, dataBarStyle);
 			zoomBar.init(dataBarStyle);
 			
 			//将第一个序列的数据和坐标轴克隆给滚动图表
-			var series:SeriesBase = chartMain.series[0];
+			var series:SB = chartMain.series[0];
 			
 			// 创建并设置坐标轴样式
 			var hAxis:AxisBase = series.horizontalAxis.clone();
@@ -225,7 +227,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function renderSeries():void
 		{
-			for each(var series:SeriesBase in chartMain.series)
+			for each(var series:SB in chartMain.series)
 				series.render();
 			
 			zoomBar.render();
@@ -264,7 +266,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			evt.stopPropagation();
 			
-			for each(var series:SeriesBase in this.chartMain.series)
+			for each(var series:SB in this.chartMain.series)
 				series.dataResizedByIndex(evt.start, evt.end);
 		}
 		
@@ -279,7 +281,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			PerformaceTest.start("dataResizedByRange");
 			
-			for each(var series:SeriesBase in this.chartMain.series)
+			for each(var series:SB in this.chartMain.series)
 				series.dataResizedByRange(evt.start, evt.end);
 			
 			PerformaceTest.end("dataResizedByRange");
@@ -297,7 +299,7 @@ package com.fiCharts.charts.chart2D.encry
 			{
 				axis.redayToUpdataYData()
 				
-				for each (var seriesItem:SeriesBase in chartMain.series)
+				for each (var seriesItem:SB in chartMain.series)
 				{
 					// 别忘了图例可以控制序列的隐藏
 					if(seriesItem.visible)					
@@ -319,7 +321,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			PerformaceTest.start("renderScaledData");
 		
-			for each(var series:SeriesBase in this.chartMain.series)
+			for each(var series:SB in this.chartMain.series)
 				series.renderDataResized();
 			
 			PerformaceTest.end("renderScaledData");
@@ -500,7 +502,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 图表主程序
 		 */		
-		private var chartMain:ChartMain;
+		private var chartMain:CB;
 		
 		/**
 		 */		
@@ -559,7 +561,7 @@ package com.fiCharts.charts.chart2D.encry
 				zoomAxis.updateToolTips();//先更新每个序列的tips节点
 				
 				// 组装tips
-				for each (var series:SeriesBase in chartMain.series)
+				for each (var series:SB in chartMain.series)
 				{
 					// 别忘了图例可以控制序列的隐藏
 					if(series.visible)

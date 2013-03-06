@@ -4,7 +4,7 @@
         <y type='linear' title='销售额'></y>
     </axis>
     <series>
-        <column xField='label' yField='value'/>
+        <area xField='label' yField='value'/>
     </series>
     <data>
         <set label='1月' value='279'/>

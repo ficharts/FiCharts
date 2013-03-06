@@ -82,13 +82,13 @@ package com.fiCharts.charts.chart2D.bar
 		}
 		
 		/**
-		 * 更新数据节点的布局信息�
+		 * 更新数据节点的布局信息�
 		 */		
 		override public function layoutDataItems(startIndex:int, endIndex:int, step:uint = 1):void
 		{
 			adjustColumnWidth();
 			
-			var item:SeriesDataItemVO;
+			var item:SeriesDataPoint;
 			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{
 				item = dataItemVOs[i];
@@ -135,7 +135,7 @@ package com.fiCharts.charts.chart2D.bar
 		
 		//---------------------------------------------
 		//
-		// 数值分布特�
+		// 数值分布特�
 		//
 		//---------------------------------------------
 		
@@ -184,7 +184,7 @@ package com.fiCharts.charts.chart2D.bar
 		}
 		
 		/**
-		 * 根据最大允许的单个柱体宽度调整柱体群宽度和单个柱体实际宽度�
+		 * 根据最大允许的单个柱体宽度调整柱体群宽度和单个柱体实际宽度�
 		 */		
 		override protected function adjustColumnWidth():void
 		{
@@ -204,7 +204,7 @@ package com.fiCharts.charts.chart2D.bar
 		}
 		
 		/**
-		 * 柱体群内部的单元间隙，个数为群柱体个�- 1�
+		 * 柱体群内部的单元间隙，个数为群柱体个�- 1�
 		 */		
 		override protected function get columnGroupInnerSpaceUint():Number
 		{
@@ -212,7 +212,7 @@ package com.fiCharts.charts.chart2D.bar
 		}
 		
 		/**
-		 * 柱体群外单元空隙，每个柱体群有两个此间隙�
+		 * 柱体群外单元空隙，每个柱体群有两个此间隙�
 		 */
 		override public function get columnGroupOuterSpaceUint():Number
 		{

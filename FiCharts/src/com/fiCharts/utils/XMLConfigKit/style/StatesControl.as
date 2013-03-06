@@ -23,10 +23,31 @@ package com.fiCharts.utils.XMLConfigKit.style
 		private var ui:IStyleStatesUI;
 		
 		/**
+		 */		
+		private var _states:States;
+		
+		/**
 		 */
-		private function get states():States
+		public function get states():States
 		{
-			return ui.states;
+			return _states;
+		}
+		
+		/**
+		 * 当UI没有states和style时， 也生效
+		 */
+		public function set states(value:States):void
+		{
+			if(value)
+			{
+				_states = value;
+				
+				ui.style = states.getNormal;
+			}
+			else
+			{
+				ui.normalHandler();
+			}
 		}
 		
 		/**

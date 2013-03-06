@@ -286,13 +286,8 @@ package com.fiCharts.utils.graphic
 		 */		
 		public static function setLabelUIText(labelUI:LabelUI, mataData:Object = null):void
 		{
-			var value:String;
 			var textStyle:Text = (labelUI.style as LabelStyle).text as Text;
-			
-			if (labelUI.text == null)
-				value = RexUtil.getTagValueFromMataData(textStyle.value, mataData).toString();
-			else
-				value = labelUI.text;
+			var value:String = RexUtil.getTagValueFromMataData(textStyle.value, mataData).toString();
 			
 			if (value.length > textStyle.substr)
 				value = value.substr(0, textStyle.substr) + "..."

@@ -90,17 +90,14 @@ package com.fiCharts.charts.chart2D.core.axis
 			var labelData:AxisLabelData;
 			axis.labelVOes.length = axis.labelUIs.length = 0;
 			
-			var length:uint = axis.sourceValues.length;
-			var step:uint = Math.ceil(axis.size / length);
-			
-			for (var i:Number = 0; i < length; i += step)
+			for each (var value:String in axis.sourceValues)
 			{
-				labelData = new AxisLabelData()
-				labelData.value = axis.sourceValues[i];
+				labelData = new AxisLabelData();
+				labelData.value = value;
 				axis.labelVOes.push(labelData);
 			}
 			
-			axis.unitSize = axis.size / length;
+			axis.unitSize = axis.size / axis.sourceValues.length;
 		}
 		
 		/**

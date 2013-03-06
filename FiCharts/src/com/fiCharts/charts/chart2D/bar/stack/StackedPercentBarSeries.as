@@ -99,7 +99,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
 			
-			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
+			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
 			for (var i:uint = 0; i < length; i++)
 			{
 				fullValue = 0;
@@ -137,7 +137,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
-		override protected function getZTip(itemVO:SeriesDataItemVO):String
+		override protected function getZTip(itemVO:SeriesDataPoint):String
 		{
 			var percentTip:String;
 			percentTip = itemVO.zLabel;
@@ -153,7 +153,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		private var _percentLabel:String
 		
 		/**
-		 * 百分比数值之前的标签; � toolTip 中会用到;
+		 * 百分比数值之前的标签; � toolTip 中会用到;
 		 */
 		public function get zDisplayName():String
 		{

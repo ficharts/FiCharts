@@ -6,7 +6,7 @@ package com.fiCharts.charts.chart2D.core.axis
 
 	/**
 	 * 
-	 * 字符类型的坐标轴�数据节点均匀分部
+	 * 字符类型的坐标轴�数据节点均匀分部
 	 * 
 	 * @author wallen
 	 * 
@@ -78,16 +78,16 @@ package com.fiCharts.charts.chart2D.core.axis
 			if (ifTickCenter)
 			{
 				ticks.unshift(start);
-				ticks.push(end);
+//				/ticks.push(end);
 			}
 			else
 			{
 				if (this.inverse)
-					ticks.forEach(shiftUp);
+					ticks.forEach(shiftRight);
 				else
-					ticks.forEach(shiftDown);
+					ticks.forEach(shiftLeft);
 				
-				ticks.push(end);
+				//ticks.push(end);
 			}
 		}
 		
@@ -121,7 +121,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				else
 					ticks.forEach(shiftDown);
 				
-				ticks.push(- size);
+				//ticks.push(- size);
 			}
 		}
 		
@@ -142,7 +142,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 标签是否与刻度线对齐，默认不对齐，标签位于两个刻度线的中间；
 		 */		
-		private var _ifTickCenter:Boolean = false;
+		private var _ifTickCenter:Boolean = true;
 
 		/**
 		 */
@@ -165,7 +165,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			var seriesDataFeature:SeriesDataFeature = new SeriesDataFeature;
 			
-			// 单值的情况�
+			// 单值的情况�
 			if (seriesData.length == 1)
 			{
 				seriesDataFeature.maxValue = seriesDataFeature.minValue = seriesData.pop();

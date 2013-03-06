@@ -13,8 +13,8 @@ package com.fiCharts.charts.chart2D.area2D
 		{
 			this.series = series;
 			
-			series.stateControl = new StatesControl(series);
-			series.stateControl.setDefault();
+			//series.stateControl = new StatesControl(series);
+			//series.stateControl.setDefault();
 		}
 		
 		/**
@@ -64,7 +64,7 @@ package com.fiCharts.charts.chart2D.area2D
 			}
 			else
 			{
-				series.clearCanvas();
+				/*series.clearCanvas();
 				StyleManager.setFillStyle(series.canvas.graphics, series.style, series);
 				StyleManager.setLineStyle(series.canvas.graphics, series.style.getBorder, series.style, series);
 				
@@ -88,7 +88,7 @@ package com.fiCharts.charts.chart2D.area2D
 						series.dataOffsetter.minIndex, series.dataOffsetter.maxIndex, series.style.cover.offset);
 				}
 				
-				StyleManager.setEffects(series.canvas, series.style, series);
+				StyleManager.setEffects(series.canvas, series.style, series);*/
 			}
 		}
 	}

@@ -1,18 +1,14 @@
 package com.fiCharts.charts.chart2D.encry
 {
-	import com.fiCharts.charts.chart2D.bubble.BubbleItemRender;
 	import com.fiCharts.charts.chart2D.bubble.BubblePointRender;
 	import com.fiCharts.charts.chart2D.column2D.ColumnSeries2D;
-	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnCombieItemRender;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnCombiePointRender;
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
-	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderBace;
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
 	import com.fiCharts.charts.toolTips.TooltipDataItem;
-	import com.fiCharts.ui.toolTips.TooltipDataItem;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -28,7 +24,7 @@ package com.fiCharts.charts.chart2D.encry
 	 */	
 	public class ClassicPattern implements IChartPattern
 	{
-		public function ClassicPattern(base:ChartMain)
+		public function ClassicPattern(base:CB)
 		{
 			chartMain = base;
 		}
@@ -51,7 +47,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private var chartMain:ChartMain;
+		private var chartMain:CB;
 		
 		/**
 		 */		
@@ -303,7 +299,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function renderEnd():void
 		{
-			var seriesItem:SeriesBase;
+			var seriesItem:SB;
 			
 			// 为播放动画做准备；
 			if (chartMain.chartModel.animation && ifFirstRender)
@@ -349,7 +345,7 @@ package com.fiCharts.charts.chart2D.encry
 				flashTimmer.start();
 			}
 			
-			for each (var seriesItem:SeriesBase in chartMain.series)
+			for each (var seriesItem:SB in chartMain.series)
 				seriesItem.setPercent(flashSeriesPercent);
 		}
 		
