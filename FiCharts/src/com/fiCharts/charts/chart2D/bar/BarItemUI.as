@@ -23,13 +23,13 @@ package com.fiCharts.charts.chart2D.bar
 		{
 			this.graphics.clear();
 			
-			style.ty = 0;
-			style.height = this.columnHeight;
+			currState.ty = 0;
+			currState.height = this.columnHeight;
 			
-			style.tx = 0;
-			style.width = this.columnWidth;
+			currState.tx = 0;
+			currState.width = this.columnWidth;
 			
-			StyleManager.drawRect(this, style, metaData);
+			StyleManager.drawRect(this, currState, metaData);
 		}
 		
 		/**

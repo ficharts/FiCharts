@@ -407,12 +407,12 @@ package com.fiCharts.charts.chart2D.core.itemRender
 		 */		
 		private var _style:Style;
 		
-		public function get style():Style
+		public function get currState():Style
 		{
 			return _style;
 		}
 		
-		public function set style(value:Style):void
+		public function set currState(value:Style):void
 		{
 			_style = value;
 		}

@@ -90,7 +90,7 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		 */		
 		private function _scrolled(dis:Number):void
 		{
-			//axis.scrollingByChartCanvas(dis);
+			axis.scrollingByChartCanvas(dis);
 			axis.dataScrolled(dataRange);
 		}
 			

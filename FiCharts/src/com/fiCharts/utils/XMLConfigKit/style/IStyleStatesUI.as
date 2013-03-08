@@ -9,8 +9,8 @@ package com.fiCharts.utils.XMLConfigKit.style
 		
 		function render():void;
 		
-		function get style():Style;
-		function set style(value:Style):void;
+		function get currState():Style;
+		function set currState(value:Style):void;
 		
 		function hoverHandler():void;
 		function normalHandler():void;

@@ -13,8 +13,7 @@ package com.fiCharts.charts.chart2D.line
 		{
 			this.series = series;
 			
-			//series.stateControl = new StatesControl(series);
-			//series.stateControl.setDefault();
+			series.stateControl = new StatesControl(series, series.states);
 		}
 		
 		/**
@@ -57,8 +56,8 @@ package com.fiCharts.charts.chart2D.line
 			{
 				series.applyDataFeature();
 				
-				//series.states.width = series.seriesWidth;
-				//series.states.height = series.seriesHeight;
+				series.states.width = series.seriesWidth;
+				series.states.height = series.seriesHeight;
 				
 				series.ifSizeChanged = series.ifDataChanged = false;
 			}
@@ -66,19 +65,19 @@ package com.fiCharts.charts.chart2D.line
 			{
 				series.clearCanvas();
 				
-				/*StyleManager.setLineStyle(series.canvas.graphics, series.style.getBorder, series.style, series);
+				StyleManager.setLineStyle(series.canvas.graphics, series.currState.getBorder, series.currState, series);
 				
 				series.renderSimleLine(series.canvas.graphics, 
 					series.dataOffsetter.minIndex, series.dataOffsetter.maxIndex);
 				
-				if (series.style.cover && series.style.cover.border)
+				if (series.currState.cover && series.currState.cover.border)
 				{
-					StyleManager.setLineStyle(series.canvas.graphics, series.style.cover.border, series.style, series);
+					StyleManager.setLineStyle(series.canvas.graphics, series.currState.cover.border, series.currState, series);
 					series.renderSimleLine(series.canvas.graphics, 
-					series.dataOffsetter.minIndex, series.dataOffsetter.maxIndex, series.style.cover.offset);
+					series.dataOffsetter.minIndex, series.dataOffsetter.maxIndex, series.currState.cover.offset);
 				}
 				
-				StyleManager.setEffects(series.canvas, series.style, series);*/
+				StyleManager.setEffects(series.canvas, series.currState, series);
 			}
 		}
 	}

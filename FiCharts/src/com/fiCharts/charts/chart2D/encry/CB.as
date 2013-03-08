@@ -310,17 +310,15 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function preConfig():void
 		{
+			if (currentPattern == null)
+				currentPattern = new ClassicPattern(this);
+			
 			configSeriesAxis();
 			configSeriesAndLegendData();
 			updateAxisData();
 			
 			if (chartModel.axis.changed || chartModel.series.changed || ifDataChanged)
-			{
-				if (currentPattern == null)
-					currentPattern = new ClassicPattern(this);
-					
 				this.currentPattern.preConfig();
-			}
 		}
 		
 		/**
@@ -876,6 +874,9 @@ package com.fiCharts.charts.chart2D.encry
 				}
 				
 			}
+			
+			if (chartModel.axis.changed)
+				this.currentPattern.configSeriesAxis(hAxises[0]);
 			
 		}
 		

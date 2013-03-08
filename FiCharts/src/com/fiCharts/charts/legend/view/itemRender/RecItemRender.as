@@ -82,7 +82,7 @@ package com.fiCharts.charts.legend.view.itemRender
 
 		/**
 		 */
-		public function get style():Style
+		public function get currState():Style
 		{
 			return _style;
 		}
@@ -90,7 +90,7 @@ package com.fiCharts.charts.legend.view.itemRender
 		/**
 		 * @private
 		 */
-		public function set style(value:Style):void
+		public function set currState(value:Style):void
 		{
 			_style = value;
 		}
@@ -120,7 +120,7 @@ package com.fiCharts.charts.legend.view.itemRender
 		public function render():void
 		{
 			this.graphics.clear();
-			StyleManager.drawRect(this, style, metaData);
+			StyleManager.drawRect(this, currState, metaData);
 		}
 		
 		/**

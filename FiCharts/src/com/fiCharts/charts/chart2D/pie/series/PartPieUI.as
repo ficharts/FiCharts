@@ -116,11 +116,11 @@ package com.fiCharts.charts.chart2D.pie.series
 		{
 			this.graphics.clear();
 			
-			style.tx = - radius;
-			style.ty = - radius;
-			style.width = style.height = radius * 2;
+			currState.tx = - radius;
+			currState.ty = - radius;
+			currState.width = currState.height = radius * 2;
 			
-			StyleManager.drawArc(this, style, radius, rads, pieDataItem.metaData);
+			StyleManager.drawArc(this, currState, radius, rads, pieDataItem.metaData);
 			
 			layoutValueLabel();
 		}

@@ -23,6 +23,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
@@ -37,7 +38,7 @@ package com.fiCharts.charts.chart2D.encry
 	/**
 	 * 序列的基�
 	 */	
-	public class SB extends Sprite implements IDirectionSeries, IEditableObject, IStyleElement, IFreshElement
+	public class SB extends Sprite implements IDirectionSeries, IEditableObject, IStyleElement, IFreshElement, IStyleStatesUI
 	{
 
 		/**
@@ -66,6 +67,28 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			return null;
 		}
+		
+		/**
+		 */		
+		public function get currState():Style
+		{
+			return _currState;
+		}
+		
+		/**
+		 */		
+		public function set currState(value:Style):void
+		{
+			_currState = value;
+		}
+		
+		/**
+		 */		
+		private var _currState:Style;
+		
+		/**
+		 */		
+		public var stateControl:StatesControl;
 
 		
 		
@@ -854,7 +877,6 @@ package com.fiCharts.charts.chart2D.encry
 		
 		
 		
-		
 		//------------------------------------------------------------------
 		//
 		//
@@ -1417,6 +1439,27 @@ package com.fiCharts.charts.chart2D.encry
 		public function set animation(value:Object):void
 		{
 			_animation = Object;
+		}
+		
+		/**
+		 */		
+		public function hoverHandler():void
+		{
+			
+		}
+		
+		/**
+		 */		
+		public function normalHandler():void
+		{
+			
+		}
+		
+		/**
+		 */		
+		public function downHandler():void
+		{
+			
 		}
 		
 		/**

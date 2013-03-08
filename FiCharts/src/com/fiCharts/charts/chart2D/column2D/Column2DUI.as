@@ -58,13 +58,13 @@ package com.fiCharts.charts.chart2D.column2D
 		{
 			this.graphics.clear();
 			
-			style.tx = 0;
-			style.width = this.columnWidth;
+			currState.tx = 0;
+			currState.width = this.columnWidth;
 			
-			style.ty = columnHeight;
-			style.height = - columnHeight;
+			currState.ty = columnHeight;
+			currState.height = - columnHeight;
 				
-			StyleManager.drawRect(this, style, metaData);
+			StyleManager.drawRect(this, currState, metaData);
 		}
 		
 		/**

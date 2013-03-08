@@ -16,6 +16,9 @@ package com.fiCharts.utils.XMLConfigKit.style
 			ui.addEventListener(MouseEvent.ROLL_OUT, outHandler, false, 0, true);
 			ui.addEventListener(MouseEvent.MOUSE_DOWN, downHandler, false, 0, true);
 			ui.addEventListener(MouseEvent.MOUSE_UP, upHandler, false, 0, true);
+			
+			if (states)
+				this.states = states;
 		}
 
 		/**
@@ -42,7 +45,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 			{
 				_states = value;
 				
-				ui.style = states.getNormal;
+				ui.currState = states.getNormal;
 			}
 			else
 			{
@@ -118,7 +121,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 			ui.normalHandler();
 			
 			if (states && states.normal)
-				ui.style = states.getNormal;
+				ui.currState = states.getNormal;
 			
 			ui.render();
 		}
@@ -130,7 +133,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 			ui.hoverHandler();
 			
 			if (states && states.hover)
-				ui.style = states.getHover;
+				ui.currState = states.getHover;
 			
 			ui.render();
 		}
@@ -142,7 +145,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 			ui.downHandler();
 			
 			if (states && states.down)
-				ui.style = states.getDown;
+				ui.currState = states.getDown;
 			
 			ui.render();
 		}

@@ -3,18 +3,13 @@
    	<label><![CDATA[日期:${xValue}{formatDate:YYYYMMDD,YYYY-MM-DD}<br>数值:${yLabel}]]></label>
    </tooltip-->
    <axis>
-     <x title="A" type="linear" input="YYYYMMDD"/> 
+     <x title="A" type="date" input="YYYYMMDD"/> 
      <y title="B" type="linear" baseAtZero='false'/> 
    </axis>
-   <gridField radius='0'>
-        <vGrid>
-        	<border color='E2E2E2' thikness='1'/>
-        </vGrid>
-    </gridField>
    <legend enable="false"/>
    <series>
-     <area name="a" xField="label" yField="value"/> 
-     <!--line name="b" xField="label" yField="valueB"/--> 
+     <line name="a" xField="label" yField="value"/> 
+     <area name="b" xField="label" yField="valueB"/> 
    </series>
    <zoom enable='true'/> 
    <zoomBar height='50'>

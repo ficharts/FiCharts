@@ -84,7 +84,7 @@ package com.fiCharts.utils.interactive
 			else
 			{
 				// 只要相对于原始位置移动距离大于特定值就证明开始了滚动
-				if (OS.isDesktopSystem && Math.abs(disFS) >= 3)
+				if ((OS.isDesktopSystem || OS.isWebSystem) && Math.abs(disFS) >= 3)
 				{
 					ifSrolling = true;
 					draged.startScroll();

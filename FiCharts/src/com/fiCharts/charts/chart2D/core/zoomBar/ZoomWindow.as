@@ -32,7 +32,7 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		{
 			_winStyle = value;
 			this.states = _winStyle.states;
-			//stateControl.setDefault();
+			stateControl.states = this.states;
 		}
 
 		/**
@@ -60,9 +60,9 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		public function render():void
 		{
 			this.graphics.clear();
-			style.width = winWidth;
-			style.height = winHeight;
-			StyleManager.drawRect(this, style);
+			currState.width = winWidth;
+			currState.height = winHeight;
+			StyleManager.drawRect(this, currState);
 		}
 		
 		/**
@@ -75,14 +75,14 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		
 		/**
 		 */		
-		public function get style():Style
+		public function get currState():Style
 		{
 			return _style;
 		}
 		
 		/**
 		 */		
-		public function set style(value:Style):void
+		public function set currState(value:Style):void
 		{
 			_style = value;
 		}
