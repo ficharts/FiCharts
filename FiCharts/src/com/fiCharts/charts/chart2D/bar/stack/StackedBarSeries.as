@@ -97,7 +97,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 				item.x = this.horizontalAxis.valueToX((item as StackedSeriesDataPoint).startValue, NaN) - baseLine;
 				item.dataItemX = horizontalAxis.valueToX((item as StackedSeriesDataPoint).endValue, NaN);
 				
-				// 数据节点的坐标系与渲染节点不同， 两者相�值为 baseLine
+				// 数据节点的坐标系与渲染节点不同， 两者相�值为 baseLine
 				item.y = verticalAxis.valueToY(item.yValue) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) //;
 					
@@ -116,7 +116,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
-		override protected function layoutColumnUIs():void
+		override public function layoutAndRenderUIs():void
 		{
 			for each (var columnUI:Column2DUI in this.columnUIs)
 			{
@@ -175,7 +175,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
 			
-			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
+			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
 			for (var i:uint = 0; i < length; i++)
 			{
 				positiveValue = negativeValue = 0;
@@ -240,7 +240,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		{
 			for each (var series:StackedSeries in this.stacks)
 			{
-				if (!series.color)// 如果未指�序列颜色则采用自动分配颜�
+				if (!series.color)// 如果未指�序列颜色则采用自动分配颜�
 					series.color = colorMananger.chartColor.toString(16);
 				
 				series.horizontalAxis = this.horizontalAxis;
@@ -249,7 +249,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 			
 			stacks.reverse();
 			
-			// 如果显示数值则坐标轴多延伸一个单元格�
+			// 如果显示数值则坐标轴多延伸一个单元格�
 			if (this.labelDisplay != LabelStyle.NONE && horizontalAxis is LinearAxis)
 				(horizontalAxis as LinearAxis).ifExpend = true;
 		}
@@ -257,7 +257,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		//---------------------------------------------
 		//
-		// 数值分布特�
+		// 数值分布特�
 		//
 		//---------------------------------------------
 		
@@ -314,7 +314,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		//-------------------------------------------------------
 		
 		/**
-		 * 根据最大允许的单个柱体宽度调整柱体群宽度和单个柱体实际宽度�
+		 * 根据最大允许的单个柱体宽度调整柱体群宽度和单个柱体实际宽度�
 		 */		
 		override protected function adjustColumnWidth():void
 		{
@@ -334,7 +334,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		}
 		
 		/**
-		 * 柱体群内部的单元间隙，个数为群柱体个�- 1�
+		 * 柱体群内部的单元间隙，个数为群柱体个�- 1�
 		 */		
 		override protected function get columnGroupInnerSpaceUint():Number
 		{
@@ -342,7 +342,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 		}
 		
 		/**
-		 * 柱体群外单元空隙，每个柱体群有两个此间隙�
+		 * 柱体群外单元空隙，每个柱体群有两个此间隙�
 		 */
 		override public function get columnGroupOuterSpaceUint():Number
 		{

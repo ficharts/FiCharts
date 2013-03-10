@@ -32,7 +32,6 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
-	import flash.display.Shape;
 	import flash.display.Sprite;
 
 	/**
@@ -89,6 +88,18 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 */		
 		public var stateControl:StatesControl;
+		
+		
+		/**
+		 * 清空画布
+		 */		
+		public function clearCanvas():void
+		{
+			while (canvas.numChildren)
+				canvas.removeChildAt(0);
+			
+			canvas.graphics.clear();
+		}
 
 		
 		

@@ -4,6 +4,7 @@ package com.fiCharts.charts.chart2D.column2D
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
+	import com.fiCharts.charts.chart2D.core.series.ISeriesRenderPattern;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
@@ -25,6 +26,20 @@ package com.fiCharts.charts.chart2D.column2D
 		
 		/**
 		 */		
+		override protected function getClassicPattern():ISeriesRenderPattern
+		{
+			return new ClassicColumnRender(this);	
+		}
+		
+		/**
+		 */		
+		override protected function getSimplePattern():ISeriesRenderPattern
+		{
+			return new SimpleColumnRender(this);
+		}
+		
+		/**
+		 */		
 		override protected function initItemRender(itemRender:PointRenderBace, item:SeriesDataPoint):void
 		{
 			itemRender.itemVO = item;
@@ -32,7 +47,7 @@ package com.fiCharts.charts.chart2D.column2D
 			item.metaData.valueLabel = item.yLabel;
 			itemRender.value = value;
 			
-				// labelDisplay 决定数值显示方式：隐藏，倾斜�0度，内部�外部�
+				// labelDisplay 决定数值显示方式：隐藏，倾斜�0度，内部�外部�
 				if (this.labelDisplay == LabelStyle.INNER)
 					itemRender.valueLabel = this.innerValueLabel;
 				else
@@ -87,7 +102,7 @@ package com.fiCharts.charts.chart2D.column2D
 		{
 			_innerValueLabel = value;
 			
-			// 此标签决定了柱体数值标签的布局方式�是在外部还是内部�
+			// 此标签决定了柱体数值标签的布局方式�是在外部还是内部�
 			_innerValueLabel.layout = LabelStyle.INNER; 
 		}
 
@@ -100,7 +115,7 @@ package com.fiCharts.charts.chart2D.column2D
 		//----------------------------------------
 		
 		/**
-		 * 更新数据节点的布局信息�
+		 * 更新数据节点的布局信息�
 		 */		
 		override public function layoutDataItems(startIndex:int, endIndex:int, step:uint = 1):void
 		{
@@ -125,37 +140,15 @@ package com.fiCharts.charts.chart2D.column2D
 		 */
 		override protected function draw():void
 		{
-			if (ifDataChanged)
-			{
-				while (canvas.numChildren)
-					canvas.removeChildAt(0);
-				
-				var columnItemUI:Column2DUI;
-				columnUIs = new Vector.<Column2DUI>;
-				for each (var itemDataVO:SeriesDataPoint in dataItemVOs)
-				{
-					//draw column or bar
-					columnItemUI = getSeriesItemUI(itemDataVO);
-					columnItemUI.states = this.states;
-					columnItemUI.metaData = itemDataVO.metaData;
-					
-					canvas.addChild(columnItemUI);
-					columnUIs.push(columnItemUI);
-				}
-			}
-			
-			if (this.ifSizeChanged || this.ifDataChanged)
-			{
-				layoutColumnUIs();
-				ifDataChanged = ifSizeChanged = false;
-			}
 		}
 		
 		/**
+		 * @return 
+		 * 
 		 */		
 		protected function getSeriesItemUI(dataItem:SeriesDataPoint):Column2DUI
 		{
-			return new Column2DUI(dataItem);
+			return null;
 		}
 		
 		/**
@@ -176,25 +169,16 @@ package com.fiCharts.charts.chart2D.column2D
 		
 		/**
 		 */		
-		protected function layoutColumnUIs():void
+		public function layoutAndRenderUIs():void
 		{
 			var columnUI:Column2DUI; 
-			var len:uint = columnUIs.length
-			for (var i:uint = 0; i < len; i ++)
+			for (var i:uint = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
 			{
 				columnUI = columnUIs[i];
-				if (i >= dataOffsetter.minIndex && i <= dataOffsetter.maxIndex)
-				{
-					columnUI.x = columnUI.dataItem.x - this.partColumnWidth / 2;
-					columnUI.y = 0;
-					setColumnUISize(columnUI);
-					columnUI.render();
-					columnUI.visible = true;
-				}
-				else
-				{
-					columnUI.visible = false;
-				}
+				columnUI.x = columnUI.dataItem.x - this.partColumnWidth / 2;
+				columnUI.y = 0;
+				setColumnUISize(columnUI);
+				columnUI.render();
 			}
 		}
 		
@@ -211,20 +195,20 @@ package com.fiCharts.charts.chart2D.column2D
 		
 		/**
 		 */		
-		protected var columnUIs:Vector.<Column2DUI>;
+		public var columnUIs:Vector.<Column2DUI>;
 		
 		
 		
 		
 		//----------------------------------------
 		//
-		// 柱体的宽度计�
+		// 柱体的宽度计�
 		//
 		//----------------------------------------
 		
 		
 		/**
-		 * 根据最大允许的单个柱体宽度调整柱体群宽度和单个柱体实际宽度�
+		 * 根据最大允许的单个柱体宽度调整柱体群宽度和单个柱体实际宽度�
 		 */		
 		protected function adjustColumnWidth():void
 		{
@@ -265,7 +249,7 @@ package com.fiCharts.charts.chart2D.column2D
 		protected var _columnGoupWidth:Number;
 		
 		/**
-		 * 最大单个柱子宽度，哪怕是仅有一个柱子，但此柱子不能太宽/Bar不能太高 �
+		 * 最大单个柱子宽度，哪怕是仅有一个柱子，但此柱子不能太宽/Bar不能太高 �
 		 */		
 		private var _maxColumnWidth:Number = 100;
 
@@ -280,7 +264,7 @@ package com.fiCharts.charts.chart2D.column2D
 		}
 
 		/**
-		 * 单元柱体群内部总间�
+		 * 单元柱体群内部总间�
 		 */		
 		protected function get columnGroupInnerSpace():Number
 		{
@@ -288,7 +272,7 @@ package com.fiCharts.charts.chart2D.column2D
 		}
 		
 		/**
-		 * 柱体群内部的单元间隙，个数为群柱体个�- 1�
+		 * 柱体群内部的单元间隙，个数为群柱体个�- 1�
 		 */		
 		protected function get columnGroupInnerSpaceUint():Number
 		{
@@ -296,7 +280,7 @@ package com.fiCharts.charts.chart2D.column2D
 		}
 		
 		/**
-		 * 柱体群外单元空隙，每个柱体群有两个此间隙�
+		 * 柱体群外单元空隙，每个柱体群有两个此间隙�
 		 */
 		public function get columnGroupOuterSpaceUint():Number
 		{
@@ -304,7 +288,7 @@ package com.fiCharts.charts.chart2D.column2D
 		}
 
 		/**
-		 * 图表中柱状图序列总数�
+		 * 图表中柱状图序列总数�
 		 */		
 		private var _columnSeriesAmount:uint = 0;
 

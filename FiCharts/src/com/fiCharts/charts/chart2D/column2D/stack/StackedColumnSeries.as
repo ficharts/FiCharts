@@ -18,7 +18,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	/**
 	 * 堆积序列群组类；
 	 * 
-	 * 堆积序列的子序列是个仅拥有数据的空壳，样式定义，样式渲染全部�code>StackedColumnSeries</code>中进行， 
+	 * 堆积序列的子序列是个仅拥有数据的空壳，样式定义，样式渲染全部�code>StackedColumnSeries</code>中进行， 
 	 * 
 	 */	
 	public class StackedColumnSeries extends ColumnSeries2D
@@ -74,14 +74,14 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			
 			if (this.ifSizeChanged || this.ifDataChanged)
 			{
-				layoutColumnUIs();
+				layoutAndRenderUIs();
 				ifDataChanged = ifSizeChanged = false;
 			}
 		}
 		
 		/**
 		 */		
-		override protected function layoutColumnUIs():void
+		override public function layoutAndRenderUIs():void
 		{
 			var index:uint;
 			for each (var columnUI:Column2DUI in this.columnUIs)
@@ -128,13 +128,13 @@ package com.fiCharts.charts.chart2D.column2D.stack
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
 				item.dataItemX = item.x;
 				
-				// 数据节点的坐标系与渲染节点不同， 两者相�值为 baseLine
+				// 数据节点的坐标系与渲染节点不同， 两者相�值为 baseLine
 				item.y = verticalAxis.valueToY((item as StackedSeriesDataPoint).startValue) - baseLine;
 				item.dataItemY = verticalAxis.valueToY((item as StackedSeriesDataPoint).endValue);
 				item.offset = baseLine;
 			}
 			
-			if(fullDataItems == null) return;//百分百堆积图没有总数据节�
+			if(fullDataItems == null) return;//百分百堆积图没有总数据节�
 			
 			for (i = startIndex; i <= endIndex; i += step)
 			{
@@ -148,7 +148,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		}
 		
 		/**
-		 * 创建汇总数据节点的渲染器， 这里创建的渲染器只是用于汇总数据的显示�
+		 * 创建汇总数据节点的渲染器， 这里创建的渲染器只是用于汇总数据的显示�
 		 */		
 		override public function createItemRenders():void
 		{
@@ -197,7 +197,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		}
 		
 		/**
-		 * 序列数据�坐标轴数据的创建
+		 * 序列数据�坐标轴数据的创建
 		 * 
 		 * 这里把原始的数据节点与计算得出的汇总数据节点分离；
 		 */		
@@ -222,7 +222,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
 			
-			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
+			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
 			for (var i:uint = 0; i < length; i++)
 			{
 				positiveValue = negativeValue = 0;
@@ -343,7 +343,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			
 			for each (var series:StackedSeries in this.stacks)
 			{
-				if (!series.color)// 如果未指�序列颜色则采用自动分配颜�
+				if (!series.color)// 如果未指�序列颜色则采用自动分配颜�
 					series.color = colorMananger.chartColor.toString(16);
 				
 				series.horizontalAxis = this.horizontalAxis;

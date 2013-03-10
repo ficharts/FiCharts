@@ -95,7 +95,7 @@ package com.fiCharts.charts.chart2D.core.model
 		 * 
 		 * 会相应缩放操作而缩放数据，例如滚轮缩放或者触摸放大缩�
 		 */		
-		private var _zoom:Zoom
+		private var _zoom:Zoom = new Zoom();// 防止经典模式下滚轮缩放时因zoom为空导致的报错
 
 		/**
 		 */

@@ -12,7 +12,7 @@
         <set label='3月' value='325'/>
         <set label='4月' value='572'/>
         <set label='5月' value='629'/>
-        <set label='6月' value='710'/>
+        <set label='6月' value='-710'/>
         <set label='7月' value='489'/>
         <set label='8月' value='635'/>
         <set label='9月' value='750'/>

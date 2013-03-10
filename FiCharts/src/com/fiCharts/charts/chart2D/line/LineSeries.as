@@ -37,6 +37,13 @@ package com.fiCharts.charts.chart2D.line
 		
 		/**
 		 */		
+		override protected function getSimplePattern():ISeriesRenderPattern
+		{
+			return new SimpleLineRender(this);
+		}
+		
+		/**
+		 */		
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
 			super.beforeUpdateProperties(xml);
@@ -46,26 +53,9 @@ package com.fiCharts.charts.chart2D.line
 		
 		/**
 		 */		
-		override protected function getSimplePattern():ISeriesRenderPattern
-		{
-			return new SimpleLineRender(this);
-		}
-		
-		/**
-		 */		
 		override protected function get type():String
 		{
 			return "line";
-		}
-		
-		/**
-		 */		
-		public function clearCanvas():void
-		{
-			while (canvas.numChildren)
-				canvas.removeChildAt(0);
-			
-			canvas.graphics.clear();
 		}
 		
 		/**

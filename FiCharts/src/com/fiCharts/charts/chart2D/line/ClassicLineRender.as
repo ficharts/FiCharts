@@ -82,9 +82,6 @@ package com.fiCharts.charts.chart2D.line
 				
 				//更新尺寸信息
 				series.layoutDataItems(0, series.maxDataItemIndex);
-				series.states.tx = series.seriesWidth;
-				series.states.width = series.seriesWidth;
-				
 				// 渲染
 				series.renderPartUIs();
 				series.ifSizeChanged = series.ifDataChanged = false;

@@ -111,7 +111,7 @@ package com.fiCharts.charts.chart2D.bar
 		
 		/**
 		 */		
-		override protected function layoutColumnUIs():void
+		override public function layoutAndRenderUIs():void
 		{
 			for each (var columnUI:Column2DUI in this.columnUIs)
 			{
