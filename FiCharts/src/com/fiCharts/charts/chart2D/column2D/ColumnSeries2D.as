@@ -28,14 +28,14 @@ package com.fiCharts.charts.chart2D.column2D
 		 */		
 		override protected function getClassicPattern():ISeriesRenderPattern
 		{
-			return null //new ClassicColumnRender(this);	
+			return new ClassicColumnRender(this);	
 		}
 		
 		/**
 		 */		
 		override protected function getSimplePattern():ISeriesRenderPattern
 		{
-			return null //new SimpleColumnRender(this);
+			return new SimpleColumnRender(this);
 		}
 		
 		/**
