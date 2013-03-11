@@ -3,6 +3,7 @@ package com.fiCharts.charts.chart2D.bubble
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
+	import com.fiCharts.charts.chart2D.core.series.ISeriesRenderPattern;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
@@ -17,6 +18,20 @@ package com.fiCharts.charts.chart2D.bubble
 		public function BubbleSeries()
 		{
 			super();
+		}
+		
+		/**
+		 */		
+		override protected function getClassicPattern():ISeriesRenderPattern
+		{
+			return new ClassicBubbleRender(this);	
+		}
+		
+		/**
+		 */		
+		override protected function getSimplePattern():ISeriesRenderPattern
+		{
+			return new SimpleBubbleRender(this);
 		}
 		
 		/**

@@ -37,7 +37,7 @@ package com.fiCharts.charts.chart2D.line
 			}
 			else
 			{
-				series.curRenderPattern = new SimpleLineRender(series);
+				series.curRenderPattern = series.simplePattern = new SimpleLineRender(series);
 			}
 			
 			series.clearCanvas();

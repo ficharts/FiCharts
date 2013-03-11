@@ -68,7 +68,7 @@ package com.fiCharts.charts.chart2D.encry
 			}
 			else
 			{
-				chartMain.currentPattern = new ZoomPattern(chartMain);
+				chartMain.currentPattern = chartMain.zoomPattern =  new ZoomPattern(chartMain);
 			}
 		}
 		

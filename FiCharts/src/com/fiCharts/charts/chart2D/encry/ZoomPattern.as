@@ -87,7 +87,7 @@ package com.fiCharts.charts.chart2D.encry
 			if (chartMain.classicPattern)
 				chartMain.currentPattern = chartMain.classicPattern;
 			else
-				chartMain.currentPattern = new ClassicPattern(chartMain);
+				chartMain.currentPattern = chartMain.classicPattern = new ClassicPattern(chartMain);
 			
 			chartMain.stage.removeEventListener(MouseEvent.MOUSE_WHEEL, mouseWheelHandler);
 			ExternalUtil.addCallback("onWebmousewheel", null);
@@ -582,7 +582,6 @@ package com.fiCharts.charts.chart2D.encry
 			zoomAxis.stopTip();
 			chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
 		}
-		
 		
 		/**
 		 */		

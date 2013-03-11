@@ -164,7 +164,7 @@ package com.fiCharts.utils.graphic
 			target.graphics.moveTo(0, - style.radius);
 			target.graphics.lineTo(style.radius, 0);
 			target.graphics.lineTo(0, style.radius);
-			target.graphics.lineTo( - style.radius, 0)
+			target.graphics.lineTo( - style.radius, 0);
 			target.graphics.lineTo(0, - style.radius);
 			
 			target.graphics.endFill();

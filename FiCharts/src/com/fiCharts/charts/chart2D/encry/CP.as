@@ -11,8 +11,6 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
 	import com.fiCharts.charts.chart2D.core.Chart2DStyleTemplate;
 	import com.fiCharts.charts.chart2D.core.axis.TickMarkStyle;
-	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomWindowStyle;
-	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBar;
 	import com.fiCharts.charts.chart2D.core.model.AxisModel;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.ChartBGStyle;
@@ -21,6 +19,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.model.Series;
 	import com.fiCharts.charts.chart2D.core.model.XAxis;
 	import com.fiCharts.charts.chart2D.core.model.YAxis;
+	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomWindowStyle;
 	import com.fiCharts.charts.chart2D.line.LineSeries;
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
 	import com.fiCharts.charts.common.ChartColors;
@@ -48,6 +47,8 @@ package com.fiCharts.charts.chart2D.encry
 			
 			XMLVOLib.setASStyleKey("barBG");
 			XMLVOLib.setASStyleKey("chart");
+			XMLVOLib.setASStyleKey("chartCover");
+			
 			
 			XMLVOLib.registerCustomClasses(<zoom path='com.fiCharts.charts.chart2D.core.model.Zoom'/>);
 			//------------------数据缩放---------------------------------

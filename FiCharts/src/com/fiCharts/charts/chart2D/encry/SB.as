@@ -149,8 +149,11 @@ package com.fiCharts.charts.chart2D.encry
 				simpleDataRender.graphics.clear();
 				
 				// 注意这里采用的是  hover 状态下的数据节点样�
-				var style:Style = dataRender.circle.states.hover as Style;
-				StyleManager.drawCircle(simpleDataRender, style, this);
+				//var style:Style = dataRender.circle.states.hover as Style;
+				//StyleManager.drawCircle(simpleDataRender, style, this);
+				
+				dataRender.toHover();
+				dataRender.render(simpleDataRender, this);
 				this.addChild(simpleDataRender);
 			}
 			

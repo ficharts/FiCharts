@@ -52,6 +52,7 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		private function downHandler(evt:MouseEvent):void
 		{
 			sourceX = window.x;
+			udpateChartCover()
 		}
 		
 		/**
@@ -77,6 +78,7 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 				temX = axis.size - window.winWidth;
 			
 			window.x = temX;
+			udpateChartCover();
 		}
 		
 		/**
@@ -105,6 +107,8 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 			
 			chart.style = style.chart;
 			addChild(chart);
+			
+			addChild(chartCover);
 			
 			window.winStyle = style.window;
 			this.addChild(window);
@@ -149,15 +153,18 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		 */		
 		public function updateWindowSize(startPerc:Number, endPerc:Number):void
 		{
-			min = startPerc;
-			max = endPerc; 
-			
-			window.winWidth = (endPerc - startPerc) * axis.size;
-			window.winHeight = this.barHeight;
-			
-			window.render();
-			updateWindowPos(startPerc);
-			window.y = ty;
+			if (this.style.visible)
+			{
+				min = startPerc;
+				max = endPerc; 
+				
+				window.winWidth = (endPerc - startPerc) * axis.size;
+				window.winHeight = this.barHeight;
+				
+				window.render();
+				updateWindowPos(startPerc);
+				window.y = ty;
+			}
 		}
 		
 		/**
@@ -165,6 +172,25 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		public function updateWindowPos(perc:Number):void
 		{
 			window.x = perc * axis.size;
+			udpateChartCover();
+		}
+		
+		/**
+		 */		
+		private function udpateChartCover():void
+		{
+			style.chartCover.ty = ty;
+			style.chartCover.tx = 0;
+			style.chartCover.width = axis.size;
+			style.chartCover.height = barHeight;
+			
+			chartCover.graphics.clear();
+			StyleManager.setFillStyle(chartCover.graphics, style.chartCover);
+			
+			chartCover.graphics.drawRect(0, ty, window.x, barHeight);
+			
+			var winEnd:uint = window.x + window.winWidth;
+			chartCover.graphics.drawRect(winEnd, ty, axis.size - winEnd, barHeight);
 		}
 		
 		/**
@@ -180,17 +206,20 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		 */		
 		public function render():void
 		{
-			chart.chartWidth = axis.size;
-			chart.chartHeight = barHeight;
-			chart.y = ty;
-			chart.render();
-			
-			style.barBG.width = axis.size;
-			style.barBG.height = this.barHeight;
-			style.barBG.ty = ty;
-			
-			bg.graphics.clear();
-			StyleManager.drawRect(bg, style.barBG);
+			if (style.visible)
+			{
+				chart.chartWidth = axis.size;
+				chart.chartHeight = barHeight;
+				chart.y = ty;
+				chart.render();
+				
+				style.barBG.width = axis.size;
+				style.barBG.height = this.barHeight;
+				style.barBG.ty = ty;
+				
+				bg.graphics.clear();
+				StyleManager.drawRect(bg, style.barBG);
+			}
 		}
 		
 		/**
@@ -208,7 +237,10 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		 */		
 		public function get barHeight():Number
 		{
-			return style.height;
+			if (this.style.visible)
+				return style.height;
+			else
+				return 0;
 		}
 		
 		/**
@@ -221,5 +253,9 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		/**
 		 */		
 		private var style:ZoomBarStyle;
+		
+		/**
+		 */		
+		private var chartCover:Shape = new Shape;
 	}
 }

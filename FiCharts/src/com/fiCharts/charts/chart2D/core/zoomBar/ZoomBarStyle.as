@@ -1,5 +1,6 @@
 package com.fiCharts.charts.chart2D.core.zoomBar
 {
+	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	
 	/**
@@ -9,6 +10,20 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		public function ZoomBarStyle()
 		{
 			super();
+		}
+		
+		/**
+		 */		
+		private var _visible:Object = true;
+
+		public function get visible():Object
+		{
+			return _visible;
+		}
+
+		public function set visible(value:Object):void
+		{
+			_visible = XMLVOMapper.boolean(value);
 		}
 		
 		/**
@@ -73,7 +88,7 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		{
 			return _chart;
 		}
-
+		
 		/**
 		 * @private
 		 */
@@ -81,6 +96,10 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		{
 			_chart = value;
 		}
+		
+		/**
+		 */		
+		public var chartCover:Style
 
 	}
 }
