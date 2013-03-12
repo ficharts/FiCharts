@@ -125,10 +125,10 @@ package com.fiCharts.charts.chart2D.column2D
 			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{
 				item = dataItemVOs[i]
-				item.x = horizontalAxis.valueToX(item.xValue, i) - columnGoupWidth / 2 +
+				item.x = horizontalAxis.valueToX(item.xVerifyValue, i) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
 				
-				item.y = (verticalAxis.valueToY(item.yValue));
+				item.y = (verticalAxis.valueToY(item.yVerifyValue));
 				
 				item.dataItemX = item.x;
 				item.dataItemY = item.y;
@@ -229,7 +229,7 @@ package com.fiCharts.charts.chart2D.column2D
 		
 		/**
 		 */		
-		protected function get partColumnWidth():Number
+		public function get partColumnWidth():Number
 		{
 			return _partColumnWidth;
 		}
@@ -239,7 +239,7 @@ package com.fiCharts.charts.chart2D.column2D
 		/**
 		 * 出去两边空隙后得到的柱体群总宽度；
 		 */		
-		protected function get columnGoupWidth():Number
+		public function get columnGoupWidth():Number
 		{
 			return _columnGoupWidth;
 		}
@@ -276,7 +276,7 @@ package com.fiCharts.charts.chart2D.column2D
 		 */		
 		protected function get columnGroupInnerSpaceUint():Number
 		{
-			return horizontalAxis.unitSize * .05;
+			return horizontalAxis.unitSize * innerSpaceFactor;
 		}
 		
 		/**
@@ -284,8 +284,16 @@ package com.fiCharts.charts.chart2D.column2D
 		 */
 		public function get columnGroupOuterSpaceUint():Number
 		{
-			return horizontalAxis.unitSize * .1;
+			return horizontalAxis.unitSize * outerSpaceFactor;
 		}
+		
+		/**
+		 */		
+		public var outerSpaceFactor:Number = 0.1;
+		
+		/**
+		 */		
+		public var innerSpaceFactor:Number = 0.05;
 
 		/**
 		 * 图表中柱状图序列总数�

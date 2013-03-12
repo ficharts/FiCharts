@@ -47,8 +47,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			XMLVOLib.setASStyleKey("barBG");
 			XMLVOLib.setASStyleKey("chart");
-			XMLVOLib.setASStyleKey("chartCover");
-			
+			XMLVOLib.setASStyleKey("grayChart");
 			
 			XMLVOLib.registerCustomClasses(<zoom path='com.fiCharts.charts.chart2D.core.model.Zoom'/>);
 			//------------------数据缩放---------------------------------

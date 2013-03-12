@@ -63,7 +63,7 @@ package com.fiCharts.charts.chart2D.core.series
 
 		/**
 		 */		
-		private var _baseLine:Number;
+		private var _baseLine:Number = 0;
 
 		public function get baseLine():Number
 		{

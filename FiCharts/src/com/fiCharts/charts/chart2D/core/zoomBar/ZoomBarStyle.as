@@ -99,7 +99,7 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		
 		/**
 		 */		
-		public var chartCover:Style
+		public var grayChart:Style;
 
 	}
 }

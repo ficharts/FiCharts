@@ -29,7 +29,7 @@ package com.fiCharts.charts.chart2D.column2D
 		public function toSimplePattern():void
 		{
 			if(series.curRenderPattern == null)
-				series.curRenderPattern = new SimpleColumnRender(series);
+				series.curRenderPattern = series.simplePattern = new SimpleColumnRender(series);
 			else
 				series.curRenderPattern = series.simplePattern;
 			

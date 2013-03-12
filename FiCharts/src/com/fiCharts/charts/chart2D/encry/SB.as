@@ -454,6 +454,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function upBaseLine():void
 		{
+			directionControl.baseLine = 0;
+			
+			return;
+			
 			if ((verticalAxis as LinearAxis).baseAtZero)
 				directionControl.baseLine = verticalAxis.valueToY(0);
 			else
@@ -471,6 +475,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function downBaseLine():void
 		{
+			directionControl.baseLine = 0;
+				
+			return;
+			
 			if ((verticalAxis as LinearAxis).baseAtZero)
 				directionControl.baseLine = verticalAxis.valueToY(0);
 			else

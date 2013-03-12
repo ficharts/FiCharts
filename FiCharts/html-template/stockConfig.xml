@@ -8,11 +8,11 @@
    </axis>
    <legend enable="false"/>
    <series>
-     <line name="a" xField="label" yField="value"/> 
-     <marker name="b" xField="label" yField="valueB"/> 
+     <column name="a" xField="label" yField="value"/> 
+     <line name="b" xField="label" yField="valueB"/> 
    </series>
    <zoom enable='true'/> 
-   <zoomBar height='50' visible='true'>
+   <zoomBar height='40' visible='true'>
 	    <barBG>
 	    	<border color="CCCCCC"/>
 	        <fill color='EEEEEE'/> 
@@ -23,29 +23,30 @@
             <xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
 	            <tickMark color='E4E2E2' thikness='1' alpha='1'/>
 	            <label margin='0'>
-	                <format color='9F9F9F' font='微软雅黑'/>
+	                <format color='555555' font='微软雅黑'/>
 	                <text value='${label}'>
 	                	<effects>
-	                        <shadow color='FFFFFF' alpha='1' distance='1' blur='1' angle='90'/>
+	                        <shadow color='FFFFFF' alpha='0' distance='1' blur='1' angle='90'/>
 	                    </effects>
 	                </text>
 	            </label>
 	         </xAxis>
 	         <yAxis/>
 	    </chart>
-	    <chartCover>
-	    	<fill color='FFFFFF,555555' alpha='0,0.3' radioes='0,255' angle='90'/>
-	    </chartCover>
+	    <grayChart>
+	    	<border color='cccccc' thikness='1' alpha='1' pixelHinting='true'/>
+            <fill color='cccccc' alpha='0.3'/>
+	    </grayChart>
 	    <window>
 	    	<states>
 	    		<normal>
-	    			<fill color='EEEEEE' alpha='0.1'/>
+	    			<fill color='097DDA' alpha='0.1'/>
 	    		</normal>
 	    		<hover>
-	    			<fill color='EEEEEE' alpha='0.1'/>
+	    			<fill color='097DDA' alpha='0.3'/>
 	    		</hover>
 	    		<down>
-	    			<fill color='EEEEEE' alpha='0.1'/>
+	    			<fill color='097DDA' alpha='0.2'/>
 	    		</down>
 	    	</states>
 	    </window>

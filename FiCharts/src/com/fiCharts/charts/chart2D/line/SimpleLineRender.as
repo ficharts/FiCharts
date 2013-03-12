@@ -30,8 +30,10 @@ package com.fiCharts.charts.chart2D.line
 			}
 			else
 			{
-				series.curRenderPattern = new ClassicLineRender(series);
+				series.curRenderPattern = series.classicPattern = new ClassicLineRender(series);
 			}
+			
+			series.clearCanvas();
 		}
 		
 		/**
