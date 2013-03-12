@@ -64,8 +64,8 @@ package com.fiCharts.charts.chart2D.bubble
 			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{
 				item = dataItemVOs[i];
-				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue, i);
-				item.dataItemY =  (verticalAxis.valueToY(item.yValue));
+				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, i);
+				item.dataItemY =  (verticalAxis.valueToY(item.yVerifyValue));
 				item.y = item.dataItemY - this.baseLine;
 					
 				if (ifDataChanged)

@@ -126,8 +126,8 @@ package com.fiCharts.charts.chart2D.marker
 			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{	
 				item = dataItemVOs[i];
-				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue, i);
-				item.dataItemY = (verticalAxis.valueToY(item.yValue));
+				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, i);
+				item.dataItemY = (verticalAxis.valueToY(item.yVerifyValue));
 				item.offset = this.baseLine;
 				item.y = item.dataItemY - this.baseLine;
 			}

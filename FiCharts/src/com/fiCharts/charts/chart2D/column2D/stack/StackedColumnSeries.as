@@ -124,7 +124,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			{
 				item = dataItemVOs[i];
 				
-				item.x = horizontalAxis.valueToX(item.xValue, i) - columnGoupWidth / 2 +
+				item.x = horizontalAxis.valueToX(item.xVerifyValue, i) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
 				item.dataItemX = item.x;
 				
@@ -140,10 +140,10 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			{
 				item = fullDataItems[i];
 				
-				item.dataItemX = item.x = horizontalAxis.valueToX(item.xValue, i) - columnGoupWidth / 2 +
+				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, i) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
 				
-				item.y = item.dataItemY = verticalAxis.valueToY(item.yValue);
+				item.y = item.dataItemY = verticalAxis.valueToY(item.yVerifyValue);
 			}
 		}
 		
