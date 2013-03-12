@@ -319,12 +319,12 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function renderDataResized(evt:DataResizeEvent):void
 		{
-			PerformaceTest.start("renderScaledData");
+			//PerformaceTest.start("renderScaledData");
 		
 			for each(var series:SB in this.chartMain.series)
 				series.renderDataResized();
 			
-			PerformaceTest.end("renderScaledData");
+			//PerformaceTest.end("renderScaledData");
 		}
 		
 		

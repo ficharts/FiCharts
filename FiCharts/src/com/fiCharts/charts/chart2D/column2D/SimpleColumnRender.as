@@ -52,34 +52,45 @@ package com.fiCharts.charts.chart2D.column2D
 		 */		
 		public function render():void
 		{
-			series.clearCanvas();
-			series.applyDataFeature();
-			
-			var dataItem:ColumnDataPoint;
-			
-			var px:Number = 0;
-			var py:Number = 0;
-			var w:Number = 0;
-			var h:Number = 0;
-			
-			for (var i:uint = series.dataOffsetter.minIndex; i <= series.dataOffsetter.maxIndex; i ++)
+			if (series.ifSizeChanged || series.ifDataChanged)
 			{
-				dataItem = series.dataItemVOs[i] as ColumnDataPoint;
-				
-				dataItem.width = series.horizontalAxis.unitSize;
-				px = dataItem.x - dataItem.width / 2;
-				
-				dataItem.height = dataItem.y - series.baseLine;
-				
-				series.currState.tx = px;
-				series.currState.width = dataItem.width;
-				
-				series.currState.ty = dataItem.y - series.baseLine;
-				series.currState.height = - dataItem.height;
-				
-				StyleManager.drawRect(series.canvas, series.currState, dataItem);
-				
+				series.applyDataFeature();
+				series.ifSizeChanged = series.ifDataChanged = false;
 			}
+			else
+			{
+				series.clearCanvas();
+				
+				var dataItem:ColumnDataPoint;
+				
+				var px:Number = 0;
+				var py:Number = 0;
+				var w:Number = 0;
+				var h:Number = 0;
+				
+				StyleManager.setShapeStyle(series.currState, series.canvas.graphics, series);
+				for (var i:uint = series.dataOffsetter.minIndex; i <= series.dataOffsetter.maxIndex; i ++)
+				{
+					dataItem = series.dataItemVOs[i] as ColumnDataPoint;
+					
+					w = series.horizontalAxis.unitSize;
+					h = series.baseLine - dataItem.y;
+					
+					px = dataItem.x - w / 2;
+					py = - h;
+					
+					series.currState.tx = px;
+					series.currState.ty = py;
+					
+					series.currState.width = w
+					series.currState.height = h;
+					
+					series.canvas.graphics.drawRoundRect(px, py, w, h, series.currState.radius, series.currState.radius);
+				}
+				
+				series.canvas.graphics.endFill();
+			}
+			
 		}
 	}
 }
