@@ -10,14 +10,14 @@ package com.fiCharts.utils
 		
 		/**
 		 */		
-		public static var ifRun:Boolean = false;
+		public static var ifRun:Boolean = true;
 		
 		/**
 		 */		
 		public static function end(desc:String = 'tem'):void
 		{
 			if (ifRun)
-				trace(desc + " : " + (getTimer() - time) / 1000 + "s");
+				trace("end: " +  desc + " --- " + (getTimer() - time) / 1000 + "s");
 		}
 		
 		/**

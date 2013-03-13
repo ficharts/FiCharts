@@ -310,7 +310,6 @@ package com.fiCharts.utils.graphic
 		public static function setShapeStyle(style:Style, target:Graphics, 
 										metaData:Object = null):void
 		{
-			
 			setLineStyle(target, style.getBorder, style, metaData);
 			setFillStyle(target, style, metaData);
 		}

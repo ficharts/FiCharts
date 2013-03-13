@@ -148,10 +148,6 @@ package com.fiCharts.charts.chart2D.encry
 				simpleDataRender = new Sprite;
 				simpleDataRender.graphics.clear();
 				
-				// 注意这里采用的是  hover 状态下的数据节点样�
-				//var style:Style = dataRender.circle.states.hover as Style;
-				//StyleManager.drawCircle(simpleDataRender, style, this);
-				
 				dataRender.toHover();
 				dataRender.render(simpleDataRender, this);
 				this.addChild(simpleDataRender);
@@ -316,9 +312,9 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function renderDataResized():void
 		{
-			PerformaceTest.start("renderScaledData");
+			PerformaceTest.start("renderScaledData " + this.type);
 			this.curRenderPattern.renderScaledData();
-			PerformaceTest.end("renderScaledData");
+			PerformaceTest.end("renderScaledData " + this.type);
 		}
 		
 		/**
@@ -445,6 +441,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			this.directionControl.dataFeature = this.verticalAxis.getSeriesDataFeature(
 				this.verticalValues.concat());
+			
 			directionControl.checkDirection(this);
 			
 			this.canvas.y = baseLine;
