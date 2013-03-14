@@ -1,5 +1,7 @@
 package com.fiCharts.charts.chart2D.core.zoomBar
 {
+	import com.fiCharts.charts.chart2D.core.model.DataRender;
+	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	
@@ -100,6 +102,26 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		/**
 		 */		
 		public var grayChart:Style;
+		
+		/**
+		 */		
+		private var _zoomPoint:DataRender;
+
+		/**
+		 */
+		public function get zoomPoint():DataRender
+		{
+			return _zoomPoint;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set zoomPoint(value:DataRender):void
+		{
+			_zoomPoint = XMLVOMapper.updateObject(value, _zoomPoint, Model.DATA_RENDER, this) as DataRender;
+		}
+
 
 	}
 }

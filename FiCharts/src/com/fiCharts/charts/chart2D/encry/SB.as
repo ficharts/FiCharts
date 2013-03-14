@@ -11,6 +11,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
 	import com.fiCharts.charts.chart2D.core.series.ISeriesRenderPattern;
 	import com.fiCharts.charts.chart2D.core.series.SeriesDirectionControl;
+	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBar;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataPoint;
@@ -47,6 +48,14 @@ package com.fiCharts.charts.chart2D.encry
 			super();
 			
 			addChild(canvas);
+		}
+		
+		/**
+		 * 堆积图的zoombar数据设置需屏蔽
+		 */		
+		public function setZoomBarData(zoomBar:ZoomBar):void
+		{
+			zoomBar.setData(dataItemVOs.concat(), verticalValues.concat());
 		}
 		
 		/**
@@ -738,7 +747,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		private var _horizontalValues:Vector.<Object>;
+		private var _horizontalValues:Vector.<Object> = new Vector.<Object>;
 
 		public function get horizontalValues():Vector.<Object>
 		{
@@ -752,7 +761,7 @@ package com.fiCharts.charts.chart2D.encry
 
 		/**
 		 */		
-		private var _verticalValues:Vector.<Object>;
+		private var _verticalValues:Vector.<Object> = new Vector.<Object>;
 
 		public function get verticalValues():Vector.<Object>
 		{
@@ -943,10 +952,10 @@ package com.fiCharts.charts.chart2D.encry
 			var item:Object;
 			var i:uint = 0;
 			
-			dataItemVOs = new Vector.<SeriesDataPoint>
-			horizontalValues = new Vector.<Object>;
-			verticalValues = new Vector.<Object>;
-			sourceDataItems = new Vector.<SeriesDataPoint>;
+			dataItemVOs.length = 0;
+			horizontalValues.length = 0; 
+			verticalValues.length = 0;
+			sourceDataItems.length = 0;
 			
 			for each (item in dataProvider)
 			{
@@ -989,6 +998,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function rateDataItems(evt:DataResizeEvent):void
 		{
+			if (sourceDataItems == null) return;
+			
 			PerformaceTest.start("构建数据节点");
 			
 			this.dataItemVOs.length = this.horValues.length = verValues.length = 0;
@@ -1070,12 +1081,15 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function updateMaxIndex():void
 		{
-			dataOffsetter.maxIndex = maxDataItemIndex = dataItemVOs.length - 1;
+			if(dataItemVOs.length > 1)
+				dataOffsetter.maxIndex = maxDataItemIndex = dataItemVOs.length - 1;
+			else
+				dataOffsetter.maxIndex = maxDataItemIndex = 0;
 		}
 		
 		/**
 		 */		
-		protected var sourceDataItems:Vector.<SeriesDataPoint>;
+		protected var sourceDataItems:Vector.<SeriesDataPoint> = new Vector.<SeriesDataPoint>;;
 		
 		/**
 		 * 把节点总数存下来，后继节点渲染会频繁用于计算；
@@ -1246,7 +1260,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * Series items of this series.
 		 */
-		private var _dataItemVOs:Vector.<SeriesDataPoint>;
+		private var _dataItemVOs:Vector.<SeriesDataPoint> = new Vector.<SeriesDataPoint>;
 
 		public function get dataItemVOs():Vector.<SeriesDataPoint>
 		{
@@ -1483,7 +1497,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		protected function ifNullData(item:SeriesDataPoint):Boolean
+		public function ifNullData(item:SeriesDataPoint):Boolean
 		{
 			//节点字段不存�
 			if (item.xValue == null || item.yValue == null)

@@ -270,7 +270,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function renderHoriticalAxis():void
 		{
-			if (changed)
+			if (changed && this.labelVOes.length)
 			{
 				this.labelsMask.graphics.clear();
 				labelRender.style = this.label;
@@ -468,7 +468,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function renderVerticalAxis():void
 		{
-			if (changed)
+			if (changed && this.labelVOes.length)
 			{
 				this.clearLabels();
 				this.labelsMask.graphics.clear();
@@ -920,14 +920,14 @@ package com.fiCharts.charts.chart2D.core.axis
 		 * @param value
 		 * @return 
 		 */		
-		public function valueToX(value:Object, index:uint) : Number
+		public function valueToX(value:Object, index:int):Number
 		{
 			return 0;
 		}
 		
 		/**
 		 */		
-		protected function valueToSize( value : Object, index:uint ) : Number
+		protected function valueToSize(value:Object, index:int):Number
 		{
 			return this.curPattern.valueToSize(value, index);
 		}

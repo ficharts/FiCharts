@@ -158,7 +158,6 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function getPercentByData(data:Object):Number
 		{
-			
 			if (data == null)
 			{
 				return 0;
@@ -179,7 +178,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function percentToPos(perc:Number):Number
 		{
-			var position:Number;
+			var position:Number = 0;
 			
 			if (axis.confirmedSourceValueDis)
 				position = perc * axis.size;

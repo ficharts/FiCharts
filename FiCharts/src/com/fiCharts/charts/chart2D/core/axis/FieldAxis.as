@@ -56,7 +56,7 @@ package com.fiCharts.charts.chart2D.core.axis
 
 		/**
 		 */
-		override public function valueToX(value:Object, index:uint):Number
+		override public function valueToX(value:Object, index:int):Number
 		{
 			return valueToSize(value, index);
 		}
@@ -65,7 +65,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */
 		override public function valueToY(value:Object):Number
 		{
-			return - valueToSize(value, NaN);
+			return - valueToSize(value, - 1);
 		}
 		
 		/**
@@ -112,7 +112,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			if (ifTickCenter)
 			{
 				ticks.unshift(0);
-				ticks.push(- size);
+				//ticks.push(- size);
 			}
 			else
 			{

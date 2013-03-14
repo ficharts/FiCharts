@@ -31,16 +31,15 @@ package com.fiCharts.charts.chart2D.core.series
 		 */		
 		public function getDataIndexRange(start:Number, end:Number, datafullRange:Array):void
 		{
+			var len:uint = datafullRange.length;
 			
-			var len:uint = datafullRange.length - 1;
-			
-			if (len <= 0)
+			if (len <= 1)
 			{
 				trace(this + "数组无内容")
 				return;
 			}
 			
-			for (var i:uint = 0; i <= len; i ++)
+			for (var i:uint = 0; i < len; i ++)
 			{
 				if (datafullRange[i] <= start)
 				{
@@ -82,11 +81,25 @@ package com.fiCharts.charts.chart2D.core.series
 		
 		/**
 		 */		
-		public var maxIndex:uint = 0;
+		public function get maxIndex():uint
+		{
+			return _maxiIndex;
+		}
 		
 		/**
 		 */		
-		public var minIndex:uint = 0;
+		public function set maxIndex(value:uint):void
+		{
+			_maxiIndex = value;
+		}
+		
+		/**
+		 */		
+		private var _maxiIndex:uint = 0;
+		
+		/**
+		 */		
+		public var minIndex:int = 0;
 		
 		/**
 		 *  数据缩放时其实节点的位置偏移量，特别是趋势图和区域图需要临近几个节点才能渲染

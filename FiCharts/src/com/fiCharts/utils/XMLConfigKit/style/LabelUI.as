@@ -21,7 +21,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		
 		/**
 		 */		
-		private var _text:String;
+		private var _text:String = '';
 
 		/**
 		 */
@@ -143,7 +143,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		}
 		
 		/**
-		 * 用textWidth是为了防止当换行显示时，maxLabelWidth 过大�这时要截取此Label的图时右�
+		 * 用textWidth是为了防止当换行显示时，maxLabelWidth 过大�这时要截取此Label的图时右�
 		 * 
 		 * 将有一部分空白，为了避免截取多余的空白区域这用textWidth靠谱一些，不能用width
 		 */		
@@ -153,7 +153,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		}
 		
 		/**
-		 * 换行�textField 的高度不等于 textHeight �区域的Bound高度�鄙视一下adobe
+		 * 换行�textField 的高度不等于 textHeight �区域的Bound高度�鄙视一下adobe
 		 */		
 		private function get uiHeight():Number
 		{

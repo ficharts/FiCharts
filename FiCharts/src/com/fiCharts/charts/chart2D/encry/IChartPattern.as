@@ -44,6 +44,11 @@ package com.fiCharts.charts.chart2D.encry
 		function toClassicPattern():void
 			
 		/**
+		 * 
+		 */			
+		function initPattern():void
+			
+		/**
 		 * 定义序列，坐标轴的模式： 经典还是数据缩放模式
 		 * 
 		 * 此方法在图表渲染之前才会被调用，此时序列和坐标轴的渲染模式才会被设定

@@ -7,6 +7,7 @@ package com.fiCharts.charts.chart2D.bar
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
+	import com.fiCharts.charts.chart2D.core.series.ISeriesRenderPattern;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataPoint;
@@ -23,6 +24,20 @@ package com.fiCharts.charts.chart2D.bar
 			super();
 			
 			this.value = 'xValue';
+		}
+		
+		/**
+		 */		
+		override protected function getClassicPattern():ISeriesRenderPattern
+		{
+			return new ClassicBarRender(this)
+		}
+		
+		/**
+		 */		
+		override protected function getSimplePattern():ISeriesRenderPattern
+		{
+			return new SimpleBarRender(this);
 		}
 		
 		/**
@@ -93,8 +108,8 @@ package com.fiCharts.charts.chart2D.bar
 			{
 				item = dataItemVOs[i];
 					
-				item.x = this.horizontalAxis.valueToX(item.xValue, i);
-				item.y = verticalAxis.valueToY(item.yValue) - columnGoupWidth / 2 +
+				item.x = this.horizontalAxis.valueToX(item.xVerifyValue, i);
+				item.y = verticalAxis.valueToY(item.yVerifyValue) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint)// 
 				
 				item.dataItemX = item.x;

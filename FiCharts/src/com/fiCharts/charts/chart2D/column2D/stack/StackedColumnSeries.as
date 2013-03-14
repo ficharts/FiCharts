@@ -5,6 +5,8 @@ package com.fiCharts.charts.chart2D.column2D.stack
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
+	import com.fiCharts.charts.chart2D.core.series.ISeriesRenderPattern;
+	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBar;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
@@ -30,6 +32,33 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
+		override public function setZoomBarData(zoomBar:ZoomBar):void
+		{
+		}
+		
+		/**
+		 * 
+		 */		
+		override public function dataResizedByRange(min:Number, max:Number):void
+		{
+		}
+		
+		/**
+		 */		
+		override protected function getClassicPattern():ISeriesRenderPattern
+		{
+			return new ClassicStackedColumnRender(this);
+		}
+		
+		/**
+		 */		
+		override protected function getSimplePattern():ISeriesRenderPattern
+		{
+			return new SimpleStackedColumnRender(this);
+		}
+		
+		/**
+		 */		
 		override protected function get type():String
 		{
 			return "stackedColumn";
@@ -49,34 +78,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		 */		
 		override protected function draw():void
 		{
-			if (ifDataChanged)
-			{
-				while (canvas.numChildren)
-					canvas.removeChildAt(0);
-				
-				var columnItemUI:Column2DUI;
-				columnUIs = new Vector.<Column2DUI>;
-				for each (var stack:StackedSeries in stacks)
-				{
-					for each (var itemDataVO:SeriesDataPoint in stack.dataItemVOs)
-					{
-						if (ifNullData(itemDataVO))
-							continue;
-						
-						columnItemUI = getSeriesItemUI(itemDataVO);
-						columnItemUI.states = this.states;//样式统一定义
-						columnItemUI.metaData = itemDataVO.metaData;
-						columnUIs.push(columnItemUI);
-						canvas.addChild(columnItemUI);
-					}
-				}
-			}
 			
-			if (this.ifSizeChanged || this.ifDataChanged)
-			{
-				layoutAndRenderUIs();
-				ifDataChanged = ifSizeChanged = false;
-			}
 		}
 		
 		/**
@@ -119,12 +121,13 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			
 			var item:SeriesDataPoint;
 			var i:int;
+			var len:uint = dataItemVOs.length;
 			
-			for (i = startIndex; i <= endIndex; i += step)
+			for (i = 0; i < len; i += step)
 			{
 				item = dataItemVOs[i];
 				
-				item.x = horizontalAxis.valueToX(item.xVerifyValue, i) - columnGoupWidth / 2 +
+				item.x = horizontalAxis.valueToX(item.xVerifyValue, - 1) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
 				item.dataItemX = item.x;
 				
@@ -140,7 +143,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			{
 				item = fullDataItems[i];
 				
-				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, i) - columnGoupWidth / 2 +
+				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, - 1) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
 				
 				item.y = item.dataItemY = verticalAxis.valueToY(item.yVerifyValue);
@@ -203,22 +206,25 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		 */		
 		override protected function preInitData():void
 		{
-			var xValue:Object, yValue:Number, positiveValue:Number, negativeValue:Number;
+			if (this.curRenderPattern is SimpleStackedColumnRender) return;
+				
+			var xVerifyValue:Object, yVerifyValue:Number, xValue:Object, yValue:Object, positiveValue:Number, negativeValue:Number;
 			var length:uint = dataProvider.length;
 			var stack:StackedSeries;
 			var combleSeriesDataItem:SeriesDataPoint;
 			var stackedSeriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataPoint>
-			horizontalValues = new Vector.<Object>;
-			verticalValues = new Vector.<Object>;
-			fullDataItems = new Vector.<SeriesDataPoint>;
+			dataItemVOs.length = 0;
+			horizontalValues.length = 0;
+			verticalValues.length = 0;
+			fullDataItems.length = 0;
 			
 			
 			// 将子序列的数据节点合并到一起；
 			for each (stack in stacks)
 			{
 				stack.dataProvider = this.dataProvider;
+				stack.initData();
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
 			
@@ -231,19 +237,19 @@ package com.fiCharts.charts.chart2D.column2D.stack
 					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataPoint);
 					stackedSeriesDataItem.index = i;
 					
-					xValue = stackedSeriesDataItem.xValue;
-					yValue = Number(stackedSeriesDataItem.yValue);
+					xVerifyValue = stackedSeriesDataItem.xVerifyValue;
+					yVerifyValue = Number(stackedSeriesDataItem.yVerifyValue);
 					
-					if (yValue >= 0)
+					if (yVerifyValue >= 0)
 					{
 						stackedSeriesDataItem.startValue = Number(positiveValue);
-						positiveValue += yValue;
+						positiveValue += yVerifyValue;
 						stackedSeriesDataItem.endValue = Number(positiveValue);
 					}
 					else
 					{
 						stackedSeriesDataItem.startValue = Number(negativeValue);
-						negativeValue += yValue;
+						negativeValue += yVerifyValue;
 						stackedSeriesDataItem.endValue = Number(negativeValue);
 					}
 					
@@ -259,10 +265,10 @@ package com.fiCharts.charts.chart2D.column2D.stack
 					combleSeriesDataItem.index = i;
 					combleSeriesDataItem.metaData = new Object;
 					
-					combleSeriesDataItem.xValue = xValue;
-					combleSeriesDataItem.yValue = ((positiveValue + negativeValue) >= 0) ? positiveValue : negativeValue;
+					combleSeriesDataItem.xVerifyValue = xVerifyValue;
+					combleSeriesDataItem.yVerifyValue = ((positiveValue + negativeValue) >= 0) ? positiveValue : negativeValue;
 					
-					combleSeriesDataItem.xLabel = horizontalAxis.getXLabel(combleSeriesDataItem.xValue);
+					combleSeriesDataItem.xLabel = horizontalAxis.getXLabel(combleSeriesDataItem.xVerifyValue);
 					combleSeriesDataItem.yLabel = verticalAxis.getYLabel(positiveValue + negativeValue);
 					
 					combleSeriesDataItem.color = uint(this.color);
@@ -277,7 +283,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 					fullDataItems.push(combleSeriesDataItem); 
 				}
 				
-				horizontalValues.push(xValue);
+				horizontalValues.push(xVerifyValue);
 				verticalValues.push(positiveValue);
 				verticalValues.push(negativeValue);
 			}
@@ -355,7 +361,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
-		protected var fullDataItems:Vector.<SeriesDataPoint>;
+		protected var fullDataItems:Vector.<SeriesDataPoint> = new Vector.<SeriesDataPoint>;
 		
 		/**
 		 */		
@@ -366,7 +372,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		/**
 		 */		
-		protected var stacks:Vector.<StackedSeries>; 
+		public var stacks:Vector.<StackedSeries>; 
 		
 	}
 }

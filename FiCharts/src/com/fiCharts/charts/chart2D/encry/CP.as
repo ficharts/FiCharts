@@ -53,7 +53,6 @@ package com.fiCharts.charts.chart2D.encry
 			//------------------数据缩放---------------------------------
 			
 			
-			
 			ChartBGStyle;
 			XMLVOLib.registerCustomClasses(<chartBG path='com.fiCharts.charts.chart2D.core.model.ChartBGStyle'/>);
 			
@@ -129,6 +128,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			DataRender;
 			XMLVOLib.registerCustomClasses(<dataRender path='com.fiCharts.charts.chart2D.core.model.DataRender'/>);
+			XMLVOLib.registerCustomClasses(<zoomPoint path='com.fiCharts.charts.chart2D.core.model.DataRender'/>);
 			
 			XMLVOLib.setASLabelStyleKey('valueLabel');
 			XMLVOLib.setASLabelStyleKey('innerValueLabel');

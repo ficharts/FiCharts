@@ -26,6 +26,7 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		public function ZoomBar(axis:AxisBase)
 		{
 			super();
+			
 			this.axis = axis;
 			dragControl = new DragControl(window, this);
 			dragControl.addEventListener(MouseEvent.MOUSE_DOWN, downHandler, false, 0, true);
@@ -52,7 +53,7 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		private function downHandler(evt:MouseEvent):void
 		{
 			sourceX = window.x;
-			udpateChartMask()
+			udpateChartMaskAndZoomPoints()
 		}
 		
 		/**
@@ -77,8 +78,16 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 			else if (temX + window.winWidth > axis.size)
 				temX = axis.size - window.winWidth;
 			
-			window.x = temX;
-			udpateChartMask();
+			zoomWinLeft(temX);
+		}
+		
+		/**
+		 * 更新窗口位置
+		 */		
+		public function zoomWinLeft(pos:Number):void
+		{
+			window.x = pos;
+			udpateChartMaskAndZoomPoints();
 		}
 		
 		/**
@@ -114,7 +123,15 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 			
 			window.winStyle = style.window;
 			this.addChild(window);
+			
+			zoomPoints = new ZoomPoints(this);
+			zoomPoints.setZoomPointRender(style.zoomPoint);
+			this.addChild(zoomPoints);
 		}
+		
+		/**
+		 */		
+		private var zoomPoints:ZoomPoints;
 		
 		/**
 		 */		
@@ -174,14 +191,15 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		public function updateWindowPos(perc:Number):void
 		{
 			window.x = perc * axis.size;
-			udpateChartMask();
+			udpateChartMaskAndZoomPoints();
 		}
 		
 		/**
 		 */		
-		private function udpateChartMask():void
+		private function udpateChartMaskAndZoomPoints():void
 		{
 			chart.scrollChart(window.x, window.winWidth);
+			zoomPoints.update(window.x, window.winWidth);
 		}
 		
 		/**
@@ -210,6 +228,10 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 				
 				bg.graphics.clear();
 				StyleManager.drawRect(bg, style.barBG);
+				
+				zoomPoints.y = ty + barHeight * 0.5;
+				zoomPoints.max = axis.size;
+				this.zoomPoints.render();
 			}
 		}
 		

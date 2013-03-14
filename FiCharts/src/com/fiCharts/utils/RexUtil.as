@@ -130,6 +130,11 @@ package com.fiCharts.utils
 		 */		
 		public static function replaceFieldBraceValue(sourceField:String, sourceObject:Object):String
 		{
+			if (sourceObject == null)
+			{
+				return null;
+			}
+				
 			sourceField = sourceField.replace(/\s*/g, '');// 剔除空格
 			
 			if (isBraceParagraph(sourceField))

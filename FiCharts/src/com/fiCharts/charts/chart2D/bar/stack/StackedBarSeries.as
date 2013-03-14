@@ -163,15 +163,16 @@ package com.fiCharts.charts.chart2D.bar.stack
 			var combleSeriesDataItem:SeriesDataPoint;
 			var stackedSeriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataPoint>
-			horizontalValues = new Vector.<Object>;
-			verticalValues = new Vector.<Object>;
-			fullDataItems = new Vector.<SeriesDataPoint>;
+			dataItemVOs.length = 0;
+			horizontalValues.length = 0;
+			verticalValues.length = 0;
+			fullDataItems.length = 0;
 			
 			// 将子序列的数据节点合并到一起；
 			for each (stack in stacks)
 			{
 				stack.dataProvider = this.dataProvider;
+				stack.initData();
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
 			
@@ -182,8 +183,8 @@ package com.fiCharts.charts.chart2D.bar.stack
 				
 				for each (stack in stacks)
 				{
-					xValue = Number(stack.dataItemVOs[i].xValue);
-					yValue = stack.dataItemVOs[i].yValue;
+					xValue = Number(stack.dataItemVOs[i].xVerifyValue);
+					yValue = stack.dataItemVOs[i].yVerifyValue;
 					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataPoint);
 					
 					if (xValue >= 0)

@@ -1,41 +1,23 @@
 package com.fiCharts.charts.chart2D.core.zoomBar
 {
 	import com.fiCharts.charts.chart2D.core.model.DataRender;
+	import com.fiCharts.charts.common.Model;
+	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.StatesControl;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
-	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
-	import flash.events.Event;
 	
-	/**
-	 * 
-	 */	
-	public class ZoomWindow extends Sprite implements IStyleStatesUI
+	public class ZoomPoint extends Sprite implements IStyleStatesUI
 	{
-		public function ZoomWindow()
+		public function ZoomPoint()
 		{
+			super();
 			stateControl = new StatesControl(this);
 		}
 		
-		/**
-		 */		
-		private var _winStyle:ZoomWindowStyle;
-
-		public function get winStyle():ZoomWindowStyle
-		{
-			return _winStyle;
-		}
-
-		public function set winStyle(value:ZoomWindowStyle):void
-		{
-			_winStyle = value;
-			this.states = _winStyle.states;
-			stateControl.states = this.states;
-		}
-
 		/**
 		 */		
 		private var stateControl:StatesControl;
@@ -47,6 +29,12 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 			return _states;
 		}
 		
+		/**
+		 */		
+		private var _states:States;
+		
+		/**
+		 */		
 		public function set states(value:States):void
 		{
 			_states = value;
@@ -54,69 +42,75 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		
 		/**
 		 */		
-		private var _states:States;
-		
-		/**
-		 */		
 		public function render():void
 		{
 			this.graphics.clear();
-			currState.width = winWidth;
-			currState.height = winHeight;
-			StyleManager.drawRect(this, currState);
+			dataRender.render(this, metaData);
 		}
 		
 		/**
 		 */		
-		public var winWidth:Number = 0;
-
-		/**
-		 */		
-		public var winHeight:Number = 0;
+		public var metaData:Object;
 		
 		/**
 		 */		
 		public function get currState():Style
 		{
-			return _style;
+			return _currState;
 		}
+		
+		/**
+		 */		
+		private var _currState:Style;
 		
 		/**
 		 */		
 		public function set currState(value:Style):void
 		{
-			_style = value;
+			_currState = value;
 		}
-		
-		/**
-		 */		
-		private var _style:Style;
 		
 		/**
 		 */		
 		public function hoverHandler():void
 		{
-		}
-		
-		public function normalHandler():void
-		{
-		}
-		
-		public function downHandler():void
-		{
+			dataRender.toHover();
 		}
 		
 		/**
 		 */		
-		override public function get visible():Boolean
+		public function normalHandler():void
 		{
-			return false;
+			dataRender.toNormal();
 		}
 		
-		override public function set visible(value:Boolean):void
+		/**
+		 */		
+		public function downHandler():void
 		{
+			dataRender.toDown();
 		}
 		
+		/**
+		 * 默认为系统统一配置，如果颜色没有配置则采用节点颜色，序列可以单独定�
+		 * 
+		 * 渲染节点的显示与尺寸�
+		 */		
+		private var _dataRender:DataRender;
 		
+		/**
+		 */
+		public function get dataRender():DataRender
+		{
+			return _dataRender;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set dataRender(value:DataRender):void
+		{
+			_dataRender = XMLVOMapper.updateObject(value, _dataRender, Model.DATA_RENDER, this) as DataRender;
+		}
 	}
 }

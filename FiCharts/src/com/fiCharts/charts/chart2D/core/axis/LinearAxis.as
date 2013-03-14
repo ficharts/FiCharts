@@ -377,7 +377,7 @@ package com.fiCharts.charts.chart2D.core.axis
 
 		/**
 		 */		
-		override protected function valueToSize(value:Object, index:uint):Number
+		override protected function valueToSize(value:Object, index:int):Number
 		{
 			return this.curPattern.valueToSize(value, index);
 		}
@@ -386,7 +386,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 * @param value
 		 * @return
 		 */
-		override public function valueToX(value:Object, index:uint):Number
+		override public function valueToX(value:Object, index:int):Number
 		{
 			return valueToSize(value, index);
 		}

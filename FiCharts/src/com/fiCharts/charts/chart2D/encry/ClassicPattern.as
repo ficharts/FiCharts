@@ -8,6 +8,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.itemRender.ItemRenderEvent;
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
+	import com.fiCharts.charts.common.IDisCombilePointRender;
 	import com.fiCharts.charts.toolTips.TooltipDataItem;
 	
 	import flash.display.Bitmap;
@@ -31,10 +32,17 @@ package com.fiCharts.charts.chart2D.encry
 		
 		/**
 		 */		
-		public function preConfig():void
+		public function initPattern():void
 		{
 			for each(var series:SB in chartMain.series)
-				series.toClassicPattern();
+			series.toClassicPattern();
+		}
+		
+		/**
+		 */		
+		public function preConfig():void
+		{
+			
 		}
 		
 		/**
@@ -255,7 +263,7 @@ package com.fiCharts.charts.chart2D.encry
 						prevLabels = prevItemRender.toolTipsHolder.tooltips;
 						nextLabels = nextItemRender.toolTipsHolder.tooltips;
 						
-						if (prevItemRender is StackedColumnCombiePointRender || nextItemRender is StackedColumnCombiePointRender)
+						if (prevItemRender is IDisCombilePointRender || nextItemRender is IDisCombilePointRender)
 						{
 							j ++;	
 							continue;	

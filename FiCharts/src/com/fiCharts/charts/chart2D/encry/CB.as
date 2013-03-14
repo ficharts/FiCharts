@@ -313,6 +313,8 @@ package com.fiCharts.charts.chart2D.encry
 			if (currentPattern == null)
 				currentPattern = new ClassicPattern(this);
 			
+			currentPattern.initPattern();
+			
 			configSeriesAxis();
 			configSeriesAndLegendData();
 			updateAxisData();
@@ -398,7 +400,7 @@ package com.fiCharts.charts.chart2D.encry
 				axis.beforeRender();
 				axis.renderHoriticalAxis();
 				
-				temOffset = axis.minUintSize;
+				temOffset = axis.temUintSize;
 				
 				// 防止坐标轴边沿label无法完全显示，这个值会作用在左右间距上，给边缘label留够空间
 				if (temOffset != hAxisLabelOffset)

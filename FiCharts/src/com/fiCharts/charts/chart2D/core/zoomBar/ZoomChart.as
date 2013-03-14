@@ -83,6 +83,8 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		 */		
 		public function render():void
 		{
+			if(this.dataItems == null) return;
+			
 			this.hAxis.size = this.chartWidth;
 			hAxis.beforeRender();
 			hAxis.renderHoriticalAxis();

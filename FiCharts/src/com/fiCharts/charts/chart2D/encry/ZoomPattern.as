@@ -1,5 +1,6 @@
 package com.fiCharts.charts.chart2D.encry
 {
+	import com.fiCharts.charts.chart2D.bar.BarSeries;
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.DataRange;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
@@ -158,13 +159,18 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 */		
+		public function initPattern():void
+		{
+			for each(var series:SB in chartMain.series)
+				series.toSimplePattern();
+		}
+		
+		/**
 		 * 图表定义完，渲染之前调用, 此时序列，坐标轴刚被创建
 		 */		
 		public function preConfig():void
 		{
-			for each(var series:SB in chartMain.series)
-				series.toSimplePattern();
-			
 			preConfigScrollAxis();
 		}
 		
@@ -206,7 +212,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			zoomBar.dataRange = this.currentDataRange;
 			zoomBar.setAxis(hAxis, vAxis);
-			zoomBar.setData(series.dataItemVOs.concat(), series.verticalValues.concat());
+			series.setZoomBarData(zoomBar);
 			
 			zoomAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_BY_INDEXS, dataResizedByIndex, false, 0, true);
 			zoomAxis.addEventListener(DataResizeEvent.GET_SERIES_DATA_INDEX_RANGE_BY_DATA, dataResizedByRange, false, 0, true);
@@ -228,7 +234,11 @@ package com.fiCharts.charts.chart2D.encry
 		public function renderSeries():void
 		{
 			for each(var series:SB in chartMain.series)
+			{
+				if (series is BarSeries) return;//条形图的大数据彻底不支持，此处略过
+					
 				series.render();
+			}
 			
 			zoomBar.render();
 		}

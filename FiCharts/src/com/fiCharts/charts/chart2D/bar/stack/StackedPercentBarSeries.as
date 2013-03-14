@@ -87,15 +87,16 @@ package com.fiCharts.charts.chart2D.bar.stack
 			var stack:StackedSeries;
 			var seriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataPoint>
-			horizontalValues = new Vector.<Object>;
-			verticalValues = new Vector.<Object>;
-			fullDataItems = new Vector.<SeriesDataPoint>;
+			dataItemVOs.length = 0;
+			horizontalValues.length = 0;
+			verticalValues.length = 0;
+			fullDataItems.length = 0;
 			
 			// 将子序列的数据节点合并到一起；
 			for each (stack in stacks)
 			{
 				stack.dataProvider = this.dataProvider;
+				stack.initData();
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
 			
@@ -106,8 +107,8 @@ package com.fiCharts.charts.chart2D.bar.stack
 				for each (stack in stacks) // 求和
 				{
 					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataPoint;
-					xValue = Number(seriesDataItem.xValue);
-					yValue = seriesDataItem.yValue;
+					xValue = Number(seriesDataItem.xVerifyValue);
+					yValue = seriesDataItem.yVerifyValue;
 					fullValue += xValue;
 				}
 				
