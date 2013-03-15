@@ -2,6 +2,7 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 {
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.DataRange;
+	import com.fiCharts.charts.chart2D.core.model.Zoom;
 	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.graphic.StyleManager;
 	import com.fiCharts.utils.interactive.DragControl;
@@ -78,7 +79,8 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 			else if (temX + window.winWidth > axis.size)
 				temX = axis.size - window.winWidth;
 			
-			zoomWinLeft(temX);
+			window.x = temX;
+			udpateChartMaskAndZoomPoints();
 		}
 		
 		/**
@@ -86,8 +88,14 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		 */		
 		public function zoomWinLeft(pos:Number):void
 		{
-			window.x = pos;
-			udpateChartMaskAndZoomPoints();
+			var maxMin:Number = dataRange.max - 1 / this.zoomModel.maxScale;
+			
+			dataRange.min = pos / axis.size;
+			
+			if (dataRange.min > maxMin)
+				dataRange.min = maxMin;
+				
+			axis.dataResized(dataRange);
 		}
 		
 		/**
@@ -107,9 +115,10 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 			
 		/**
 		 */		
-		public function init(style:ZoomBarStyle):void
+		public function init(style:ZoomBarStyle, zoomModel:Zoom):void
 		{
 			this.style = style;
+			this.zoomModel = zoomModel;
 			
 			bg.addEventListener(MouseEvent.MOUSE_DOWN, gotoDataRange, false, 0, true);
 			this.addChild(bg);
@@ -123,15 +132,19 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 			
 			window.winStyle = style.window;
 			this.addChild(window);
-			
-			zoomPoints = new ZoomPoints(this);
+			 
+			zoomPoints = new ZoomPointLeft(this);
 			zoomPoints.setZoomPointRender(style.zoomPoint);
 			this.addChild(zoomPoints);
 		}
 		
 		/**
 		 */		
-		private var zoomPoints:ZoomPoints;
+		private var zoomModel:Zoom;
+		
+		/**
+		 */		
+		private var zoomPoints:ZoomPointLeft;
 		
 		/**
 		 */		

@@ -202,9 +202,19 @@ package com.fiCharts.charts.chart2D.encry
 		//
 		//-------------------------------------------------------
 		
+		
 		/**
+		 * 显示数据节点
 		 */		
-		private function hideTips(evt:DataResizeEvent):void
+		public function showDataRender():void
+		{
+			simpleDataRender.visible = true;
+		}
+		
+		/**
+		 * 隐藏数据节点
+		 */		
+		private function hideDataRender(evt:DataResizeEvent):void
 		{
 			simpleDataRender.visible = false;
 		}
@@ -213,7 +223,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function updateTipByIndex(evt:DataResizeEvent):void
 		{
-			showItem(evt.data);
+			_updateTipsData(evt.data);
 		}
 		
 		/**
@@ -239,12 +249,12 @@ package com.fiCharts.charts.chart2D.encry
 				}
 			}
 			
-			showItem(index);
+			_updateTipsData(index);
 		}
 		
 		/**
 		 */		
-		private function showItem(index:uint):void
+		private function _updateTipsData(index:uint):void
 		{
 			if (index >= 0 && index <= maxDataItemIndex)
 			{
@@ -253,7 +263,7 @@ package com.fiCharts.charts.chart2D.encry
 				simpleDataRender.y = item.y;
 				
 				if (simpleDataRender.visible == false)
-					simpleDataRender.visible = true;
+					this.horizontalAxis.dispatchEvent(new DataResizeEvent(DataResizeEvent.IF_SHOW_DATA_RENDER));
 				
 				tipItem.metaData = item.metaData;
 			}
@@ -846,7 +856,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			_horizontalAxis.addEventListener(DataResizeEvent.UPDATE_TIPS_BY_DATA, updateTipByData, false, 0, true);
 			_horizontalAxis.addEventListener(DataResizeEvent.UPDATE_TIPS_BY_INDEX, updateTipByIndex, false, 0, true);
-			_horizontalAxis.addEventListener(DataResizeEvent.HIDE_TIPS, hideTips, false, 0, true);
+			_horizontalAxis.addEventListener(DataResizeEvent.HIDE_DATA_RENDER, hideDataRender, false, 0, true);
 		}
 
 		/**

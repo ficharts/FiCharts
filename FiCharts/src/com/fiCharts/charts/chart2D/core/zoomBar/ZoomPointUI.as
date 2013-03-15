@@ -10,9 +10,9 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 	
 	import flash.display.Sprite;
 	
-	public class ZoomPoint extends Sprite implements IStyleStatesUI
+	public class ZoomPointUI extends Sprite implements IStyleStatesUI
 	{
-		public function ZoomPoint()
+		public function ZoomPointUI()
 		{
 			super();
 			stateControl = new StatesControl(this);

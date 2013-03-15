@@ -6,14 +6,15 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 	
 	import flash.display.Sprite;
 	
-	public class ZoomPoints extends Sprite implements IDragCanvas
+	public class ZoomPointLeft extends Sprite implements IDragCanvas
 	{
-		public function ZoomPoints(zoomBar:ZoomBar)
+		public function ZoomPointLeft(zoomBar:ZoomBar)
 		{
 			super();
 			
 			this.zoomBar = zoomBar;
 			this.addChild(leftZoomPoint);
+			
 			dragControl = new DragControl(leftZoomPoint, this);
 		}
 		
@@ -88,10 +89,10 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		
 		/**
 		 */		
-		private var leftZoomPoint:ZoomPoint = new ZoomPoint;
+		private var leftZoomPoint:ZoomPointUI = new ZoomPointUI;
 		
 		/**
 		 */		
-		private var rightZoomPoint:ZoomPoint = new ZoomPoint;
+		private var rightZoomPoint:ZoomPointUI = new ZoomPointUI;
 	}
 }

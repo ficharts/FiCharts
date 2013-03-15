@@ -20,15 +20,15 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function stopTips():void
+		public function hideDataRender():void
 		{
-			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.HIDE_TIPS));
+			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.HIDE_DATA_RENDER));
 		}
 		
 		/**
 		 * 先缩小数值范围，然后寻求最近点来锁定tooltips
 		 */		
-		public function updateToolTips():void
+		public function updateTipsData():void
 		{
 			var data:Number = getDataByPerc(posToPercent(axis.mouseX));
 			
@@ -46,7 +46,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			ifScrolling = false;
 			
-			stopTips();
+			hideDataRender();
 			
 			//筛分数据节点
 			dataScaleProxy.updateCurDataItems(dataRange.min, dataRange.max, axis, this);
@@ -61,7 +61,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			renderYAxisAndSeries(dataScaleProxy.currentDataRange.min, dataScaleProxy.currentDataRange.max);
 			
-			updateToolTips();
+			updateTipsData();
 			
 			axis.updateScrollBarSize(dataRange.min, dataRange.max);
 			

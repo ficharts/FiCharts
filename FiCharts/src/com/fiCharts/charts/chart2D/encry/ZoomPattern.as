@@ -156,6 +156,19 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			//目前仅横轴方向支持数据滚动和缩放，并且仅单轴支持
 			zoomAxis = scrolAxis;
+			zoomAxis.addEventListener(DataResizeEvent.IF_SHOW_DATA_RENDER, ifShowDataRender, false, 0, true);
+		}
+		
+		/**
+		 * 仅当鼠标位于图表绘制区域时，数据节点才会被显示出来
+		 */		
+		private function ifShowDataRender(evt:DataResizeEvent):void
+		{
+			if (this.tipsContorl.ifMouseIn)
+			{
+				for each(var series:SB in chartMain.series)
+					series.showDataRender();
+			}
 		}
 		
 		/**
@@ -191,7 +204,7 @@ package com.fiCharts.charts.chart2D.encry
 			var dataBarStyle:ZoomBarStyle = new ZoomBarStyle;
 			var config:* = XMLVOLib.getXML(Chart2DModel.ZOOM_BAR, Model.SYSTEM)
 			XMLVOMapper.fuck(config, dataBarStyle);
-			zoomBar.init(dataBarStyle);
+			zoomBar.init(dataBarStyle, chartMain.chartModel.zoom);
 			
 			//将第一个序列的数据和坐标轴克隆给滚动图表
 			var series:SB = chartMain.series[0];
@@ -329,12 +342,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function renderDataResized(evt:DataResizeEvent):void
 		{
-			//PerformaceTest.start("renderScaledData");
-		
 			for each(var series:SB in this.chartMain.series)
 				series.renderDataResized();
-			
-			//PerformaceTest.end("renderScaledData");
 		}
 		
 		
@@ -493,9 +502,6 @@ package com.fiCharts.charts.chart2D.encry
 				// 坐标轴会驱动序列按照节点位置或数据范围方式完成, 序列再驱动渲染节点等的更新
 				zoomAxis.dataResized(currentDataRange);
 				chartMain.gridField.drawHGidLine(zoomAxis.ticks, chartMain.chartModel.gridField);
-				
-				if (this.tipsContorl.ifMouseIn == false)
-					this.hideTips();
 			}
 		}
 		
@@ -568,7 +574,7 @@ package com.fiCharts.charts.chart2D.encry
 			if (zoomAxis)
 			{
 				tipsHolder.clear();
-				zoomAxis.updateToolTips();//先更新每个序列的tips节点
+				zoomAxis.updateTipsData();//先更新每个序列的tips节点
 				
 				// 组装tips
 				for each (var series:SB in chartMain.series)
@@ -589,7 +595,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function hideTips():void
 		{
-			zoomAxis.stopTip();
+			zoomAxis.hideDataRender();
 			chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
 		}
 		

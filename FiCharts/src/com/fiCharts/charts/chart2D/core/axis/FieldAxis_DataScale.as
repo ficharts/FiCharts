@@ -19,15 +19,15 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function stopTips():void
+		public function hideDataRender():void
 		{
-			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.HIDE_TIPS));
+			axis.dispatchEvent(new DataResizeEvent(DataResizeEvent.HIDE_DATA_RENDER));
 		}
 		
 		/**
 		 * 找到离鼠标位置最近的点
 		 */		
-		public function updateToolTips():void
+		public function updateTipsData():void
 		{
 			var evt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.UPDATE_TIPS_BY_INDEX);
 			
@@ -77,7 +77,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function dataResized(dataRange:DataRange):void
 		{
-			stopTips();
+			hideDataRender();
 			
 			dataScaleProxy.updateCurDataItems(dataRange.min, dataRange.max, axis, this);
 			
@@ -92,7 +92,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			renderYAxisAndSeries(dataScaleProxy.currentDataRange.min, dataScaleProxy.currentDataRange.max);
 			
-			updateToolTips();
+			updateTipsData();
 		}
 		
 		/**

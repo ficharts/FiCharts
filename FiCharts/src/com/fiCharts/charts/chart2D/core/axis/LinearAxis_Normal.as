@@ -15,14 +15,14 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function stopTips():void
+		public function hideDataRender():void
 		{
 			
 		}
 		
 		/**
 		 */		
-		public function updateToolTips():void
+		public function updateTipsData():void
 		{
 			
 		}

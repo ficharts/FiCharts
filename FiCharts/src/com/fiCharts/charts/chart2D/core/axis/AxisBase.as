@@ -119,16 +119,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public function stopTip():void
+		public function hideDataRender():void
 		{
-			curPattern.stopTips();
+			curPattern.hideDataRender();
 		}
 		
 		/**
 		 */		
-		public function updateToolTips():void
+		public function updateTipsData():void
 		{
-			this.curPattern.updateToolTips();
+			this.curPattern.updateTipsData();
 		}
 		
 		

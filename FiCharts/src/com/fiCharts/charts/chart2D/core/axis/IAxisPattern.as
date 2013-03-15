@@ -4,9 +4,13 @@ package com.fiCharts.charts.chart2D.core.axis
 
 	public interface IAxisPattern
 	{
-		function stopTips():void;
+		/**
+		 */		
+		function hideDataRender():void;
 		
-		function updateToolTips():void;
+		/**
+		 */		
+		function updateTipsData():void;
 		
 		/**
 		 * 调节数据缩放的最值，比率等参数

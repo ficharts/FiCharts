@@ -9,7 +9,14 @@ package com.fiCharts.charts.chart2D.core.events
 		/**
 		 * 数据滚动时需隐藏tips 
 		 */		
-		public static const HIDE_TIPS:String = "hideTips";
+		public static const HIDE_DATA_RENDER:String = "hideTips";
+		
+		/**
+		 * 是否显示数据节点，只有当鼠标位于图表绘制区域时，数据节点才会被显示出来，
+		 * 
+		 * 否则只是更新节点数据
+		 */		
+		public static const IF_SHOW_DATA_RENDER:String = "hideTips";
 		
 		/**
 		 * 根据数据计算出toolips节点 
