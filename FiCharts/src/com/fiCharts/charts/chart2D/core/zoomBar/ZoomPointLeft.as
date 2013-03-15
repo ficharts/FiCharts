@@ -91,8 +91,5 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		 */		
 		private var leftZoomPoint:ZoomPointUI = new ZoomPointUI;
 		
-		/**
-		 */		
-		private var rightZoomPoint:ZoomPointUI = new ZoomPointUI;
 	}
 }

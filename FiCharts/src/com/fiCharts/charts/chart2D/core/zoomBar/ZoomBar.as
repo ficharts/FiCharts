@@ -100,6 +100,20 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		
 		/**
 		 */		
+		public function zoomWinRight(pos:Number):void
+		{
+			var min:Number = dataRange.min + 1 / this.zoomModel.maxScale;
+			
+			dataRange.max = pos / axis.size;
+			
+			if (dataRange.max < min)
+				dataRange.max = min;
+			
+			axis.dataResized(dataRange);
+		}
+		
+		/**
+		 */		
 		public function stopScroll(offset:Number, sourceOffset:Number):void
 		{
 			_scrolled(- sourceOffset / (max - min));
@@ -128,14 +142,18 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 			
 			addChild(chart);
 			
-			addChild(chartCover);
-			
 			window.winStyle = style.window;
 			this.addChild(window);
 			 
-			zoomPoints = new ZoomPointLeft(this);
-			zoomPoints.setZoomPointRender(style.zoomPoint);
-			this.addChild(zoomPoints);
+			leftZoomPoint = new ZoomPointLeft(this);
+			leftZoomPoint.setZoomPointRender(style.zoomPoint);
+			addChild(leftZoomPoint);
+			
+			rightZoomPoint = new ZoomPointRight(this);
+			rightZoomPoint.setZoomPointRender(style.zoomPoint);
+			addChild(rightZoomPoint);
+			
+			leftZoomPoint.metaData = rightZoomPoint.metaData = style.chart.getFill;
 		}
 		
 		/**
@@ -144,7 +162,11 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		
 		/**
 		 */		
-		private var zoomPoints:ZoomPointLeft;
+		private var leftZoomPoint:ZoomPointLeft;
+		
+		/**
+		 */		
+		private var rightZoomPoint:ZoomPointRight;
 		
 		/**
 		 */		
@@ -212,7 +234,8 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		private function udpateChartMaskAndZoomPoints():void
 		{
 			chart.scrollChart(window.x, window.winWidth);
-			zoomPoints.update(window.x, window.winWidth);
+			leftZoomPoint.update(window.x, window.winWidth);
+			rightZoomPoint.update(window.x, window.winWidth);
 		}
 		
 		/**
@@ -242,9 +265,13 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 				bg.graphics.clear();
 				StyleManager.drawRect(bg, style.barBG);
 				
-				zoomPoints.y = ty + barHeight * 0.5;
-				zoomPoints.max = axis.size;
-				this.zoomPoints.render();
+				leftZoomPoint.y = ty + barHeight * 0.5;
+				leftZoomPoint.max = axis.size;
+				this.leftZoomPoint.render();
+				
+				rightZoomPoint.y = ty + barHeight * 0.5;
+				rightZoomPoint.max = axis.size;
+				rightZoomPoint.render();
 			}
 		}
 		
@@ -280,8 +307,5 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 		 */		
 		private var style:ZoomBarStyle;
 		
-		/**
-		 */		
-		private var chartCover:Shape = new Shape;
 	}
 }
