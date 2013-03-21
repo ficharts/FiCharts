@@ -77,9 +77,9 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			var stack:StackedSeries;
 			var seriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataPoint>
-			horizontalValues = new Vector.<Object>;
-			verticalValues = new Vector.<Object>;
+			dataItemVOs.length = 0;
+			horizontalValues.length = 0;
+			verticalValues.length = 0;
 			
 			// 将子序列的数据节点合并到一起；
 			for each (stack in stacks)

@@ -30,7 +30,11 @@
 					var url = $(this).attr('demoURL');
 					if (typeof $(this).attr('style') != 'undefined')
 						url += '&style=' + $(this).attr('style');
-						url +=  '&type=' + $(this).attr('type');
+					else
+						url += '&style=Classic'
+
+
+					url +=  '&type=' + $(this).attr('type');
 
 					chartShotContent += '<div class="chart-shot">';
 					chartShotContent += '<a class="chart-link" href=' + './gallery/demo.html?url=' + url  + '><img src=' + $(this).attr('imgURL') + '></a>'

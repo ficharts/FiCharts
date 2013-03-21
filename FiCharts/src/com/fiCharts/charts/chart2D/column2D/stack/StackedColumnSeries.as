@@ -137,7 +137,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				item.offset = baseLine;
 			}
 			
-			if(fullDataItems == null) return;//百分百堆积图没有总数据节�
+			if(fullDataItems == null || fullDataItems.length == 0) return;//百分百堆积图没有总数据节�
 			
 			for (i = startIndex; i <= endIndex; i += step)
 			{

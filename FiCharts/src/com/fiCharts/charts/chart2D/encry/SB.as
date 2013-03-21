@@ -472,7 +472,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			directionControl.baseLine = 0;
 			
-			return;
+			//return;
 			
 			if ((verticalAxis as LinearAxis).baseAtZero)
 				directionControl.baseLine = verticalAxis.valueToY(0);
@@ -493,7 +493,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			directionControl.baseLine = 0;
 				
-			return;
+			//return;
 			
 			if ((verticalAxis as LinearAxis).baseAtZero)
 				directionControl.baseLine = verticalAxis.valueToY(0);

@@ -63,7 +63,7 @@ package com.fiCharts.charts.common
 			if (result >= 0)
 				return zPrefix + formatter.formatNumber(result) + zSuffix;
 			else
-				return "-" (zPrefix + formatter.formatNumber(- result) + zSuffix);
+				return "-" + (zPrefix + formatter.formatNumber(- result) + zSuffix);
 		}
 		
 		/**

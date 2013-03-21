@@ -218,9 +218,9 @@ package com.fiCharts.charts.chart2D.bubble
 		{
 			var seriesDataItem:SeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataPoint>
-			horizontalValues = new Vector.<Object>;
-			verticalValues = new Vector.<Object>;
+			dataItemVOs.length = 0;
+			horizontalValues.length = 0;
+			verticalValues.length = 0;
 			radiusValues = new Vector.<Object>;
 			
 			for each (var item:Object in dataProvider)
@@ -233,8 +233,11 @@ package com.fiCharts.charts.chart2D.bubble
 				seriesDataItem.yValue = seriesDataItem.metaData[yField]; // yValue.
 				seriesDataItem.zValue = seriesDataItem.metaData[radiusField];
 				
-				seriesDataItem.xLabel = horizontalAxis.getXLabel(seriesDataItem.xValue);
-				seriesDataItem.yLabel = verticalAxis.getYLabel(seriesDataItem.yValue);
+				seriesDataItem.xVerifyValue = this.horizontalAxis.getVerifyData(seriesDataItem.xValue);
+				seriesDataItem.yVerifyValue = this.verticalAxis.getVerifyData(seriesDataItem.yValue);
+				
+				seriesDataItem.xLabel = horizontalAxis.getXLabel(seriesDataItem.xVerifyValue);
+				seriesDataItem.yLabel = verticalAxis.getYLabel(seriesDataItem.yVerifyValue);
 				seriesDataItem.zLabel = this.radiusAxis.getZLabel(seriesDataItem.zValue);
 				
 				seriesDataItem.xDisplayName = horizontalAxis.displayName;
