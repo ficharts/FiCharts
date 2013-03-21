@@ -4,14 +4,41 @@ package com.fiCharts.charts.chart2D.core.zoomBar
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	
 	/**
 	 */	
-	public class ZoomBarStyle
+	public class ZoomBarStyle implements IStyleElement
 	{
 		public function ZoomBarStyle()
 		{
 			super();
+		}
+		
+		/**
+		 *  style 采取的是继承模式，更新原有样
+		 */
+		public function set style(value:String):void
+		{
+			_style = XMLVOMapper.updateStyle(this, value, "zoomBar");		
+			
+			styleXML = XMLVOMapper.getStyleXMLBy_ID(_style, "zoomBar");
+		}
+		
+		/**
+		 * 样式的配置文件 
+		 */		
+		public var styleXML:Object;
+		
+		/**
+		 */		
+		private var _style:String;
+		
+		/**
+		 */
+		public function get style():String
+		{
+			return _style;
 		}
 		
 		/**

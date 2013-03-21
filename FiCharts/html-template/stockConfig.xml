@@ -1,53 +1,16 @@
- <config precision="2" title="数据缩放" subTitle='鼠标滚动缩放，拖拽查看，背景双击全屏'>
-   <tooltip>
-   	<label><![CDATA[日期:${xValue}{formatDate:YYYYMMDD,YYYY-MM-DD}<br>数值:${yLabel}]]></label>
-   </tooltip>
-   <axis>
-        <y type="linear" title='数值' baseAtZero='false'/>
-        <x type='date' title='月份' input='YYYYMMDD'/>
-    </axis>
-    <series>
-        <line xField='label' yField='value'/>
-    </series>
-   <zoom enable='true' start='19950601' end='19990526'/> 
-   <zoomBar height='40' visible='true'>
-	    <barBG>
-	    	<border color="CCCCCC"/>
-	        <fill color='EEEEEE'/> 
-	    </barBG>
-	    <chart>
-	    	<border color='097DDA' thikness='1' alpha='1' pixelHinting='true'/>
-            <fill color='097DDA' alpha='0.3'/>
-            <xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
-	            <tickMark color='E4E2E2' thikness='1' alpha='1'/>
-	            <label margin='0'>
-	                <format color='555555' font='微软雅黑'/>
-	                <text value='${label}'>
-	                	<effects>
-	                        <shadow color='FFFFFF' alpha='0' distance='1' blur='1' angle='90'/>
-	                    </effects>
-	                </text>
-	            </label>
-	         </xAxis>
-	         <yAxis/>
-	    </chart>
-	    <grayChart>
-	    	<border color='cccccc' thikness='1' alpha='1' pixelHinting='true'/>
-            <fill color='cccccc' alpha='0.3'/>
-	    </grayChart>
-	    <window>
-	    	<states>
-	    		<normal>
-	    			<fill color='097DDA' alpha='0.1'/>
-	    		</normal>
-	    		<hover>
-	    			<fill color='097DDA' alpha='0.3'/>
-	    		</hover>
-	    		<down>
-	    			<fill color='097DDA' alpha='0.2'/>
-	    		</down>
-	    	</states>
-	    </window>
-	    <zoomPoint style='SimplePoint'/>
-   </zoomBar>
- </config>
+<config precision="2" title="数据缩放" subTitle='鼠标滚动缩放，拖拽查看，背景双击全屏'>
+	<tooltip>
+		<label>
+			<![CDATA[日期:${xValue}{formatDate:YYYYMMDD,YYYY-MM-DD}<br>数值:${yLabel}]]>
+		</label>
+	</tooltip>
+	<axis>
+		<y type="linear" title='数值' baseAtZero='false'/>
+		<x type='date' title='月份' input='YYYYMMDD'/>
+	</axis>
+	<series>
+		<line xField='label' yField='value'/>
+	</series>
+	<zoom enable='true' start='19950601' end='19990526'/>
+	
+</config>

@@ -52,7 +52,7 @@
 
 		<!-------------------文本样式----------------------------------------------------------------------------------->
 
-        <format id='FontFormat' font='å¾®è½¯é›…é»‘' size='12' color='${color}'/>
+        <format id='FontFormat' font='微软雅黑' size='12' color='${color}'/>
 
         <label id='Simple_Self' format='FontFormat' radius='0' padding='5' vMargin='10' hMargin='20'>
 			<border thikness='1' alpha='1' color='${color}' pixelHinting='true'/>
@@ -501,7 +501,122 @@
 		</tooltip>
 
 
-        <!--------------------é¢œè‰²æ------------------------------>
+		<!--------------------滚动条----------------------------------------->
+
+		<zoomBar id='Simple' height='40' visible='true'>
+		    <barBG>
+		    	<border color="CCCCCC"/>
+		        <fill color='EEEEEE'/> 
+		    </barBG>
+		    <chart>
+		    	<border color='097DDA' thikness='1' alpha='1' pixelHinting='true'/>
+	            <fill color='097DDA' alpha='0.3'/>
+	            <xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
+		            <tickMark color='E4E2E2' thikness='1' alpha='1'/>
+		            <label margin='0'>
+		                <format color='555555' font='微软雅黑'/>
+		                <text value='${label}'>
+		                </text>
+		            </label>
+		         </xAxis>
+		         <yAxis/>
+		    </chart>
+		    <grayChart>
+		    	<border color='cccccc' thikness='1' alpha='1' pixelHinting='true'/>
+	            <fill color='cccccc' alpha='0.3'/>
+		    </grayChart>
+		    <window>
+		    	<states>
+		    		<normal>
+		    			<fill color='097DDA' alpha='0.1'/>
+		    		</normal>
+		    		<hover>
+		    			<fill color='097DDA' alpha='0.3'/>
+		    		</hover>
+		    		<down>
+		    			<fill color='097DDA' alpha='0.2'/>
+		    		</down>
+		    	</states>
+		    </window>
+		    <zoomPoint style='SimplePoint'/>
+	   </zoomBar>
+
+	   <zoomBar id='Classic' height='40' visible='true'>
+			<barBG>
+				<border color="CCCCCC"/>
+				<fill color='EEEEEE'/>
+			</barBG>
+			<chart>
+				<border color='097DDA' thikness='1' alpha='1' pixelHinting='true'/>
+				<fill color='097DDA' alpha='0.3'/>
+				<xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
+					<tickMark color='E4E2E2' thikness='1' alpha='1'/>
+					<label margin='0'>
+						<format color='555555' font='微软雅黑'/>
+						<text value='${label}'></text>
+					</label>
+				</xAxis>
+				<yAxis/>
+			</chart>
+			<grayChart>
+				<border color='cccccc' thikness='1' alpha='1' pixelHinting='true'/>
+				<fill color='cccccc' alpha='0.3'/>
+			</grayChart>
+			<window>
+				<states>
+					<normal>
+						<fill color='097DDA' alpha='0.1'/>
+					</normal>
+					<hover>
+						<fill color='097DDA' alpha='0.3'/>
+					</hover>
+					<down>
+						<fill color='097DDA' alpha='0.2'/>
+					</down>
+				</states>
+			</window>
+			<zoomPoint style='ClassicPoint'/>
+		</zoomBar>
+
+
+	   <zoomBar id='Black' height='40' visible='true'>
+			<barBG>
+				<border color="434348"/>
+				<fill color='25252A'/>
+			</barBG>
+			<chart>
+				<border color='097DDA' thikness='1' alpha='1' pixelHinting='true'/>
+				<fill color='097DDA' alpha='0.5'/>
+				<xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
+					<tickMark color='E4E2E2' thikness='1' alpha='1'/>
+					<label margin='0'>
+						<format color='ADADAD' font='微软雅黑'/>
+						<text value='${label}'></text>
+					</label>
+				</xAxis>
+				<yAxis/>
+			</chart>
+			<grayChart>
+				<border color='cccccc' thikness='1' alpha='0.3' pixelHinting='true'/>
+				<fill color='cccccc' alpha='0.3'/>
+			</grayChart>
+			<window>
+				<states>
+					<normal>
+						<fill color='097DDA' alpha='0.1'/>
+					</normal>
+					<hover>
+						<fill color='097DDA' alpha='0.3'/>
+					</hover>
+					<down>
+						<fill color='097DDA' alpha='0.2'/>
+					</down>
+				</states>
+			</window>
+			<zoomPoint style='ClassicPoint'/>
+	    </zoomBar>
+
+        <!--------------------颜色------------------------------>
         <colors id='Heavy'>
 			<color>#097DDA</color>
             <color>#017E01</color>
@@ -642,10 +757,10 @@
 				<dataRender style='SimpleBubble'></dataRender>
 			</bubble>
 
+			<zoomBar style='Simple'/>
 
 			<template>
             </template>
-
 
 			<colors>RGB</colors>
 		</Simple>
@@ -753,6 +868,7 @@
 			<bubble maxRadius='60' minRadius='5' labelDisplay="inner">
 				<dataRender style='ClassicBubble'/>
 			</bubble>
+			<zoomBar style='Simple'/>
 
 			<template></template>
 			<colors>RGB</colors>
@@ -864,6 +980,8 @@
 			<bubble maxRadius='60' minRadius='5' labelDisplay="inner">
 				<dataRender style='ClassicBubble'/>
 			</bubble>
+
+			<zoomBar style='Simple'/>
 
 			<template></template>
 			<colors>RGB</colors>

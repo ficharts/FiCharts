@@ -201,10 +201,14 @@ package com.fiCharts.charts.chart2D.encry
 			zoomAxis.ifCeilEdgeValue = false;
 			zoomAxis.ifHideEdgeLabel = true;
 			
-			var dataBarStyle:ZoomBarStyle = new ZoomBarStyle;
-			var config:* = XMLVOLib.getXML(Chart2DModel.ZOOM_BAR, Model.SYSTEM)
-			XMLVOMapper.fuck(config, dataBarStyle);
-			zoomBar.init(dataBarStyle, chartMain.chartModel.zoom);
+			var zoomBarStyle:ZoomBarStyle = new ZoomBarStyle;
+			var zoomBarConfig:* = XMLVOLib.getXML(Chart2DModel.ZOOM_BAR, Model.SYSTEM)
+			XMLVOMapper.fuck(zoomBarConfig, zoomBarStyle);
+			
+			//将滚动条的标准样式与配置样式合并
+			zoomBarConfig = XMLVOMapper.extendFrom(zoomBarStyle.styleXML, zoomBarConfig);
+			
+			zoomBar.init(zoomBarStyle, chartMain.chartModel.zoom);
 			
 			//将第一个序列的数据和坐标轴克隆给滚动图表
 			var series:SB = chartMain.series[0];
@@ -213,8 +217,8 @@ package com.fiCharts.charts.chart2D.encry
 			var hAxis:AxisBase = series.horizontalAxis.clone();
 			var vAxis:AxisBase = series.verticalAxis.clone();
 			
-			var xStyle:* = config.child("chart").child("xAxis");
-			var yStyle:* = config.child("chart").child("yAxis");
+			var xStyle:* = zoomBarConfig.child("chart").child("xAxis");
+			var yStyle:* = zoomBarConfig.child("chart").child("yAxis");
 			
 			XMLVOMapper.fuck(xStyle, hAxis);
 			XMLVOMapper.fuck(yStyle, vAxis);
