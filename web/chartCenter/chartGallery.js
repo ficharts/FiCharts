@@ -2,6 +2,9 @@
 
 	$(document).ready(function()
 	{
+		 var zoomChart = new Chart2D({id: 'zoomChart', width: '100%', height: '100%', style: 'Simple'});
+         zoomChart.setConfigFile('./zoomChart/stockConfig.xml');
+         zoomChart.setCSVData("./zoomChart/date.csv", ["label", "value"])
 
 		var configXML;
 		var htmlContent = '';
