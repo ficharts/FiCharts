@@ -868,7 +868,7 @@
 			<bubble maxRadius='60' minRadius='5' labelDisplay="inner">
 				<dataRender style='ClassicBubble'/>
 			</bubble>
-			<zoomBar style='Simple'/>
+			<zoomBar style='Classic'/>
 
 			<template></template>
 			<colors>RGB</colors>
@@ -981,7 +981,7 @@
 				<dataRender style='ClassicBubble'/>
 			</bubble>
 
-			<zoomBar style='Simple'/>
+			<zoomBar style='Black'/>
 
 			<template></template>
 			<colors>RGB</colors>
