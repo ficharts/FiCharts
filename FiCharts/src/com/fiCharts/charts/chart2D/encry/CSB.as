@@ -532,8 +532,14 @@ package com.fiCharts.charts.chart2D.encry
 			chart.render();
 		}
 		
-		
-		
+		/**
+		 * 坐标轴标签点击事件
+		 */		
+		private function axisLabelClicked(evt:FiChartsEvent):void
+		{
+			evt.stopPropagation();
+			ExternalUtil.call('FiCharts.labelClicked', id, evt.label, evt.labelIndex);
+		}
 		
 		
 		//---------------------------------------------------------
@@ -841,6 +847,7 @@ package com.fiCharts.charts.chart2D.encry
 			(chart as EventDispatcher).addEventListener(FiChartsEvent.ITEM_OVER, itemOverHandler, false, 0, true);
 			(chart as EventDispatcher).addEventListener(FiChartsEvent.ITEM_OUT, itemOutHandler, false, 0, true);
 			(chart as EventDispatcher).addEventListener(FiChartsEvent.ITEM_CLICKED, itemClickHandler, false, 0, true);
+			(chart as EventDispatcher).addEventListener(FiChartsEvent.AXIS_LABEL_CLICKED, axisLabelClicked, false, 0, true);
 		}
 		
 		

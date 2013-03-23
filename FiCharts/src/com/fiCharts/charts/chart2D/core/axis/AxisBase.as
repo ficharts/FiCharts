@@ -1,9 +1,11 @@
 package com.fiCharts.charts.chart2D.core.axis
 {
+	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.chart2D.core.model.Zoom;
 	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBar;
 	import com.fiCharts.charts.common.ChartDataFormatter;
+	import com.fiCharts.utils.ExternalUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
@@ -16,6 +18,8 @@ package com.fiCharts.charts.chart2D.core.axis
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 
 	/**
@@ -42,13 +46,34 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function AxisBase()
 		{
-			labelUIsCanvas.mouseChildren = labelUIsCanvas.mouseEnabled = false;
+			labelUIsCanvas.mouseChildren = false; //labelUIsCanvas.mouseEnabled = false;
 			this.addChild(labelUIsCanvas);
 			addChild(labelsMask);
 			labelUIsCanvas.mask = labelsMask;
+			labelUIsCanvas.addEventListener(MouseEvent.CLICK, labelsClickHandler, false, 0, true);
 			
 			// 初始化当前模�
 			curPattern = this.getNormalPatter();
+		}
+		
+		/**
+		 * 用户点击坐标轴标签时，触发此事件
+		 */		
+		private function labelsClickHandler(evt:Event):void
+		{
+			var clickLoc:Number;
+			
+			if(this.direction == HORIZONTAL_AXIS)
+				clickLoc = labelUIsCanvas.mouseX;
+			else
+				clickLoc = - labelUIsCanvas.mouseY;
+				
+			var index:uint = Math.ceil(clickLoc / this.unitSize) - 1;
+			
+			var labelEvt:FiChartsEvent = new FiChartsEvent(FiChartsEvent.AXIS_LABEL_CLICKED);
+			labelEvt.labelIndex = index;
+			labelEvt.label = this.labelVOes[index].label;
+			this.dispatchEvent(labelEvt);
 		}
 		
 		/**

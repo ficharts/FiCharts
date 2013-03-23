@@ -45,6 +45,11 @@ package com.fiCharts.charts.chart2D.core.events
 		public static const RENDERED:String = 'renderd';
 		
 		/**
+		 * 坐标轴标签被点击后触发的事件
+		 */		
+		public static const AXIS_LABEL_CLICKED:String = 'axisLabelClicked';
+		
+		/**
 		 * 开启或者关闭渲染节点的鼠标交互， 柱状图等需要用到此特性； 
 		 */		
 		//public static const ENABLE_ITEM_RENDER_INTERACTION:String = 'enableItemRenderInteraction';
@@ -74,6 +79,14 @@ package com.fiCharts.charts.chart2D.core.events
 		{
 			_legendData = value;
 		}
+		
+		/**
+		 */		
+		public var label:String = '';
+		
+		/**
+		 */		
+		public var labelIndex:uint = 0;
 		
 		/**
 		 * 图表节点数据 

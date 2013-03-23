@@ -195,6 +195,7 @@
 	FiCharts.event.ITEM_CLICKED = "itemClick";
 	FiCharts.event.ITEM_OVER = "itemOver";
 	FiCharts.event.ITEM_OUT = "itemOut";
+	FiCharts.event.LABEL_CLICKED = "labelClicked";
 	
 	FiCharts.message = {};
 	FiCharts.message.init = '初始化...';
@@ -254,6 +255,10 @@
 	
 	FiCharts.debuger = function(id, info) {
 		alert(info);
+	};
+	
+	FiCharts.labelClicked = function(id, label, index) {
+		FiCharts.getChartByID(id).labelClicked(label, index);
 	};
 	
 	// 初始化图表的基本属性；
@@ -442,6 +447,12 @@
 			return this.addEventListener(FiCharts.event.ITEM_OUT, callback);
 		};
 		
+		that.onLabelClicked = function(callback) {
+			return this.addEventListener(FiCharts.event.LABEL_CLICKED, callback);
+		};
+		
+		
+		
 		
 		
 		
@@ -533,6 +544,17 @@
 		that.itemOut = function(value) {
 			this.dispatchEvent({type: FiCharts.event.ITEM_OUT, data: value, target: this})
 		};
+		
+		that.labelClicked = function(label, index) {
+			
+			var d = {};
+			d.label = label;
+			d.index = index;
+			
+			this.dispatchEvent({type: FiCharts.event.LABEL_CLICKED, label:label, index: index, target: this})
+		};
+		
+		
 		
 		
 		//-------------------------------

@@ -142,7 +142,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * 标签是否与刻度线对齐，默认不对齐，标签位于两个刻度线的中间；
 		 */		
-		private var _ifTickCenter:Boolean = true;
+		private var _ifTickCenter:Boolean = false;
 
 		/**
 		 */
