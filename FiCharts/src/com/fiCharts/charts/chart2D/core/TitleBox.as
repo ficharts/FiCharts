@@ -21,6 +21,14 @@ package com.fiCharts.charts.chart2D.core
 		
 		/**
 		 */		
+		public function fresh():void
+		{
+			titleLabel.text = '';
+			subTitleLabel.text = '';
+		}
+		
+		/**
+		 */		
 		public function render():void
 		{
 			titleLabel.render();

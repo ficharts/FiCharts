@@ -472,6 +472,27 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 设置数据，数据格式
+		 */		
+		public function setDataArry(arr:Array):void
+		{
+			var dataVOes:Vector.<Object> = new Vector.<Object>;
+			
+			for each (var item:Object in arr)
+				dataVOes.push(item);
+				
+			chart.dataVOes = dataVOes;
+		}
+		
+		/**
+		 * 设置数据，对象数组格式
+		 */		
+		public function setDataVOes(vos:Vector.<Object>):void
+		{
+			chart.dataVOes = vos;
+		}
+		
+		/**
 		 */		
 		private var csvLoader:CSVLoader 
 		

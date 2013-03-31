@@ -26,6 +26,7 @@ package com.fiCharts.charts.chart2D.core.backgound
 			
 			vGrid.mask = hGridMask;
 			hGrid.mask =  vGridMask
+				
 			addChild(vGrid);
 			addChild(hGrid);
 			addChild(vGridMask);

@@ -1,4 +1,4 @@
-﻿package 
+﻿package com.dataGrid 
 {
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.graphic.BitmapUtil;
@@ -12,9 +12,12 @@
 	import flash.ui.Keyboard;
 
 	/**
+	 * 单元格数据的绘制与编辑
 	 */
     public class EditCanvas extends Sprite
     {
+		/**
+		 */		
         public var columns:Vector.<Column>;
         public var rows:Vector.<Row>;
       
@@ -39,23 +42,20 @@
         public var currentRowIndex:int = -1;
 		
 		/**
+		 * 文本画布，你看到的图表数据其实都是单元格的截图
 		 */		
-        private var textLayer:Sprite;
+        private var textCanvas:Sprite = new Sprite;
 		
 		/**
 		 */		
-		private var cellUI:CellUI;
+		private var cellUI:CellUI = new CellUI;
 
 		/**
 		 */		
         public function EditCanvas()
         {
-           
-            this.textLayer = new Sprite();
-			this.textLayer.mouseEnabled = textLayer.mouseChildren =  false;
-            this.addChild(this.textLayer);
-			
-			this.cellUI = new CellUI();
+			this.textCanvas.mouseEnabled = textCanvas.mouseChildren =  false;
+            this.addChild(this.textCanvas);
             this.addChild(this.cellUI);
 			
             this.addEventListener(Event.ADDED_TO_STAGE, this.init);
@@ -80,7 +80,7 @@
         private function doubleHandler(event:Event):void
         {
             this.readyToTex();
-            this.cellUI.text(this.cellData.label);
+            this.cellUI.setTxtAndHover(this.cellData.label);
         }
 
 		/**
@@ -109,7 +109,7 @@
         private function swtichCell() : void
         {
             this.cellUI.leave();
-            this.saveCurCell();
+            this.drawCurCell();
             this.moveToNewCell();
         }
 
@@ -170,35 +170,48 @@
             this.graphics.drawRect(this.currentColumn.x, this.currentRow.y, this.currentColumn.width, this.currentRow.height);
 			
             this.cellUI.moveTo(this.currentColumn.x, this.currentRow.y, this.currentColumn.width, this.currentRow.height);
-            this.cellUI.text(this.currentColumn.getCellData(this.currentRowIndex).label);
+            this.cellUI.setTxtAndHover(this.currentColumn.getCellData(this.currentRowIndex).label);
         }
 
 		/**
+		 * 渲染当前单元格
 		 */		
-        private function saveCurCell() : void
+        private function drawCurCell() : void
         {
-            var bmd:BitmapData = null;
-            var shape:Shape = null;
-			
             if (currentColumn && this.currentRow)
-            {
-                bmd = BitmapUtil.drawBitData(this.cellUI);
-                shape = this.currentColumn.saveCellData(this.cellUI.label, this.currentRowIndex);
-				
-                shape.graphics.clear();
-                shape.graphics.beginBitmapFill(bmd);
-                shape.graphics.drawRect(0, 0, bmd.width, bmd.height);
-				
-                shape.x = this.currentColumn.x;
-                shape.y = this.currentRow.y;
-				
-                this.textLayer.addChild(shape);
-            }
+				drawAndSaveCell(currentColumn, currentRowIndex, currentRow);
         }
-
+		
+		/**
+		 * 渲染指定单元格
+		 */		
+		public function renderCell(column:Column, rowIndex:int, row:Row, label:String):void
+		{
+			cellUI.setTxt(label);
+			drawAndSaveCell(column, rowIndex, row);
+		}
+		
+		/**
+		 * 绘制并保存单元格数据
+		 */		
+		public function drawAndSaveCell(column:Column, rowIndex:int, row:Row):void
+		{
+			var bmd:BitmapData = BitmapUtil.drawBitData(this.cellUI);
+			var shape:Shape = column.saveCellData(cellUI.label, rowIndex);
+			
+			shape.graphics.clear();
+			shape.graphics.beginBitmapFill(bmd);
+			shape.graphics.drawRect(0, 0, bmd.width, bmd.height);
+			
+			shape.x = column.x;
+			shape.y = row.y;
+			
+			this.textCanvas.addChild(shape);
+		}
+		
 		/**
 		 */		
-        private function keyDownHandler(event:KeyboardEvent) : void
+        private function keyDownHandler(event:KeyboardEvent):void
         {
             if (this.currentRow == null || currentColumn == null)
                 return;
@@ -207,11 +220,14 @@
             {
                 case Keyboard.ENTER:
                 {
-                    this.newRowIndex += 1;
-                    this.swtichCell();
-					
+					downCell();
                     break;
                 }
+				case Keyboard.DOWN:
+				{
+					downCell();
+					break;
+				}
                 case Keyboard.DELETE:
                 {
                     this.clearCell();
@@ -226,20 +242,11 @@
                     this.swtichCell();
                     break;
                 }
-                case Keyboard.DOWN:
-                {
-                    this.newRowIndex += 1;
-                    if (this.newRowIndex >= rows.length)
-						newRowIndex = rows.length - 1;
-					
-                    this.swtichCell();
-                    break;
-                }
                 case Keyboard.LEFT:
                 {
                     this.newColumnIndex -= 1;
 					
-                    if (this.newColumnIndex <= 0)
+                    if (this.newColumnIndex < 0)
                         this.newColumnIndex = 0;
 					
                     this.swtichCell();
@@ -249,6 +256,10 @@
                 case Keyboard.UP:
                 {
                     this.newRowIndex -= 1;
+					
+					if (newRowIndex < 0)
+						newRowIndex = 0;
+					
                     this.swtichCell();
 					
                     break;
@@ -258,7 +269,7 @@
                     if (this.cellUI.visible == false)
                     {
 						this.readyToTex();
-						this.cellUI.text();
+						this.cellUI.setTxtAndHover();
                     }
 					
                     break;
@@ -266,6 +277,17 @@
             }
 			
         }
+		
+		/**
+		 */		
+		private function downCell():void
+		{
+			this.newRowIndex += 1;
+			if (this.newRowIndex >= rows.length)
+				newRowIndex = rows.length - 1;
+			
+			this.swtichCell();
+		}
 
 		/**
 		 */		
@@ -275,7 +297,7 @@
 			
 			cell.label = "";
 			cell.shape.graphics.clear();
-			cellUI.text();
+			cellUI.setTxtAndHover();
         }
 
 		/**
@@ -284,14 +306,16 @@
         {
             var shape:Shape = this.cellData.shape;
 			
-            if (this.textLayer.contains(shape))
+            if (this.textCanvas.contains(shape))
             {
                 shape.graphics.clear();
-                this.textLayer.removeChild(shape);
+                this.textCanvas.removeChild(shape);
             }
 			
+			this.currentColumn
+				
+			cellUI.restrict();
             this.cellUI.beforTex();
         }
-
     }
 }

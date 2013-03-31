@@ -973,6 +973,13 @@ package com.fiCharts.charts.chart2D.encry
 				
 				seriesDataItem.xValue = item[xField]; // xValue.
 				seriesDataItem.yValue = item[yField]; // yValue.
+				
+				if (seriesDataItem.xValue == null && seriesDataItem.yValue == null)
+				{
+					seriesDataItem = null;				
+					continue;
+				}
+				
 				setItemColor(item, seriesDataItem);
 				
 				seriesDataItem.xVerifyValue = this.horizontalAxis.getVerifyData(seriesDataItem.xValue);

@@ -1,8 +1,9 @@
-﻿package 
+﻿package com.dataGrid 
 {
 	import flash.display.Shape;
 
 	/**
+	 * 背景网格
 	 */	
     public class Grid extends Shape
     {
@@ -19,7 +20,6 @@
 		 */		
         public function Grid()
         {
-            return;
         }
 
 		/**
@@ -29,8 +29,8 @@
             var column:Column = null;
             var row:Row = null;
 			
-            var columnLen:* = columns.length;
-            var rowLen:* = rows.length;
+            var columnLen:int = columns.length;
+            var rowLen:int = rows.length;
 			
             var temW:Number = 0;
             var temH:Number = 0;
@@ -38,7 +38,7 @@
             var index:uint = 0;
 			
             this.graphics.clear();
-            this.graphics.lineStyle(1, 0xcccccc, 1);
+            this.graphics.lineStyle(1, 0xDEDEDE, 1);
             this.graphics.drawRect(0, 0, this.w, this.h);
 			
             index = this.startColumnIndex;
@@ -46,16 +46,12 @@
             while (temW < this.w)
             {
                 if (index >= columnLen)
-                {
 					column = columns[index] = new Column();
-                    column.x = temW;
-                    column.width = this.defaultCellW;
-                }
                 else
-                {
                     column = columns[index];
-                }
 				
+				column.x = temW;
+				column.width = this.defaultCellW;
                 temW = column.x + column.width;
 				
                 if (temW < this.w)
@@ -71,18 +67,14 @@
             index = this.startRowIndex;
             while (temH < this.h)
             {
-                
                 if (index >= rowLen)
-                {
 					row = rows[index] = new Row();
-                    row.y = temH;
-                    row.height = this.defaultCellH;
-                }
                 else
-                {
                     row = rows[index];
-                }
 				
+				
+				row.y = temH;
+				row.height = this.defaultCellH;
                 temH = row.y + row.height;
 				
                 if (temH < this.h)
@@ -125,16 +117,16 @@
 
 		/**
 		 */		
-        public function get w() : Number
+        public function get w():Number
         {
             return this._w;
         }
 
 		/**
 		 */		
-        public function set w(param1:Number):void
+        public function set w(value:Number):void
         {
-            this._w = param1;
+            this._w = value;
         }
 
 		/**
@@ -146,9 +138,9 @@
 
 		/**
 		 */		
-        public function set h(param1:Number):void
+        public function set h(value:Number):void
         {
-            this._h = param1;
+            this._h = value;
         }
 
 		/**

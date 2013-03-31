@@ -171,6 +171,7 @@ package com.fiCharts.charts.chart2D.encry
 			chartProxy.configXML = value;
 			
 			this.initLegend();
+			this.title.fresh();
 			
 			chartProxy.setChartModel(XMLVOMapper.extendFrom(
 				chartProxy.currentStyleXML.copy(), configXML.copy()));
@@ -934,6 +935,8 @@ package com.fiCharts.charts.chart2D.encry
 		public function set dataVOes(value:Vector.<Object>):void
 		{
 			_dataVOes = value;
+			
+			ifDataChanged = true;
 		}
 		
 		/**
