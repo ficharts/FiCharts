@@ -1,0 +1,13 @@
+<template>
+	<chart img=''>
+		<config title='2010年度销售状况' ySuffix="万">
+			<axis>
+				<x type="field" title="月份"/>
+				<y type="linear" title="销售额"/>
+			</axis>
+			<series>
+				<line xField='label' yField='value'/>
+			</series>
+		</config>
+	</chart>
+</template>

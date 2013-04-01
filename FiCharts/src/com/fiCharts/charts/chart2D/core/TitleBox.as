@@ -25,6 +25,7 @@ package com.fiCharts.charts.chart2D.core
 		{
 			titleLabel.text = '';
 			subTitleLabel.text = '';
+			boxHeight = 0;
 		}
 		
 		/**

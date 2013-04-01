@@ -1,3 +1,4 @@
+
 package com.fiCharts.charts.chart2D.encry
 {
 	import com.fiCharts.utils.ExternalUtil;
@@ -157,6 +158,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function createLicenseInfo(info:String):void
 		{
+			return;
+			
 			var label:LabelUI = new LabelUI;
 			var labelStyle:LabelStyle = new LabelStyle;
 			XMLVOMapper.fuck(labelStyleXML, labelStyle);
