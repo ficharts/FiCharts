@@ -14,7 +14,7 @@
         private var _h:Number = 500;
 		
         private var _defaultCellW:Number = 70;
-        private var _defaultCellH:Number = 25;
+        private var _defaultCellH:Number = 20;
 
 		/**
 		 */		

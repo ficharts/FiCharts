@@ -554,7 +554,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			if (temTopSpace > topSpace)
 			{
-				z = temTopSpace;
+				topSpace = temTopSpace;
 				ifNeedRefectorLayout = true;
 			}
 			

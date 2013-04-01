@@ -1,8 +1,10 @@
 package edit
 {
 	import com.dataGrid.DataGrid;
+	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	
 	/**
 	 * 图表数据和配置编辑页
@@ -15,6 +17,18 @@ package edit
 			
 			addChild(dataGrid);
 			this.main = main;
+			
+			dataGrid.preRender();
+			
+			main.stage.doubleClickEnabled = true;
+			main.stage.addEventListener(MouseEvent.DOUBLE_CLICK, toReview, false, 0, true);
+		}
+		
+		/**
+		 */		
+		private function toReview(evt:MouseEvent):void
+		{
+			main.toChartPage(this.getSeriesConfig(), this.getChartData());
 		}
 		
 		/**
@@ -23,34 +37,34 @@ package edit
 		
 		/**
 		 */		
-		public function createNewChart(tem:XML):void
+		public function createNewChart(config:XML):void
 		{
-			var data:Array = [];
+			configXML = config; 
 			
+			var data:Array = [];
+			var vo:Object;
+			
+			for each (var item:XML in configXML.data.children())
+			{
+				vo = new Object();
+				XMLVOMapper.pushAppedXMLDataToVO(item, vo);
+				data.push(vo);
+			}
+			
+			delete configXML.data;
+			
+			creatSeriesHeads();
 			dataGrid.data = data;
 			dataGrid.render();
 		}
 		
 		/**
 		 */		
-		public function changeChart(tem:XML):void
+		public function changeChart(config:XML):void
 		{
 			
 		}
 		
-		/**
-		 */		
-		public function prePage():void
-		{
-			
-		}
-		
-		/**
-		 */		
-		public function nextPage():void
-		{
-			
-		}
 		
 		/**
 		 * 创建并分配序列头
@@ -59,11 +73,12 @@ package edit
 		 * 
 		 * 序列的数据字段
 		 */		
-		private function setSeriesHeads():void
+		private function creatSeriesHeads():void
 		{
 			var series:SeriesHead;
 			var index:uint = 0;
 			
+			seriesHeads.length = 0;
 			for each (var sXML:XML in configXML.series.children())
 			{
 				series = new SeriesHead;
@@ -78,10 +93,9 @@ package edit
 				series.index = index;
 				series.columns = this.dataGrid.columns.slice(index * 2, (index + 1) * 2);
 				series.setColumnDataField();
-				this.series.push(series);
+				this.seriesHeads.push(series);
 			}
 		}
-		
 		
 		/**
 		 * 动态获取图表的配置文件
@@ -91,8 +105,8 @@ package edit
 			var result:XML = configXML.copy();
 			result.series = <series/>
 			
-			for each (var seriesH:SeriesHead in this.series)
-			result.series.appendChild(seriesH.getXML());
+			for each (var seriesH:SeriesHead in this.seriesHeads)
+				result.series.appendChild(seriesH.getXML());
 			
 			return result;
 		}
@@ -104,23 +118,15 @@ package edit
 		{
 			var result:Array = [];
 			
-			for each (var seriesH:SeriesHead in this.series)
+			for each (var seriesH:SeriesHead in this.seriesHeads)
 				result = result.concat(seriesH.getData());
 			
 			return result;
 		}
 		
 		/**
-		 */		
-		private function init() : void
-		{
-			dataGrid.preRender();
-			setSeriesHeads();
-		}
-		
-		/**
 		 */			
-		private var series:Vector.<SeriesHead> = new Vector.<SeriesHead>;
+		private var seriesHeads:Vector.<SeriesHead> = new Vector.<SeriesHead>;
 		
 		/**
 		 */		
@@ -183,14 +189,6 @@ package edit
 		
 		/**
 		 */		
-		private var configXML:XML = <config title='2010年度销售状况' ySuffix="万" subTitle='呈上升趋势'>
-										<axis>
-											<x type="field" title="月份"/>
-											<y type="linear" title="销售额"/>
-										</axis>
-										<series>
-											<line xField='label' yField='value' labelDisplay='normal'/>
-										</series>
-									</config>
+		private var configXML:XML;
 	}
 }

@@ -32,16 +32,23 @@
 
 		/**
 		 */		
-        public function get label() : String
+        public function get label():String
         {
             return this.field.text;
         }
 		
 		/**
 		 */		
-		public function restrict():void
+		public function restrictNum():void
 		{
 			field.restrict = "0-9 \\-\\ .";
+		}
+		
+		/**
+		 */		
+		public function notRestrict():void
+		{
+			field.restrict = null;
 		}
 		
 		/**

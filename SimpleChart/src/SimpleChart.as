@@ -9,6 +9,8 @@ package
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
+	import preview.PreviewPage;
+	
 	import temple.TemplePage;
 
 	/**
@@ -26,23 +28,25 @@ package
 		{
 			templatePage = new TemplePage(this);
 			editPage = new EditPage(this);
+			chartPage = new PreviewPage(this);
 			
-			this.addChild(templatePage);
+			this.addChild(chartPage);
 			this.addChild(editPage);
+			this.addChild(templatePage);
 		}
 		
 		/**
 		 */		
 		public function toEditPage(config:XML):void
 		{
-			
+			this.editPage.createNewChart(config);
 		}
 		
 		/**
 		 */		
-		public function toPrevPage(config:XML, data:Array):void
+		public function toChartPage(config:XML, data:Array):void
 		{
-			
+			chartPage.renderChart(config, data);
 		}
 		
 		/**
@@ -51,11 +55,12 @@ package
 		
 		/**
 		 */		
-		private var editPage:EditPage
+		private var editPage:EditPage;
 		
 		/**
 		 */		
-		private var curPage:IPage;
+		private var chartPage:PreviewPage;
+		
 		
 	}
 }

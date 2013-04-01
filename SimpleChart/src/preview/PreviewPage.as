@@ -7,14 +7,20 @@ package preview
 	 */	
 	public class PreviewPage extends Sprite
 	{
-		public function PreviewPage()
+		public function PreviewPage(main:SimpleChart)
 		{
 			super();
 			
 			chart.width = 500;
 			chart.height = 500;
 			this.addChild(chart);
+			
+			this.main = main;
 		}
+		
+		/**
+		 */		
+		private var main:SimpleChart;
 		
 		/**
 		 */		

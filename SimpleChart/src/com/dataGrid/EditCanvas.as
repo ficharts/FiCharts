@@ -312,9 +312,12 @@
                 this.textCanvas.removeChild(shape);
             }
 			
-			this.currentColumn
-				
-			cellUI.restrict();
+			if (this.currentColumn.ifNumContents)
+				cellUI.restrictNum();
+			else
+				cellUI.notRestrict();
+			
+			
             this.cellUI.beforTex();
         }
     }
