@@ -1,17 +1,17 @@
 package
 {
-	import com.dataGrid.DataGrid;
 	import com.fiCharts.utils.StageUtil;
 	
 	import edit.EditPage;
-	import edit.SeriesHead;
 	
 	import flash.display.Sprite;
-	import flash.events.MouseEvent;
+	
+	import navBar.NavBottom;
 	
 	import preview.PreviewPage;
 	
-	import temple.TemplePage;
+	import template.ChartCreatEvt;
+	import template.TemplePage;
 
 	/**
 	 */	
@@ -26,6 +26,7 @@ package
 		 */		
 		private function init():void
 		{
+				
 			templatePage = new TemplePage(this);
 			editPage = new EditPage(this);
 			chartPage = new PreviewPage(this);
@@ -33,19 +34,59 @@ package
 			this.addChild(chartPage);
 			this.addChild(editPage);
 			this.addChild(templatePage);
+			
+			templatePage.renderBG();
+			editPage.renderBG();
+			chartPage.renderBG();
+			
+			bottomNav = new NavBottom(this);
+			addChild(bottomNav);
+			
+			bottomNav.toTemplatePage();
+			
 		}
 		
 		/**
 		 */		
-		public function toEditPage(config:XML):void
+		private function createChartHandler(evt:ChartCreatEvt):void
 		{
-			this.editPage.createNewChart(config);
+			evt.stopPropagation();
+			editPage.createNewChart(currTemplateXML);
+		}
+		
+		/**
+		 */		
+		private var currTemplateXML:XML;
+		
+		/**
+		 */		
+		public function toTemplatePage():void
+		{
+			if (this.currPage)
+				currPage.hide();
+			
+			currPage = templatePage;
+			currPage.show();
+			bottomNav.y = currPage.h;
+		}
+		
+		/**
+		 */		
+		public function toEditPage():void
+		{
+			currPage.hide();
+			currPage = editPage;
+			currPage.show();
 		}
 		
 		/**
 		 */		
 		public function toChartPage(config:XML, data:Array):void
 		{
+			currPage.hide();
+			currPage = chartPage;
+			currPage.show();
+			
 			chartPage.renderChart(config, data);
 		}
 		
@@ -60,6 +101,14 @@ package
 		/**
 		 */		
 		private var chartPage:PreviewPage;
+		
+		/**
+		 */		
+		private var currPage:PageBase;
+		
+		/**
+		 */		
+		private var bottomNav:NavBottom;
 		
 		
 	}

@@ -5,7 +5,7 @@ package preview
 	/**
 	 * 图表呈现及发布页
 	 */	
-	public class PreviewPage extends Sprite
+	public class PreviewPage extends PageBase
 	{
 		public function PreviewPage(main:SimpleChart)
 		{

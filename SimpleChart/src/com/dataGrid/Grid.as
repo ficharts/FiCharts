@@ -10,7 +10,7 @@
         private var _startColumnIndex:uint = 0;
         private var _startRowIndex:uint = 0;
 		
-        private var _w:Number = 1000;
+        private var _w:Number = 760;
         private var _h:Number = 500;
 		
         private var _defaultCellW:Number = 70;

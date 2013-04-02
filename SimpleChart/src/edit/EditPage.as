@@ -9,7 +9,7 @@ package edit
 	/**
 	 * 图表数据和配置编辑页
 	 */	
-	public class EditPage extends Sprite implements IPage
+	public class EditPage extends PageBase
 	{
 		public function EditPage(main:SimpleChart)
 		{
@@ -19,9 +19,6 @@ package edit
 			this.main = main;
 			
 			dataGrid.preRender();
-			
-			main.stage.doubleClickEnabled = true;
-			main.stage.addEventListener(MouseEvent.DOUBLE_CLICK, toReview, false, 0, true);
 		}
 		
 		/**
