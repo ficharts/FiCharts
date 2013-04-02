@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="Ficharts Builder" basedir="." default="Release FiCharts">
-	<!--property name="FLEX_HOME" value="D:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.6.0" />
-	<property name="WORK_SPACE" value="G:/FiCharts" /-->
-	<property name="FLEX_HOME" value="I:/flex_sdk_4.6" />
-	<property name="WORK_SPACE" value="I:/FiCharts" />
+	
+	<property name="FLEX_HOME" value="D:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.6.0" />
+	<property name="WORK_SPACE" value="G:/FiCharts" />
+	
+	<!--property name="FLEX_HOME" value="I:/flex_sdk_4.6" />
+	<property name="WORK_SPACE" value="I:/FiCharts" /-->
+	
 	<property name="VER" value="1.3.0" />
 	<property name="controlFlowObfuscation" value="20"/>
 	<property name="dynamicCodeWrapping" value="1"/>

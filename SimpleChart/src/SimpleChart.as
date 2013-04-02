@@ -43,7 +43,6 @@ package
 			addChild(bottomNav);
 			
 			bottomNav.toTemplatePage();
-			
 		}
 		
 		/**

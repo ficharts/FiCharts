@@ -19,7 +19,6 @@
 		 */		
         private var _width:Number = 0;
 		
-		
 		/**
 		 * 行数
 		 */		
