@@ -14,11 +14,11 @@ package com.fiCharts.utils.layout
 	{
 		/**
 		 */		
-		public static const top:String = "top";
-		public static const buttom:String = "buttom";
-		public static const left:String = "left";
-		public static const right:String = "right";
-		public static const center:String = "center";
+		public static const TOP:String = "top";
+		public static const BOTTOM:String = "buttom";
+		public static const LEFT:String = "left";
+		public static const RIGHT:String = "right";
+		public static const CENTER:String = "center";
 		
 		/**
 		 */		
@@ -39,20 +39,50 @@ package com.fiCharts.utils.layout
 		}
 		
 		/**
+		 * 水平方向布局
 		 */
-		public static function excuteLayout(target:DisplayObject, 
-											parent:DisplayObjectContainer, layout:String=center):void
+		public static function excuteHLayout(target:DisplayObject, 
+											parent:DisplayObjectContainer, layout:String=CENTER, padding:uint = 10):void
 		{
 			var targetX:Number = 0;
-			var targetY:Number = 0;
 			
-			if (layout == center)
+			if (layout == CENTER)
 			{
 				targetX = (parent.width - target.width) / 2;
-				targetY = (parent.height - target.height) / 2;
+			}
+			else if (layout == LEFT)
+			{
+				targetX = padding;
+			}
+			else if (layout == RIGHT)
+			{
+				targetX = parent.width - target.width - padding;
 			}
 			
 			target.x = targetX;
+		}
+		
+		/**
+		 * 方向布局
+		 */
+		public static function excuteVLayout(target:DisplayObject, 
+											 parent:DisplayObjectContainer, layout:String=CENTER, padding:uint = 10):void
+		{
+			var targetY:Number = 0;
+			
+			if (layout == CENTER)
+			{
+				targetY = (parent.height - target.height) / 2;
+			}
+			else if (layout == TOP)
+			{
+				targetY = padding;
+			}
+			else if (layout == BOTTOM)
+			{
+				targetY = parent.height - target.height - padding;
+			}
+			
 			target.y = targetY;
 		}
 		
