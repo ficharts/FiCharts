@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="Ficharts Builder" basedir="." default="Release FiCharts">
 	
-	<property name="FLEX_HOME" value="D:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.6.0" />
-	<property name="WORK_SPACE" value="G:/FiCharts" />
+	<!--property name="FLEX_HOME" value="D:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.6.0" />
+	<property name="WORK_SPACE" value="G:/FiCharts" /-->
 	
-	<!--property name="FLEX_HOME" value="I:/flex_sdk_4.6" />
-	<property name="WORK_SPACE" value="I:/FiCharts" /-->
+	<property name="FLEX_HOME" value="I:/flex_sdk_4.6" />
+	<property name="WORK_SPACE" value="I:/FiCharts" />
 	
 	<property name="VER" value="1.3.0" />
 	<property name="controlFlowObfuscation" value="20"/>
@@ -134,7 +134,7 @@
 		
 		<delete dir="${WORK_SPACE}/FiCharts/release/ficharts" includes="*.swc"/>
 		
-		<protect keyFilePath="${WORK_SPACE}/secureSWF/key.data" outputPath="${WORK_SPACE}/FiCharts/release/tem"
+		<!--protect keyFilePath="${WORK_SPACE}/secureSWF/key.data" outputPath="${WORK_SPACE}/FiCharts/release/tem"
 			preset="best_size" superCompression="true" removeLinesNumbers="true" slr="true">
 			<fileset dir="${WORK_SPACE}/FiCharts/release/tem" includes="*.swf"/>
 
@@ -151,7 +151,7 @@
 			
 			<rule filter="com.fiCharts.charts.chart2D.encry" rename="false"/>
 			<rule filter="com.fiCharts.charts.chart2D.encry.IChartPattern.*" rename="false"/>
-		</protect>
+		</protect-->
 		
 		<zip destfile="${WORK_SPACE}/FiCharts/release/ficharts/FiCharts(${VER}).swc"
 		       basedir="${WORK_SPACE}/FiCharts/release/tem"

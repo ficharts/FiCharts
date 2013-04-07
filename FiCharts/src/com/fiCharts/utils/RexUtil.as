@@ -10,6 +10,26 @@ package com.fiCharts.utils
 		}
 		
 		/**
+		 * 判断字符串是否为数字类型
+		 */		
+		public static function isNumber(s:String):Boolean
+		{
+			var len:uint = s.length;
+			var code:Number = 0;
+			for (var i:uint = 0; i < len; i ++)
+			{
+				code = s.charCodeAt(i);
+				if (code < 45 || code > 57)
+				{
+					break;
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
+		/**
 		 * 根据标签值从对象上获取满足与此标签对应的属性；
 		 */		
 		public static function getTagValueFromMataData(tagValue:Object, mataData:Object):Object
