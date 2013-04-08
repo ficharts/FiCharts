@@ -11,7 +11,7 @@ package com.fiCharts.utils
 		
 		/**
 		 */		
-		public static  function ifHasNumValue(value:String):Boolean
+		public static function ifHasNumValue(value:String):Boolean
 		{
 			var rex:RegExp = /^(.*)?(-?\d+\.?\d*)(.*)?$/g;
 			
