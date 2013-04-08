@@ -10,6 +10,18 @@ package com.fiCharts.utils
 		}
 		
 		/**
+		 */		
+		public static  function ifHasNumValue(value:String):Boolean
+		{
+			var rex:RegExp = /^(.*)?(-?\d+\.?\d*)(.*)?$/g;
+			
+			if(value.match(rex)[0] == null)
+				return false;	
+			else
+				return true;
+		}
+		
+		/**
 		 * 根据标签值从对象上获取满足与此标签对应的属性；
 		 */		
 		public static function getTagValueFromMataData(tagValue:Object, mataData:Object):Object

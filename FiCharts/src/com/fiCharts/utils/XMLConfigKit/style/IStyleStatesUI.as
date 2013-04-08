@@ -2,6 +2,8 @@ package com.fiCharts.utils.XMLConfigKit.style
 {
 	import flash.events.IEventDispatcher;
 
+	/**
+	 */	
 	public interface IStyleStatesUI extends IEventDispatcher
 	{
 		function get states():States;
