@@ -51,6 +51,15 @@ package com.fiCharts.utils.layout
 		}
 		
 		/**
+		 */		
+		public function getRectHeight():Number
+		{
+			this.rect.height = (this.curRow + 1) * this.cellH + (this.curRow + 2) * this.gap;
+			
+			return this.rect.height;
+		}
+		
+		/**
 		 * 一个一个布局
 		 */		
 		public function layout(item:IBoxItem):void
