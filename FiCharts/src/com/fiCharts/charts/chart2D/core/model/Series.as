@@ -14,7 +14,7 @@ package com.fiCharts.charts.chart2D.core.model
 	{
 		/**
 		 */		
-		public static const SERIES_CREATED:String = 'seriesCreated';
+		public static const CHART2D_SERIES_CREATED:String = 'chart2dSeriesCreated';
 		
 		/**
 		 */		
@@ -228,7 +228,7 @@ package com.fiCharts.charts.chart2D.core.model
 			}
 			
 			changed = true;
-			XMLVOLib.dispatchCreation(Series.SERIES_CREATED, items);
+			XMLVOLib.dispatchCreation(Series.CHART2D_SERIES_CREATED, items);
 		}
 		
 		/**

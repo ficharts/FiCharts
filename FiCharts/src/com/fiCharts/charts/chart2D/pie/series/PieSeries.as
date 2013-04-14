@@ -273,7 +273,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		
 		/**
 		 */		
-		public function initData(value:XML):void
+		public function initData(value:Vector.<Object>):void
 		{
 			var seriesDataItem:PieDataItem;
 			var dataSum:Number = 0;
@@ -281,15 +281,15 @@ package com.fiCharts.charts.chart2D.pie.series
 			var partRad:Number = 0;
 			dataItemVOs = new Vector.<PieDataItem>;
 			
-			for each (var item:XML in value.children())
+			for each (var item:Object in value)
 			{
 				seriesDataItem = new PieDataItem;
 				
-				seriesDataItem.metaData = new Object;
-				XMLVOMapper.pushXMLDataToVO(item, seriesDataItem.metaData);//将XML转化为对象
+				seriesDataItem.metaData = item;
+				//XMLVOMapper.pushXMLDataToVO(item, seriesDataItem.metaData);//将XML转化为对象
 				
-				seriesDataItem.label = seriesDataItem.metaData[this.labelField]; 
-				seriesDataItem.value = seriesDataItem.metaData[this.valueField]; 
+				seriesDataItem.label = item[this.labelField]; 
+				seriesDataItem.value = item[this.valueField]; 
 				
 				seriesDataItem.xLabel = dataFormatter.formatLabel(seriesDataItem.label);
 				seriesDataItem.yLabel = dataFormatter.formatValue(seriesDataItem.value);

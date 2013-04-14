@@ -8,6 +8,8 @@ package com.fiCharts.charts.chart2D.pie
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	
+	import org.osmf.elements.SerialElement;
 
 	/**
 	 * 饼图的模型
@@ -47,6 +49,20 @@ package com.fiCharts.charts.chart2D.pie
 		public function set pieSeries(value:Series):void
 		{
 			_series = value;
+		}
+		
+		/**
+		 */		
+		public function set series(value:Series):void
+		{
+			_series = value;
+		}
+		
+		/**
+		 */		
+		public function get series():Series
+		{
+			return this._series;
 		}
 
 		

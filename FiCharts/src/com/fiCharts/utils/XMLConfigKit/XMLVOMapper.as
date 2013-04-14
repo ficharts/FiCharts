@@ -23,7 +23,7 @@ package com.fiCharts.utils.XMLConfigKit
 			{
 				transformNodeAttributes(xml.attributes(), vo, xml.name().toString());
 				ransfromNodeChild(xml, vo, parentVo, xml.name().toString());
-			}
+			}      
 		}
 		
 		/**

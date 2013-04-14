@@ -54,6 +54,8 @@ package com.fiCharts.charts.chart2D.encry
 		public function set dataVOes(value:Vector.<Object>):void
 		{
 			_dataVOes = value;
+			
+			this.ifDataChanged = true;
 		}
 		
 		/**
@@ -106,7 +108,7 @@ package com.fiCharts.charts.chart2D.encry
 			if (isRendering)
 				return;
 			
-			if (configXML && this.dataXML && chartModel.pieSeries.length)
+			if (configXML && (this.dataXML || dataVOes) && chartModel.series.ifHasPie())
 			{
 				if(this.ifSizeChanged || this.ifDataChanged) 
 				{
@@ -341,10 +343,22 @@ package com.fiCharts.charts.chart2D.encry
 			
 			if (ifDataChanged)
 			{
+				if (dataVOes == null)
+				{
+					dataVOes = new Vector.<Object>;
+					var dataVO:Object;
+					for each (var item:XML in dataXML.children())
+					{
+						dataVO = new Object;
+						XMLVOMapper.pushXMLDataToVO(item, dataVO);
+						dataVOes.push(dataVO);
+					}
+				}
+				
 				for each (var seriesItem:PieSeries in series)  
 				{
 					seriesItem.configed();				
-					seriesItem.initData(this.dataXML);
+					seriesItem.initData(this.dataVOes);
 					
 					if (chartModel.legend.enable)
 						legends = legends.concat(seriesItem.legendData);
@@ -600,7 +614,7 @@ package com.fiCharts.charts.chart2D.encry
 			addChild(this.leftContainer);
 			tooltipManager = new ToolTipsManager(this);
 			
-			XMLVOLib.addCreationHandler(Series.SERIES_CREATED, createSeriesHandler);
+			XMLVOLib.addCreationHandler(Series.PIE_SERIES_CREATED, createSeriesHandler);
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_TITLE_STYLE, updateTitleStyleHandler);
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_LEGEND_STYLE, updateLegendStyleHandler);
 			

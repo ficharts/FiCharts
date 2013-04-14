@@ -1192,7 +1192,7 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.addCreationHandler(AxisModel.CREATE_RIGHT_AXIS, createVertiAxisRightHandler);
 			XMLVOLib.addCreationHandler(AxisModel.CREATE_TOP_AXIS, createHoriAxisTopHandler);
 			XMLVOLib.addCreationHandler(AxisModel.CREATE_BOTTOM_AXIS, createHoriAxisBottomHandler);
-			XMLVOLib.addCreationHandler(Series.SERIES_CREATED, createSeriesHandler);
+			XMLVOLib.addCreationHandler(Series.CHART2D_SERIES_CREATED, createSeriesHandler);
 			
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_TITLE_STYLE, updateTitleStyleHandler);
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_LEGEND_STYLE, updateLegendStyleHandler);
