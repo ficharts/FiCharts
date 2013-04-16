@@ -4,7 +4,7 @@
 		<about>关于</about>
 		<version>版本</version>
 	</menu>
-	<!------------------------------------------------------样式库----------------------------------------------------------------------------->
+	<!------------------------------------------------------样式库----------------------------------------------------->
 
 
 	<template>
@@ -245,6 +245,21 @@
 			</down>
 		</states>
 
+		<states id='ClassicBar' normal='HighLight_Series' hover='HighLight_Series' down='HighLight_Series'>
+			<normal effects='Series'>
+				<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='180'
+				color='${color}{adjustColor:1.5},${color}{adjustColor:1.1},${color}{adjustColor:0.9}'/>
+			</normal>
+			<hover effects='Series'>
+				<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='180'
+				color='${color}{adjustColor:1.5},${color}{adjustColor:1.3},${color}{adjustColor:0.9}'/>
+			</hover>
+			<down effects='Series'>
+				<fill radioes='0,255' alpha='0.8,0.8' angle='180'
+				color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
+			</down>
+		</states>
+
 		<column id='Simple' states='SimpleShape'/>
 		<column id='Classic' states='ClassicShape'/>
 
@@ -252,10 +267,10 @@
 		<stackedColumn id='Classic' states='ClassicShape'/>
 
 		<bar id='Simple' states='SimpleShape'/>
-		<bar id='Classic' states='ClassicShape'/>
+		<bar id='Classic' states='ClassicBar'/>
 
 		<stackedBar id='Simple' states='SimpleShape'/>
-		<stackedBar id='Classic' states='ClassicShape'/>
+		<stackedBar id='Classic' states='ClassicBar'/>
 
 
         <!----------------------------数据节点------------------------------------------------------------->

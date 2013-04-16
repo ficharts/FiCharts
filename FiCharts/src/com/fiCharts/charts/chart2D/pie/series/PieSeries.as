@@ -37,6 +37,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		public function render():void
 		{
 			var partUI:PartPieUI;
+			
 			if (this.ifDataChanged)
 			{
 				while (this.numChildren)
@@ -85,13 +86,16 @@ package com.fiCharts.charts.chart2D.pie.series
 					partUI.render();
 					
 					StyleManager.setEffects(this, this, this);
-					
-					this.ifDataChanged = this.ifSizeChanged = false;
 				}
 				
+				this.ifDataChanged = this.ifSizeChanged = styleChanged = false;
+				
 			}
-			
 		}
+		
+		/**
+		 */		
+		public var styleChanged:Boolean = false;
 		
 		/**
 		 */		

@@ -110,7 +110,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			if (configXML && (this.dataXML || dataVOes) && chartModel.series.ifHasPie())
 			{
-				if(this.ifSizeChanged || this.ifDataChanged) 
+				if(this.ifSizeChanged || this.ifDataChanged || ifStyleChanged) 
 				{
 					isRendering = true
 						
@@ -123,7 +123,7 @@ package com.fiCharts.charts.chart2D.encry
 					
 					openFlash();	
 					
-					isRendering = ifSizeChanged = ifDataChanged = false;
+					isRendering = ifSizeChanged = ifDataChanged = ifStyleChanged = false;
 				}
 			}
 			
@@ -340,8 +340,9 @@ package com.fiCharts.charts.chart2D.encry
 		private function updateSeriesAndLegendData():void
 		{
 			var legends:Vector.<LegendVO> = new Vector.<LegendVO>();
+			var seriesItem:PieSeries;
 			
-			if (ifDataChanged)
+			if (ifDataChanged || this.ifStyleChanged)
 			{
 				if (dataVOes == null)
 				{
@@ -355,7 +356,7 @@ package com.fiCharts.charts.chart2D.encry
 					}
 				}
 				
-				for each (var seriesItem:PieSeries in series)  
+				for each (seriesItem in series)  
 				{
 					seriesItem.configed();				
 					seriesItem.initData(this.dataVOes);
@@ -557,9 +558,17 @@ package com.fiCharts.charts.chart2D.encry
 			chartProxy.setCurStyleTemplate(newStyle);
 			
 			if (configXML)
+			{
 				chartProxy.setChartModel(XMLVOMapper.extendFrom(
 					chartProxy.currentStyleXML.copy(), configXML.copy()));
+			}
+			
+			ifStyleChanged = true;
 		}
+		
+		/**
+		 */		
+		private var ifStyleChanged:Boolean = false;
 		
 		/**
 		 */		

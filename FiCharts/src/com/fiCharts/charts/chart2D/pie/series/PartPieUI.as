@@ -64,8 +64,8 @@ package com.fiCharts.charts.chart2D.pie.series
 		public function init():void
 		{
 			valueLabelUI = new LabelUI;
-			valueLabelUI.style = this.labelStyle;
 			valueLabelUI.metaData = this.dataItem.metaData;
+			valueLabelUI.style = this.labelStyle;
 			valueLabelUI.render();
 			addChild(valueLabelUI);
 			
