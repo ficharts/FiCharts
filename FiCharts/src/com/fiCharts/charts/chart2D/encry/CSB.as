@@ -89,8 +89,6 @@ package com.fiCharts.charts.chart2D.encry
 		protected var dec:Dec;
 		
 		
-		
-		
 		/**
 		 * 注入图表的基础配置文件�此配置文件包含默认的样式模板, 菜单语言配置等；
 		 * 

@@ -253,6 +253,10 @@ package com.fiCharts.charts.chart2D.encry
 				{
 					nextItemRender = itemRenders[j];
 					
+					// 有可能序列中根本就没有数据
+					if (prevItemRender == null || nextItemRender == null)
+						continue;
+						
 					// 两个数据结点均不在渲染范围内，忽略
 					if (prevItemRender.visible == false && nextItemRender.visible == false)
 						continue;

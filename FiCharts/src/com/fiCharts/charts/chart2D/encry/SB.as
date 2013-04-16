@@ -347,7 +347,9 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		public function render():void
 		{
-			this.curRenderPattern.render();
+			// 只有当序列中有数据时，才渲染
+			if (this.dataItemVOs.length)
+				this.curRenderPattern.render();
 		}
 		
 		/**

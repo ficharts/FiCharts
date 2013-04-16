@@ -72,6 +72,13 @@ package com.fiCharts.utils.XMLConfigKit
 		
 		/**
 		 */		
+		public static function initCore():void
+		{
+			
+		}
+		
+		/**
+		 */		
 		public static function addCreationHandler(name:String, handler:Function):void
 		{
 			creationMaps.put(name, handler);
