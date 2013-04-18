@@ -190,7 +190,7 @@ package com.fiCharts.utils.graphic
 					if (effect is Noise)
 					{
 						if (target is IBitmapDrawable)
-							var bitMapData:BitmapData = BitmapUtil.drawBitData(target);
+							var bitMapData:BitmapData = BitmapUtil.getBitmapData(target);
 							
 						bitMapData.noise((effect as Noise).randomSpeed, (effect as Noise).low, (effect as Noise).high,
 							(effect as Noise).channelOptions, (effect as Noise).grayScale as Boolean);

@@ -182,7 +182,7 @@ package com.fiCharts.charts.toolTips
 				
 				StyleManager.setEffects(label, this.style.text as Text, tooltipItem.metaData);
 				
-				bm = BitmapUtil.drawBitmap(label);
+				bm = BitmapUtil.getBitmap(label);
 				bm.y = labelY - bm.height;
 				
 				labelsContainer.addChild(bm);

@@ -699,7 +699,7 @@ package com.fiCharts.charts.chart2D.core.axis
 				titleLabel.style = title;
 				titleLabel.render();
 				
-				titileBitmap = BitmapUtil.drawBitmap(titleLabel);
+				titileBitmap = BitmapUtil.getBitmap(titleLabel);
 				titileBitmap.rotation =  - 90;
 				
 				if(this.position == "left")

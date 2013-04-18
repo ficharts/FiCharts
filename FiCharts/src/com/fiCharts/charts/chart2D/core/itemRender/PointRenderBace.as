@@ -313,7 +313,7 @@ package com.fiCharts.charts.chart2D.core.itemRender
 			labelUI.metaData = this.itemVO.metaData;
 			labelUI.render();
 			
-			return BitmapUtil.drawBitmap(labelUI);
+			return BitmapUtil.getBitmap(labelUI);
 		}
 		
 		/**

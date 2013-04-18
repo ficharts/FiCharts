@@ -20,7 +20,7 @@ package com.fiCharts.utils.graphic
 		 */		
 		public static function saveImg(target:DisplayObject, name:String):void
 		{
-			var imageByteArray:ByteArray = PNGEncoder.encode(BitmapUtil.drawBitData(target));
+			var imageByteArray:ByteArray = PNGEncoder.encode(BitmapUtil.getBitmapData(target));
 			var file:FileReference = new FileReference();
 			file.save(imageByteArray, name);
 		}
@@ -30,7 +30,7 @@ package com.fiCharts.utils.graphic
 		 */		
 		public static function get64Data(target:DisplayObject):String
 		{
-			var imageByteArray:ByteArray = PNGEncoder.encode(BitmapUtil.drawBitData(target));
+			var imageByteArray:ByteArray = PNGEncoder.encode(BitmapUtil.getBitmapData(target));
 			
 			return Base64.encode(imageByteArray);
 		}
