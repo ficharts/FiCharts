@@ -515,7 +515,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function itemClickHandler(evt:FiChartsEvent):void
 		{
-			evt.stopPropagation();
+			//evt.stopPropagation();
 			ExternalUtil.call('FiCharts.itemClick', id, evt.dataItem.metaData);
 		}
 		
@@ -523,7 +523,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function itemOverHandler(evt:FiChartsEvent):void
 		{
-			evt.stopPropagation();
+			//evt.stopPropagation();
 			ExternalUtil.call('FiCharts.itemOver', id, evt.dataItem.metaData);
 		}
 		
@@ -531,7 +531,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function itemOutHandler(evt:FiChartsEvent):void
 		{
-			evt.stopPropagation();
+			//evt.stopPropagation();
 			ExternalUtil.call('FiCharts.itemOut', id, evt.dataItem.metaData);
 		}
 		
@@ -539,7 +539,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function renderedHandler(evt:FiChartsEvent):void
 		{
-			evt.stopPropagation();
+			//evt.stopPropagation();
 			ExternalUtil.call('FiCharts.rendered', id);
 		}
 		
@@ -556,7 +556,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function axisLabelClicked(evt:FiChartsEvent):void
 		{
-			evt.stopPropagation();
+			//evt.stopPropagation();
 			ExternalUtil.call('FiCharts.labelClicked', id, evt.label, evt.labelIndex);
 		}
 		
