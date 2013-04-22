@@ -26,7 +26,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		
 		/**
 		 */		
-		private var _pixelHinting:Object = false;
+		private var _pixelHinting:Object = true;
 
 		public function get pixelHinting():Object
 		{
