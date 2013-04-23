@@ -369,7 +369,7 @@ package com.fiCharts.utils.graphic
 					
 					matr.createGradientBox(style.width, style.height, fillStyle.angle, style.tx, style.ty);
 					graphic.beginGradientFill(fillStyle.type, colors, alphas, ratios, matr, 
-						SpreadMethod.PAD, InterpolationMethod.RGB, 0); 
+						SpreadMethod.PAD, InterpolationMethod.LINEAR_RGB, 0); 
 				}
 				else
 				{
