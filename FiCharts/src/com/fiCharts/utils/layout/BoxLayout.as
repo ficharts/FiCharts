@@ -35,6 +35,28 @@ package com.fiCharts.utils.layout
 		}
 		
 		/**
+		 * 设置总体宽高，用于水平单行的排列
+		 */		
+		public function setFullWidthAndHeight(w:Number, h:Number, gap:uint = 10):void
+		{
+			this.gap = gap;
+			this.cellW = this.cellH = h - 2 * gap;
+		}
+		
+		/**
+		 */		
+		public function horiLayout(item:IBoxItem):void
+		{
+			item.itemW = this.cellW;
+			item.itemH = this.cellH;
+			
+			item.x = rect.x + gap + curColumn * (cellW + gap);
+			item.y = rect.y + gap;
+			
+			curColumn += 1;
+		}
+		
+		/**
 		 */		
 		private var maxColumnNum:uint = 0;
 		

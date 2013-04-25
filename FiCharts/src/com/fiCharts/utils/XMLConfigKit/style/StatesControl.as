@@ -121,9 +121,8 @@ package com.fiCharts.utils.XMLConfigKit.style
 			if (states && states.normal)
 				ui.currState = states.getNormal;
 			
-			ui.render();
-			
 			ui.normalHandler();
+			ui.render();
 		}
 		
 		/**
@@ -133,9 +132,8 @@ package com.fiCharts.utils.XMLConfigKit.style
 			if (states && states.hover)
 				ui.currState = states.getHover;
 			
-			ui.render();
-			
 			ui.hoverHandler();
+			ui.render();
 		}
 		
 		/**
@@ -145,9 +143,8 @@ package com.fiCharts.utils.XMLConfigKit.style
 			if (states && states.down)
 				ui.currState = states.getDown;
 			
-			ui.render();
-			
 			ui.downHandler();
+			ui.render();
 		}
 		
 		/**
