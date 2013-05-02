@@ -37,7 +37,7 @@ package com.fiCharts.utils.layout
 		/**
 		 * 设置总体宽高，用于水平单行的排列
 		 */		
-		public function setFullWidthAndHeight(w:Number, h:Number, gap:uint = 7):void
+		public function setHoriHeightAndGap(h:Number, gap:uint = 7):void
 		{
 			this.gap = gap;
 			this.cellW = this.cellH = h - 2 * gap;
@@ -54,6 +54,13 @@ package com.fiCharts.utils.layout
 			item.y = rect.y + gap;
 			
 			curColumn += 1;
+		}
+		
+		/**
+		 */		
+		public function get horiWidth():Number
+		{
+			return this.gap * (curColumn + 1)  + curColumn * this.cellW;
 		}
 		
 		/**

@@ -132,11 +132,15 @@ package com.fiCharts.utils.XMLConfigKit.style
 			}
 		}
 		
+		/**
+		 */		
 		override public function get width():Number
 		{
 			return uiWidth;
 		}
 		
+		/**
+		 */		
 		override public function get height():Number
 		{
 			return uiHeight
@@ -162,7 +166,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		
 		/**
 		 */		
-		private var textField:TextField = new TextField();
+		protected var textField:TextField = new TextField();
 		
 		/**
 		 */		

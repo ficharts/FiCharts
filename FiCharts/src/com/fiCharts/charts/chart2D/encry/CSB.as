@@ -664,6 +664,19 @@ package com.fiCharts.charts.chart2D.encry
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
 				myContextMenu.customItems.push(item);
 				
+				item = new ContextMenuItem("新浪微博");
+				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(evt:Event):void{
+					flash.net.navigateToURL(new URLRequest('http://weibo.com/u/2431448684'), '_blank');
+				});
+				
+				myContextMenu.customItems.push(item);
+				
+				item = new ContextMenuItem("QQ群:184587429");
+				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(evt:Event):void{
+					flash.net.navigateToURL(new URLRequest('http://qun.qzone.qq.com/group#!/184587429/home'), '_blank');
+				});
+				myContextMenu.customItems.push(item);
+				
 				item = new ContextMenuItem(menu.version + VARSION);
 				item.enabled = false;
 				myContextMenu.customItems.push(item);
