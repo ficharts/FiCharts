@@ -15,10 +15,8 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.effect.Effects;
 	import com.fiCharts.utils.XMLConfigKit.effect.IEffectable;
-	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
@@ -325,10 +323,10 @@ package com.fiCharts.charts.chart2D.pie.series
 				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, ['zValue', 'zLabel']);
 				
 				// 默认数值标签的元数据内容
-				seriesDataItem.metaData.valueLabel = seriesDataItem.xLabel;
+				seriesDataItem.metaData.valueLabel = seriesDataItem.zLabel;
 				
 				// 默认tooltip
-				seriesDataItem.metaData.tooltip = seriesDataItem.yLabel + "," + seriesDataItem.zLabel;
+				seriesDataItem.metaData.tooltip = seriesDataItem.xLabel + "," + seriesDataItem.yLabel;
 			}
 			
 			ifDataChanged = true;

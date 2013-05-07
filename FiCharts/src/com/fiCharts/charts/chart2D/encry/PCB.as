@@ -260,7 +260,7 @@ package com.fiCharts.charts.chart2D.encry
 				pieRadius = ySize / 2;
 			
 			rightContainer.x = centerX + pieRadius + ((this.chartWidth - centerX - pieRadius) - rightContainer.width) / 2;
-			leftContainer.x = (centerX - centerX - leftContainer.width) / 2;
+			leftContainer.x = (centerX - pieRadius - leftContainer.width) / 2;
 			
 		}
 		
