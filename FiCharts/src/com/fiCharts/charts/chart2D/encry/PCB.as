@@ -242,13 +242,13 @@ package com.fiCharts.charts.chart2D.encry
 			topContainer.x = (this.chartWidth - title.boxWidth) * 0.5;
 			topContainer.y = (this.gutterTop - topContainer.height) * 0.5;
 			
-			rightContainer.x = (chartWidth - this.gutterRight) + (this.gutterRight - rightContainer.width) / 2 ;
+			//rightContainer.x = (chartWidth - this.gutterRight) + (this.gutterRight - rightContainer.width) / 2 ;
 			rightContainer.y = (this.chartHeight + this.gutterTop - rightContainer.height) * 0.5;
 			
 			bottomContainer.x = (this.chartWidth - bottomContainer.width) * 0.5;
 			bottomContainer.y = this.chartHeight - bottomContainer.height - chartModel.chartBG.paddingBottom;
 			
-			leftContainer.x = chartModel.chartBG.paddingLeft;
+			//leftContainer.x = chartModel.chartBG.paddingLeft;
 			leftContainer.y = (this.chartHeight - leftContainer.height + this.gutterTop) * 0.5;
 			
 			centerX = this.xSize / 2 + this.gutterLeft;//this.chartWidth / 2;
@@ -258,6 +258,9 @@ package com.fiCharts.charts.chart2D.encry
 				pieRadius = xSize / 2;
 			else
 				pieRadius = ySize / 2;
+			
+			rightContainer.x = centerX + pieRadius + ((this.chartWidth - centerX - pieRadius) - rightContainer.width) / 2;
+			leftContainer.x = (centerX - centerX - leftContainer.width) / 2;
 			
 		}
 		
