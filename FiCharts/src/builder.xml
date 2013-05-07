@@ -7,7 +7,7 @@
 	<!--property name="FLEX_HOME" value="I:/flex_sdk_4.6" />
 	<property name="WORK_SPACE" value="I:/FiCharts" /-->
 	
-	<property name="VER" value="1.3.0" />
+	<property name="VER" value="1.3.1" />
 	<property name="controlFlowObfuscation" value="20"/>
 	<property name="dynamicCodeWrapping" value="1"/>
 	
