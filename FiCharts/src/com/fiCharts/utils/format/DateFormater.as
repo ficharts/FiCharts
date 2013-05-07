@@ -68,7 +68,7 @@ package com.fiCharts.utils.format
 		
 		/**
 		 */		
-		private static function formatTime(value:Number):String
+		public static function formatTime(value:Number):String
 		{
 			if (value < 10)
 				return "0" + value.toString();
@@ -78,7 +78,7 @@ package com.fiCharts.utils.format
 		
 		/**
 		 */		
-		public static function stringToDate(valueString:String, inputFormat:String):Date
+		public static function stringToDate(valueString:String, inputFormat:String, date:Date = null):Date
 		{
 			var mask:String
 			var temp:String;
@@ -168,12 +168,32 @@ package com.fiCharts.utils.format
 				monthNum = 1;
 			
 			if (yearString.length == 2 && yearNum < 70)
-				yearNum+=2000;
+				yearNum += 2000;
 			
-			var newDate:Date = new Date(yearNum, monthNum - 1, dayNum, hourNum, minNum, secondNum);
 			
-			if (dayNum != newDate.getDate() || (monthNum - 1) != newDate.getMonth())
+			var newDate:Date;
+			
+			if (date)
+				newDate = date;
+			else
+				newDate = new Date();
+			
+			newDate.fullYear = yearNum;
+			
+			newDate.seconds = secondNum;
+			newDate.minutes = minNum;
+			newDate.hours = hourNum;
+			
+			newDate.month = 0;// 防止当前月没有31号时造成date归零，所以先给足空间
+			newDate.date = dayNum;
+			newDate.month = monthNum - 1;
+			
+			
+			if (dayNum != newDate.date || (monthNum - 1) != newDate.month)
+			{
+				trace(dayNum, newDate.date, monthNum, newDate.month);
 				return null;
+			}
 			
 			return newDate;
 		}

@@ -1,5 +1,6 @@
 package com.fiCharts.utils.XMLConfigKit.style
 {
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 
@@ -15,6 +16,9 @@ package com.fiCharts.utils.XMLConfigKit.style
 			ui.addEventListener(MouseEvent.ROLL_OUT, outHandler, false, 0, true);
 			ui.addEventListener(MouseEvent.MOUSE_DOWN, downHandler, false, 0, true);
 			ui.addEventListener(MouseEvent.MOUSE_UP, upHandler, false, 0, true);
+			
+			if (states)
+				this.states = states;
 		}
 
 		/**
@@ -24,14 +28,14 @@ package com.fiCharts.utils.XMLConfigKit.style
 		/**
 		 */		
 		private var _states:States;
-
+		
 		/**
 		 */
 		public function get states():States
 		{
 			return _states;
 		}
-
+		
 		/**
 		 * 当UI没有states和style时， 也生效
 		 */
@@ -40,18 +44,23 @@ package com.fiCharts.utils.XMLConfigKit.style
 			if(value)
 			{
 				_states = value;
-				ui.style = states.getNormal;
+				
+				ui.currState = states.getNormal;
 			}
 			else
 			{
 				ui.normalHandler();
 			}
 		}
-
+		
 		/**
 		 */		
 		private function overHandler(evt:MouseEvent):void
 		{
+			isOut = false;
+			
+			if (isDowning) return;
+			
 			if (enable)
 				this.toHover();
 		}
@@ -60,35 +69,59 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function outHandler(evt:MouseEvent):void
 		{
+			isOut = true;
+			
+			if (isDowning) return;
+			
 			if (enable)
 				this.toNormal();
 		}
 		
 		/**
 		 */		
+		private var isOut:Boolean = true;
+		
+		/**
+		 */		
 		private function downHandler(evt:MouseEvent):void
 		{
+			(ui as DisplayObject).stage.addEventListener(MouseEvent.MOUSE_UP, upHandler, false, 0, true);
+			
+			isDowning = true;
+			
 			if (enable)
 				this.toDown();	
 		}
 		
 		/**
 		 */		
+		private var isDowning:Boolean = false;
+		
+		/**
+		 */		
 		private function upHandler(evt:MouseEvent):void
 		{
+			(ui as DisplayObject).stage.removeEventListener(MouseEvent.MOUSE_UP, upHandler);
+			
+			isDowning = false;
+			
 			if (enable)
-				this.toHover();
+			{
+				if (isOut)
+					toNormal();
+				else
+					this.toHover();
+			}
 		}
 		
 		/**
 		 */		
 		public function toNormal():void
 		{
-			ui.normalHandler();
-			
 			if (states && states.normal)
-				ui.style = states.getNormal;
+				ui.currState = states.getNormal;
 			
+			ui.normalHandler();
 			ui.render();
 		}
 		
@@ -96,11 +129,10 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		public function toHover():void
 		{
-			ui.hoverHandler();
-			
 			if (states && states.hover)
-				ui.style = states.getHover;
+				ui.currState = states.getHover;
 			
+			ui.hoverHandler();
 			ui.render();
 		}
 		
@@ -108,11 +140,10 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		public function toDown():void
 		{
-			ui.downHandler();
-			
 			if (states && states.down)
-				ui.style = states.getDown;
+				ui.currState = states.getDown;
 			
+			ui.downHandler();
 			ui.render();
 		}
 		

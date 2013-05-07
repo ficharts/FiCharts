@@ -16,7 +16,7 @@ package com.fiCharts.charts.chart2D.area2D
 		 */		
 		override public function render():void
 		{
-			partUIRender.renderPartUI(canvas, this.style, this.metaData, this.renderIndex);
+			partUIRender.renderPartUI(canvas, this.currState, this.metaData, this.renderIndex);
 			
 			maskUI.graphics.clear();
 			maskUI.graphics.beginFill(0, 0.3);

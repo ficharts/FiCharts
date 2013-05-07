@@ -10,6 +10,38 @@ package com.fiCharts.utils
 		}
 		
 		/**
+		 */		
+		public static function ifHasNumValue(value:String):Boolean
+		{
+			var rex:RegExp = /^(.*)?(-?\d+\.?\d*)(.*)?$/g;
+			
+			if(value.match(rex)[0] == null)
+				return false;	
+			else
+				return true;
+		}
+		
+		/*
+		 * 判断字符串是否为数字类型
+		 */		
+		public static function isNumber(s:String):Boolean
+		{
+			var len:uint = s.length;
+			var code:Number = 0;
+			for (var i:uint = 0; i < len; i ++)
+			{
+				code = s.charCodeAt(i);
+				if (code < 45 || code > 57)
+				{
+					break;
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		
+		/**
 		 * 根据标签值从对象上获取满足与此标签对应的属性；
 		 */		
 		public static function getTagValueFromMataData(tagValue:Object, mataData:Object):Object
@@ -78,7 +110,7 @@ package com.fiCharts.utils
 			var valueNameArray:Array = value.match(rex);
 			
 			//属性处理函数的提取
-			rex = /(?:\{\w+\:\w+\.?\w*\})/g;
+			rex = /(?:\{\w+\:\w+\.?[^\}]*\})/g;
 			var functionArray:Array = value.match(rex);
 			
 			// 此属性名可以是层级关系
@@ -130,12 +162,17 @@ package com.fiCharts.utils
 		 */		
 		public static function replaceFieldBraceValue(sourceField:String, sourceObject:Object):String
 		{
+			if (sourceObject == null)
+			{
+				return null;
+			}
+				
 			sourceField = sourceField.replace(/\s*/g, '');// 剔除空格
 			
 			if (isBraceParagraph(sourceField))
 			{
 				var value:Object;
-				var rex:RegExp = /(?:\$\{\w+\.?\w*\})(\{\w+:\w+\.?\w*\})*/g;
+				var rex:RegExp = /(?:\$\{\w+\.?\w*\})(\{\w+:\w+\.?[^\}]*\})*/g;
 				var braceValues:Array = sourceField.match(rex);
 				
 				for each (var fieldValue:String in braceValues)

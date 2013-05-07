@@ -3,6 +3,8 @@ package com.fiCharts.charts.chart2D.bar.stack
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnPointRender;
 	
 	public class StackedBarPointRender extends StackedColumnPointRender
+	/**
+	 */	
 	{
 		public function StackedBarPointRender(visible:Boolean = false)
 		{
@@ -22,7 +24,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 			else
 				valueLabelUI.x = this.radius;
 			
-			// 当柱体太小不能容纳标签时隐藏标签；
+			// 当柱体太小不能容纳标签时隐藏标签�
 			if (Math.abs(columnDataItem.width) < valueLabelUI.width)
 				valueLabelUI.visible = false;
 			else
@@ -45,7 +47,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 				valueLabelUI.x = - stackWidth / 2 - valueLabelUI.width / 2;
 			}
 			
-			// 当柱体太小不能容纳标签时隐藏标签；
+			// 当柱体太小不能容纳标签时隐藏标签�
 			if (stackWidth < valueLabelUI.width)
 				valueLabelUI.visible = false;
 			else

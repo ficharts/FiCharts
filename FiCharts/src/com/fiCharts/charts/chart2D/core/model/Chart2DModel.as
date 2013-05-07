@@ -6,12 +6,15 @@ package com.fiCharts.charts.chart2D.core.model
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	
 	/**
 	 */
 	public class Chart2DModel
 	{
+		/**
+		 */		
+		public static const ZOOM_BAR:String = "dataBar";
+		
 		/**
 		 */		
 		public static const UPDATE_TITLE_STYLE:String = 'upateTitleStyle';
@@ -29,11 +32,11 @@ package com.fiCharts.charts.chart2D.core.model
 		public static const UPDATE_TOOLTIP_STYLE:String = 'updateToolTipStyle';
 		
 		/**
-		 * 每个序列都有自己单独的数据渲染相关样式, 这包含 tootip, valueLabel, dataRender;
+		 * 每个序列都有自己单独的数据渲染相关样� 这包�tootip, valueLabel, dataRender;
 		 * 
 		 * 以此名称为Key值存储在 XMLVOMapper中， 在序列初始化的时候应用这些统一的样式配置， 同时每个序列
 		 * 
-		 * 也可以自己独立配置这些样式， 默认集成统一配置样式，也可以完全重写样式；
+		 * 也可以自己独立配置这些样式， 默认集成统一配置样式，也可以完全重写样式�
 		 */		
 		public static const SERIES_DATA_STYLE:String = 'seriesDataStyle';
 		
@@ -90,23 +93,23 @@ package com.fiCharts.charts.chart2D.core.model
 		/**
 		 * 是否支持数据缩放，开启数据缩放后，在PC或者移动设备上
 		 * 
-		 * 会相应缩放操作而缩放数据，例如滚轮缩放或者触摸放大缩放 
+		 * 会相应缩放操作而缩放数据，例如滚轮缩放或者触摸放大缩�
 		 */		
-		private var _dataScale:DataScale
+		private var _zoom:Zoom = new Zoom();// 防止经典模式下滚轮缩放时因zoom为空导致的报错
 
 		/**
 		 */
-		public function get dataScale():DataScale
+		public function get zoom():Zoom
 		{
-			return _dataScale;
+			return _zoom;
 		}
 
 		/**
 		 * @private
 		 */
-		public function set dataScale(value:DataScale):void
+		public function set zoom(value:Zoom):void
 		{
-			_dataScale = value;
+			_zoom = value;
 		}
 		
 		
@@ -132,7 +135,7 @@ package com.fiCharts.charts.chart2D.core.model
 		}
 		
 		/**
-		 * 是否开启开场动画
+		 * 是否开启开场动�
 		 */		
 		private var _animation:Object = true;
 		
@@ -161,7 +164,7 @@ package com.fiCharts.charts.chart2D.core.model
 		
 		//-----------------------------------------
 		//
-		// 数据格式与样式控制
+		// 数据格式与样式控�
 		//
 		//-----------------------------------------
 
@@ -187,7 +190,7 @@ package com.fiCharts.charts.chart2D.core.model
 		}
 
 		/**
-		 * 数据格式定义；
+		 * 数据格式定义�
 		 */		
 		private var _dataFormatter:ChartDataFormatter = new ChartDataFormatter;
 
@@ -361,7 +364,7 @@ package com.fiCharts.charts.chart2D.core.model
 		
 		//-------------------------------------------------
 		//
-		// 标题样式与设置
+		// 标题样式与设�
 		//
 		//-------------------------------------------------
 
@@ -438,25 +441,7 @@ package com.fiCharts.charts.chart2D.core.model
 		{
 			_gridField = value;
 		}
-		
-		/**
-		 */		
-		private var _scrollBar:Style;
 
-		/**
-		 */
-		public function get scrollBar():Style
-		{
-			return _scrollBar;
-		}
-
-		/**
-		 * @private
-		 */
-		public function set scrollBar(value:Style):void
-		{
-			_scrollBar = value;
-		}
 		
 		/**
 		 */		

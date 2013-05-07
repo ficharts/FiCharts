@@ -22,6 +22,19 @@ package com.fiCharts.charts.chart2D.core.series
 		}
 		
 		/**
+		 * 此背景透明区域的绘制是为了便于判断鼠标是否位于图表区域， 从而
+		 * 
+		 * 决定数据缩放控制的开启和关闭
+		 */		
+		public function drawBG(w:Number, h:Number):void
+		{
+			this.graphics.clear();
+			this.graphics.beginFill(0, 0);
+			this.graphics.drawRect(0, - h, w, h);
+			this.graphics.endFill();
+		}
+		
+		/**
 		 */		
 		public function addValueLabel(bm:Bitmap):void
 		{

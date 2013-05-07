@@ -2,6 +2,9 @@
 
 	$(document).ready(function()
 	{
+		 var zoomChart = new Chart2D({id: 'zoomChart', width: '100%', height: '100%', style: 'Simple'});
+         zoomChart.setConfigFile('./zoomChart/stockConfig.xml');
+         zoomChart.setCSVData("./zoomChart/date.csv", ["label", "value"])
 
 		var configXML;
 		var htmlContent = '';
@@ -30,7 +33,11 @@
 					var url = $(this).attr('demoURL');
 					if (typeof $(this).attr('style') != 'undefined')
 						url += '&style=' + $(this).attr('style');
-						url +=  '&type=' + $(this).attr('type');
+					else
+						url += '&style=Classic'
+
+
+					url +=  '&type=' + $(this).attr('type');
 
 					chartShotContent += '<div class="chart-shot">';
 					chartShotContent += '<a class="chart-link" href=' + './gallery/demo.html?url=' + url  + '><img src=' + $(this).attr('imgURL') + '></a>'

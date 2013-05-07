@@ -1,10 +1,10 @@
 <config>
 	<menu>
-		<saveAsImage>存储为图片</saveAsImage>
+		<saveAsImage>存为图片</saveAsImage>
 		<about>关于</about>
 		<version>版本</version>
 	</menu>
-	<!------------------------------------------------------公共样式----------------------------------------------------------------------------->
+	<!------------------------------------------------------样式库----------------------------------------------------->
 
 
 	<template>
@@ -50,7 +50,7 @@
 
 
 
-		<!-------------------文字样式----------------------------------------------------------------------------------->
+		<!-------------------文本样式----------------------------------------------------------------------------------->
 
         <format id='FontFormat' font='微软雅黑' size='12' color='${color}'/>
 
@@ -114,7 +114,7 @@
 
 
 
-        <!----------------------趋势图样式--------------------------------->
+        <!----------------------趋势线-------------------------------->
 
 		<line id='Simple'>
 			<states>
@@ -157,7 +157,7 @@
 
 
 
-		<!----------------------------区域图样式--------------------------------------------------------------------->
+		<!----------------------------曲面-------------------------------------------------------------------->
 
 
 		<area id='Simple'>
@@ -216,7 +216,7 @@
 
 
 
-	   <!----------------------------柱状图样式--------------------------------------------------------------------->
+	   <!----------------------------柱体-------------------------------------------------------------------->
 
 	  	<states id='SimpleShape'>
 			<normal>
@@ -245,6 +245,21 @@
 			</down>
 		</states>
 
+		<states id='ClassicBar' normal='HighLight_Series' hover='HighLight_Series' down='HighLight_Series'>
+			<normal effects='Series'>
+				<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='180'
+				color='${color}{adjustColor:1.5},${color}{adjustColor:1.1},${color}{adjustColor:0.9}'/>
+			</normal>
+			<hover effects='Series'>
+				<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='180'
+				color='${color}{adjustColor:1.5},${color}{adjustColor:1.3},${color}{adjustColor:0.9}'/>
+			</hover>
+			<down effects='Series'>
+				<fill radioes='0,255' alpha='0.8,0.8' angle='180'
+				color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
+			</down>
+		</states>
+
 		<column id='Simple' states='SimpleShape'/>
 		<column id='Classic' states='ClassicShape'/>
 
@@ -252,10 +267,10 @@
 		<stackedColumn id='Classic' states='ClassicShape'/>
 
 		<bar id='Simple' states='SimpleShape'/>
-		<bar id='Classic' states='ClassicShape'/>
+		<bar id='Classic' states='ClassicBar'/>
 
 		<stackedBar id='Simple' states='SimpleShape'/>
-		<stackedBar id='Classic' states='ClassicShape'/>
+		<stackedBar id='Classic' states='ClassicBar'/>
 
 
         <!----------------------------数据节点------------------------------------------------------------->
@@ -501,7 +516,122 @@
 		</tooltip>
 
 
-        <!--------------------颜色板------------------------------->
+		<!--------------------滚动条----------------------------------------->
+
+		<zoomBar id='Simple' height='40' visible='true'>
+		    <barBG>
+		    	<border color="CCCCCC"/>
+		        <fill color='EEEEEE'/> 
+		    </barBG>
+		    <chart>
+		    	<border color='097DDA' thikness='1' alpha='1' pixelHinting='true'/>
+	            <fill color='097DDA' alpha='0.3'/>
+	            <xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
+		            <tickMark color='E4E2E2' thikness='1' alpha='1'/>
+		            <label margin='0'>
+		                <format color='555555' font='微软雅黑'/>
+		                <text value='${label}'>
+		                </text>
+		            </label>
+		         </xAxis>
+		         <yAxis/>
+		    </chart>
+		    <grayChart>
+		    	<border color='cccccc' thikness='1' alpha='1' pixelHinting='true'/>
+	            <fill color='cccccc' alpha='0.3'/>
+		    </grayChart>
+		    <window>
+		    	<states>
+		    		<normal>
+		    			<fill color='097DDA' alpha='0.1'/>
+		    		</normal>
+		    		<hover>
+		    			<fill color='097DDA' alpha='0.3'/>
+		    		</hover>
+		    		<down>
+		    			<fill color='097DDA' alpha='0.2'/>
+		    		</down>
+		    	</states>
+		    </window>
+		    <zoomPoint style='SimplePoint'/>
+	   </zoomBar>
+
+	   <zoomBar id='Classic' height='40' visible='true'>
+			<barBG>
+				<border color="CCCCCC"/>
+				<fill color='EEEEEE'/>
+			</barBG>
+			<chart>
+				<border color='097DDA' thikness='1' alpha='1' pixelHinting='true'/>
+				<fill color='097DDA' alpha='0.3'/>
+				<xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
+					<tickMark color='E4E2E2' thikness='1' alpha='1'/>
+					<label margin='0'>
+						<format color='555555' font='微软雅黑'/>
+						<text value='${label}'></text>
+					</label>
+				</xAxis>
+				<yAxis/>
+			</chart>
+			<grayChart>
+				<border color='cccccc' thikness='1' alpha='1' pixelHinting='true'/>
+				<fill color='cccccc' alpha='0.3'/>
+			</grayChart>
+			<window>
+				<states>
+					<normal>
+						<fill color='097DDA' alpha='0.1'/>
+					</normal>
+					<hover>
+						<fill color='097DDA' alpha='0.3'/>
+					</hover>
+					<down>
+						<fill color='097DDA' alpha='0.2'/>
+					</down>
+				</states>
+			</window>
+			<zoomPoint style='ClassicPoint'/>
+		</zoomBar>
+
+
+	   <zoomBar id='Black' height='40' visible='true'>
+			<barBG>
+				<border color="434348"/>
+				<fill color='25252A'/>
+			</barBG>
+			<chart>
+				<border color='097DDA' thikness='1' alpha='1' pixelHinting='true'/>
+				<fill color='097DDA' alpha='0.5'/>
+				<xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
+					<tickMark color='E4E2E2' thikness='1' alpha='1'/>
+					<label margin='0'>
+						<format color='ADADAD' font='微软雅黑'/>
+						<text value='${label}'></text>
+					</label>
+				</xAxis>
+				<yAxis/>
+			</chart>
+			<grayChart>
+				<border color='cccccc' thikness='1' alpha='0.3' pixelHinting='true'/>
+				<fill color='cccccc' alpha='0.3'/>
+			</grayChart>
+			<window>
+				<states>
+					<normal>
+						<fill color='097DDA' alpha='0.1'/>
+					</normal>
+					<hover>
+						<fill color='097DDA' alpha='0.3'/>
+					</hover>
+					<down>
+						<fill color='097DDA' alpha='0.2'/>
+					</down>
+				</states>
+			</window>
+			<zoomPoint style='ClassicPoint'/>
+	    </zoomBar>
+
+        <!--------------------颜色------------------------------>
         <colors id='Heavy'>
 			<color>#097DDA</color>
             <color>#017E01</color>
@@ -537,7 +667,7 @@
 	</template>
 
 
-	<!---------------------------------------------------------公共样式-------------------------------------------------------------------------->
+	<!---------------------------------------------------------样式通用模板-------------------------------------------------------------------------->
 
 
 
@@ -551,7 +681,7 @@
     <!------------------------------------------------------------------------------------------------------------------------------------------->
 	<styles>
 
-		<!-- 默认样式  ： 精简-->
+		<!-- 默认样式  精简-->
 		<Simple animation='true'>
 			<title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
 				<format size='14' color='3C4145' bold='true'/>
@@ -610,7 +740,6 @@
 				<text value='${valueLabel}'/>
 			</innerValueLabel>
 
-			<!---------------------------- 序列 ------------------------->
 
 			<line style='Simple' labelDisplay="none">
 				<dataRender style='SimplePoint'/>
@@ -643,12 +772,11 @@
 				<dataRender style='SimpleBubble'></dataRender>
 			</bubble>
 
+			<zoomBar style='Simple'/>
 
-			<!--- 模板 ---------------->
 			<template>
             </template>
 
-            <!----色系----------------->
 			<colors>RGB</colors>
 		</Simple>
 
@@ -666,7 +794,7 @@
 
 
 
-		<!----------------------------------- 默认样式  ： 经典色系-------------------------------------------------------------------------------->
+		<!----------------------------------- 经典样式-------------------------------------------------------------------------------->
 		<Classic animation='true'>
 			<title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
 				<format size='14' color='3C4145' bold='true'/>
@@ -723,7 +851,7 @@
 				</text>
 			</innerValueLabel>
 
-			<!-- 序列 -->
+		
 			<line style='Classic' labelDisplay="none">
 				<dataRender style='ClassicPoint'/>
 			</line>
@@ -755,6 +883,7 @@
 			<bubble maxRadius='60' minRadius='5' labelDisplay="inner">
 				<dataRender style='ClassicBubble'/>
 			</bubble>
+			<zoomBar style='Classic'/>
 
 			<template></template>
 			<colors>RGB</colors>
@@ -770,7 +899,7 @@
 
 
 
-		<!--------------------------------------- 黑色  ----------------------------------------------------------------------->
+		<!--------------------------------------- 黑色系 ----------------------------------------------------------------------->
 		<Black animation='true'>
 			<title hAlign='center' vMargin='0' vPadding='0' format='FontFormat'>
 				<format size='14' color='ADADAD' bold='true'/>
@@ -835,8 +964,6 @@
 				</text>
 			</innerValueLabel>
 
-
-			<!-- 序列 -->
 			<line style='Classic' labelDisplay="none">
 				<dataRender style='ClassicPoint'/>
 			</line>
@@ -868,6 +995,8 @@
 			<bubble maxRadius='60' minRadius='5' labelDisplay="inner">
 				<dataRender style='ClassicBubble'/>
 			</bubble>
+
+			<zoomBar style='Black'/>
 
 			<template></template>
 			<colors>RGB</colors>

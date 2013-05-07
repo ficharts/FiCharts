@@ -8,9 +8,10 @@ package com.fiCharts.utils.XMLConfigKit.style
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Fill;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFiElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.Img;
 	
 	/**
-	 * 通常用来设置矩形或者原型的样式，包含填充，边框及基本的尺寸信息；
+	 * 通常用来设置矩形或者原型的样式，包含填充，边框及基本的尺寸信息�
 	 */
 	public class Style implements IEffectable, IFiElement, IFreshElement
 	{
@@ -26,6 +27,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 			cover = new Cover;
 			fill = new Fill;
 			border = new BorderLine;
+			img = new Img;
 		}
 		
 		/**
@@ -122,7 +124,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		}
 
 		/**
-		 * 如果是圆形则代表半径， 举行则代表圆角半径；
+		 * 如果是圆形则代表半径�举行则代表圆角半径；
 		 */		
 		private var _radius:Number = 0;
 		
@@ -214,6 +216,32 @@ package com.fiCharts.utils.XMLConfigKit.style
 		public function get getBorder():BorderLine
 		{
 			return _line;
+		}
+		
+		/**
+		 */		
+		public function get getImg():Img
+		{
+			return _img;
+		}
+		
+		/**
+		 */		
+		private var _img:Img;
+		
+		/**
+		 */
+		public function get img():Object
+		{
+			return _img;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set img(value:Object):void
+		{
+			_img = XMLVOMapper.updateObject(value, _img, "img", this) as Img;;
 		}
 		
 	}

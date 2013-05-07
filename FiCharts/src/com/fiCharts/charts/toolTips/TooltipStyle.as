@@ -114,6 +114,7 @@ package com.fiCharts.charts.toolTips
 		{
 			_locked = XMLVOMapper.boolean(value);
 		}
+		
 
 	}
 }

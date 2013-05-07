@@ -1,10 +1,11 @@
 <config ySuffix="万" title='年度销售'>
+    <chartBG paddingTop='10'/>
     <axis>
         <x type='field' title='月份'></x>
         <y type='linear' title='销售额'></y>
     </axis>
     <series>
-        <column xField='label' yField='value'/>
+        <column xField='label' yField='value' singleColor='false'/>
     </series>
     <data>
         <set label='1月' value='279'/>
@@ -21,3 +22,4 @@
         <set label='12月' value='950'/>
     </data>
 </config>
+

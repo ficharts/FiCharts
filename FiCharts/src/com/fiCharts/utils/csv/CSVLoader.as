@@ -1,5 +1,8 @@
 package com.fiCharts.utils.csv
 {
+	import com.fiCharts.utils.ArrayUtil;
+	import com.fiCharts.utils.PerformaceTest;
+	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
@@ -9,7 +12,7 @@ package com.fiCharts.utils.csv
 	import flash.utils.ByteArray;
 
 	/**
-	 *  Load and parse csv data to XML.
+	 *  加载csv数据并将其转换为数组， 每行为一个对象，对象的字段映射到列数据
 	 * 
 	 *  @author wallen.
 	 */	
@@ -102,16 +105,22 @@ package com.fiCharts.utils.csv
 			var byt:ByteArray = evt.target.data;
 			var source : Array = byt.readMultiByte(byt.bytesAvailable, codeType).split( '\r\n' );
 			var rowsData : Array = new Array();
+			var rowIndex:uint = 0;
+			var rowSourceData:String;
 			
-			for each ( var rowData : String  in source )
+			// 防止有重复元素
+			ArrayUtil.removeDubItem(source);
+			
+			for each (rowSourceData  in source)
 			{
-				if ( rowData != '' )
+				if (rowSourceData != '')
 				{
-					rowsData.push( rowData.split( ',' ) );
+					rowsData[rowIndex] = rowSourceData.split( ',' );
+					rowIndex ++;
 				}
 			}
 			
-			var resultXML : XML = <{baseNodeName}>
+			/*var resultXML : XML = <{baseNodeName}>
 								  </{baseNodeName}>
 				
 			for each ( var rowArray : Array in rowsData )
@@ -120,15 +129,33 @@ package com.fiCharts.utils.csv
 									</{rowName}>
 					
 				var length : uint = rowArray.length;
-				for ( var i : uint = 0; i < length; i ++ )
+				for ( var i : uint = 0; i < length; i ++ )  
 				{
 					xmlNode.@[ _columnNames[ i ]  ]  = rowArray[ i ].toString();
 				}
 				
 				resultXML.appendChild( xmlNode );
+			}*/
+			
+			var resultVOes:Vector.<Object> = new Vector.<Object>;
+			var itemVO:Object;
+			var length:uint;
+			var i:uint;
+			var columnInRow:Array;
+			var colIndex:uint = 0;
+			for each (columnInRow in rowsData)
+			{
+				length = columnInRow.length;
+				
+				itemVO = {};
+				for (i = 0; i < length; i ++ )  
+					itemVO[_columnNames[i]]  = columnInRow[i].toString();
+				
+				resultVOes[colIndex] = itemVO;
+				colIndex = colIndex + 1;
 			}
 			
-			dispatchEvent( new CSVParseEvent( CSVParseEvent.PARSE_COMPLETE, resultXML ) );
+			dispatchEvent( new CSVParseEvent( CSVParseEvent.PARSE_COMPLETE, resultVOes ) );
 		}
 	}
 }

@@ -16,9 +16,6 @@ package com.fiCharts.charts.chart2D.core.series
 	 * 每个序列的节点不但要有ItemRender， 还要有专门渲染此节点的渲染器，
 	 * 
 	 * 如柱体， 散点，气泡等类型的节点；
-	 * 
-	 * @author wallen
-	 * 
 	 */	
 	public class SeriesItemUIBase extends Sprite implements IStyleStatesUI
 	{
@@ -43,7 +40,7 @@ package com.fiCharts.charts.chart2D.core.series
 		/**
 		 * 
 		 */
-		public function get style():Style
+		public function get currState():Style
 		{
 			return _style;
 		}
@@ -51,7 +48,7 @@ package com.fiCharts.charts.chart2D.core.series
 		/**
 		 * @private
 		 */
-		public function set style(value:Style):void
+		public function set currState(value:Style):void
 		{
 			_style = value;
 		}

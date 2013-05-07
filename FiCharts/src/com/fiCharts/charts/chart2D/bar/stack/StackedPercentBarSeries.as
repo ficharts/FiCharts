@@ -13,6 +13,8 @@ package com.fiCharts.charts.chart2D.bar.stack
 
 	/**
 	 * 
+	 * @author wallen
+	 * 
 	 */	
 	public class StackedPercentBarSeries extends StackedBarSeries
 	{
@@ -37,6 +39,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 			
 			itemRender.dataRender = this.dataRender;
 			itemRender.tooltip = this.tooltip;
+			
+			initTipString(item, itemRender.xTipLabel, 
+				itemRender.yTipLabel, this.getZTip(item),itemRender.isHorizontal);
 			
 			itemRender.initToolTips();
 			itemRenders.push(itemRender);
@@ -75,34 +80,35 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */			
-		override protected function initData():void
+		override protected function preInitData():void
 		{
 			var xValue:Number, yValue:Object, positiveValue:Number, fullValue:Number, percent:Number;
-			var length:uint = dataProvider.children().length();
+			var length:uint = dataProvider.length
 			var stack:StackedSeries;
 			var seriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs = new Vector.<SeriesDataPoint>
-			horizontalValues = new Vector.<Object>;
-			verticalValues = new Vector.<Object>;
-			fullDataItems = new Vector.<SeriesDataPoint>;
+			dataItemVOs.length = 0;
+			horizontalValues.length = 0;
+			verticalValues.length = 0;
+			fullDataItems.length = 0;
 			
 			// 将子序列的数据节点合并到一起；
 			for each (stack in stacks)
 			{
 				stack.dataProvider = this.dataProvider;
+				stack.initData();
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
 			
-			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量；
+			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
 			for (var i:uint = 0; i < length; i++)
 			{
 				fullValue = 0;
 				for each (stack in stacks) // 求和
 				{
 					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataPoint;
-					xValue = Number(seriesDataItem.xValue);
-					yValue = seriesDataItem.yValue;
+					xValue = Number(seriesDataItem.xVerifyValue);
+					yValue = seriesDataItem.yVerifyValue;
 					fullValue += xValue;
 				}
 				
@@ -132,10 +138,23 @@ package com.fiCharts.charts.chart2D.bar.stack
 		
 		/**
 		 */		
+		override protected function getZTip(itemVO:SeriesDataPoint):String
+		{
+			var percentTip:String;
+			percentTip = itemVO.zLabel;
+			
+			if (itemVO.zDisplayName)
+				percentTip = itemVO.zDisplayName + ':' + percentTip;
+			
+			return '<br>' + percentTip;
+		}
+		
+		/**
+		 */		
 		private var _percentLabel:String
 		
 		/**
-		 * 百分比数值之前的标签; 在  toolTip 中会用到;
+		 * 百分比数值之前的标签; � toolTip 中会用到;
 		 */
 		public function get zDisplayName():String
 		{

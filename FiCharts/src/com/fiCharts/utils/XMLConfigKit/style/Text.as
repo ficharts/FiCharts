@@ -2,7 +2,6 @@ package com.fiCharts.utils.XMLConfigKit.style
 {
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.effect.Effects;
-	import com.fiCharts.utils.XMLConfigKit.effect.IEffectElement;
 	import com.fiCharts.utils.XMLConfigKit.effect.IEffectable;
 
 	public class Text implements IEffectable

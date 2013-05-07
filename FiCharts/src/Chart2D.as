@@ -5,7 +5,7 @@ package
 	import com.fiCharts.charts.chart2D.encry.Dec;
 	
 	/**
-	 * 2D图表主程序，用此类可以构建柱状图，趋势图，堆积图，混合图表等。
+	 * 2D图表主程序，用此类可以构建柱状图，趋势图，堆积图，混合图表等;
 	 */	
 	public class Chart2D extends CSB
 	{
@@ -30,7 +30,7 @@ package
 		}
 		
 		/**
-		 *  这里的压缩文件是由  chart2DConfig.xml 压缩得来， 源文件可查看完整配置；
+		 *  这里的压缩文件是� chart2DConfig.xml 压缩得来�源文件可查看完整配置�
 		 */		
 		[Embed(source="chart2DConfig.z", mimeType="application/octet-stream")]
 		private var MetaByte:Class;

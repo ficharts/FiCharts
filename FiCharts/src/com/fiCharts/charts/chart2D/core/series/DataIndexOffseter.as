@@ -14,6 +14,50 @@ package com.fiCharts.charts.chart2D.core.series
 		}
 		
 		/**
+		 */		
+		public function get length():uint
+		{
+			return this.maxIndex - this.minIndex + 1;
+		}
+		
+		/**
+		 *
+		 * 根据数值范围得出其在总数据中的位置范围；
+		 *  
+		 * @param start
+		 * @param end
+		 * @param datafullRange
+		 * 
+		 */		
+		public function getDataIndexRange(start:Number, end:Number, datafullRange:Array):void
+		{
+			var len:uint = datafullRange.length;
+			
+			if (len <= 1)
+			{
+				trace(this + "数组无内容")
+				return;
+			}
+			
+			for (var i:uint = 0; i < len; i ++)
+			{
+				if (datafullRange[i] <= start)
+				{
+					minIndex = i;
+				}
+				else if (datafullRange[i] >= end)
+				{
+					maxIndex = i;
+					break;
+				}
+				else
+				{
+					continue;
+				}
+			}
+		}
+		
+		/**
 		 * 
 		 */		
 		public function offsetMin(index:uint, min:uint):uint
@@ -37,11 +81,25 @@ package com.fiCharts.charts.chart2D.core.series
 		
 		/**
 		 */		
-		public var maxIndex:uint = 0;
+		public function get maxIndex():uint
+		{
+			return _maxiIndex;
+		}
 		
 		/**
 		 */		
-		public var minIndex:uint = 0;
+		public function set maxIndex(value:uint):void
+		{
+			_maxiIndex = value;
+		}
+		
+		/**
+		 */		
+		private var _maxiIndex:uint = 0;
+		
+		/**
+		 */		
+		public var minIndex:int = 0;
 		
 		/**
 		 *  数据缩放时其实节点的位置偏移量，特别是趋势图和区域图需要临近几个节点才能渲染

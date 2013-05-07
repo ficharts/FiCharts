@@ -5,11 +5,10 @@ package com.fiCharts.charts.toolTips
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
 	/**
-	 * 提示窗口以中下部为坐标基点
+	 * 提示窗口以中下部为坐标基�
 	 */	
 	public class ToolTipsManager
 	{
@@ -78,10 +77,12 @@ package com.fiCharts.charts.toolTips
 			evt.stopPropagation();
 			
 			toolTipUI.visible = false;
-			ifLocked = evt.toolTipsHolder.locked;
+			locked = evt.toolTipsHolder.locked;
 			
 			toolTipUI.tooltipHolder = evt.toolTipsHolder;
 			toolTipUI.updateLabel();
+			
+			isHorizontal = evt.toolTipsHolder.isHorizontal;
 			
 			if (evt.toolTipsHolder.locked && evt.toolTipsHolder.location)// 固定位置
 			{
@@ -108,13 +109,18 @@ package com.fiCharts.charts.toolTips
 				adjustTipUILocation();
 				
 			}
-			else// 随鼠标位置而移动
+			else// 随鼠标位置而移�
 			{
 				ifMoving = true;
+				_moveTips();
 			}
 			
 			toolTipUI.show();
 		}
+		
+		/**
+		 */		
+		private var isHorizontal:Boolean = false;
 		
 		/**
 		 */		
@@ -130,6 +136,13 @@ package com.fiCharts.charts.toolTips
 		 */		
 		private function moveHandler(evt:Event):void
 		{
+			_moveTips();
+		}
+		
+		/**
+		 */		
+		private function _moveTips():void
+		{
 			if (ifMoving)
 			{
 				toolTipUI.x = container.mouseX + toolTipUI.width / 2 + toolTipUI.style.hMargin;
@@ -140,33 +153,29 @@ package com.fiCharts.charts.toolTips
 		}
 		
 		/**
-		 */		
-		private var ifLocked:Boolean = false;
-		
-		/**
 		 * 有时候提示UI会超出边界，需要调整一下； 
 		 */		
 		private function adjustTipUILocation():void
 		{
-			// 左
+			// �
 			if (toolTipUI.x - toolTipUI.width / 2 - container.x < edgeGutter)
 				toolTipUI.x =  - container.x + toolTipUI.width / 2 + edgeGutter;
 			
-			// 右
+			// �
 			if (toolTipUI.x + toolTipUI.width / 2 + container.x + edgeGutter > container.stage.stageWidth)
 			{
-				if (ifLocked)
+				if (locked)
 					toolTipUI.x = container.stage.stageWidth - toolTipUI.width / 2 - container.x - edgeGutter;
 				else
 					toolTipUI.x = container.stage.mouseX - toolTipUI.width / 2 - toolTipUI.style.hMargin;
 			}
 			
-			// 上
+			// �
 			if (toolTipUI.y - toolTipUI.height / 2 - container.y < edgeGutter)
 				toolTipUI.y = toolTipUI.height / 2 - container.y + edgeGutter;
 			
-			// 下
-			var time:uint = 0; // 防止死循环;
+			// �
+			var time:uint = 0; // 防止死循�
 			while (toolTipUI.y + toolTipUI.height / 2 + container.y >= container.stage.stageHeight - edgeGutter && time < 50)
 			{
 				toolTipUI.y = container.stage.height - toolTipUI.height / 2 - container.y - 1 - edgeGutter;

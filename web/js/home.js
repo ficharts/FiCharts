@@ -23,10 +23,10 @@
 			$(this).attr('src', './images/sina_up.jpg')
 		})
 
-		$('#buy img').mouseover(function(){
-			$(this).attr('src', './images/buy_over.jpg')
+		$('#down img').mouseover(function(){
+			$(this).attr('src', './images/down_over.jpg')
 		}).mouseout(function(){
-			$(this).attr('src', './images/buy_up.jpg')
+			$(this).attr('src', './images/down_up.jpg')
 		})
 		
 	})

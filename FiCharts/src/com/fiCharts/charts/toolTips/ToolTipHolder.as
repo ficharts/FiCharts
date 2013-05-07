@@ -1,9 +1,9 @@
 package com.fiCharts.charts.toolTips
 {
-	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
-	
 	import flash.geom.Point;
 
+	/**
+	 */	
 	public class ToolTipHolder extends TooltipDataItem
 	{
 		public function ToolTipHolder()
@@ -15,6 +15,13 @@ package com.fiCharts.charts.toolTips
 		public function pushTip(tip:Object):void
 		{
 			tooltips.push(tip);
+		}
+		
+		/**
+		 */		
+		public function clear():void
+		{
+			tooltips.length = 0;
 		}
 		
 		/**
@@ -120,6 +127,14 @@ package com.fiCharts.charts.toolTips
 		public function set isHorizontal(value:Boolean):void
 		{
 			_isHorizontal = value;
+		}
+		
+		/**
+		 */		
+		override  public function distory():void
+		{
+			_tooltips.length = 0;
+			_tooltips = null;
 		}
 
 	}

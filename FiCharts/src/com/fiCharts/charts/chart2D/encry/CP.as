@@ -19,6 +19,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.model.Series;
 	import com.fiCharts.charts.chart2D.core.model.XAxis;
 	import com.fiCharts.charts.chart2D.core.model.YAxis;
+	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomWindowStyle;
 	import com.fiCharts.charts.chart2D.line.LineSeries;
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
 	import com.fiCharts.charts.common.ChartColors;
@@ -40,7 +41,17 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			XMLVOLib.registerCustomClasses(<colors path='com.fiCharts.utils.XMLConfigKit.style.Colors'/>);
 			
-			XMLVOLib.registerCustomClasses(<dataScale path='com.fiCharts.charts.chart2D.core.model.DataScale'/>);
+			//-------------------数据缩放--------------------------------
+			ZoomWindowStyle;
+			XMLVOLib.registerCustomClasses(<window path='com.fiCharts.charts.chart2D.core.zoomBar.ZoomWindowStyle'/>);
+			
+			XMLVOLib.setASStyleKey("barBG");
+			XMLVOLib.setASStyleKey("chart");
+			XMLVOLib.setASStyleKey("grayChart");
+			
+			XMLVOLib.registerCustomClasses(<zoom path='com.fiCharts.charts.chart2D.core.model.Zoom'/>);
+			//------------------数据缩放---------------------------------
+			
 			
 			ChartBGStyle;
 			XMLVOLib.registerCustomClasses(<chartBG path='com.fiCharts.charts.chart2D.core.model.ChartBGStyle'/>);
@@ -117,6 +128,7 @@ package com.fiCharts.charts.chart2D.encry
 			
 			DataRender;
 			XMLVOLib.registerCustomClasses(<dataRender path='com.fiCharts.charts.chart2D.core.model.DataRender'/>);
+			XMLVOLib.registerCustomClasses(<zoomPoint path='com.fiCharts.charts.chart2D.core.model.DataRender'/>);
 			
 			XMLVOLib.setASLabelStyleKey('valueLabel');
 			XMLVOLib.setASLabelStyleKey('innerValueLabel');
@@ -141,6 +153,8 @@ package com.fiCharts.charts.chart2D.encry
 			
 			XMLVOLib.registerObjectToProperty('tooltip', 'group', 'text');
 			XMLVOLib.registerObjectToProperty('group', 'text', 'value');
+			
+			XMLVOLib.registerObjectToProperty('config', 'tooltip', 'label');
 			
 			XMLVOLib.registerObjectToProperty('x', 'label', 'text');
 			XMLVOLib.registerObjectToProperty('y', 'label', 'text');
@@ -167,7 +181,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		//----------------------------------------
 		//
-		// 图表的配置
+		// 图表的配�
 		//
 		//----------------------------------------
 		/**
@@ -203,7 +217,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 * 创建新模型，一次性 应用混合好的样式；
+		 * 创建新模型，一次�应用混合好的样式�
 		 */		
 		public function setChartModel(value:XML):void
 		{
@@ -227,6 +241,7 @@ package com.fiCharts.charts.chart2D.encry
 			seriesDataStyle.appendChild(value.child('tooltip'));
 			seriesDataStyle.appendChild(value.child('valueLabel'));
 			seriesDataStyle.appendChild(value.child('innerValueLabel'));
+			
 			XMLVOLib.registerPartXML(Chart2DModel.SERIES_DATA_STYLE, seriesDataStyle, Model.SYSTEM);
 			
 			XMLVOLib.registerPartXML(Chart2DModel.X_AXIS_STYLE, value.child('xAxis'), Model.SYSTEM);
@@ -244,7 +259,10 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.registerPartXML(Chart2DModel.BAR_SERIES, value.child('bar'), Model.SYSTEM);
 			XMLVOLib.registerPartXML(Chart2DModel.STACKED_BAR_SERIES, value.child('stackedBar'), Model.SYSTEM);
 			
-			//添加局部样式模板到局部库中
+			// 缩放条样式定
+			XMLVOLib.registerPartXML(Chart2DModel.ZOOM_BAR, value.child('zoomBar'), Model.SYSTEM);
+			
+			//添加局部样式模板到局部库
 			for each (var item:XML in value.child('template').children())
 				XMLVOLib.registerPartXML(item.@id, item, item.name().toString());
 			
@@ -271,7 +289,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 
 		/**
-		 * 根据样式名称设置当前样式模板； 
+		 * 根据样式名称设置当前样式模板�
 		 */		
 		public function setCurStyleTemplate(styleName:String = 'Simple'):void
 		{
@@ -300,7 +318,7 @@ package com.fiCharts.charts.chart2D.encry
 		private var _currentStyleXML:XML;
 		
 		/**
-		 * 当前的样式名称， 此名称与样式模板一一对应；
+		 * 当前的样式名称， 此名称与样式模板一一对应�
 		 */		
 		public var currentStyleName:String = 'Simple';
 		

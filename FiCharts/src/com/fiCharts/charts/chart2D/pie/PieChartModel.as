@@ -48,6 +48,20 @@ package com.fiCharts.charts.chart2D.pie
 		{
 			_series = value;
 		}
+		
+		/**
+		 */		
+		public function set series(value:Series):void
+		{
+			_series = value;
+		}
+		
+		/**
+		 */		
+		public function get series():Series
+		{
+			return this._series;
+		}
 
 		
 		//-----------------------------------------

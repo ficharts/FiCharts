@@ -15,10 +15,8 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.effect.Effects;
 	import com.fiCharts.utils.XMLConfigKit.effect.IEffectable;
-	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
@@ -37,6 +35,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		public function render():void
 		{
 			var partUI:PartPieUI;
+			
 			if (this.ifDataChanged)
 			{
 				while (this.numChildren)
@@ -85,13 +84,16 @@ package com.fiCharts.charts.chart2D.pie.series
 					partUI.render();
 					
 					StyleManager.setEffects(this, this, this);
-					
-					this.ifDataChanged = this.ifSizeChanged = false;
 				}
 				
+				this.ifDataChanged = this.ifSizeChanged = styleChanged = false;
+				
 			}
-			
 		}
+		
+		/**
+		 */		
+		public var styleChanged:Boolean = false;
 		
 		/**
 		 */		
@@ -273,7 +275,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		
 		/**
 		 */		
-		public function initData(value:XML):void
+		public function initData(value:Vector.<Object>):void
 		{
 			var seriesDataItem:PieDataItem;
 			var dataSum:Number = 0;
@@ -281,15 +283,15 @@ package com.fiCharts.charts.chart2D.pie.series
 			var partRad:Number = 0;
 			dataItemVOs = new Vector.<PieDataItem>;
 			
-			for each (var item:XML in value.children())
+			for each (var item:Object in value)
 			{
 				seriesDataItem = new PieDataItem;
 				
-				seriesDataItem.metaData = new Object;
-				XMLVOMapper.pushXMLDataToVO(item, seriesDataItem.metaData);//将XML转化为对象
+				seriesDataItem.metaData = item;
+				//XMLVOMapper.pushXMLDataToVO(item, seriesDataItem.metaData);//将XML转化为对象
 				
-				seriesDataItem.label = seriesDataItem.metaData[this.labelField]; 
-				seriesDataItem.value = seriesDataItem.metaData[this.valueField]; 
+				seriesDataItem.label = item[this.labelField]; 
+				seriesDataItem.value = item[this.valueField]; 
 				
 				seriesDataItem.xLabel = dataFormatter.formatLabel(seriesDataItem.label);
 				seriesDataItem.yLabel = dataFormatter.formatValue(seriesDataItem.value);
@@ -321,10 +323,10 @@ package com.fiCharts.charts.chart2D.pie.series
 				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, ['zValue', 'zLabel']);
 				
 				// 默认数值标签的元数据内容
-				seriesDataItem.metaData.valueLabel = seriesDataItem.xLabel;
+				seriesDataItem.metaData.valueLabel = seriesDataItem.zLabel;
 				
 				// 默认tooltip
-				seriesDataItem.metaData.tooltip = seriesDataItem.yLabel + "," + seriesDataItem.zLabel;
+				seriesDataItem.metaData.tooltip = seriesDataItem.xLabel + "," + seriesDataItem.yLabel;
 			}
 			
 			ifDataChanged = true;

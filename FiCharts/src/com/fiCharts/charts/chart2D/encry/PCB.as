@@ -24,7 +24,7 @@ package com.fiCharts.charts.chart2D.encry
 	import flash.utils.Timer;
 	
 	/**
-	 * 饼图的基类
+	 * 饼图的基�
 	 * 
 	 * PieChartBase
 	 */	
@@ -35,6 +35,27 @@ package com.fiCharts.charts.chart2D.encry
 			super();
 			
 			init();
+		}
+		
+		/**
+		 */		
+		private var _dataVOes:Vector.<Object>;
+		
+		/**
+		 */
+		public function get dataVOes():Vector.<Object>
+		{
+			return _dataVOes;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set dataVOes(value:Vector.<Object>):void
+		{
+			_dataVOes = value;
+			
+			this.ifDataChanged = true;
 		}
 		
 		/**
@@ -87,9 +108,9 @@ package com.fiCharts.charts.chart2D.encry
 			if (isRendering)
 				return;
 			
-			if (configXML && this.dataXML && chartModel.pieSeries.length)
+			if (configXML && (this.dataXML || dataVOes) && chartModel.series.ifHasPie())
 			{
-				if(this.ifSizeChanged || this.ifDataChanged) 
+				if(this.ifSizeChanged || this.ifDataChanged || ifStyleChanged) 
 				{
 					isRendering = true
 						
@@ -98,11 +119,11 @@ package com.fiCharts.charts.chart2D.encry
 					renderTitle();// 渲染标题
 					renderLegend(); // 渲染图例并调整好位置
 					renderBG();
-					layout();// 调整布局， 计算出饼图位置及半径；
+					layout();// 调整布局�计算出饼图位置及半径�
 					
 					openFlash();	
 					
-					isRendering = ifSizeChanged = ifDataChanged = false;
+					isRendering = ifSizeChanged = ifDataChanged = ifStyleChanged = false;
 				}
 			}
 			
@@ -130,7 +151,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			var seriesItem:PieSeries;
 			
-			// 为播放动画做准备；
+			// 为播放动画做准备�
 			if (chartModel.animation && ifFirstRender)
 			{
 				flashSeriesPercent = 0;
@@ -221,13 +242,13 @@ package com.fiCharts.charts.chart2D.encry
 			topContainer.x = (this.chartWidth - title.boxWidth) * 0.5;
 			topContainer.y = (this.gutterTop - topContainer.height) * 0.5;
 			
-			rightContainer.x = (chartWidth - this.gutterRight) + (this.gutterRight - rightContainer.width) / 2 ;
+			//rightContainer.x = (chartWidth - this.gutterRight) + (this.gutterRight - rightContainer.width) / 2 ;
 			rightContainer.y = (this.chartHeight + this.gutterTop - rightContainer.height) * 0.5;
 			
 			bottomContainer.x = (this.chartWidth - bottomContainer.width) * 0.5;
 			bottomContainer.y = this.chartHeight - bottomContainer.height - chartModel.chartBG.paddingBottom;
 			
-			leftContainer.x = chartModel.chartBG.paddingLeft;
+			//leftContainer.x = chartModel.chartBG.paddingLeft;
 			leftContainer.y = (this.chartHeight - leftContainer.height + this.gutterTop) * 0.5;
 			
 			centerX = this.xSize / 2 + this.gutterLeft;//this.chartWidth / 2;
@@ -237,6 +258,9 @@ package com.fiCharts.charts.chart2D.encry
 				pieRadius = xSize / 2;
 			else
 				pieRadius = ySize / 2;
+			
+			rightContainer.x = centerX + pieRadius + ((this.chartWidth - centerX - pieRadius) - rightContainer.width) / 2;
+			leftContainer.x = (centerX - pieRadius - leftContainer.width) / 2;
 			
 		}
 		
@@ -319,13 +343,26 @@ package com.fiCharts.charts.chart2D.encry
 		private function updateSeriesAndLegendData():void
 		{
 			var legends:Vector.<LegendVO> = new Vector.<LegendVO>();
+			var seriesItem:PieSeries;
 			
-			if (ifDataChanged)
+			if (ifDataChanged || this.ifStyleChanged)
 			{
-				for each (var seriesItem:PieSeries in series)  
+				if (dataVOes == null)
+				{
+					dataVOes = new Vector.<Object>;
+					var dataVO:Object;
+					for each (var item:XML in dataXML.children())
+					{
+						dataVO = new Object;
+						XMLVOMapper.pushXMLDataToVO(item, dataVO);
+						dataVOes.push(dataVO);
+					}
+				}
+				
+				for each (seriesItem in series)  
 				{
 					seriesItem.configed();				
-					seriesItem.initData(this.dataXML);
+					seriesItem.initData(this.dataVOes);
 					
 					if (chartModel.legend.enable)
 						legends = legends.concat(seriesItem.legendData);
@@ -349,7 +386,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		//-----------------------------------------------
 		//
-		// 配置与数据
+		// 配置与数�
 		//
 		//-----------------------------------------------
 		
@@ -358,6 +395,8 @@ package com.fiCharts.charts.chart2D.encry
 		public function set configXML(value:XML):void
 		{
 			chartProxy.configXML = value;
+			
+			this.title.fresh();
 			
 			chartProxy.setChartModel(XMLVOMapper.extendFrom(
 				chartProxy.currentStyleXML.copy(), configXML.copy()));
@@ -522,9 +561,17 @@ package com.fiCharts.charts.chart2D.encry
 			chartProxy.setCurStyleTemplate(newStyle);
 			
 			if (configXML)
+			{
 				chartProxy.setChartModel(XMLVOMapper.extendFrom(
 					chartProxy.currentStyleXML.copy(), configXML.copy()));
+			}
+			
+			ifStyleChanged = true;
 		}
+		
+		/**
+		 */		
+		private var ifStyleChanged:Boolean = false;
 		
 		/**
 		 */		
@@ -548,7 +595,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 * 背景区域点击后全屏模式控制
+		 * 背景区域点击后全屏模式控�
 		 */		
 		private function fullScreenHandler(evt:Event):void
 		{
@@ -562,7 +609,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
-		 * 初始化
+		 * 初始�
 		 */		
 		private function init():void
 		{
@@ -579,7 +626,7 @@ package com.fiCharts.charts.chart2D.encry
 			addChild(this.leftContainer);
 			tooltipManager = new ToolTipsManager(this);
 			
-			XMLVOLib.addCreationHandler(Series.SERIES_CREATED, createSeriesHandler);
+			XMLVOLib.addCreationHandler(Series.PIE_SERIES_CREATED, createSeriesHandler);
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_TITLE_STYLE, updateTitleStyleHandler);
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_LEGEND_STYLE, updateLegendStyleHandler);
 			

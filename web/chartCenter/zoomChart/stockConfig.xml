@@ -1,0 +1,16 @@
+<config precision="2" title="数据缩放" subTitle='鼠标滚动缩放，拖拽查看，背景双击全屏'>
+	<tooltip>
+		<label>
+			<![CDATA[日期:${xValue}{formatDate:YYYYMMDD,YYYY-MM-DD}<br>数值:${yLabel}]]>
+		</label>
+	</tooltip>
+	<axis>
+		<y type="linear" title='数值' baseAtZero='false'/>
+		<x type='date' title='月份' input='YYYYMMDD'/>
+	</axis>
+	<series>
+		<line xField='label' yField='value'/>
+	</series>
+	<zoom enable='true' start='19950601' end='19990526'/>
+	
+</config>

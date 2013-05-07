@@ -28,14 +28,14 @@ package com.fiCharts.charts.chart2D.core
 		}
 		
 		/**
-		 * 背景，标题，坐标轴等样式, 默认取白色样式；
+		 * 背景，标题，坐标轴等样式, 默认取经典色系样式；
 		 */		
 		public static function getTheme(styleName:String):XML
 		{
 			if (themeMap.containsKey(styleName))
 				return themeMap.getValue(styleName) as XML;
 			else
-				return themeMap.getValue(CLASSIC) as XML;
+				return themeMap.getValue(SIMPLE) as XML;
 		}
 		
 		/**

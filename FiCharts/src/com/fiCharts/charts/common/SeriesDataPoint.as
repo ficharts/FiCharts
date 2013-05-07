@@ -54,6 +54,41 @@ package com.fiCharts.charts.common
 		{
 			_xValue = v;
 		}
+		
+		/**
+		 */		
+		private var _xVerifyValue:Object;
+
+		public function get xVerifyValue():Object
+		{
+			return _xVerifyValue;
+		}
+
+		public function set xVerifyValue(value:Object):void
+		{
+			_xVerifyValue = value;
+		}
+		
+		/**
+		 */		
+		private var _yVerifyValue:Object
+
+		/**
+		 * 
+		 */
+		public function get yVerifyValue():Object
+		{
+			return _yVerifyValue;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set yVerifyValue(value:Object):void
+		{
+			_yVerifyValue = value;
+		}
+
 
 		/**
 		 */

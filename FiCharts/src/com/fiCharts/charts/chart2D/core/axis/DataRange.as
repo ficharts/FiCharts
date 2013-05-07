@@ -8,7 +8,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 */		
-		public var max:Number = 0;
+		public var max:Number = 1;
 		
 		/**
 		 */		

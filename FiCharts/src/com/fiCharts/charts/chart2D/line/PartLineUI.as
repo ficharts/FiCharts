@@ -36,11 +36,11 @@ package com.fiCharts.charts.chart2D.line
 		
 		/**
 		 */		
-		protected var _partUIRender:LineSeries;
+		protected var _partUIRender:IClassicPartRender;
 
 		/**
 		 */
-		public function get partUIRender():LineSeries
+		public function get partUIRender():IClassicPartRender
 		{
 			return _partUIRender;
 		}
@@ -48,7 +48,7 @@ package com.fiCharts.charts.chart2D.line
 		/**
 		 * @private
 		 */
-		public function set partUIRender(value:LineSeries):void
+		public function set partUIRender(value:IClassicPartRender):void
 		{
 			_partUIRender = value;
 		}
@@ -62,7 +62,7 @@ package com.fiCharts.charts.chart2D.line
 			maskUI.graphics.drawRect(locX, this.locY, this.locWidth, this.locHeight);
 			maskUI.graphics.endFill();
 			
-			partUIRender.renderPartUI(canvas, this.style, this.metaData, this.renderIndex);
+			partUIRender.renderPartUI(canvas, this.currState, this.metaData, this.renderIndex);
 		}
 		
 		/**

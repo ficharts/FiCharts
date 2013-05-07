@@ -9,7 +9,7 @@ package com.fiCharts.charts.chart2D.pie.series
 	{
 		/**
 		 */		
-		public static const SERIES_CREATED:String = 'seriesCreated';
+		public static const PIE_SERIES_CREATED:String = 'pieSeriesCreated';
 		
 		/**
 		 */		
@@ -21,19 +21,38 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */
 		public function get pie():PieSeries
 		{
-			return null;
+			return _pie;
 		}
 
+		/**
+		 */		
 		public function set pie(value:PieSeries):void
 		{
-			_items.push(value);
+			_pie = value;
+			
+			_items[0] = value;
 		}
+		
+		/**
+		 */		
+		public function ifHasPie():Boolean
+		{
+			if (_pie)
+				return true;
+			
+			return false;
+		}
+		
+		/**
+		 */		
+		private var _pie:PieSeries;
 
 		/**
 		 */		
 		public function beforeUpdateProperties(xml:*=null):void
 		{
 			_items = new Vector.<PieSeries>;
+			_items.length = 1;
 		}
 		
 		/**
@@ -59,7 +78,7 @@ package com.fiCharts.charts.chart2D.pie.series
 		 */		
 		public function created():void
 		{
-			XMLVOLib.dispatchCreation(Series.SERIES_CREATED, items);
+			XMLVOLib.dispatchCreation(Series.PIE_SERIES_CREATED, items);
 		}
 	}
 }

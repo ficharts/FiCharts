@@ -220,6 +220,46 @@
 					</table>
 				</div>
 
+				<p class='subTitle'>FiCharts.event.LABEL_CLICKED</p>
+				<p>当点击坐标轴上的标签时触发此事件，事件对象中包含标签值和序号。</p>
+				<div class="tableWrapper">
+					<table width="100%">
+						<tbody>
+							<tr class="tableHeader">
+								<td width='15%'>属性</td>
+								<td width='15%'>值</td>
+								<td>说明</td>
+							</tr>
+							<tr>
+								<td><span class='code'>type</span></td>
+								<td><span class='code'>labelClicked</span></td>
+								<td>事件类型</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>target</span></td>
+								<td>图表自身</td>
+								<td>触发此事件的对象</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>label</span></td>
+								<td>被点击的label值</td>
+								<td>坐标轴上的摸个label值，此刻它被点击</td>
+							</tr>
+
+							<tr>
+								<td><span class='code'>index</span></td>
+								<td>被点击的label的序号</td>
+								<td>x轴上是从左向右，y轴上是从下向上计算</td>
+							</tr>
+
+
+							
+						</tbody>
+					</table>
+				</div>
+
 				<p class='subTitle'>与事件相关的函数</p>
 				<div class="tableWrapper">
 					<table width="100%">
@@ -281,7 +321,12 @@
 								<td>function</td>
 								<td>添加<span class='code'>ITEM_OUT</span>事件, 鼠标滑出节点时触发</td>
 							</tr>
-							
+
+							<tr>
+								<td><span class='code'>onLabelClicked</span></td>
+								<td>function</td>
+								<td>添加<span class='code'>LABEL_CLICKED</span>事件, 点击坐标轴标签时触发</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>

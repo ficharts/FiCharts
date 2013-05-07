@@ -2,6 +2,8 @@ package com.fiCharts.utils.XMLConfigKit.style
 {
 	import flash.events.IEventDispatcher;
 
+	/**
+	 */	
 	public interface IStyleStatesUI extends IEventDispatcher
 	{
 		function get states():States;
@@ -9,8 +11,8 @@ package com.fiCharts.utils.XMLConfigKit.style
 		
 		function render():void;
 		
-		function get style():Style;
-		function set style(value:Style):void;
+		function get currState():Style;
+		function set currState(value:Style):void;
 		
 		function hoverHandler():void;
 		function normalHandler():void;
@@ -18,5 +20,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		
 		function get visible():Boolean;
 		function set visible(value:Boolean):void;
+		
+		
 	}
 }

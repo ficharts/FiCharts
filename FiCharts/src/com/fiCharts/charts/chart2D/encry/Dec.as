@@ -1,3 +1,4 @@
+
 package com.fiCharts.charts.chart2D.encry
 {
 	import com.fiCharts.utils.ExternalUtil;
@@ -157,7 +158,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function createLicenseInfo(info:String):void
 		{
-			//return
+			return;
 			
 			var label:LabelUI = new LabelUI;
 			var labelStyle:LabelStyle = new LabelStyle;
@@ -166,7 +167,7 @@ package com.fiCharts.charts.chart2D.encry
 			label.text = info;
 			label.render();
 			
-			waterLabel = BitmapUtil.drawBitmap(label, true);
+			waterLabel = BitmapUtil.getBitmap(label, true);
 			label = null;
 			
 			shell.stage.addEventListener(Event.RESIZE, stageResized, false, 0, true);

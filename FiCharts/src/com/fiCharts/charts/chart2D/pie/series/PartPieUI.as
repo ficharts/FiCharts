@@ -64,8 +64,8 @@ package com.fiCharts.charts.chart2D.pie.series
 		public function init():void
 		{
 			valueLabelUI = new LabelUI;
-			valueLabelUI.style = this.labelStyle;
 			valueLabelUI.metaData = this.dataItem.metaData;
+			valueLabelUI.style = this.labelStyle;
 			valueLabelUI.render();
 			addChild(valueLabelUI);
 			
@@ -116,11 +116,11 @@ package com.fiCharts.charts.chart2D.pie.series
 		{
 			this.graphics.clear();
 			
-			style.tx = - radius;
-			style.ty = - radius;
-			style.width = style.height = radius * 2;
+			currState.tx = - radius;
+			currState.ty = - radius;
+			currState.width = currState.height = radius * 2;
 			
-			StyleManager.drawArc(this, style, radius, rads, pieDataItem.metaData);
+			StyleManager.drawArc(this, currState, radius, rads, pieDataItem.metaData);
 			
 			layoutValueLabel();
 		}

@@ -23,7 +23,7 @@ package com.fiCharts.utils.XMLConfigKit
 			{
 				transformNodeAttributes(xml.attributes(), vo, xml.name().toString());
 				ransfromNodeChild(xml, vo, parentVo, xml.name().toString());
-			}
+			}      
 		}
 		
 		/**
@@ -220,7 +220,8 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function pushAttributesToObject(sourceVO:Object, target:Object, attributes:Array):void
 		{
-			for each (var attribute:String in attributes)
+			var attribute:String;
+			for each (attribute in attributes)
 			{
 				target[attribute] = sourceVO[attribute];
 			}

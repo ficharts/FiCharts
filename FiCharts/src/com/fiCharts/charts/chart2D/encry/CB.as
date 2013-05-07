@@ -4,10 +4,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.bar.BarSeries;
 	import com.fiCharts.charts.chart2D.bar.stack.StackedBarSeries;
 	import com.fiCharts.charts.chart2D.bar.stack.StackedPercentBarSeries;
-	import com.fiCharts.charts.chart2D.bubble.BubblePointRender;
 	import com.fiCharts.charts.chart2D.bubble.BubbleSeries;
-	import com.fiCharts.charts.chart2D.column2D.ColumnSeries2D;
-	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnCombiePointRender;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedPercentColumnSeries;
 	import com.fiCharts.charts.chart2D.column2D.stack.StackedSeries;
@@ -27,30 +24,20 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.series.ChartCanvas;
 	import com.fiCharts.charts.chart2D.line.LineSeries;
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
-	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.IChart;
-	import com.fiCharts.charts.common.IDisCombilePointRender;
 	import com.fiCharts.charts.legend.LegendPanel;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.toolTips.ToolTipsManager;
-	import com.fiCharts.charts.toolTips.TooltipDataItem;
-	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.system.GC;
 	
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.PixelSnapping;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.events.TimerEvent;
-	import flash.geom.Matrix;
-	import flash.utils.Timer;
 	
 	/**
 	 */
@@ -88,6 +75,30 @@ package com.fiCharts.charts.chart2D.encry
 			StackedPercentBarSeries;
 			
 			init();
+		}
+		
+		/**
+		 */		
+		public function ifDataScalable():Boolean
+		{
+			return chartModel.zoom.enable;
+		}
+		
+		/**
+		 */		
+		public function setDataScalable(value:Boolean):void
+		{
+			chartModel.zoom.enable = value;
+		}
+		
+		/**
+		 * 
+		 * 动态进行数据缩放的对外接口, 用于Flash/AIR等类型的项目中， web用配置文件方式处理数据缩放
+		 * 
+		 */		
+		public function scaleData(startValue:Object, endValue:Object):void
+		{
+			this.currentPattern.scaleData(startValue, endValue);
 		}
 		
 		
@@ -160,6 +171,7 @@ package com.fiCharts.charts.chart2D.encry
 			chartProxy.configXML = value;
 			
 			this.initLegend();
+			this.title.fresh();
 			
 			chartProxy.setChartModel(XMLVOMapper.extendFrom(
 				chartProxy.currentStyleXML.copy(), configXML.copy()));
@@ -213,7 +225,7 @@ package com.fiCharts.charts.chart2D.encry
 			if (isRendering)
 				return;
 			
-			if (configXML && this.dataXML && chartModel.series.length)
+			if (configXML && (this.dataXML || dataVOes) && chartModel.series.length)
 			{
 				// 为避免重复渲染，这里做了严格的限制条件，
 				if(this.ifSizeChanged || this.ifDataChanged 
@@ -276,7 +288,10 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			renderSeries();
 			renderBG();
+			
 			drawMask(chartMask);
+			chartCanvas.drawBG(this.sizeX, this.sizeY);
+			
 			layoutElementsPos(); 
 		}
 		
@@ -284,12 +299,11 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function renderEnd():void
 		{
-			this.chartModel.axis.changed = chartModel.series.changed = ifDataChanged = false;
+			this.chartModel.axis.changed = chartModel.series.changed = ifDataChanged = isRendering = false;
 			
-			openFlash();
+			this.currentPattern.renderEnd();
+			
 			GC.run();
-			
-			isRendering = false;
 		}
 		
 		/**
@@ -297,9 +311,17 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function preConfig():void
 		{
+			if (currentPattern == null)
+				currentPattern = new ClassicPattern(this);
+			
+			currentPattern.initPattern();
+			
 			configSeriesAxis();
 			configSeriesAndLegendData();
 			updateAxisData();
+			
+			if (chartModel.axis.changed || chartModel.series.changed || ifDataChanged)
+				this.currentPattern.preConfig();
 		}
 		
 		/**
@@ -314,6 +336,13 @@ package com.fiCharts.charts.chart2D.encry
 			
 			gridField.render(this.hAxises[0].ticks, this.vAxises[0].ticks, chartModel.gridField);
 			chartBG.render(chartModel.chartBG);
+		}
+		
+		/**
+		 */		
+		internal function renderVGrid():void
+		{
+			gridField.drawVGidLine(this.vAxises[0].ticks, chartModel.gridField);
 		}
 
 		/**
@@ -372,7 +401,7 @@ package com.fiCharts.charts.chart2D.encry
 				axis.beforeRender();
 				axis.renderHoriticalAxis();
 				
-				temOffset = axis.minUintSize;
+				temOffset = axis.temUintSize;
 				
 				// 防止坐标轴边沿label无法完全显示，这个值会作用在左右间距上，给边缘label留够空间
 				if (temOffset != hAxisLabelOffset)
@@ -436,314 +465,19 @@ package com.fiCharts.charts.chart2D.encry
 			{
 				seriesItem.seriesWidth = sizeX;
 				seriesItem.seriesHeight = sizeY;
-				seriesItem.renderSeries();
 			}
+			
+			currentPattern.renderSeries();
 			
 			if (chartModel.series.changed || ifDataChanged)
 			{
-				itemRenders = [];
-				chartCanvas.clearItemRenders();
-				
-				// 汇总  节点渲染器；
-				for each (seriesItem in series)
-				{
-					// 柱状图与散点图的节点渲染器优先作为主体渲染节点
-					if (seriesItem is ColumnSeries2D || seriesItem is MarkerSeries)
-					{
-						var renders:Array = [];
-						renders = renders.concat(seriesItem.itemRenders);
-						itemRenders = renders.concat(itemRenders);
-					}
-					else
-					{
-						itemRenders = itemRenders.concat(seriesItem.itemRenders);
-					}
-				}
-				
-				leftOffBubblesItemRender();// 调节显示列表深度；
-				for each (itemRender in itemRenders)
-				{
-					if (itemRender)
-					{
-						itemRender.render();
-						this.chartCanvas.addItemRender(itemRender);
-					}
-				}
+				this.currentPattern.getItemRenderFromSereis();
 			}
 			
-			for each (itemRender in itemRenders)
-			{
-				if (itemRender)
-					itemRender.layout();
-			}
-				
-			combileItemRender();
-			
-			this.chartCanvas.clearValuelabels();
-			drawValueLabels(itemRenders);
+			currentPattern.renderItemRenderAndDrawValueLabels();
 		}
 		
-		/**
-		 */		
-		private function updateValueLabelHandler(evt:ItemRenderEvent):void
-		{
-			this.chartCanvas.clearValuelabels();
-			drawValueLabels(this.itemRenders);
-		}
-		
-		/**
-		 * 当布局或者图例显示状态发生改变时更新数值标签显示；
-		 */		
-		private function drawValueLabels(renders:Array):void
-		{
-			var px:Number;
-			var py:Number;
-			var bd:BitmapData;
-			var bm:Bitmap = new Bitmap(bd);
-			var mar:Matrix = new Matrix;
-			
-			for each (var itemRender:PointRenderBace in renders)
-			{
-				if (itemRender == null) continue;
-				if (itemRender.valueLabel.enable == false) continue;
-				
-				px = itemRender.x + itemRender.valueLabelUI.x;
-				py = itemRender.y + itemRender.valueLabelUI.y;
-				
-				mar.tx = px;
-				mar.ty = py;
-				
-				bd = itemRender.valueLabelUI.bitmapData.clone();
-				
-				if (itemRender.valueLabelUI.visible && itemRender.isEnable && itemRender.visible)
-				{
-					if (itemRender.valueLabelUI.rotation == 0)
-					{
-						this.chartCanvas.drawValueLabel(bd, mar, px, py);
-					}
-					else
-					{
-						bm = new Bitmap(bd, PixelSnapping.ALWAYS, true);
-						bm.x = px;
-						bm.y = py;
-						bm.rotation = itemRender.valueLabelUI.rotation;
-						chartCanvas.addValueLabel(bm);
-					}
-				}
-			}
-		}
-		
-		/**
-		 * 把汽包渲染器靠前排列， 这样可以先加入显示列表， 不至于遮盖住其他节点渲染器；
-		 */		
-		private function leftOffBubblesItemRender():void
-		{
-			var bubbles:Array = [];
-			var length:uint = itemRenders.length;
-			for (var i:uint = 0; i < length;)
-			{
-				if (itemRenders[i] is BubblePointRender)
-				{
-					bubbles.push(itemRenders[i]);
-					itemRenders.splice(i, 1);
-					length -= 1;
-				}
-				else
-				{
-					i ++;
-				}
-			}
-			
-			bubbles.sort(orderBubbles, Array.NUMERIC);
-			itemRenders = bubbles.concat(itemRenders);
-		}
-		
-		/**
-		 * 从大到小排列Bubble,大的在下， 小的在上显示；
-		 */		
-		private function orderBubbles(prev:BubblePointRender, next:BubblePointRender):int
-		{
-			if (Number(prev.itemVO.zValue) < Number(next.itemVO.zValue))
-				return 1;
-			else if (Number(prev.itemVO.zValue) > Number(next.itemVO.zValue))
-				return - 1;
-			else 
-				return 0;
-		}
-		
-		/**
-		 * 将距离较近的节点渲染器合并
-		 */		
-		private function combileItemRender():void
-		{
-			var itemRenderLength:uint = itemRenders.length;
-			var prevItemRender:PointRenderBace;
-			var nextItemRender:PointRenderBace;
-			var prevLabels:Vector.<TooltipDataItem>;
-			var nextLabels:Vector.<TooltipDataItem>;
-			var itemDistance:Number;
-			var xDis:Number;
-			var yDis:Number;
-			var labelVO:TooltipDataItem;
-			
-			for (var i:uint = 0; i < itemRenderLength; i ++)
-			{
-				prevItemRender = itemRenders[i];
-				
-				for (var j:uint = i + 1; j < itemRenderLength; j ++)
-				{
-					nextItemRender = itemRenders[j];
-					
-					// 两个数据结点均不在渲染范围内，忽略
-					if (prevItemRender.visible == false && nextItemRender.visible == false)
-						continue;
-					
-					// 开启 工具提示时才会合并将要显示的toolTip;  
-					if (prevItemRender.tooltip.enable && nextItemRender.tooltip.enable)
-					{
-						prevLabels = prevItemRender.toolTipsHolder.tooltips;
-						nextLabels = nextItemRender.toolTipsHolder.tooltips;
-						
-						if (prevItemRender is IDisCombilePointRender || nextItemRender is IDisCombilePointRender)
-						{
-							j ++;	
-							continue;	
-						}
-						
-						xDis = Math.abs(prevItemRender.itemVO.dataItemX - nextItemRender.itemVO.dataItemX);
-						yDis = Math.abs(prevItemRender.itemVO.dataItemY - nextItemRender.itemVO.dataItemY)
-						itemDistance = Math.sqrt(xDis * xDis + yDis * yDis);
-						
-						for each (labelVO in nextLabels)
-						{
-							// 合并节点
-							if (itemDistance <= (prevItemRender.radius + nextItemRender.radius) &&
-								prevLabels.indexOf(labelVO) == - 1 && nextItemRender.isEnable && !(nextItemRender is BubblePointRender)) 
-							{
-								prevLabels.push(labelVO);
-								nextItemRender.disable();// 销毁节点渲染器， 不再接受事件；
-							}// 分离节点
-							else if (itemDistance > (prevItemRender.radius + nextItemRender.radius) && 
-								prevLabels.indexOf(labelVO) != - 1 && !nextItemRender.isEnable)
-							{
-								prevLabels.splice(prevLabels.indexOf(labelVO), 1);
-								nextItemRender.enable();
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		/**
-		 * Renderer target
-		 * @param seriesItem target series
-		 *
-		 */
-		protected var itemRenders:Array;
-		
-		
-		
-		
-		//----------------------------------------------------
-		//
-		// 动画控制
-		//
-		//----------------------------------------------------
-		
-		
-		/**
-		 * 仅当动画开关开启并且初次加载时动画才会播放；
-		 * 
-		 * 如果开启滤镜效果会特别豪资源，所以在动画播放之前要关闭滤镜效果；
-		 */		
-		private function openFlash():void
-		{
-			var seriesItem:SB;
-			
-			// 为播放动画做准备；
-			if (chartModel.animation && ifFirstRender)
-			{
-				flashSeriesPercent = 0;
-				this.chartCanvas.setItemAndValueLabelsAlpha(flashItemRenderPercent);
-			}
-			else
-			{
-				flashSeriesPercent = 1;
-			}
-			
-			for each (seriesItem in series)
-				seriesItem.setPercent(flashSeriesPercent);
-			
-			//播放动画
-			if (chartModel.animation && ifFirstRender)
-			{
-				flashTimmer.addEventListener(TimerEvent.TIMER, flashSeriesHandler, false, 0, true);
-				flashTimmer.start();
-			}
-			else
-			{
-				this.dispatchEvent(new FiChartsEvent(FiChartsEvent.RENDERED));
-			}
-		}
-		
-		/**
-		 */		
-		private function flashSeriesHandler(evt:Event):void
-		{
-			flashSeriesPercent += .05;
-			if (flashSeriesPercent > 1)
-			{
-				ifFirstRender = false;// 新数据渲染动画仅播放一次；
-				flashSeriesPercent = 1;
-				flashTimmer.stop();
-				flashTimmer.removeEventListener(TimerEvent.TIMER, flashSeriesHandler);
-				
-				// 柱体动画播放完毕后播放渲染节点动画；
-				flashItemRenderPercent = .05;
-				flashTimmer.addEventListener(TimerEvent.TIMER, flashItemRendersHandler, false, 0, true);
-				flashTimmer.start();
-			}
-			
-			for each (var seriesItem:SB in series)
-				seriesItem.setPercent(flashSeriesPercent);
-		}
-		
-		/**
-		 */		
-		private function flashItemRendersHandler(evt:TimerEvent):void
-		{
-			flashItemRenderPercent += .1;
-			if (flashItemRenderPercent >= 1)
-			{
-				flashItemRenderPercent = 1;
-				flashTimmer.stop();
-				flashTimmer.removeEventListener(TimerEvent.TIMER, flashItemRendersHandler);
-				
-				this.dispatchEvent(new FiChartsEvent(FiChartsEvent.RENDERED));
-			}
-			
-			this.chartCanvas.setItemAndValueLabelsAlpha(flashItemRenderPercent);
-		}
-		
-		/**
-		 */		
-		private var flashSeriesPercent:Number;
-		
-		/**
-		 */		
-		private var flashItemRenderPercent:Number;
-		
-		/**
-		 */		
-		private var ifFirstRender:Boolean = true;
-		
-		/**
-		 */		
-		private var flashTimmer:Timer = new Timer(30, 0);
-			
-		
-		
+
 		
 		//---------------------------------
 		//
@@ -1144,6 +878,9 @@ package com.fiCharts.charts.chart2D.encry
 				
 			}
 			
+			if (chartModel.axis.changed)
+				this.currentPattern.configSeriesAxis(hAxises[0]);
+			
 		}
 		
 		/**
@@ -1155,10 +892,22 @@ package com.fiCharts.charts.chart2D.encry
 			
 			if (chartModel.series.changed || ifDataChanged)
 			{
+				if (dataVOes == null)
+				{
+					dataVOes = new Vector.<Object>;
+					var dataVO:Object;
+					for each (var item:XML in dataXML.children())
+					{
+						dataVO = new Object;
+						XMLVOMapper.pushXMLDataToVO(item, dataVO);
+						dataVOes.push(dataVO);
+					}
+				}
+				
 				for each (var seriesItem:SB in series)  
 				{
 					seriesItem.configed(this.chartModel.series.colorMananger);// 图表整体配置完毕， 可以开始子序列的定义了；					
-					seriesItem.dataProvider = this.dataXML;
+					seriesItem.dataProvider = dataVOes;
 					
 					if (chartModel.legend.enable)
 						legends = legends.concat(seriesItem.legendData);
@@ -1167,6 +916,27 @@ package com.fiCharts.charts.chart2D.encry
 				if (legendPanel && chartModel.legend.enable)
 					legendPanel.legendData = legends;
 			}
+		}
+		
+		/**
+		 */		
+		private var _dataVOes:Vector.<Object>;
+		
+		/**
+		 */
+		public function get dataVOes():Vector.<Object>
+		{
+			return _dataVOes;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set dataVOes(value:Vector.<Object>):void
+		{
+			_dataVOes = value;
+			
+			ifDataChanged = true;
 		}
 		
 		/**
@@ -1275,6 +1045,39 @@ package com.fiCharts.charts.chart2D.encry
 		
 		
 		
+		//----------------------------------
+		//
+		// 图表状态， 经典模式和数据缩放模式控制
+		//
+		//----------------------------------
+		
+		
+		/**
+		 */		
+		private function toZoomPatternHandler(evt:Event):void
+		{
+			if (this.currentPattern == null)
+				currentPattern = new ZoomPattern(this);
+			else
+				currentPattern.toZoomPattern();
+		}
+		
+		/**
+		 */		
+		private function toClassicPatternHandler(evt:Event):void
+		{
+			if (this.currentPattern == null)
+				currentPattern = new ClassicPattern(this);
+			else
+				currentPattern.toClassicPattern();
+		}
+		
+		/**
+		 */		
+		private function updateValueLabelHandler(evt:ItemRenderEvent):void
+		{
+			currentPattern.updateValueLabelHandler(evt);
+		}
 		
 		
 		
@@ -1369,7 +1172,9 @@ package com.fiCharts.charts.chart2D.encry
 			rightAxisContainer = new AxisContianer;
 			addChild(rightAxisContainer);
 			
-			chartCanvas = new ChartCanvas
+			chartCanvas = new ChartCanvas;
+			chartCanvas.doubleClickEnabled = true;
+			chartCanvas.addEventListener(MouseEvent.DOUBLE_CLICK, fullScreenHandler, false, 0, true);
 			addChild(chartCanvas);
 			
 			chartMask = new Shape;
@@ -1387,10 +1192,13 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.addCreationHandler(AxisModel.CREATE_RIGHT_AXIS, createVertiAxisRightHandler);
 			XMLVOLib.addCreationHandler(AxisModel.CREATE_TOP_AXIS, createHoriAxisTopHandler);
 			XMLVOLib.addCreationHandler(AxisModel.CREATE_BOTTOM_AXIS, createHoriAxisBottomHandler);
-			XMLVOLib.addCreationHandler(Series.SERIES_CREATED, createSeriesHandler);
+			XMLVOLib.addCreationHandler(Series.CHART2D_SERIES_CREATED, createSeriesHandler);
 			
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_TITLE_STYLE, updateTitleStyleHandler);
 			XMLVOLib.addCreationHandler(Chart2DModel.UPDATE_LEGEND_STYLE, updateLegendStyleHandler);
+			
+			XMLVOLib.addCreationHandler(CB.TO_CLASSIC_PATTERN, toClassicPatternHandler);
+			XMLVOLib.addCreationHandler(CB.TO_ZOOM_PATTERN, toZoomPatternHandler);
 			
 			this.addEventListener(ItemRenderEvent.UPDATE_VALUE_LABEL, updateValueLabelHandler, false, 0, true);
 		}
@@ -1398,21 +1206,21 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * @return 
 		 */		
-		private function get hAxises():Vector.<AxisBase>
+		internal function get hAxises():Vector.<AxisBase>
 		{
 			return this.chartModel.axis.horizontalAxis;
 		}
 		
 		/**
 		 */		
-		private function get vAxises():Vector.<AxisBase>
+		internal function get vAxises():Vector.<AxisBase>
 		{
 			return this.chartModel.axis.verticalAxis;
 		}
 		
 		/**
 		 */		
-		private function get chartModel():Chart2DModel
+		internal function get chartModel():Chart2DModel
 		{
 			return chartProxy.chartModel;
 		}
@@ -1424,7 +1232,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**  
 		 * 网格/序列背景
 		 */
-		protected var gridField:GridFieldUI;
+		internal var gridField:GridFieldUI;
 		
 		/**
 		 * 图表背景 
@@ -1447,8 +1255,37 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 */		
 		private var bgContainer:Sprite;
-		private var chartCanvas:ChartCanvas;
-		private var chartMask:Shape;
+		internal var chartCanvas:ChartCanvas;
+		internal var chartMask:Shape;
+		
+		/**
+		 * 
+		 */		
+		internal function set currentPattern(value:IChartPattern):void
+		{
+			_currentPatern = value;
+		}
+		
+		/**
+		 */		
+		internal function get currentPattern():IChartPattern
+		{
+			return _currentPatern;
+		}
+		
+		/**
+		 */		
+		private var _currentPatern:IChartPattern;
+		
+		/**
+		 */		
+		internal var classicPattern:IChartPattern;
+		internal var zoomPattern:IChartPattern;
+		
+		/**
+		 */		
+		public static const TO_CLASSIC_PATTERN:String = 'toClassicState';
+		public static const TO_ZOOM_PATTERN:String = 'toZoomState';
 		
 	}
 }

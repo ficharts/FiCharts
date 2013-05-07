@@ -5,7 +5,6 @@ package com.fiCharts.utils.XMLConfigKit.style
 	import flash.display.Sprite;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
-	import flash.text.TextFormat;
 	import flash.text.TextLineMetrics;
 	
 	/**
@@ -22,7 +21,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		
 		/**
 		 */		
-		private var _text:String;
+		private var _text:String = '';
 
 		/**
 		 */
@@ -46,10 +45,8 @@ package com.fiCharts.utils.XMLConfigKit.style
 			if (labelStyle == null) return;
 			
 			this.visible = labelStyle.enable;
-				
 			StyleManager.setLabelUIText(this, this.metaData);
-			
-			textField.y = labelStyle.vPadding;
+			textField.autoSize = TextFieldAutoSize.CENTER;
 			
 			if (labelStyle.layout == LabelStyle.WRAP)
 			{
@@ -73,7 +70,6 @@ package com.fiCharts.utils.XMLConfigKit.style
 				textField.autoSize = 'none';
 				textField.defaultTextFormat = labelStyle.getTextFormat(metaData);
 				textField.text = text;
-				
 				textMetric = textField.getLineMetrics(0);  
 				textField.width = textField.textWidth + textMetric.leading;
 				textField.height = textField.textHeight;
@@ -86,6 +82,9 @@ package com.fiCharts.utils.XMLConfigKit.style
 			this.graphics.clear();
 			StyleManager.setShapeStyle(labelStyle, this.graphics, this.metaData);
 			this.graphics.drawRoundRect(0, 0, this.uiWidth, this.uiHeight, labelStyle.radius, labelStyle.radius);
+			
+			textField.x = labelStyle.hPadding;
+			textField.y = labelStyle.vPadding;
 		}
 		
 		/**
@@ -133,18 +132,22 @@ package com.fiCharts.utils.XMLConfigKit.style
 			}
 		}
 		
+		/**
+		 */		
 		override public function get width():Number
 		{
 			return uiWidth;
 		}
 		
+		/**
+		 */		
 		override public function get height():Number
 		{
 			return uiHeight
 		}
 		
 		/**
-		 * 用textWidth是为了防止当换行显示时，maxLabelWidth 过大， 这时要截取此Label的图时右侧
+		 * 用textWidth是为了防止当换行显示时，maxLabelWidth 过大�这时要截取此Label的图时右�
 		 * 
 		 * 将有一部分空白，为了避免截取多余的空白区域这用textWidth靠谱一些，不能用width
 		 */		
@@ -154,17 +157,16 @@ package com.fiCharts.utils.XMLConfigKit.style
 		}
 		
 		/**
-		 * 换行后 textField 的高度不等于 textHeight 和 区域的Bound高度， 鄙视一下adobe
+		 * 换行�textField 的高度不等于 textHeight �区域的Bound高度�鄙视一下adobe
 		 */		
 		private function get uiHeight():Number
 		{
-			
 			return textField.height + labelStyle.vPadding * 2;
 		}
 		
 		/**
 		 */		
-		private var textField:TextField = new TextField();
+		protected var textField:TextField = new TextField();
 		
 		/**
 		 */		

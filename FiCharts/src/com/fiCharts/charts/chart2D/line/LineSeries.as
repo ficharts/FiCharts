@@ -1,25 +1,23 @@
 package com.fiCharts.charts.chart2D.line
 {
-	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.SeriesDataFeature;
 	import com.fiCharts.charts.chart2D.core.series.DataIndexOffseter;
 	import com.fiCharts.charts.chart2D.core.series.IDirectionSeries;
+	import com.fiCharts.charts.chart2D.core.series.ISeriesRenderPattern;
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.graphic.CubicBezier;
-	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Graphics;
 	import flash.display.Shape;
 	import flash.geom.Point;
 
 	/**
-	 * 趋势图序列
+	 * 趋势图序
 	 */	
 	public class LineSeries extends SB implements IDirectionSeries
 	{
@@ -32,10 +30,25 @@ package com.fiCharts.charts.chart2D.line
 		
 		/**
 		 */		
+		override protected function getClassicPattern():ISeriesRenderPattern
+		{
+			return new ClassicLineRender(this);
+		}
+		
+		/**
+		 */		
+		override protected function getSimplePattern():ISeriesRenderPattern
+		{
+			return new SimpleLineRender(this);
+		}
+		
+		/**
+		 */		
 		override public function beforeUpdateProperties(xml:*=null):void
 		{
 			super.beforeUpdateProperties(xml);
 			XMLVOMapper.fuck(XMLVOLib.getXML(Chart2DModel.LINE_SERIES, Model.SYSTEM), this);
+
 		}
 		
 		/**
@@ -46,114 +59,67 @@ package com.fiCharts.charts.chart2D.line
 		}
 		
 		/**
-		 * Render line.
-		 */
-		override protected function renderChart():void
-		{
-			if (ifDataChanged)
-			{
-				while (canvas.numChildren)
-					canvas.removeChildAt(0);
-				
-				var linePartUI:PartLineUI;
-				partUIs = new Vector.<PartLineUI>;
-				for each (var itemDataVO:SeriesDataPoint in dataItemVOs)
-				{
-					linePartUI = new PartLineUI(itemDataVO);
-					linePartUI.partUIRender = this;
-					linePartUI.states = this.states;
-					linePartUI.metaData = itemDataVO.metaData;
-					canvas.addChild(linePartUI);
-					partUIs.push(linePartUI);
-				}
-			}
-			
-			if (this.ifSizeChanged || this.ifDataChanged)
-			{
-				states.tx = this.seriesWidth;
-				states.width = seriesWidth;
-				
-				renderPartUIs();
-				ifSizeChanged = ifDataChanged = false;
-			}
-			
-		}
-		
-		/**
 		 */		
-		protected function renderPartUIs():void
+		public function renderPartUIs():void
 		{
+			var len:uint = maxDataItemIndex;
+			var nodeUI:PartLineUI;
+			var preNodeUI:PartLineUI;
+			var nextNodeUI:PartLineUI; 
 			
-			for (var i:uint = 0; i <= itemRenderMaxIndex; i ++)
+			for (var i:uint = 0; i <= len; i ++)
 			{
-					
+				nodeUI = partUIs[i];
+				
 				if (i == 0)
 				{
-					partUIs[i].locX = partUIs[i].dataItem.x;
+					nodeUI.locX = nodeUI.dataItem.x;
 					
-					if ((i + 1) <=  itemRenderMaxIndex)//防止一个点的报错
-						partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i].dataItem.x) / 2;
+					if ((i + 1) <= len)//防止一个点的报
+					{
+						nextNodeUI = partUIs[i + 1];
+						nodeUI.locWidth = (nextNodeUI.dataItem.x - nodeUI.dataItem.x) / 2;
+					}
+					
 				}
-				else if (i == itemRenderMaxIndex)
+				else if (i == len)
 				{
-					partUIs[i].locX = partUIs[i - 1].dataItem.x + (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
-					partUIs[i].locWidth = (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
+					preNodeUI = partUIs[i - 1];
+					nodeUI.locX = preNodeUI.dataItem.x + (nodeUI.dataItem.x - preNodeUI.dataItem.x) / 2;
+					nodeUI.locWidth = (nodeUI.dataItem.x - preNodeUI.dataItem.x) / 2;
 				}
 				else
 				{
-					partUIs[i].locX = partUIs[i - 1].dataItem.x + (partUIs[i].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
-					partUIs[i].locWidth = (partUIs[i + 1].dataItem.x - partUIs[i - 1].dataItem.x) / 2;
+					preNodeUI = partUIs[i - 1];
+					nextNodeUI = partUIs[i + 1];
+					nodeUI.locX = preNodeUI.dataItem.x + (nodeUI.dataItem.x - preNodeUI.dataItem.x) / 2;
+					nodeUI.locWidth = (nextNodeUI.dataItem.x - preNodeUI.dataItem.x) / 2;
 				}
 				
-				partUIs[i].locHeight = this.verticalAxis.size;
-				partUIs[i].locY = - this.verticalAxis.size - this.baseLine;
+				nodeUI.locHeight = verticalAxis.size;
+				nodeUI.locY = - verticalAxis.size - baseLine;
 				
-				partUIs[i].renderIndex = i;
-				partUIs[i].render();
+				nodeUI.renderIndex = i;
+				nodeUI.render();
 			}
 		}
 		
 		/**
-		 * 每个节点渲染的是包括自身在内的临近几个节点
+		 * 每个节点的最终渲染都会调用到此方
 		 */		
-		public function renderPartUI(canvas:Shape, style:Style, metaData:Object, renderIndex:uint):void
-		{
-			canvas.graphics.clear();
-			
-			StyleManager.setLineStyle(canvas.graphics, style.getBorder, style, metaData);
-			renderPartLine(canvas, 0, renderIndex);
-			
-			if (style.cover && style.cover.border)
-			{
-				StyleManager.setLineStyle(canvas.graphics, style.cover.border, style, metaData);
-				renderPartLine(canvas, style.cover.offset, renderIndex);
-			}
-			
-			StyleManager.setEffects(canvas, style, metaData);
-		}
-		
-		/**
-		 */		
-		override public function render():void
-		{
-		}
-		
-		/**
-		 * 每个节点的最终渲染都会调用到此方法
-		 */		
-		protected function renderPartLine(canvas:Shape, offset:Number = 0, renderIndex:uint = 0):void
+		public function renderPartLine(canvas:Shape, offset:Number = 0, renderIndex:uint = 0):void
 		{
 			var startIndex:uint, endIndex:uint;
 			
 			startIndex = dataOffsetter.offsetMin(renderIndex, 0);
-			endIndex = dataOffsetter.offsetMax(renderIndex, itemRenderMaxIndex);
+			endIndex = dataOffsetter.offsetMax(renderIndex, maxDataItemIndex);
 			
 			renderSimleLine(canvas.graphics, startIndex, endIndex, offset);
 		}
 		
 		/**
 		 */		
-		protected function renderSimleLine(canvas:Graphics, startIndex:uint, endIndex:uint, offset:uint = 0):void
+		public function renderSimleLine(canvas:Graphics, startIndex:uint, endIndex:uint, offset:uint = 0):void
 		{
 			var firstX:Number = (dataItemVOs[startIndex] as SeriesDataPoint).x; 
 			var firstY:Number = (dataItemVOs[startIndex] as SeriesDataPoint).y - baseLine - offset;
@@ -188,7 +154,7 @@ package com.fiCharts.charts.chart2D.line
 					pointArr.push(point);
 				}
 				
-				//绘制贝塞尔曲线
+				//绘制贝塞尔曲
 				CubicBezier.curveThroughPoints(canvas, pointArr);
 			}
 			else //线段连接方式
@@ -201,6 +167,7 @@ package com.fiCharts.charts.chart2D.line
 					canvas.lineTo(item.x, item.y - baseLine - offset);
 				}
 			}
+			
 		}
 		
 		/**
@@ -211,7 +178,7 @@ package com.fiCharts.charts.chart2D.line
 		}
 		
 		/**
-		 * 是否采用光滑曲线方式绘制；
+		 * 是否采用光滑曲线方式绘制
 		 */		
 		private var _ifSmooth:Object = false;
 
@@ -230,7 +197,7 @@ package com.fiCharts.charts.chart2D.line
 			_ifSmooth = XMLVOMapper.boolean(value);
 			
 			
-			// 平滑趋势图至少需要5个数据采集点才能平滑过渡
+			// 平滑趋势图至少需个数据采集点才能平滑过渡
 			if (_ifSmooth)
 			{
 				this.dataOffsetter.dataIndexOffset = 2;
@@ -242,11 +209,7 @@ package com.fiCharts.charts.chart2D.line
 		}
 		
 		/**
-		 */		
-		protected var dataOffsetter:DataIndexOffseter = new DataIndexOffseter;
-		
-		/**
-		 * 是否以渐进线段方式绘制 
+		 * 是否以渐进线段方式绘
 		 */		
 		private var _ifStep:Object = 0;
 
@@ -304,7 +267,7 @@ package com.fiCharts.charts.chart2D.line
 		
 		/**
 		 */		
-		protected var partUIs:Vector.<PartLineUI>;
+		public var partUIs:Vector.<PartLineUI>;
 		
 	}
 }

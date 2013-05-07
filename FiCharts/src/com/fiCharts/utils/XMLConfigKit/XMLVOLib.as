@@ -17,6 +17,7 @@ package com.fiCharts.utils.XMLConfigKit
 	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Cover;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.Fill;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.Img;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.TextFormatStyle;
 
 	/**
@@ -54,6 +55,7 @@ package com.fiCharts.utils.XMLConfigKit
 			Cover;
 			BorderLine;
 			Fill;
+			Img;
 			States;
 			LabelStyle;
 			TextFormatStyle;
@@ -68,6 +70,13 @@ package com.fiCharts.utils.XMLConfigKit
 			RectShape;
 			Diamond;
 			Triangle;
+		}
+		
+		/**
+		 */		
+		public static function initCore():void
+		{
+			
 		}
 		
 		/**
@@ -363,6 +372,7 @@ package com.fiCharts.utils.XMLConfigKit
 								<cover path='com.fiCharts.utils.XMLConfigKit.style.elements.Cover'/>
 								<fill path='com.fiCharts.utils.XMLConfigKit.style.elements.Fill'/>
 								<format path='com.fiCharts.utils.XMLConfigKit.style.elements.TextFormatStyle'/>
+								<img path='com.fiCharts.utils.XMLConfigKit.style.elements.Img'/>
 								
 								<!--样式模型-->
 								<label path='com.fiCharts.utils.XMLConfigKit.style.LabelStyle'/>
