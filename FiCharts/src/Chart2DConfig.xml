@@ -229,6 +229,18 @@
 				<fill color='${color}{adjustColor:1.2},${color}{adjustColor:0.9}' alpha='0.8,0.8' angle='90'/>
 			</down>
 		</states>
+		
+		<states id='SimpleBar'>
+			<normal>
+				<fill color='${color}{adjustColor:1.2},${color}' alpha='0.8,0.8' angle='180'/>
+			</normal>
+			<hover>
+				<fill color='${color}{adjustColor:1.4},${color}{adjustColor:1.2}' alpha='0.8,0.8' angle='180'/>
+			</hover>
+			<down>
+				<fill color='${color}{adjustColor:1.1},${color}{adjustColor:0.9}' alpha='0.8,0.8' angle='180'/>
+			</down>
+		</states>
 
 		<states id='ClassicShape' normal='HighLight_Series' hover='HighLight_Series' down='HighLight_Series'>
 			<normal effects='Series'>
@@ -275,10 +287,10 @@
 		<stackedColumn id='Simple' states='SimpleShape'/>
 		<stackedColumn id='Classic' states='ClassicShape'/>
 
-		<bar id='Simple' states='SimpleShape'/>
+		<bar id='Simple' states='SimpleBar'/>
 		<bar id='Classic' states='ClassicBar'/>
 
-		<stackedBar id='Simple' states='SimpleShape'/>
+		<stackedBar id='Simple' states='SimpleBar'/>
 		<stackedBar id='Classic' states='ClassicBar'/>
 
 

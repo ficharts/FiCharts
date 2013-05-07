@@ -8,6 +8,7 @@ package edit.chart
 	import com.greensock.TweenLite;
 	
 	import edit.IconBtn;
+	import edit.LabelInput;
 	import edit.chartTypeBox.ChartTypePanel;
 	
 	import fl.motion.easing.Back;
@@ -165,14 +166,27 @@ package edit.chart
 			
 			//---------------------------------------
 			
-			header.graphics.clear();
-			header.graphics.beginFill(0x2494E6, 0.8);
-			header.graphics.drawRect(1, headHeight - 3,  headWidth - 2, 3);
-			header.graphics.endFill();
 			
+			//header.graphics.beginFill(0x2494E6, 0.8);
+			//header.graphics.drawRect(1, headHeight - 3,  headWidth - 2, 3);
+			//header.graphics.endFill();
+			
+			header.graphics.clear();
 			header.graphics.beginFill(0xDDDDDD, 0.2);
 			header.graphics.drawRect(1, 0, headWidth - 2, this.headHeight);
 			header.graphics.endFill();
+			
+			nameField.graphics.clear();
+			nameField.y = headHeight - 3;
+			nameField.graphics.beginFill(0x2494E6, 0.8);
+			nameField.graphics.drawRect(1, 0,  headWidth - 2, 3);
+			nameField.graphics.endFill();
+			header.addChild(nameField);
+			
+			nameTxtField.defaultTxt = '序列名';
+			nameTxtField.render();
+			nameTxtField.y = headHeight;
+			header.addChild(nameTxtField);
 			
 			delBtn.x = (headWidth - this.chartSize) / 2;
 			delBtn.y = (headHeight - this.chartSize) / 2;
@@ -182,11 +196,36 @@ package edit.chart
 			header.addChild(delBtn);
 			
 			TweenLite.from(headerHolder, 0.5, {alpha: 0, scaleX:0, scaleY:0, ease: Back.easeOut});
+			
+			header.addEventListener(MouseEvent.ROLL_OVER, overHeader, false, 0, true);
+			header.addEventListener(MouseEvent.ROLL_OUT, outHeader, false, 0, true);
 		}
 		
 		/**
 		 */		
+		private function overHeader(evt:MouseEvent):void
+		{
+			nameTxtField.visible = true;
+		}
+		
+		/**
+		 */		
+		private function outHeader(evt:MouseEvent):void
+		{
+			nameTxtField.visible = false;
+		}
+		
+		/**
+		 */		
+		private var nameTxtField:LabelInput = new LabelInput;
+		
+		/**
+		 */		
 		private var header:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var nameField:Sprite = new Sprite;
 		
 		/**
 		 */		
