@@ -301,17 +301,7 @@ package edit
 		public function getChartConfigXML():XML
 		{
 			if (ifDataChanged)
-			{
-				var result:XML = this.chartProxy.getConfigXML();
-				
-				// 多个序列时显示图例
-				if (chartProxy.len > 1)
-				{
-					
-				}
-				
-				currentConfig = result;
-			}
+				currentConfig = this.chartProxy.getConfigXML();;
 				
 			return currentConfig;
 		}
@@ -590,6 +580,7 @@ package edit
 				newSeries.verifyFieldData(this.dataGrid.verifyColumnData);
 				
 				newSeries.name = oldSeries.name;
+				newSeries.renderNameField();
 			}
 			else// 此时无法加入序列
 			{

@@ -539,6 +539,9 @@ package edit.chart
 			checkAxis(result);
 			getSeriesConfigXML(result);
 			
+			if (this.len > 1)
+				result.appendChild(<legend enable='true'/>);
+			
 			return result;
 		}
 		
@@ -671,7 +674,7 @@ package edit.chart
 				stackedColumnXML = <stackedColumn>
 										</stackedColumn>;
 				for each (item in stackedColumns)
-					stackedColumnXML.appendChild(<stack xField={item.xField} yField={item.yField}/>);
+					stackedColumnXML.appendChild(<stack xField={item.xField} yField={item.yField} name={item.name}/>);
 			}
 			
 			var stackedBarXML:XML;
@@ -680,7 +683,7 @@ package edit.chart
 				stackedBarXML = <stackedBar>
 								</stackedBar>;
 				for each (item in stackedBars)
-				stackedBarXML.appendChild(<stack xField={item.xField} yField={item.yField}/>);
+				stackedBarXML.appendChild(<stack xField={item.xField} yField={item.yField} name={item.name}/>);
 			}
 			
 			for each (item in result)

@@ -2,9 +2,7 @@ package edit.chart
 {
 	import com.dataGrid.CellData;
 	import com.dataGrid.Column;
-	import com.fiCharts.utils.ClassUtil;
 	import com.fiCharts.utils.RexUtil;
-	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.greensock.TweenLite;
 	
 	import edit.IconBtn;
@@ -14,8 +12,8 @@ package edit.chart
 	import fl.motion.easing.Back;
 	import fl.transitions.easing.Bounce;
 	
-	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 
 	/**
@@ -129,6 +127,8 @@ package edit.chart
 			
 			xColumn.dataType = ChartProxy.FIELD;
 			yColumn.dataType = ChartProxy.LINEAR;
+			
+			this.name = "序列" + this.startColumnIndex;
 		}
 		
 		/**
@@ -166,53 +166,132 @@ package edit.chart
 			
 			//---------------------------------------
 			
+			initHeadGraphic();
 			
-			//header.graphics.beginFill(0x2494E6, 0.8);
-			//header.graphics.drawRect(1, headHeight - 3,  headWidth - 2, 3);
-			//header.graphics.endFill();
-			
-			header.graphics.clear();
-			header.graphics.beginFill(0xDDDDDD, 0.2);
-			header.graphics.drawRect(1, 0, headWidth - 2, this.headHeight);
-			header.graphics.endFill();
-			
-			nameField.graphics.clear();
-			nameField.y = headHeight - 3;
-			nameField.graphics.beginFill(0x2494E6, 0.8);
-			nameField.graphics.drawRect(1, 0,  headWidth - 2, 3);
-			nameField.graphics.endFill();
-			header.addChild(nameField);
-			
-			nameTxtField.defaultTxt = '序列名';
-			nameTxtField.render();
-			nameTxtField.y = headHeight;
-			header.addChild(nameTxtField);
+			initLabelField();
 			
 			delBtn.x = (headWidth - this.chartSize) / 2;
 			delBtn.y = (headHeight - this.chartSize) / 2;
 			delBtn.init(ChartTypePanel.getChartBitmapByType(type), 'blueDel', 'blueDel', 20, 20);
 			delBtn.addEventListener(MouseEvent.CLICK, deleteThisHandler, false, 0, true);
 			delBtn.render();
-			header.addChild(delBtn);
 			
+			headTop.addChild(delBtn);
+			header.addChild(headTop);
+				
 			TweenLite.from(headerHolder, 0.5, {alpha: 0, scaleX:0, scaleY:0, ease: Back.easeOut});
 			
-			header.addEventListener(MouseEvent.ROLL_OVER, overHeader, false, 0, true);
+			headTop.addEventListener(MouseEvent.ROLL_OVER, overHeader, false, 0, true);
 			header.addEventListener(MouseEvent.ROLL_OUT, outHeader, false, 0, true);
+		}
+		
+		/**
+		 */		
+		public function renderNameField():void
+		{
+			nameTxtField.text = this.name;
+		}
+		
+		/**
+		 */		
+		private function initHeadGraphic():void
+		{
+			headTop.graphics.clear();
+			
+			headTop.graphics.beginFill(0x2494E6, 0.8);
+			headTop.graphics.drawRect(1, headHeight - 3,  headWidth - 2, 3);
+			headTop.graphics.endFill();
+			
+			headTop.graphics.beginFill(0xDDDDDD, 0.2);
+			headTop.graphics.drawRect(1, 0, headWidth - 2, this.headHeight);
+			headTop.graphics.endFill();
+		}
+		
+		/**
+		 */		
+		private var headTop:Sprite = new Sprite;
+		
+		/**
+		 */		
+		protected function initLabelField():void
+		{
+			nameTxtField.defaultStyleXML = nameTxtField.selectStyleXML = <style>
+																			<border alpha='0'/>
+																			<fill alpha='0'/>
+																		</style>;
+			 
+			nameTxtField.setTextFormat(12, 'FFFFFF');
+			nameTxtField.defaultTxt = this.name;
+			nameTxtField.w = headWidth - 2;
+			nameTxtField.addEventListener(Event.RESIZE, resizeTxtField, false, 0, true);
+			nameTxtField.addEventListener(Event.CHANGE, txtFieldChanged, false, 0, true);
+			nameTxtField.render();
+			nameTxtField.x = (headWidth - nameTxtField.w) / 2;
+			nameTxtField.y = 3;
+			
+			headBottom.alpha = 0;
+			headBottom.x = this.headWidth / 2;
+			headBottom.y = headHeight / 2;
+			headBottom.scaleX = headBottom.scaleY = 0;
+			
+			headBottom.addChild(nameTxtField);
+			header.addChild(headBottom);
+			
+			drawNameFieldBG();
+			
+			headBottom.mouseChildren = headBottom.mouseEnabled = false;
+		}
+		
+		/**
+		 */		
+		private function drawNameFieldBG():void
+		{
+			headBottom.graphics.clear();
+			headBottom.graphics.beginFill(0x2494E6, 0.9);
+			
+			var x:Number = 1;
+			var w:Number = headWidth - 2;
+			
+			if (nameTxtField.w > w)
+			{
+				w = nameTxtField.w;
+				x = (headWidth - w ) /2 
+			}
+			
+			headBottom.graphics.drawRect(x, 0,  w, nameTxtField.h + 5);
+			headBottom.graphics.endFill();
+		}
+		
+		/**
+		 */		
+		private function resizeTxtField(evt:Event):void
+		{
+			nameTxtField.x = (headWidth - nameTxtField.w) / 2;
+			drawNameFieldBG();
+		}
+		
+		/**
+		 */		
+		private function txtFieldChanged(evt:Event):void
+		{
+			this.name = nameTxtField.text;
 		}
 		
 		/**
 		 */		
 		private function overHeader(evt:MouseEvent):void
 		{
-			nameTxtField.visible = true;
+			headBottom.mouseChildren = headBottom.mouseEnabled = true;
+			TweenLite.to(headBottom, 0.3, {alpha: 1, x: 0, y: headHeight - 3, scaleX: 1, scaleY: 1});
 		}
 		
 		/**
 		 */		
 		private function outHeader(evt:MouseEvent):void
 		{
-			nameTxtField.visible = false;
+			headBottom.mouseChildren = headBottom.mouseEnabled = false;
+			
+			TweenLite.to(headBottom, 0.3, {alpha: 0, x: this.headWidth / 2, y: this.headHeight / 2,scaleX: 0, scaleY: 0});
 		}
 		
 		/**
@@ -225,7 +304,7 @@ package edit.chart
 		
 		/**
 		 */		
-		private var nameField:Sprite = new Sprite;
+		private var headBottom:Sprite = new Sprite;
 		
 		/**
 		 */		

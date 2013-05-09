@@ -5,6 +5,7 @@ package edit
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.TextFormatStyle;
 	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
@@ -17,6 +18,7 @@ package edit
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFieldType;
+	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
 	
 	/**
@@ -30,11 +32,20 @@ package edit
 			this.w = 50;
 			hoverShape.visible = false;
 			this.addChild(hoverShape);
-			XMLVOMapper.fuck(this.defaultStyleXML, this.defaultStyle);
-			XMLVOMapper.fuck(this.selectStyleXML, this.selectStyle);
 			
 			this.addEventListener(MouseEvent.ROLL_OVER, rollOver, false, 0, true);
 			this.addEventListener(MouseEvent.ROLL_OUT, rollOut, false, 0, true);
+		}
+		
+		/**
+		 */		
+		public function setTextFormat(size:uint, color:String):void
+		{
+			beforeInputStyleXML.format.@size = size;
+			inputStyleXML.format.@size = size;
+			
+			beforeInputStyleXML.format.@color = color;
+			inputStyleXML.format.@color = color;
 		}
 		
 		/**
@@ -84,6 +95,8 @@ package edit
 		 */		
 		private function select(evt:MouseEvent):void
 		{
+			ifSlected = true;
+			
 			this.graphics.clear();
 			StyleManager.drawRect(this, this.selectStyle);
 			
@@ -94,6 +107,10 @@ package edit
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler, false, 0, true);
 		}
+		
+		/**
+		 */		
+		private var ifSlected:Boolean = false;
 		
 		/**
 		 */		
@@ -123,6 +140,8 @@ package edit
 		 */		
 		private function _unSelect():void
 		{
+			ifSlected = false;
+			
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			
 			hideBgField();
@@ -201,6 +220,7 @@ package edit
 			if (RexUtil.ifTextNull(value) == false)
 			{
 				field.text = value;
+				
 				_inputText();
 				hideBgField();
 			}
@@ -246,6 +266,7 @@ package edit
 				XMLVOMapper.fuck(beforeInputStyleXML, style);
 				field.defaultTextFormat = (style as LabelStyle).getTextFormat();
 				field.text = defaultTxt;
+				this.h = field.textHeight + gap * 2;
 				
 				this._inputText();
 				if (this.w > this.defalutW)
@@ -262,6 +283,9 @@ package edit
 				field.addEventListener(Event.CHANGE, inputHandler, false, 0, true);
 				this.addChild(field);
 			}
+			
+			XMLVOMapper.fuck(this.defaultStyleXML, this.defaultStyle);
+			XMLVOMapper.fuck(this.selectStyleXML, this.selectStyle);
 				
 			defaultStyle.width = this.selectStyle.width = w;
 			defaultStyle.height = this.selectStyle.height = h;
@@ -350,9 +374,12 @@ package edit
 		 */		
 		private function drawHoverShape():void
 		{
-			hoverShape.graphics.clear();
-			hoverShape.graphics.beginFill(0xDDDDDD, 0.2);
-			hoverShape.graphics.drawRect(0, 0, w, h);
+			if (ifSlected)
+			{
+				hoverShape.graphics.clear();
+				hoverShape.graphics.beginFill(uint(selectStyle.getFill.color), Number(selectStyle.getFill.alpha));
+				hoverShape.graphics.drawRect(0, 0, w, h);
+			}
 		}
 		
 		/**
@@ -409,11 +436,8 @@ package edit
 		/**
 		 */		
 		public var selectStyleXML:XML = <style>
-											<fill color="FFFFFF" alpha='0'/>
+											<fill color="DDDDDD" alpha='0.2'/>
 											<border color='#2494E6' thikness='1' alpha='1' pixelHinting='true'/>
-											<!--effects>
-												<glow color='#2494E6' blur='2' alpha='0.2'/>
-											</effects-->
 										</style>
 			
 			
