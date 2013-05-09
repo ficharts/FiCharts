@@ -10,11 +10,14 @@ package edit
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.text.AntiAliasType;
+	import flash.text.GridFitType;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFieldType;
@@ -32,6 +35,7 @@ package edit
 			this.w = 50;
 			hoverShape.visible = false;
 			this.addChild(hoverShape);
+			this.addChild(frame);
 			
 			this.addEventListener(MouseEvent.ROLL_OVER, rollOver, false, 0, true);
 			this.addEventListener(MouseEvent.ROLL_OUT, rollOut, false, 0, true);
@@ -39,7 +43,45 @@ package edit
 		
 		/**
 		 */		
-		public function setTextFormat(size:uint, color:String):void
+		public function disEnable():void
+		{
+			if (proxyBm && this.contains(proxyBm))
+			{
+				this.removeChild(proxyBm)
+				proxyBm = null;
+			}
+			
+			field.visible = true;
+			proxyBm = BitmapUtil.getBitmap(this);
+			this.addChild(proxyBm);
+			
+			this.hoverShape.visible = this.frame.visible = this.field.visible = false;
+		}
+		
+		/**
+		 */		
+		private var proxyBm:Bitmap;
+		
+		/**
+		 */		
+		public function activit():void
+		{
+			this.hoverShape.visible = this.frame.visible = this.field.visible = true;
+			
+			if (proxyBm && this.contains(proxyBm))
+			{
+				this.removeChild(proxyBm)
+				proxyBm = null;
+			}
+		}
+		
+		/**
+		 */		
+		private var frame:Shape = new Shape;
+		
+		/**
+		 */		
+		public function setTextFormat(size:uint, color:String = '555555'):void
 		{
 			beforeInputStyleXML.format.@size = size;
 			inputStyleXML.format.@size = size;
@@ -97,8 +139,10 @@ package edit
 		{
 			ifSlected = true;
 			
-			this.graphics.clear();
-			StyleManager.drawRect(this, this.selectStyle);
+			this.dispatchEvent(new Event(Event.SELECT));
+			
+			frame.graphics.clear();
+			StyleManager.drawRectOnShape(frame, this.selectStyle);
 			
 			stage.focus = field;
 			
@@ -131,6 +175,13 @@ package edit
 		
 		/**
 		 */		
+		public function leave():void
+		{
+			_unSelect();
+		}
+		
+		/**
+		 */		
 		private function unSelect(evt:MouseEvent):void
 		{
 			_unSelect();
@@ -148,8 +199,10 @@ package edit
 			
 			stage.focus = null;
 			stage.removeEventListener(MouseEvent.MOUSE_DOWN, unSelect);
-			this.graphics.clear();
-			StyleManager.drawRect(this, this.defaultStyle);
+			frame.graphics.clear();
+			StyleManager.drawRectOnShape(frame, this.defaultStyle);
+			
+			this.dispatchEvent(new Event(Event.MOUSE_LEAVE));
 		}
 		
 		/**
@@ -248,7 +301,14 @@ package edit
 		public function setRotation(value:Number):void
 		{
 			this.rotation = value;
-			field.transform.matrix = null;
+			//field.transform.matrix = null;
+		}
+		
+		/**
+		 */		
+		private function textRenderd(evt:Event):void
+		{
+			trace("rendered");
 		}
 		
 		/**
@@ -258,14 +318,20 @@ package edit
 			if (field == null)
 			{
 				field = new TextField;
+				
+				field.addEventListener(Event.RENDER, textRenderd);
+				
 				field.type = TextFieldType.INPUT;
+				//field.antiAliasType = AntiAliasType.ADVANCED;
+				//field.gridFitType = GridFitType.SUBPIXEL
 				field.x = field.y = gap;
-				field.width = this.w - gap * 2;
-				field.height = this.h - gap * 2;
 				
 				XMLVOMapper.fuck(beforeInputStyleXML, style);
 				field.defaultTextFormat = (style as LabelStyle).getTextFormat();
 				field.text = defaultTxt;
+				
+				field.width = this.w - gap * 2;
+				field.height = this.h - gap * 2;
 				this.h = field.textHeight + gap * 2;
 				
 				this._inputText();
@@ -292,8 +358,8 @@ package edit
 			
 			drawHoverShape();
 			
-			this.graphics.clear();
-			StyleManager.drawRect(this, this.defaultStyle, this);
+			frame.graphics.clear();
+			StyleManager.drawRectOnShape(frame, this.defaultStyle, this);
 		}
 		
 		/**
@@ -331,12 +397,12 @@ package edit
 				defaultStyle.width = selectStyle.width = _w = field.textWidth + gap * 2 + 6;
 				field.width = field.textWidth + 6;
 				
-				this.graphics.clear();
+				frame.graphics.clear();
 				
 				if (ifSelected)
-					StyleManager.drawRect(this, this.selectStyle, this);
+					StyleManager.drawRectOnShape(frame, this.selectStyle, this);
 				else
-					StyleManager.drawRect(this, this.defaultStyle, this);
+					StyleManager.drawRectOnShape(frame, this.defaultStyle, this);
 				
 				
 				this.dispatchEvent(new Event(Event.RESIZE));
@@ -352,12 +418,12 @@ package edit
 				defaultStyle.width = selectStyle.width = _w = this.defalutW;
 				field.width = this.defalutW - gap * 2;
 				
-				this.graphics.clear();
+				frame.graphics.clear();
 				
 				if (ifSelected)
-					StyleManager.drawRect(this, this.selectStyle, this);
+					StyleManager.drawRectOnShape(frame, this.selectStyle, this);
 				else
-					StyleManager.drawRect(this, this.defaultStyle, this);
+					StyleManager.drawRectOnShape(frame, this.defaultStyle, this);
 				
 				
 				this.dispatchEvent(new Event(Event.RESIZE));

@@ -3,6 +3,7 @@ package edit
 	import com.dataGrid.DataGrid;
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.greensock.TweenLite;
 	
 	import edit.chart.ChartProxy;
 	import edit.chart.SeriesProxy;
@@ -83,6 +84,7 @@ package edit
 			this.addChild(titleLabel);
 			
 			hTitleLabel.defaultTxt = '横轴标题';
+			hTitleLabel.setTextFormat(12);
 			hTitleLabel.w = 30;
 			hTitleLabel.render();
 			hTitleLabel.x = (this.w - hTitleLabel.w) / 2;
@@ -92,14 +94,44 @@ package edit
 			this.addChild(hTitleLabel);
 			
 			vTitleLabel.defaultTxt = '纵轴标题';
+			vTitleLabel.setTextFormat(12);
 			vTitleLabel.w = 30;
 			vTitleLabel.render();
+			vTitleLabel.disEnable();
 			vTitleLabel.setRotation(- 90);
 			vTitleLabel.x = 15;
 			vTitleLabel.y = h / 2 + vTitleLabel.w / 2;
 			vTitleLabel.addEventListener(Event.CHANGE, vTitleChanged, false, 0, true);
 			vTitleLabel.addEventListener(Event.RESIZE, resizeVTitle, false, 0, true);
+			
+			vTitleLabel.addEventListener(Event.SELECT, vTitleSelected, false, 0, true);
+			vTitleLabel.addEventListener(Event.MOUSE_LEAVE, vTitleUnSelected, false, 0, true);
+			
 			this.addChild(vTitleLabel);
+		}
+		
+		/**
+		 */		
+		private function vTitleSelected(evt:Event):void
+		{
+			//onFinishTween:finishSelectedVtitle
+			vTitleLabel.activit();
+			TweenLite.to(vTitleLabel, 0.3, {rotation: 0});
+		}
+		
+		/**
+		 */		
+		private function finishSelectedVtitle():void
+		{
+			vTitleLabel.activit();
+		}
+		
+		/**
+		 */		
+		private function vTitleUnSelected(evt:Event):void
+		{
+			vTitleLabel.disEnable();
+			TweenLite.to(vTitleLabel, 0.3, {rotation: - 90});
 		}
 		
 		/**
@@ -252,6 +284,7 @@ package edit
 			
 			vTitleLabel.reset();
 			vTitleLabel.text = chartProxy.vTitle;
+			vTitleLabel.disEnable();
 		}
 		
 		/**

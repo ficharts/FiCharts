@@ -9,6 +9,19 @@ package edit.chart
 		
 		/**
 		 */		
+		override protected function initLabelField():void
+		{
+			
+		}
+		
+		/**
+		 */		
+		override public function renderNameField():void
+		{
+		}
+		
+		/**
+		 */		
 		override public function getXML():XML
 		{
 			return <{this.type} labelField={this.xField} valueField={this.yField} name={name}/>

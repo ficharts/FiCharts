@@ -100,6 +100,7 @@ package edit.chart
 		{
 			xField = sXML.@xField;
 			yField = sXML.@yField;
+			this.name = sXML.@name;
 			
 			setColumnDataField();
 		}
@@ -111,6 +112,8 @@ package edit.chart
 		{
 			xField = ChartProxy.SHARE_FIELD;
 			yField = type + startIndex;
+			
+			this.name = "序列" + this.startColumnIndex;
 			
 			setColumnDataField();
 		}
@@ -127,8 +130,6 @@ package edit.chart
 			
 			xColumn.dataType = ChartProxy.FIELD;
 			yColumn.dataType = ChartProxy.LINEAR;
-			
-			this.name = "序列" + this.startColumnIndex;
 		}
 		
 		/**
@@ -168,8 +169,6 @@ package edit.chart
 			
 			initHeadGraphic();
 			
-			initLabelField();
-			
 			delBtn.x = (headWidth - this.chartSize) / 2;
 			delBtn.y = (headHeight - this.chartSize) / 2;
 			delBtn.init(ChartTypePanel.getChartBitmapByType(type), 'blueDel', 'blueDel', 20, 20);
@@ -178,6 +177,8 @@ package edit.chart
 			
 			headTop.addChild(delBtn);
 			header.addChild(headTop);
+			
+			initLabelField();
 				
 			TweenLite.from(headerHolder, 0.5, {alpha: 0, scaleX:0, scaleY:0, ease: Back.easeOut});
 			
@@ -230,9 +231,10 @@ package edit.chart
 			nameTxtField.y = 3;
 			
 			headBottom.alpha = 0;
-			headBottom.x = this.headWidth / 2;
-			headBottom.y = headHeight / 2;
-			headBottom.scaleX = headBottom.scaleY = 0;
+			headBottom.x = delBtn.x;
+			headBottom.y = delBtn.y;
+			headBottom.width = delBtn.width;
+			headBottom.height = delBtn.height;
 			
 			headBottom.addChild(nameTxtField);
 			header.addChild(headBottom);
@@ -289,9 +291,9 @@ package edit.chart
 		 */		
 		private function outHeader(evt:MouseEvent):void
 		{
+			nameTxtField.leave();
 			headBottom.mouseChildren = headBottom.mouseEnabled = false;
-			
-			TweenLite.to(headBottom, 0.3, {alpha: 0, x: this.headWidth / 2, y: this.headHeight / 2,scaleX: 0, scaleY: 0});
+			TweenLite.to(headBottom, 0.3, {alpha: 0, x: delBtn.x, y: delBtn.y ,width: delBtn.width, height: delBtn.height});
 		}
 		
 		/**

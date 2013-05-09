@@ -512,16 +512,16 @@ package edit.chart
 			
 			if (value.hasOwnProperty("axis"))
 			{
-				this.hAxisType = value.@axis.x.@type;
-				this.vAxisType = value.@axis.y.@type;
+				this.hAxisType = value.axis.x.@type;
+				this.vAxisType = value.axis.y.@type;
 				
-				if (value.@axis.x.hasOwnProperty("@title"))
-					this.hTitle = value.@axis.x.@title;
+				if (value.axis.x.hasOwnProperty("@title"))
+					this.hTitle = value.axis.x.@title;
 				else
 					hTitle = '';
 				
-				if (value.@axis.y.hasOwnProperty("@title"))
-					this.vTitle = value.@axis.y.@title;
+				if (value.axis.y.hasOwnProperty("@title"))
+					this.vTitle = value.axis.y.@title;
 				else
 					vTitle = '';
 			}
