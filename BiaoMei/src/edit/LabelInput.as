@@ -43,19 +43,18 @@ package edit
 		
 		/**
 		 */		
-		public function disEnable():void
+		public function toImgMode():void
 		{
-			if (proxyBm && this.contains(proxyBm))
-			{
-				this.removeChild(proxyBm)
-				proxyBm = null;
-			}
+			ifIMGModel = true;
 			
-			field.visible = true;
-			proxyBm = BitmapUtil.getBitmap(this);
+			clearProxy();
+			
+			proxyBm = BitmapUtil.getBitmap(this.field);
+			proxyBm.x = field.x;
+			proxyBm.y = field.y;
 			this.addChild(proxyBm);
 			
-			this.hoverShape.visible = this.frame.visible = this.field.visible = false;
+			this.field.alpha = 0;
 		}
 		
 		/**
@@ -66,12 +65,53 @@ package edit
 		 */		
 		public function activit():void
 		{
-			this.hoverShape.visible = this.frame.visible = this.field.visible = true;
+			ifIMGModel = false;
+			clearProxy();
 			
+			this.field.alpha = 1;
+		}
+		
+		/**
+		 */		
+		private var ifIMGModel:Boolean = false;
+		
+		/**
+		 */		
+		private function clearProxy():void
+		{
 			if (proxyBm && this.contains(proxyBm))
 			{
 				this.removeChild(proxyBm)
 				proxyBm = null;
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set text(value:String):void
+		{
+			if (RexUtil.ifTextNull(value) == false)
+			{
+				var temRot:Number = this.rotation;
+				var temSx:Number = this.scaleX;
+				var temSy:Number = this.scaleY;
+				
+				this.rotation = 0;
+				this.scaleX = this.scaleY = 1;
+				
+				field.text = value;
+				
+				updateFieldSize();
+				
+				checkIfShowDefaultText();
+				
+				if (ifIMGModel)
+					this.toImgMode();
+				
+				this.rotation = temRot;
+				this.scaleX = temSx;
+				this.scaleY = temSy;
 			}
 		}
 		
@@ -95,9 +135,13 @@ package edit
 		public function reset():void
 		{
 			this.field.text = '';
-			this._inputText();
 			
-			hideBgField();
+			this.updateFieldSize();
+			
+			if (this.ifIMGModel)
+				this.toImgMode();
+			
+			checkIfShowDefaultText();
 		}
 		
 		/**
@@ -118,7 +162,6 @@ package edit
 		{
 			_maxWidth = value;
 		}
-
 		
 		/**
 		 */		
@@ -141,10 +184,10 @@ package edit
 			
 			this.dispatchEvent(new Event(Event.SELECT));
 			
-			frame.graphics.clear();
-			StyleManager.drawRectOnShape(frame, this.selectStyle);
-			
 			stage.focus = field;
+			
+			this.drawFrame();
+			this.drawHoverShape();
 			
 			if (bgField)
 				bgField.visible = false;
@@ -161,7 +204,9 @@ package edit
 		private function keyDownHandler(evt:KeyboardEvent):void
 		{
 			if (evt.keyCode == Keyboard.ENTER)
+			{
 				_unSelect();
+			}
 		}
 		
 		/**
@@ -191,30 +236,45 @@ package edit
 		 */		
 		private function _unSelect():void
 		{
-			ifSlected = false;
-			
-			stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-			
-			hideBgField();
-			
-			stage.focus = null;
-			stage.removeEventListener(MouseEvent.MOUSE_DOWN, unSelect);
-			frame.graphics.clear();
-			StyleManager.drawRectOnShape(frame, this.defaultStyle);
-			
-			this.dispatchEvent(new Event(Event.MOUSE_LEAVE));
+			if (ifSlected)
+			{
+				ifSlected = false;
+				
+				stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+				
+				checkIfShowDefaultText();
+				
+				stage.focus = null;
+				stage.removeEventListener(MouseEvent.MOUSE_DOWN, unSelect);
+				frame.graphics.clear();
+				StyleManager.drawRectOnShape(frame, this.defaultStyle);
+				
+				this.dispatchEvent(new Event(Event.MOUSE_LEAVE));
+			}
 		}
 		
 		/**
 		 */		
-		private function hideBgField():void
+		private function checkIfShowDefaultText():void
 		{
 			if (bgField)
 			{
 				if (RexUtil.ifTextNull(this.field.text))
+				{
 					bgField.visible = true;
+					
+					if (this.w < bgField.width + this.gap * 2)
+					{
+						this.selectStyle.width = this.defaultStyle.width = this._w = bgField.width + this.gap * 2;
+						this.drawFrame();
+						this.drawHoverShape();
+					}
+				}
 				else
+				{
 					bgField.visible = false;	
+					updateFieldSize();
+				}
 			}
 		}
 		
@@ -266,20 +326,6 @@ package edit
 		}
 
 		/**
-		 * @private
-		 */
-		public function set text(value:String):void
-		{
-			if (RexUtil.ifTextNull(value) == false)
-			{
-				field.text = value;
-				
-				_inputText();
-				hideBgField();
-			}
-		}
-		
-		/**
 		 */		
 		public function get defaultTxt():String
 		{
@@ -301,26 +347,18 @@ package edit
 		public function setRotation(value:Number):void
 		{
 			this.rotation = value;
-			//field.transform.matrix = null;
-		}
-		
-		/**
-		 */		
-		private function textRenderd(evt:Event):void
-		{
-			trace("rendered");
 		}
 		
 		/**
 		 */		
 		public function render():void
 		{
+			XMLVOMapper.fuck(this.defaultStyleXML, this.defaultStyle);
+			XMLVOMapper.fuck(this.selectStyleXML, this.selectStyle);
+			
 			if (field == null)
 			{
 				field = new TextField;
-				
-				field.addEventListener(Event.RENDER, textRenderd);
-				
 				field.type = TextFieldType.INPUT;
 				//field.antiAliasType = AntiAliasType.ADVANCED;
 				//field.gridFitType = GridFitType.SUBPIXEL
@@ -334,9 +372,10 @@ package edit
 				field.height = this.h - gap * 2;
 				this.h = field.textHeight + gap * 2;
 				
-				this._inputText();
-				if (this.w > this.defalutW)
-					this.defalutW = this.w;
+				this.updateFieldSize();
+				
+				/*if (this.w > this.defalutW)
+					this.defalutW = this.w;*/
 				
 				bgField = BitmapUtil.getBitmap(field);
 				bgField.x = bgField.y = gap;
@@ -350,16 +389,11 @@ package edit
 				this.addChild(field);
 			}
 			
-			XMLVOMapper.fuck(this.defaultStyleXML, this.defaultStyle);
-			XMLVOMapper.fuck(this.selectStyleXML, this.selectStyle);
-				
 			defaultStyle.width = this.selectStyle.width = w;
 			defaultStyle.height = this.selectStyle.height = h;
 			
 			drawHoverShape();
-			
-			frame.graphics.clear();
-			StyleManager.drawRectOnShape(frame, this.defaultStyle, this);
+			drawFrame();
 		}
 		
 		/**
@@ -374,12 +408,12 @@ package edit
 		 */		
 		private function inputHandler(evt:Event):void
 		{
-			_inputText(true);
+			updateFieldSize();
 		}
 		
 		/**
 		 */		
-		private function _inputText(ifSelected:Boolean = false):void
+		private function updateFieldSize():void
 		{
 			if (field.textWidth + gap * 2 > this.maxWidth)
 			{
@@ -397,13 +431,7 @@ package edit
 				defaultStyle.width = selectStyle.width = _w = field.textWidth + gap * 2 + 6;
 				field.width = field.textWidth + 6;
 				
-				frame.graphics.clear();
-				
-				if (ifSelected)
-					StyleManager.drawRectOnShape(frame, this.selectStyle, this);
-				else
-					StyleManager.drawRectOnShape(frame, this.defaultStyle, this);
-				
+				drawFrame();
 				
 				this.dispatchEvent(new Event(Event.RESIZE));
 			}
@@ -418,18 +446,24 @@ package edit
 				defaultStyle.width = selectStyle.width = _w = this.defalutW;
 				field.width = this.defalutW - gap * 2;
 				
-				frame.graphics.clear();
-				
-				if (ifSelected)
-					StyleManager.drawRectOnShape(frame, this.selectStyle, this);
-				else
-					StyleManager.drawRectOnShape(frame, this.defaultStyle, this);
-				
+				drawFrame();
 				
 				this.dispatchEvent(new Event(Event.RESIZE));
 			}
 			
 			drawHoverShape();
+		}
+		
+		/**
+		 */		
+		private function drawFrame():void
+		{
+			frame.graphics.clear();
+			
+			if (this.ifSlected)
+				StyleManager.drawRectOnShape(frame, this.selectStyle, this);
+			else
+				StyleManager.drawRectOnShape(frame, this.defaultStyle, this);
 		}
 		
 		/**
@@ -440,12 +474,13 @@ package edit
 		 */		
 		private function drawHoverShape():void
 		{
-			if (ifSlected)
-			{
-				hoverShape.graphics.clear();
-				hoverShape.graphics.beginFill(uint(selectStyle.getFill.color), Number(selectStyle.getFill.alpha));
-				hoverShape.graphics.drawRect(0, 0, w, h);
-			}
+			hoverShape.graphics.clear();
+			hoverShape.graphics.beginFill(uint(selectStyle.getFill.color), Number(selectStyle.getFill.alpha));
+			
+			if (this.ifSlected)
+				hoverShape.graphics.drawRect(0, 0, selectStyle.width, h);
+			else
+				hoverShape.graphics.drawRect(0, 0, this.defaultStyle.width, h);
 		}
 		
 		/**

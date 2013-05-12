@@ -1,0 +1,19 @@
+#banner {
+
+	width: 100%;
+	height: 90px;
+	background-color: #DEDEDE;
+
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+#banner img {
+
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}

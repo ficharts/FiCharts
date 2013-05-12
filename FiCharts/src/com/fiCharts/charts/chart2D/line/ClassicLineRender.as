@@ -2,6 +2,7 @@ package com.fiCharts.charts.chart2D.line
 {
 	import com.fiCharts.charts.chart2D.core.series.ISeriesRenderPattern;
 	import com.fiCharts.charts.common.SeriesDataPoint;
+	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.graphic.StyleManager;
 	

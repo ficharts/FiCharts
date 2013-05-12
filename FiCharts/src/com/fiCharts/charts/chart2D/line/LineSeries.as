@@ -8,6 +8,7 @@ package com.fiCharts.charts.chart2D.line
 	import com.fiCharts.charts.chart2D.encry.SB;
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataPoint;
+	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.graphic.CubicBezier;

@@ -56,13 +56,13 @@ package com.fiCharts.utils
 		
 		/**
 		 */		
-		public static function ifTextNull(value:String):Boolean
+		public static function ifTextNull(value:Object):Boolean
 		{
 			if (value == null)
 				return true;
 			
 			var rex:RegExp = /^\s*$/g;
-			return rex.test(value); 
+			return rex.test(value.toString()); 
 		}
 		
 		//---------------------------------------

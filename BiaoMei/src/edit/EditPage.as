@@ -97,7 +97,7 @@ package edit
 			vTitleLabel.setTextFormat(12);
 			vTitleLabel.w = 30;
 			vTitleLabel.render();
-			vTitleLabel.disEnable();
+			vTitleLabel.toImgMode();
 			vTitleLabel.setRotation(- 90);
 			vTitleLabel.x = 15;
 			vTitleLabel.y = h / 2 + vTitleLabel.w / 2;
@@ -114,9 +114,7 @@ package edit
 		 */		
 		private function vTitleSelected(evt:Event):void
 		{
-			//onFinishTween:finishSelectedVtitle
-			vTitleLabel.activit();
-			TweenLite.to(vTitleLabel, 0.3, {rotation: 0});
+			TweenLite.to(vTitleLabel, 0.3, {rotation: 0, onComplete: finishSelectedVtitle});
 		}
 		
 		/**
@@ -130,7 +128,7 @@ package edit
 		 */		
 		private function vTitleUnSelected(evt:Event):void
 		{
-			vTitleLabel.disEnable();
+			vTitleLabel.toImgMode();
 			TweenLite.to(vTitleLabel, 0.3, {rotation: - 90});
 		}
 		
@@ -284,7 +282,7 @@ package edit
 			
 			vTitleLabel.reset();
 			vTitleLabel.text = chartProxy.vTitle;
-			vTitleLabel.disEnable();
+			//vTitleLabel.disEnable();
 		}
 		
 		/**

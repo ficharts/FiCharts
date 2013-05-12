@@ -190,6 +190,12 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			_dataXML = value;
 
+			if (dataVOes)
+			{
+				dataVOes.length = 0;
+				dataVOes = null;
+			}
+			
 			ifDataChanged = true;
 		}
 		

@@ -148,6 +148,8 @@ package edit.chart
 		 */		
 		public function render():void
 		{
+			this.mouseEnabled = this.mouseChildren = false;
+			
 			this.x = this.getX();
 			this.y = this.getY();
 
@@ -180,18 +182,41 @@ package edit.chart
 			
 			initLabelField();
 				
-			TweenLite.from(headerHolder, 0.5, {alpha: 0, scaleX:0, scaleY:0, ease: Back.easeOut});
+			TweenLite.from(headerHolder, 0.5, {alpha: 0, scaleX:0, scaleY:0, ease: Back.easeOut, onComplete: rendered});
 			
 			headTop.addEventListener(MouseEvent.ROLL_OVER, overHeader, false, 0, true);
 			header.addEventListener(MouseEvent.ROLL_OUT, outHeader, false, 0, true);
 		}
 		
 		/**
+		 * 这里的奇葩动画会影响  nameTxtField 文本尺寸的渲染；
+		 */		
+		private function rendered():void
+		{
+			if (ifNameChanged)
+			{
+				nameTxtField.text = this.name;
+				
+				headBottom.width = delBtn.width;
+				headBottom.height = delBtn.height;	
+				
+				headBottom.x = delBtn.x;
+				headBottom.y = delBtn.y;
+			}
+			
+			this.mouseEnabled = this.mouseChildren = true;
+		}
+		
+		/**
 		 */		
 		public function renderNameField():void
 		{
-			nameTxtField.text = this.name;
+			ifNameChanged = true;
 		}
+		
+		/**
+		 */		
+		private var ifNameChanged:Boolean = false;
 		
 		/**
 		 */		
@@ -226,16 +251,12 @@ package edit.chart
 			nameTxtField.w = headWidth - 2;
 			nameTxtField.addEventListener(Event.RESIZE, resizeTxtField, false, 0, true);
 			nameTxtField.addEventListener(Event.CHANGE, txtFieldChanged, false, 0, true);
+			nameTxtField.addEventListener(Event.MOUSE_LEAVE, nameFieldEditComplete, false, 0, true);
 			nameTxtField.render();
 			nameTxtField.x = (headWidth - nameTxtField.w) / 2;
 			nameTxtField.y = 3;
 			
 			headBottom.alpha = 0;
-			headBottom.x = delBtn.x;
-			headBottom.y = delBtn.y;
-			headBottom.width = delBtn.width;
-			headBottom.height = delBtn.height;
-			
 			headBottom.addChild(nameTxtField);
 			header.addChild(headBottom);
 			
@@ -284,7 +305,18 @@ package edit.chart
 		private function overHeader(evt:MouseEvent):void
 		{
 			headBottom.mouseChildren = headBottom.mouseEnabled = true;
+			
+			headBottom.alpha = 1;
+			
 			TweenLite.to(headBottom, 0.3, {alpha: 1, x: 0, y: headHeight - 3, scaleX: 1, scaleY: 1});
+		}
+		
+		/**
+		 */		
+		private function nameFieldEditComplete(evt:Event):void
+		{
+			headBottom.mouseChildren = headBottom.mouseEnabled = false;
+			TweenLite.to(headBottom, 0.3, {alpha: 0, x: delBtn.x, y: delBtn.y ,width: delBtn.width, height: delBtn.height});
 		}
 		
 		/**
