@@ -4,15 +4,15 @@ package navBar
 	{
 		/**
 		 */		
-		function toTemplatePage(nav:NavBottom):void;
+		function toTemplatePage(nav:NavTop):void;
 		
 		/**
 		 */		
-		function toEditPage(nav:NavBottom):void;
+		function toEditPage(nav:NavTop):void;
 		
 		/**
 		 */		
-		function toPreviewPage(nav:NavBottom):void;
+		function toPreviewPage(nav:NavTop):void;
 
 	}
 }

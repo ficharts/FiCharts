@@ -3,6 +3,7 @@ package
 	import alert.AlertEvent;
 	import alert.AlertPanel;
 	
+	import com.dataGrid.DataGridEvent;
 	import com.fiCharts.utils.StageUtil;
 	import com.greensock.TweenLite;
 	
@@ -12,7 +13,7 @@ package
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
-	import navBar.NavBottom;
+	import navBar.NavTop;
 	
 	import preview.PreviewPage;
 	
@@ -32,6 +33,7 @@ package
 		 */		
 		private function init():void
 		{
+			pageContainer.y = 90;
 			this.addChild(pageContainer);
 			
 			templatePage = new TemplePage(this);
@@ -45,22 +47,23 @@ package
 			pageContainer.addPage(editPage);
 			pageContainer.addPage(previewPage);
 			
-			bottomNav = new NavBottom(this);
-			addChild(bottomNav);
+			nav = new NavTop(this);
+			addChild(nav);
 			
 			toTemplatePage();
 			
 			this.addChild(maskShape);
 			pageContainer.mask = maskShape;
-			maskShape.graphics.clear();
-			maskShape.graphics.beginFill(0);
-			maskShape.graphics.drawRect(0, 0, templatePage.w, templatePage.height);
 			
-			this.graphics.clear();
-			this.graphics.lineStyle(1, 0xDEDEDE);
-			this.graphics.drawRect(0, 0, 980, this.height);
-			this.graphics.endFill();
-			
+			this.addEventListener(DataGridEvent.UPDATA_SEIZE, sizeChangedHandler, false, 0, true);
+		}
+		
+		/**
+		 * 页面动态刷新高度时调用
+		 */		
+		private function sizeChangedHandler(evt:DataGridEvent):void
+		{
+			renderBg();
 		}
 		
 		/**
@@ -122,11 +125,25 @@ package
 		 */		
 		private function exchangeToPage(newPage:PageBase):void
 		{
-			//if (this.currPage)
-			//	currPage.hide();
 			currPage = newPage;
-			//currPage.show();
-			bottomNav.y = currPage.h;
+			renderBg();
+		}
+		
+		/**
+		 */		
+		private function renderBg():void
+		{
+			//内容区域
+			maskShape.graphics.clear();
+			maskShape.graphics.beginFill(0);
+			maskShape.graphics.drawRect(1, this.nav.h, currPage.w - 2, currPage.h - 1);
+			maskShape.graphics.endFill();
+			
+			// 边框
+			this.graphics.clear();
+			this.graphics.lineStyle(1, 0xEEEEEE);
+			this.graphics.drawRect(0, 0, 950 - 1, currPage.h + this.nav.h);
+			this.graphics.endFill();
 		}
 		
 		/**
@@ -152,6 +169,6 @@ package
 		/**
 		 * 底部导航条
 		 */		
-		public var bottomNav:NavBottom;
+		public var nav:NavTop;
 	}
 }

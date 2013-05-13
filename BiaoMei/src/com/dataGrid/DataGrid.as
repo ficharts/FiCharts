@@ -48,7 +48,19 @@
 			this.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler, false, 0, true);
 			
 			this.addEventListener(DataGridEvent.DATA_CHNAGED, dataChanged, false, 0, true);
+			this.addEventListener(DataGridEvent.ADD_ROW, addRowHandler, false, 0, true);
         }
+		
+		/**
+		 */		
+		private function addRowHandler(evt:DataGridEvent):void
+		{
+			this.gridH += grid.defaultCellH;
+			this.grid.render(this.columns, this.rows);
+			renderBG();
+			
+			this.dispatchEvent(new DataGridEvent(DataGridEvent.UPDATA_SEIZE));
+		}
 		
 		/**
 		 * 验证数据列的内容
@@ -220,7 +232,14 @@
 			
 			this.grid.render(this.columns, this.rows);
 			
-			// 白色背景
+			renderBG();
+		}
+		
+		/**
+		 *  绘制白色背景
+		 */		
+		private function renderBG():void
+		{
 			this.graphics.clear();
 			this.graphics.beginFill(0xFFFFFF);
 			this.graphics.drawRect(0, 0, gridW, gridH);
@@ -245,6 +264,18 @@
 				var columnIndex:int = 0;
 				var rowIndex:uint = 0;
 				var field:String;
+				
+				// 数据量大于表格行数，需要添加行
+				if (this.soruceData.length > this.rows.length)
+				{
+					var rows:uint = this.soruceData.length - this.rows.length;
+					
+					this.gridH += grid.defaultCellH * rows;
+					this.grid.render(this.columns, this.rows);
+					renderBG();
+					
+					this.dispatchEvent(new DataGridEvent(DataGridEvent.UPDATA_SEIZE));
+				}
 				
 				for each(var item:Object in this.soruceData)
 				{

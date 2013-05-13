@@ -21,7 +21,7 @@ package template
 			chartTemplates = XML(ByteArray(new TEMPL).toString());
 			
 			boxLayout.setLoc(0, 0);
-			boxLayout.setItemSizeAndFullWidth(this.w, 180, 150);
+			boxLayout.setItemSizeAndFullWidth(this.w, 215, 150);
 			layoutCharts();
 			
 			this.addEventListener(ChartCreatEvent.SELECT_CHART, selectChartHandler, false, 0, true);
@@ -72,6 +72,8 @@ package template
 				chart.render();
 				addChild(chart);
 			}
+			
+			this.h = boxLayout.getRectHeight();
 		}
 		
 		/**
@@ -95,7 +97,7 @@ package template
 			currentChartTPUI = chart;
 			currentChartTPUI.selected();
 			
-			main.bottomNav.toEditPage();
+			main.nav.toEditPage();
 		}
 		
 		/**

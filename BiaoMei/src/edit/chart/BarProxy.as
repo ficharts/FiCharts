@@ -63,6 +63,7 @@ package edit.chart
 		{
 			xField = sXML.@xField;
 			yField = sXML.@yField
+			this.name = sXML.@name;
 			
 			setColumnDataField();
 		}
@@ -74,6 +75,8 @@ package edit.chart
 		{
 			xField = type + startIndex;
 			yField = ChartProxy.SHARE_FIELD;
+			
+			this.name = "序列" + this.startColumnIndex;
 			
 			setColumnDataField();
 		}

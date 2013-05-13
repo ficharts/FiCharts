@@ -1,6 +1,7 @@
 package edit
 {
 	import com.dataGrid.DataGrid;
+	import com.dataGrid.DataGridEvent;
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.greensock.TweenLite;
@@ -30,25 +31,28 @@ package edit
 			
 			this.main = main;
 			StageUtil.initApplication(this, init)
+				
+			this.h = 540;
 		}
 		
 		/**
 		 */		
 		private function init():void
 		{
+			dataGrid.addEventListener(DataGridEvent.UPDATA_SEIZE, updateDataGridSizeHandler, false, 0, true);
+			dataGrid.gridW = 840;
+			dataGrid.gridH = this.h - 200// 上下空白;
+			
+			dataGrid.x = (this.w - dataGrid.gridW) * 0.5;
+			dataGrid.y = (this.h - dataGrid.gridH) * 0.5;
 			addChild(dataGrid);
+			
 			dataGrid.preRender();
 			dataGrid.fillColumnBG(0);
 			dataGrid.setColumnTextFormat(0, new TextFormat("Arial", 14, 0x333333, false, true));
 			
-			dataGrid.x = (this.w - dataGrid.gridW) * 0.5;
-			dataGrid.y = (this.h - dataGrid.gridH) * 0.5;
-			
 			// 背景
-			this.renderBG();
-			this.graphics.beginFill(0xEEEEEE);
-			this.graphics.drawRoundRect(dataGrid.x - dis, dataGrid.y - dis, 
-				dataGrid.gridW + 2 * dis, dataGrid.gridH + 2 * dis, 5, 5);
+			renderBG();
 			
 			chartProxy.x = dataGrid.x;
 			chartProxy.y = dataGrid.y;
@@ -56,8 +60,8 @@ package edit
 			
 			this.addChild(chartTypePanel);
 			chartTypePanel.render();
-			chartTypePanel.x = dataGrid.x + dataGrid.gridW - chartTypePanel.w - 20;
-			chartTypePanel.y = dataGrid.y + 20;
+			chartTypePanel.x = this.w - chartTypePanel.w - 10;
+			chartTypePanel.y = this.dataGrid.y;
 			
 			var rect:Rectangle = this.getRect(this);
 			chartTypePanel.setDragRect(rect);
@@ -68,6 +72,31 @@ package edit
 			dragDropper.addReceiver(this, dataGrid);
 			
 			initTitles();
+		}
+		
+		/**
+		 */		
+		private function updateDataGridSizeHandler(evt:DataGridEvent):void
+		{
+			evt.stopPropagation();
+			
+			dataGrid.fillColumnBG(0);
+			this.h = this.dataGrid.gridH + 200;
+			this.layoutVTitleY();
+			this.layoutHTitileY();
+			renderBG();
+			
+			this.dispatchEvent(evt);
+		}
+		
+		/**
+		 */		
+		override public function renderBG():void
+		{
+			super.renderBG();
+			this.graphics.beginFill(0xEEEEEE);
+			this.graphics.drawRoundRect(dataGrid.x - dis, dataGrid.y - dis, 
+				dataGrid.gridW + 2 * dis, dataGrid.gridH + 2 * dis, 5, 5);
 		}
 		
 		/**
@@ -88,7 +117,7 @@ package edit
 			hTitleLabel.w = 30;
 			hTitleLabel.render();
 			hTitleLabel.x = (this.w - hTitleLabel.w) / 2;
-			hTitleLabel.y = 620;
+			layoutHTitileY();
 			hTitleLabel.addEventListener(Event.CHANGE, hTitleChanged, false, 0, true);
 			hTitleLabel.addEventListener(Event.RESIZE, resizeHTitle, false, 0, true);
 			this.addChild(hTitleLabel);
@@ -99,8 +128,8 @@ package edit
 			vTitleLabel.render();
 			vTitleLabel.toImgMode();
 			vTitleLabel.setRotation(- 90);
-			vTitleLabel.x = 15;
-			vTitleLabel.y = h / 2 + vTitleLabel.w / 2;
+			vTitleLabel.x = (this.dataGrid.x - vTitleLabel.h) / 2;
+			layoutVTitleY();
 			vTitleLabel.addEventListener(Event.CHANGE, vTitleChanged, false, 0, true);
 			vTitleLabel.addEventListener(Event.RESIZE, resizeVTitle, false, 0, true);
 			
@@ -108,6 +137,20 @@ package edit
 			vTitleLabel.addEventListener(Event.MOUSE_LEAVE, vTitleUnSelected, false, 0, true);
 			
 			this.addChild(vTitleLabel);
+		}
+		
+		/**
+		 */		
+		private function layoutHTitileY():void
+		{
+			hTitleLabel.y = this.h / 2 + (this.dataGrid.height + this.dataGrid.y) / 2 - hTitleLabel.h / 2;
+		}
+		
+		/**
+		 */		
+		private function layoutVTitleY():void
+		{
+			vTitleLabel.y = h / 2 + vTitleLabel.w / 2;
 		}
 		
 		/**
@@ -152,7 +195,7 @@ package edit
 		 */		
 		private function resizeVTitle(evt:Event):void
 		{
-			vTitleLabel.y = h / 2 + vTitleLabel.w / 2;
+			layoutVTitleY();
 		}
 		
 		/**

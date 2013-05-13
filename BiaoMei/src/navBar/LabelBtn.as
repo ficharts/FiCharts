@@ -170,15 +170,13 @@ package navBar
 		 */		
 		public var styleXML:XML = <states>
 										<normal>
-											<fill color='#DDDDDD' alpha='0.4'/>
+											<fill color='#DDDDDD' alpha='0'/>
 										</normal>
 										<hover>
-											<fill color='#87C5F1' alpha='1' angle='90'/>
-											<border color='#87C5F1' alpha='1'/>
+											<fill color='#DDDDDD' alpha='0.6'/>
 										</hover>
 										<down>
-											<border color='#4EA6EA' alpha='0.35'/>
-											<fill color='#4EA6EA' alpha='0.3'/>
+											<fill color='#DDDDDD' alpha='0.4'/>
 										</down>
 									</states>
 			

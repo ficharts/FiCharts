@@ -38,7 +38,7 @@ package
 		
 		/**
 		 */		
-		public var w:Number = 980;
+		public var w:Number = 950;
 		
 		/**
 		 */		

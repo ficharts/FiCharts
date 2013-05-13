@@ -8,7 +8,7 @@ package navBar
 		
 		/**
 		 */		
-		public function toTemplatePage(nav:NavBottom):void
+		public function toTemplatePage(nav:NavTop):void
 		{
 			nav.currentNav = nav.templateNav;
 			nav.main.toTemplatePage();
@@ -16,13 +16,13 @@ package navBar
 		
 		/**
 		 */		
-		public function toEditPage(nav:NavBottom):void
+		public function toEditPage(nav:NavTop):void
 		{
 		}
 		
 		/**
 		 */		
-		public function toPreviewPage(nav:NavBottom):void
+		public function toPreviewPage(nav:NavTop):void
 		{
 			nav.currentNav = nav.previewChartNav;
 			nav.main.toPreviewPage();

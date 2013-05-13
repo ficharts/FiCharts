@@ -175,6 +175,8 @@ package edit.chart
 			delBtn.y = (headHeight - this.chartSize) / 2;
 			delBtn.init(ChartTypePanel.getChartBitmapByType(type), 'blueDel', 'blueDel', 20, 20);
 			delBtn.addEventListener(MouseEvent.CLICK, deleteThisHandler, false, 0, true);
+			delBtn.addEventListener(MouseEvent.ROLL_OVER, delBtnOver, false, 0, true);
+			delBtn.addEventListener(MouseEvent.ROLL_OUT, delBtnOut, false, 0, true);
 			delBtn.render();
 			
 			headTop.addChild(delBtn);
@@ -302,26 +304,50 @@ package edit.chart
 		
 		/**
 		 */		
+		private function delBtnOver(evt:MouseEvent):void
+		{
+			this.hideNameField();
+		}
+		
+		/**
+		 */		
+		private function delBtnOut(evt:MouseEvent):void
+		{
+			this.showNameField();
+		}
+		
+		/**
+		 */		
 		private function overHeader(evt:MouseEvent):void
 		{
-			headBottom.mouseChildren = headBottom.mouseEnabled = true;
-			
-			headBottom.alpha = 1;
-			
-			TweenLite.to(headBottom, 0.3, {alpha: 1, x: 0, y: headHeight - 3, scaleX: 1, scaleY: 1});
+			showNameField();
 		}
 		
 		/**
 		 */		
 		private function nameFieldEditComplete(evt:Event):void
 		{
-			headBottom.mouseChildren = headBottom.mouseEnabled = false;
-			TweenLite.to(headBottom, 0.3, {alpha: 0, x: delBtn.x, y: delBtn.y ,width: delBtn.width, height: delBtn.height});
+			hideNameField();
 		}
 		
 		/**
 		 */		
 		private function outHeader(evt:MouseEvent):void
+		{
+			hideNameField();
+		}
+		
+		/**
+		 */		
+		private function showNameField():void
+		{
+			headBottom.mouseChildren = headBottom.mouseEnabled = true;
+			TweenLite.to(headBottom, 0.3, {alpha: 1, x: 0, y: headHeight - 3, scaleX: 1, scaleY: 1});
+		}
+		
+		/**
+		 */		
+		private function hideNameField():void
 		{
 			nameTxtField.leave();
 			headBottom.mouseChildren = headBottom.mouseEnabled = false;

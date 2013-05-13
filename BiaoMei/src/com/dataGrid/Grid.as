@@ -10,8 +10,8 @@
         private var _startColumnIndex:uint = 0;
         private var _startRowIndex:uint = 0;
 		
-        private var _w:Number = 840;
-        private var _h:Number = 500;
+        private var _w:Number = 0;
+        private var _h:Number = 0;
 		
         private var _defaultCellW:Number = 70;
         private var _defaultCellH:Number = 20;

@@ -283,8 +283,6 @@
 		 */		
         private function keyDownHandler(event:KeyboardEvent):void
         {
-			if (this.ifActivation == false) return;
-			
             if (this.currentRow == null || currentColumn == null)
                 return;
 			
@@ -355,10 +353,19 @@
 		private function downCell():void
 		{
 			this.newRowIndex += 1;
-			if (this.newRowIndex >= rows.length)
-				newRowIndex = rows.length - 1;
 			
-			this.swtichCell();
+			// 行不够了，需要再增添, 一次增添一行，总行数
+			// 暂时不做限制
+			if (this.newRowIndex >= rows.length)
+			{
+				//newRowIndex = rows.length - 1;
+				this.dispatchEvent(new DataGridEvent(DataGridEvent.ADD_ROW));
+				this.swtichCell();
+			}
+			else
+			{
+				this.swtichCell();
+			}
 		}
 
 		/**
