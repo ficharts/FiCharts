@@ -532,7 +532,7 @@ package edit
 		 */		
 		public var defaultStyleXML:XML = <style>
 											<fill color="FFFFFF" alpha='0'/>
-											<border color='#eeeeee' thikness='1' alpha='1' pixelHinting='true'/>
+											<border color='#eeeeee' thikness='1' alpha='0' pixelHinting='true'/>
 										</style>
 		/**
 		 */		

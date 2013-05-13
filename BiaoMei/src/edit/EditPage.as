@@ -32,7 +32,7 @@ package edit
 			this.main = main;
 			StageUtil.initApplication(this, init)
 				
-			this.h = 540;
+			this.h = 680;
 		}
 		
 		/**
@@ -41,7 +41,7 @@ package edit
 		{
 			dataGrid.addEventListener(DataGridEvent.UPDATA_SEIZE, updateDataGridSizeHandler, false, 0, true);
 			dataGrid.gridW = 840;
-			dataGrid.gridH = this.h - 200// 上下空白;
+			dataGrid.gridH = this.h - 180// 上下空白;
 			
 			dataGrid.x = (this.w - dataGrid.gridW) * 0.5;
 			dataGrid.y = (this.h - dataGrid.gridH) * 0.5;
@@ -60,8 +60,8 @@ package edit
 			
 			this.addChild(chartTypePanel);
 			chartTypePanel.render();
-			chartTypePanel.x = this.w - chartTypePanel.w - 10;
-			chartTypePanel.y = this.dataGrid.y;
+			chartTypePanel.x = this.w - chartTypePanel.w - 20;
+			chartTypePanel.y = 20;
 			
 			var rect:Rectangle = this.getRect(this);
 			chartTypePanel.setDragRect(rect);
@@ -113,7 +113,7 @@ package edit
 			this.addChild(titleLabel);
 			
 			hTitleLabel.defaultTxt = '横轴标题';
-			hTitleLabel.setTextFormat(12);
+			hTitleLabel.setTextFormat(14);
 			hTitleLabel.w = 30;
 			hTitleLabel.render();
 			hTitleLabel.x = (this.w - hTitleLabel.w) / 2;
@@ -123,7 +123,7 @@ package edit
 			this.addChild(hTitleLabel);
 			
 			vTitleLabel.defaultTxt = '纵轴标题';
-			vTitleLabel.setTextFormat(12);
+			vTitleLabel.setTextFormat(14);
 			vTitleLabel.w = 30;
 			vTitleLabel.render();
 			vTitleLabel.toImgMode();

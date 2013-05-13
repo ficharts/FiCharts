@@ -20,6 +20,23 @@ package
 	 */	
 	public class ChartItemBase extends Sprite implements IBoxItem, IStyleStatesUI
 	{
+		
+		/**
+		 */		
+		protected var styleXML:XML = <states>
+										<normal>
+											<border color='#BCBCBC' alpha='0.6'/>
+										</normal>
+										<hover>
+											<border color='#4EA6EA' thikness='1' alpha='1'/>
+											<fill color='#4EA6EA' alpha='0.3'/>
+										</hover>
+										<down>
+											<border color='#4EA6EA' thikness='2' alpha='1'/>
+										</down>
+									</states>
+			
+			
 		/**
 		 */		
 		public function ChartItemBase(type:String, img:String)
@@ -175,20 +192,6 @@ package
 		{
 		}
 		
-		/**
-		 */		
-		protected var styleXML:XML = <states>
-										<normal>
-											<border color='#BCBCBC' alpha='0.6'/>
-										</normal>
-										<hover>
-											<border color='#4EA6EA' thikness='1' alpha='1'/>
-											<fill color='#4EA6EA' alpha='0.3'/>
-										</hover>
-										<down>
-											<border color='#4EA6EA' thikness='2' alpha='1'/>
-										</down>
-									</states>
-		
+	
 	}
 }

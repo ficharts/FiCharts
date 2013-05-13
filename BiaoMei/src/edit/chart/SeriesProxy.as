@@ -175,8 +175,8 @@ package edit.chart
 			delBtn.y = (headHeight - this.chartSize) / 2;
 			delBtn.init(ChartTypePanel.getChartBitmapByType(type), 'blueDel', 'blueDel', 20, 20);
 			delBtn.addEventListener(MouseEvent.CLICK, deleteThisHandler, false, 0, true);
-			delBtn.addEventListener(MouseEvent.ROLL_OVER, delBtnOver, false, 0, true);
-			delBtn.addEventListener(MouseEvent.ROLL_OUT, delBtnOut, false, 0, true);
+			//delBtn.addEventListener(MouseEvent.ROLL_OVER, delBtnOver, false, 0, true);
+			//delBtn.addEventListener(MouseEvent.ROLL_OUT, delBtnOut, false, 0, true);
 			delBtn.render();
 			
 			headTop.addChild(delBtn);

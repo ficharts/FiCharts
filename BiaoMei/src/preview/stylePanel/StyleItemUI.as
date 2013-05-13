@@ -11,7 +11,7 @@ package preview.stylePanel
 		{
 			this.styleXML = <states>
 								<normal>
-									<border color='#BCBCBC' alpha='0.6'/>
+									<border color='#EEEEEE' alpha='0.6'/>
 								</normal>
 								<hover>
 									<border color='#555555' thikness='1' alpha='1'/>

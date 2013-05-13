@@ -41,7 +41,7 @@ package preview.stylePanel
 		public function render():void
 		{
 			boxLayout.setLoc(0, 0);
-			boxLayout.setHoriHeightAndGap(this.h);
+			boxLayout.setHoriHeightAndGap(this.h, 5);
 			boxLayout.ready();
 			
 			var styleItem:StyleItemUI;
@@ -63,7 +63,7 @@ package preview.stylePanel
 			}
 			
 			graphics.clear();
-			graphics.beginFill(0x555555, 0.5);
+			graphics.beginFill(0x555555, 0.0);
 			w = boxLayout.horiWidth;
 			graphics.drawRoundRect(0, 0, w, h, 5, 5);
 		}

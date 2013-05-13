@@ -31,21 +31,14 @@ package preview
 			this.addChild(bg);
 			this.addChild(chartContainer);
 			
-			chartContainer.addEventListener(MouseEvent.ROLL_OVER, rollOverHandler, false, 0, true);
-			chartContainer.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler, false, 0, true);
-			
 			stylePanel.w = 200;
-			stylePanel.h = 50;
+			stylePanel.h = 45;
 			
-			stylePanel.alpha = 0;
+			stylePanel.x =  stylePanel.y = 12;
 			chartContainer.addChild(stylePanel);
 			
 			stylePanel.render();
 			stylePanel.addEventListener(Event.CHANGE, styleChangedHandler, false, 0, true);
-			stylePanel.cacheAsBitmap = true;
-			
-			stylePanel.y = 520;
-			stylePanel.x = (this.w - stylePanel.w) / 2;
 			
 			//初始化图表
 			chart = new Chart2D;
@@ -57,23 +50,13 @@ package preview
 		
 		/**
 		 */		
+		private var topGutter:uint = 100;
+		
+		/**
+		 */		
 		public function alert(ms:String):void
 		{
 			
-		}
-		
-		/**
-		 */		
-		private function rollOverHandler(evt:MouseEvent):void
-		{
-			TweenLite.to(stylePanel, 0.3, {alpha: 1, y: 480});
-		}
-		
-		/**
-		 */		
-		private function rollOutHandler(evt:MouseEvent):void
-		{
-			TweenLite.to(stylePanel, 0.3, {alpha: 0, y: 520});
 		}
 		
 		/**
@@ -84,8 +67,12 @@ package preview
 		 */		
 		override public function renderBG():void
 		{
-			super.renderBG();
+			this.graphics.clear();
+			this.graphics.beginFill(0xEEEEEE, 0.6);
+			this.graphics.drawRect(0, 0, this.w, this.topGutter - 30);
+			this.graphics.endFill();
 			
+			bg.graphics.clear();
 			bg.graphics.beginFill(0xEEEEEE);
 			bg.graphics.drawRoundRect(chart.x - dis, chart.y - dis, 
 				chart.width + 2 * dis, chart.height + 2 * dis, 5, 5);
@@ -95,6 +82,7 @@ package preview
 			bg.graphics.drawRect(chart.x, chart.y, chart.width, chart.height);
 			bg.graphics.endFill();
 			
+			// 绘制提示信息
 			var sorryIcon:sorry = new sorry;
 			var mat:Matrix = new Matrix();
 			mat.tx = chart.x + (chart.width - sorryIcon.width) / 2;
@@ -237,7 +225,7 @@ package preview
 			chart.height = 540;
 			
 			chart.x = (this.w - chart.width) / 2;
-			chart.y = chart.x//(this.h - chart.height) / 2;
+			chart.y = topGutter;
 			chartContainer.addChildAt(chart, 0);
 		}
 		
