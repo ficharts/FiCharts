@@ -13,6 +13,7 @@ package
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.external.ExternalInterface;
 	import flash.system.Security;
 	
 	import navBar.NavTop;
@@ -35,8 +36,6 @@ package
 		 */		
 		private function init():void
 		{
-			Security.allowInsecureDomain("*");
-			
 			pageContainer.y = 90;
 			this.addChild(pageContainer);
 			
@@ -60,6 +59,23 @@ package
 			pageContainer.mask = maskShape;
 			
 			this.addEventListener(DataGridEvent.UPDATA_SEIZE, sizeChangedHandler, false, 0, true);
+			
+			initAPI();
+		}
+		
+		/**
+		 */		
+		private function initAPI():void
+		{
+			ExternalInterface.addCallback("setToken", setToken);
+			ExternalInterface.call("ready");
+		}
+		
+		/**
+		 */		
+		private function setToken(value:String):void
+		{
+			this.previewPage.initWeiboToken(value);
 		}
 		
 		/**

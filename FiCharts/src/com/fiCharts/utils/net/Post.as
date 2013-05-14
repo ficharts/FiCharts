@@ -20,7 +20,7 @@ package com.fiCharts.utils.net
 		
 		private var req:URLRequest;
 		
-		private static var _boundary:String = "";
+		private static var _boundary:String = "wallen";
 		
 		protected static const HTTP_SEPARATOR:String="\r\n";
 		
@@ -32,7 +32,7 @@ package com.fiCharts.utils.net
 			req.method = URLRequestMethod.POST;
 			this.data = data;
 			
-			this.setHeader(new URLRequestHeader("Cache-Control", "no-cache"));
+			//this.setHeader(new URLRequestHeader("Cache-Control", "no-cache"));
 			this.setHeader(new URLRequestHeader("Content-Type", "multipart/form-data; boundary=" + Post.getBoundary()));
 		}
 		

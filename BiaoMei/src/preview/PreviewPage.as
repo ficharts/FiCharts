@@ -2,35 +2,26 @@ package preview
 {
 	import com.adobe.images.PNGEncoder;
 	import com.fiCharts.charts.chart2D.encry.CSB;
-	import com.fiCharts.charts.common.IChart;
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.graphic.ImgSaver;
-	import com.fiCharts.utils.layout.LayoutManager;
 	import com.fiCharts.utils.net.Post;
-	import com.greensock.TweenLite;
-	import com.sina.microblog.MicroBlog;
-	import com.sina.microblog.WeiboService;
-	import com.sina.microblog.events.MicroBlogErrorEvent;
-	import com.sina.microblog.events.MicroBlogEvent;
-	import com.weibo.charts.events.WeiboChartEvent;
-	
-	import fl.controls.Label;
+	import com.fiCharts.utils.system.FiTrace;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
-	import flash.net.URLRequestHeader;
 	import flash.utils.ByteArray;
+	
+	import flashx.textLayout.tlf_internal;
 	
 	import navBar.LabelBtn;
 	
 	import preview.stylePanel.ChartStylePanel;
-	import preview.stylePanel.StyleChangedEvt;
 	
 	/**
 	 * 图表呈现及发布页
@@ -53,9 +44,18 @@ package preview
 			renderBG();
 			initEditPanel();
 			disableEditPanel();
-			
-			weiboService = new WeiboService("2785778826", "73507bee6eec8ac4d52a4ffc0ebb09cf");
 		}
+		
+		/**
+		 */		
+		public function initWeiboToken(value:String):void
+		{
+			token = value;
+		}
+		
+		/**
+		 */		
+		private var token:String = "";
 		
 		/**
 		 */		
@@ -261,17 +261,12 @@ package preview
 			var bmd:ByteArray = PNGEncoder.encode(BitmapUtil.getBitmapData(chart));
 			
 			data.status = "表魅，给数据添加清新味道";
+			data.access_token = this.token;
 			data.pic = bmd;
 			
-			weiboService.upload("测试", bmd);
-			
-			//post = new Post("https://api.weibo.com/2/statuses/upload.json", data);
-			//post.sendfile();
+			post = new Post("https://api.weibo.com/2/statuses/upload.json", data);
+			post.sendfile();
 		}
-		
-		/**
-		 */		
-		private var weiboService:WeiboService;
 		
 		/**
 		 */		
