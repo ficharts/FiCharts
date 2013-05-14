@@ -45,7 +45,7 @@ package com.fiCharts.utils.graphic
 		public static function getBitmapData(target:DisplayObject, ifSmooth:Boolean = false):BitmapData
 		{
 			var rect:Rectangle = target.getBounds(target);
-			var myBitmapData:BitmapData = new BitmapData(rect.width, rect.height, true, 0xFFFFFF);
+			var myBitmapData:BitmapData = new BitmapData(target.width, target.height, true, 0xFFFFFF);
 			
 			var mat:Matrix = new Matrix;
 			mat.createBox(1, 1, 0, - rect.left, - rect.top);

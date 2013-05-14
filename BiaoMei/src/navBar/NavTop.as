@@ -46,7 +46,7 @@ package navBar
 		private function init():void
 		{
 			currentNav = this.templateNav;
-			exchangePageBtn(templateBtn)
+		
 			
 			var btnWidth:uint = 100;
 			var btnHeight:uint = 40;
@@ -74,6 +74,8 @@ package navBar
 			previewBtn.render();
 			btnContainer.addChild(previewBtn);
 			previewBtn.addEventListener(MouseEvent.CLICK, toPreviewPageHandler, false, 0, true);
+			
+			exchangePageBtn(templateBtn);
 		}
 		
 		/**

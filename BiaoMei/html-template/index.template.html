@@ -3,16 +3,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"> 
   
     <head>
-        <title>${title}</title>
+        <title>表魅</title>
         <meta name="google" value="notranslate" />         
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link type="text/css" rel="stylesheet" media="screen" href="index.css" />
     </head>
     <body>
         <div id="content">
-            <embed id="BiaoMei" src="BiaoMei.swf" allowFullScreen="true" quality="high" width="950" height="1500" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
+            <embed id="BiaoMei" src="BiaoMei.swf" allowFullScreen="true" quality="high" width="950" height="500" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
         </div>
         <div id="foot">
         </div>
+        <script type="text/javascript">
+            function updatePageHeight(value){
+                document.getElementById("BiaoMei").height = value  + 1;
+            }
+        </script>
    </body>
 </html>

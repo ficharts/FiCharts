@@ -1,12 +1,22 @@
 package preview
 {
+	import com.adobe.images.PNGEncoder;
 	import com.fiCharts.charts.chart2D.encry.CSB;
 	import com.fiCharts.charts.common.IChart;
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
+	import com.fiCharts.utils.graphic.BitmapUtil;
+	import com.fiCharts.utils.graphic.ImgSaver;
+	import com.fiCharts.utils.layout.LayoutManager;
+	import com.fiCharts.utils.net.Post;
 	import com.greensock.TweenLite;
+	import com.sina.microblog.MicroBlog;
+	import com.sina.microblog.WeiboService;
+	import com.sina.microblog.events.MicroBlogErrorEvent;
+	import com.sina.microblog.events.MicroBlogEvent;
+	import com.weibo.charts.events.WeiboChartEvent;
 	
 	import fl.controls.Label;
 	
@@ -14,6 +24,10 @@ package preview
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
+	import flash.net.URLRequestHeader;
+	import flash.utils.ByteArray;
+	
+	import navBar.LabelBtn;
 	
 	import preview.stylePanel.ChartStylePanel;
 	import preview.stylePanel.StyleChangedEvt;
@@ -31,98 +45,17 @@ package preview
 			this.addChild(bg);
 			this.addChild(chartContainer);
 			
-			stylePanel.w = 200;
-			stylePanel.h = 45;
-			
-			stylePanel.x =  stylePanel.y = 12;
-			chartContainer.addChild(stylePanel);
-			
-			stylePanel.render();
-			stylePanel.addEventListener(Event.CHANGE, styleChangedHandler, false, 0, true);
-			
 			//初始化图表
 			chart = new Chart2D;
 			initChart();
 			chart.render();
 			
 			renderBG();
+			initEditPanel();
+			disableEditPanel();
+			
+			weiboService = new WeiboService("2785778826", "73507bee6eec8ac4d52a4ffc0ebb09cf");
 		}
-		
-		/**
-		 */		
-		private var topGutter:uint = 100;
-		
-		/**
-		 */		
-		public function alert(ms:String):void
-		{
-			
-		}
-		
-		/**
-		 */		
-		private var chartContainer:Sprite = new Sprite;
-		
-		/**
-		 */		
-		override public function renderBG():void
-		{
-			this.graphics.clear();
-			this.graphics.beginFill(0xEEEEEE, 0.6);
-			this.graphics.drawRect(0, 0, this.w, this.topGutter - 30);
-			this.graphics.endFill();
-			
-			bg.graphics.clear();
-			bg.graphics.beginFill(0xEEEEEE);
-			bg.graphics.drawRoundRect(chart.x - dis, chart.y - dis, 
-				chart.width + 2 * dis, chart.height + 2 * dis, 5, 5);
-			bg.graphics.endFill();
-			
-			bg.graphics.beginFill(0xFFFFFF);
-			bg.graphics.drawRect(chart.x, chart.y, chart.width, chart.height);
-			bg.graphics.endFill();
-			
-			// 绘制提示信息
-			var sorryIcon:sorry = new sorry;
-			var mat:Matrix = new Matrix();
-			mat.tx = chart.x + (chart.width - sorryIcon.width) / 2;
-			mat.ty = chart.y + (chart.height - sorryIcon.height) / 2 - 50;
-			bg.graphics.beginBitmapFill(sorryIcon, mat);
-			bg.graphics.lineStyle(0, 0, 0);
-			bg.graphics.drawRect(mat.tx, mat.ty, sorryIcon.width, sorryIcon.height);
-			bg.graphics.endFill();
-			
-			var labelStyle:LabelStyle = new LabelStyle;
-			XMLVOMapper.fuck(labelStyleXML, labelStyle);
-			alertLabel.style = labelStyle;
-			alertLabel.y = mat.ty + sorryIcon.height;
-			alertLabel.text = "您好像漏掉了什么";
-			alertLabel.render();
-			alertLabel.x = chart.x + (chart.width - alertLabel.width) / 2;
-			bg.addChild(alertLabel);
-		}
-		
-		/**
-		 */		
-		private var bg:Sprite = new Sprite;
-		
-		/**
-		 */		
-		private var alertLabel:LabelUI = new LabelUI;
-		
-		/**
-		 */		
-		private var labelStyleXML:XML =  <label>
-											<format color='555555' font='微软雅黑' size='15'/>
-											<text>
-												<effects>
-													<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
-												</effects>
-											</text>
-										</label>
-		/**
-		 */		
-		private var dis:uint = 3;
 		
 		/**
 		 */		
@@ -152,6 +85,8 @@ package preview
 			if(config && data && data.length)
 			{
 				this.chartContainer.visible = true;
+				enableEditPanel();
+				
 				updateChart(config);
 				
 				PerformaceTest.start("预览图表");
@@ -167,7 +102,24 @@ package preview
 			else
 			{
 				this.chartContainer.visible = false;
+				disableEditPanel();
 			}
+		}
+		
+		/**
+		 */		
+		private function disableEditPanel():void
+		{
+			this.editPanel.alpha = 0.5;
+			editPanel.mouseChildren = editPanel.mouseEnabled = false;
+		}
+		
+		/**
+		 */		
+		private function enableEditPanel():void
+		{
+			this.editPanel.alpha = 1;
+			editPanel.mouseChildren = editPanel.mouseEnabled = true;
 		}
 		
 		/**
@@ -225,7 +177,7 @@ package preview
 			chart.height = 540;
 			
 			chart.x = (this.w - chart.width) / 2;
-			chart.y = topGutter;
+			chart.y = topGutter + (this.h - topGutter - chart.height) / 2;
 			chartContainer.addChildAt(chart, 0);
 		}
 		
@@ -238,6 +190,182 @@ package preview
 			
 			return false;
 		}
+		
+		/**
+		 */		
+		private function initEditPanel():void
+		{
+			this.addChild(editPanel);
+			
+			stylePanel.w = 200;
+			stylePanel.h = 45;
+			stylePanel.x =  stylePanel.y = 12;
+			editPanel.addChild(stylePanel);
+			stylePanel.render();
+			stylePanel.addEventListener(Event.CHANGE, styleChangedHandler, false, 0, true);
+			
+			// 发微博
+			weiboBtn.text = "发微博";
+			weiboBtn.w = 150;
+			weiboBtn.h = 40;
+			weiboBtn.x = (this.w - weiboBtn.w - 20);
+			weiboBtn.y = (topGutter - weiboBtn.h) / 2;
+			weiboBtn.bgStyleXML = <states>
+										<normal>
+											<fill color='#CCCCCC' alpha='1'/>
+										</normal>
+										<hover>
+											<fill color='#DDDDDD' alpha='1'/>
+										</hover>
+										<down>
+											<fill color='#EEEEEE' alpha='1'/>
+										</down>
+									</states>;
+			weiboBtn.render();
+			weiboBtn.addEventListener(MouseEvent.CLICK, sendWeiboHandler, false, 0, true);
+			editPanel.addChild(weiboBtn);
+			
+			
+			// 存图片
+			savaImgBtn.w = 150;
+			savaImgBtn.h = 40;
+			savaImgBtn.x = weiboBtn.x - savaImgBtn.w - 20;
+			savaImgBtn.y = (topGutter - savaImgBtn.h) / 2;
+			savaImgBtn.text = "存图片";
+			savaImgBtn.bgStyleXML = <states>
+										<normal>
+											<fill color='#CCCCCC' alpha='1'/>
+										</normal>
+										<hover>
+											<fill color='#DDDDDD' alpha='1'/>
+										</hover>
+										<down>
+											<fill color='#EEEEEE' alpha='1'/>
+										</down>
+									</states>;
+			
+			savaImgBtn.labelStyleXML = <label>
+											<format color='666666' font='微软雅黑' size='16'/>
+										</label>
+			
+			savaImgBtn.render();
+			savaImgBtn.addEventListener(MouseEvent.CLICK, saveImgHandler, false, 0, true);
+			editPanel.addChild(savaImgBtn);
+		}
+		
+		/**
+		 */		
+		private function sendWeiboHandler(evt:MouseEvent):void
+		{
+			var data:Object = {};
+			var bmd:ByteArray = PNGEncoder.encode(BitmapUtil.getBitmapData(chart));
+			
+			data.status = "表魅，给数据添加清新味道";
+			data.pic = bmd;
+			
+			weiboService.upload("测试", bmd);
+			
+			//post = new Post("https://api.weibo.com/2/statuses/upload.json", data);
+			//post.sendfile();
+		}
+		
+		/**
+		 */		
+		private var weiboService:WeiboService;
+		
+		/**
+		 */		
+		private var post:Post;
+		
+		/**
+		 * 发送微博按钮
+		 */		
+		private var weiboBtn:LabelBtn = new LabelBtn;
+		
+		/**
+		 */		
+		private function saveImgHandler(evt:MouseEvent):void
+		{
+			ImgSaver.saveImg(this.chart, "biaomei.png");
+		}
+		
+		/**
+		 */		
+		private var editPanel:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var savaImgBtn:LabelBtn = new LabelBtn;
+		
+		/**
+		 */		
+		private var topGutter:uint = 70;
+		
+		/**
+		 */		
+		private var chartContainer:Sprite = new Sprite;
+		
+		/**
+		 */		
+		override public function renderBG():void
+		{
+			editPanel.graphics.clear();
+			editPanel.graphics.beginFill(0xEEEEEE, 0.6);
+			editPanel.graphics.drawRect(0, 0, this.w, this.topGutter);
+			editPanel.graphics.endFill();
+			
+			bg.graphics.clear();
+			bg.graphics.beginFill(0xEEEEEE);
+			bg.graphics.drawRoundRect(chart.x - dis, chart.y - dis, 
+				chart.width + 2 * dis, chart.height + 2 * dis, 5, 5);
+			bg.graphics.endFill();
+			
+			bg.graphics.beginFill(0xFFFFFF);
+			bg.graphics.drawRect(chart.x, chart.y, chart.width, chart.height);
+			bg.graphics.endFill();
+			
+			// 绘制提示信息
+			var sorryIcon:sorry = new sorry;
+			var mat:Matrix = new Matrix();
+			mat.tx = chart.x + (chart.width - sorryIcon.width) / 2;
+			mat.ty = chart.y + (chart.height - sorryIcon.height) / 2 - 50;
+			bg.graphics.beginBitmapFill(sorryIcon, mat);
+			bg.graphics.lineStyle(0, 0, 0);
+			bg.graphics.drawRect(mat.tx, mat.ty, sorryIcon.width, sorryIcon.height);
+			bg.graphics.endFill();
+			
+			var labelStyle:LabelStyle = new LabelStyle;
+			XMLVOMapper.fuck(labelStyleXML, labelStyle);
+			alertLabel.style = labelStyle;
+			alertLabel.y = mat.ty + sorryIcon.height;
+			alertLabel.text = "您好像漏掉了什么";
+			alertLabel.render();
+			alertLabel.x = chart.x + (chart.width - alertLabel.width) / 2;
+			bg.addChild(alertLabel);
+		}
+		
+		/**
+		 */		
+		private var dis:uint = 3;
+		
+		/**
+		 */		
+		private var labelStyleXML:XML =  <label>
+											<format color='555555' font='微软雅黑' size='15'/>
+											<text>
+												<effects>
+													<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
+												</effects>
+											</text>
+										</label>
+		
+		/**
+		 */		
+		private var bg:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var alertLabel:LabelUI = new LabelUI;
 		
 		/**
 		 */		

@@ -4,6 +4,7 @@ package
 	import alert.AlertPanel;
 	
 	import com.dataGrid.DataGridEvent;
+	import com.fiCharts.utils.ExternalUtil;
 	import com.fiCharts.utils.StageUtil;
 	import com.greensock.TweenLite;
 	
@@ -12,6 +13,7 @@ package
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.system.Security;
 	
 	import navBar.NavTop;
 	
@@ -33,6 +35,8 @@ package
 		 */		
 		private function init():void
 		{
+			Security.allowInsecureDomain("*");
+			
 			pageContainer.y = 90;
 			this.addChild(pageContainer);
 			
@@ -144,6 +148,8 @@ package
 			this.graphics.lineStyle(1, 0xEEEEEE);
 			this.graphics.drawRect(0, 0, 950 - 1, currPage.h + this.nav.h);
 			this.graphics.endFill();
+			
+			ExternalUtil.call("updatePageHeight", currPage.h + nav.h);
 		}
 		
 		/**

@@ -1,5 +1,6 @@
 package navBar
 {
+	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -20,16 +21,27 @@ package navBar
 		public function LabelBtn()
 		{
 			super();
-			
 			this.mouseChildren = false;
+		}
+		
+		/**
+		 */		
+		public function ready():void
+		{
 			labelUI.style = this.labelStyle;
 			XMLVOMapper.fuck(this.labelStyleXML, labelStyle);
 			this.addChild(labelUI);
 			
 			this.states = new States;
-			XMLVOMapper.fuck(styleXML, states);
+			XMLVOMapper.fuck(bgStyleXML, states);
 			statesControl = new StatesControl(this, states);
+			
+			ifReady = true;
 		}
+		
+		/**
+		 */		
+		private var ifReady:Boolean = false;
 		
 		/**
 		 */		
@@ -97,16 +109,26 @@ package navBar
 		 */		
 		public function render():void
 		{
-			labelUI.text = text;
-			labelUI.render();
+			if (ifReady)
+			{
+				labelUI.text = text;
+				labelUI.render();
+				
+				this.graphics.clear();
+				currState.width = this.w;
+				currState.height = this.h;
+				StyleManager.drawRect(this, currState);
+				
+				LayoutManager.excuteVLayout(labelUI, this);
+				LayoutManager.excuteHLayout(labelUI, this);
+			}
+			else
+			{
+				this.ready();
+				ifReady = true;
+				render();
+			}
 			
-			this.graphics.clear();
-			currState.width = this.w;
-			currState.height = this.h;
-			StyleManager.drawRect(this, currState);
-			
-			LayoutManager.excuteVLayout(labelUI, this);
-			LayoutManager.excuteHLayout(labelUI, this);
 		}
 		
 		/**
@@ -168,7 +190,7 @@ package navBar
 		
 		/**
 		 */		
-		public var styleXML:XML = <states>
+		public var bgStyleXML:XML = <states>
 										<normal>
 											<fill color='#DDDDDD' alpha='0'/>
 										</normal>
@@ -181,7 +203,7 @@ package navBar
 									</states>
 			
 			
-		private var labelStyleXML:XML =  <label>
+		public var labelStyleXML:XML =  <label>
 							                <format color='555555' font='微软雅黑' size='16'/>
 											<text>
 												<effects>

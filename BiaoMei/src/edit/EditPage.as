@@ -60,8 +60,8 @@ package edit
 			
 			this.addChild(chartTypePanel);
 			chartTypePanel.render();
-			chartTypePanel.x = this.w - chartTypePanel.w - 20;
-			chartTypePanel.y = 20;
+			chartTypePanel.x = this.dataGrid.x + dataGrid.gridW - chartTypePanel.w;
+			chartTypePanel.y = dataGrid.y;
 			
 			var rect:Rectangle = this.getRect(this);
 			chartTypePanel.setDragRect(rect);
