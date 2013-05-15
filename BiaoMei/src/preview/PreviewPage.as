@@ -7,8 +7,10 @@ package preview
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
+	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.graphic.ImgSaver;
+	import com.fiCharts.utils.graphic.StyleManager;
 	import com.fiCharts.utils.net.Post;
 	import com.fiCharts.utils.system.FiTrace;
 	
@@ -111,7 +113,7 @@ package preview
 		 */		
 		private function disableEditPanel():void
 		{
-			this.editPanel.alpha = 0.5;
+			this.editPanel.alpha = 0.8;
 			editPanel.mouseChildren = editPanel.mouseEnabled = false;
 		}
 		
@@ -199,23 +201,24 @@ package preview
 			this.addChild(editPanel);
 			
 			stylePanel.w = 200;
-			stylePanel.h = 45;
-			stylePanel.x =  stylePanel.y = 12;
+			stylePanel.h = 30;
+			stylePanel.x =  stylePanel.y = ( this.topGutter - stylePanel.h ) /2 ;
 			editPanel.addChild(stylePanel);
 			stylePanel.render();
 			stylePanel.addEventListener(Event.CHANGE, styleChangedHandler, false, 0, true);
 			
-			var btnH:uint = 35;
+			var btnH:uint = 32;
+			var btnW:uint = 100;
 			
 			// 发微博
 			weiboBtn.text = "发微博";
-			weiboBtn.w = 150;
+			weiboBtn.w = btnW;
 			weiboBtn.h = btnH;
 			weiboBtn.x = (this.w - weiboBtn.w - 20);
 			weiboBtn.y = (topGutter - weiboBtn.h) / 2;
 			weiboBtn.bgStyleXML = <states>
 										<normal>
-											<fill color='#4EA6EA' alpha='1'/>
+											<fill color='#329AE7' alpha='1'/>
 										</normal>
 										<hover>
 											<fill color='#4EA6EA' alpha='0.6'/>
@@ -226,7 +229,7 @@ package preview
 									</states>;
 			
 			weiboBtn.labelStyleXML = <label vAlign="center">
-						                <format color='FFFFFF' font='微软雅黑' size='12'/>
+						                <format color='FFFFFF' font='微软雅黑' size='12' letterSpacing="3"/>
 						            </label>
 				
 			
@@ -236,7 +239,7 @@ package preview
 			
 			
 			// 存图片
-			savaImgBtn.w = 150;
+			savaImgBtn.w = btnW;
 			savaImgBtn.h = btnH;
 			savaImgBtn.x = weiboBtn.x - savaImgBtn.w - 20;
 			savaImgBtn.y = (topGutter - savaImgBtn.h) / 2;
@@ -265,18 +268,7 @@ package preview
 			var bmd:ByteArray = PNGEncoder.encode(BitmapUtil.getBitmapData(chart));
 			var data:Object = {"status": "表魅，给数据添加清新之味！", "access_token":this.token, "pic":bmd, "visible":1};
 			
-			//post = new Post("https://api.weibo.com/2/statuses/upload.json", data);
-			
-			data = {};
-			
-			data.pic = bmd;
-			data.uid = "2431448684";
-			data.appkey = "1166443256";
-			data.token = token;
-			data.cbkIndex = "cbk_1";
-			
-			
-			post = new Post("https://service.t.sina.com.cn/widget/jssdk/aj_uploadpic.php", data);
+			post = new Post("https://api.weibo.com/2/statuses/upload.json", data);
 			post.sendfile();
 		}
 		
@@ -306,7 +298,7 @@ package preview
 		
 		/**
 		 */		
-		private var topGutter:uint = 70;
+		private var topGutter:uint = 50;
 		
 		/**
 		 */		
@@ -316,10 +308,12 @@ package preview
 		 */		
 		override public function renderBG():void
 		{
+			// 绘制编辑面板背景
 			editPanel.graphics.clear();
-			editPanel.graphics.beginFill(0xEEEEEE, 0.6);
-			editPanel.graphics.drawRect(0, 0, this.w, this.topGutter);
-			editPanel.graphics.endFill();
+			editBgStyle.width = this.w;
+			editBgStyle.height = this.topGutter;
+			XMLVOMapper.fuck(this.editBgStyleXML, this.editBgStyle);
+			StyleManager.drawRect(editPanel, editBgStyle);
 			
 			bg.graphics.clear();
 			bg.graphics.beginFill(0xEEEEEE);
@@ -350,6 +344,17 @@ package preview
 			alertLabel.x = chart.x + (chart.width - alertLabel.width) / 2;
 			bg.addChild(alertLabel);
 		}
+		
+		/**
+		 */		
+		private var editBgStyle:Style = new Style;
+		
+		/**
+		 */		
+		private var editBgStyleXML:XML = <style>
+											<border color="EEEEEE"/>
+											<fill color="#EFEFEF, #EFEFEF" alpha="0.2,0.2" angle="-90"/>
+										</style>
 		
 		/**
 		 */		

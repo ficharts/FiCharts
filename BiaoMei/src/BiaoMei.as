@@ -53,7 +53,7 @@ package
 			nav = new NavTop(this);
 			addChild(nav);
 			
-			toTemplatePage();
+			nav.toTemplatePage();
 			
 			this.addChild(maskShape);
 			pageContainer.mask = maskShape;

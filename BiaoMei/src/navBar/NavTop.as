@@ -45,7 +45,6 @@ package navBar
 			progressBar.graphics.endFill();
 			
 			progressBar.width = 0;
-			TweenLite.to(progressBar, flashTime, {width: dataBtn.x});
 		}
 		
 		/**
@@ -86,7 +85,6 @@ package navBar
 			progressImgsOver.mask = progressImgMask;
 			
 			progressImgMask.width = 0;
-			TweenLite.to(progressImgMask, flashTime, {width: dataBtn.x});
 		}
 		
 		/**
@@ -117,8 +115,6 @@ package navBar
 		 */		
 		private function init():void
 		{
-			currentNav = this.templateNav;
-		
 			var btnWidth:uint = 100;
 			var btnHeight:uint = 90;
 			
@@ -131,33 +127,38 @@ package navBar
 			
 			templateBtn.y = dataBtn.y = previewBtn.y = this.h - btnHeight - progreesLineH;
 			
-			templateBtn.text = "选模板" ;
-			templateBtn.labelStyleXML = <label vAlign="bottom">
-							                <format color='555555' font='微软雅黑' size='12'/>
-							            </label>
+			templateBtn.text = "①选模板" ;
+			templateBtn.labelStyleXML = disLabelStyleXML;
 			templateBtn.render();
 			btnContainer.addChild(templateBtn);
 			templateBtn.addEventListener(MouseEvent.CLICK, toTemplatePageHandler, false, 0, true);
 			
-			dataBtn.text = "填数据";
-			dataBtn.labelStyleXML = <label vAlign="bottom">
-														<format color='555555' font='微软雅黑' size='12'/>
-													</label>
+			dataBtn.text = "②填数据";
+			dataBtn.labelStyleXML = disLabelStyleXML;
 			dataBtn.render();
 			btnContainer.addChild(dataBtn);
 			dataBtn.addEventListener(MouseEvent.CLICK, toEditPageHandler, false, 0, true);
 			
-			previewBtn.text = "秀图表"
-			previewBtn.labelStyleXML = <label vAlign="bottom">
-														<format color='555555' font='微软雅黑' size='12'/>
-													</label>
+			previewBtn.text = "③秀图表"
+			previewBtn.labelStyleXML = disLabelStyleXML;
 			previewBtn.render();
 			btnContainer.addChild(previewBtn);
 			previewBtn.addEventListener(MouseEvent.CLICK, toPreviewPageHandler, false, 0, true);
 			
-			exchangePageBtn(templateBtn);
+			this.currentNav = this.previewChartNav;
 		}
 		
+		/**
+		 */		
+		private var disLabelStyleXML:XML = <label vAlign="bottom">
+												<format color='#AAAAAA' font='微软雅黑' size='13' letterSpacing="3"/>
+											</label>
+			
+		/**
+		 */			
+		private var ableLabelStyleXML:XML = <label vAlign="bottom">
+												<format color='#329AE7' font='微软雅黑' size='13' letterSpacing="3"/>
+											</label>
 		/**
 		 */		
 		public function toTemplatePage():void
@@ -167,6 +168,10 @@ package navBar
 			
 			TweenLite.to(progressBar, flashTime, {width: dataBtn.x});
 			TweenLite.to(progressImgMask, flashTime * 1.5, {width: dataBtn.x});
+			
+			this.templateBtn.updateLabelStyle(this.ableLabelStyleXML);
+			this.dataBtn.updateLabelStyle(this.disLabelStyleXML);
+			this.previewBtn.updateLabelStyle(this.disLabelStyleXML);
 		}
 		
 		/**
@@ -178,6 +183,10 @@ package navBar
 			
 			TweenLite.to(progressBar, flashTime, {width: dataBtn.x + dataBtn.w});
 			TweenLite.to(progressImgMask, flashTime * 1.5, {width: dataBtn.x + dataBtn.w});
+			
+			this.templateBtn.updateLabelStyle(this.ableLabelStyleXML);
+			this.dataBtn.updateLabelStyle(this.ableLabelStyleXML);
+			this.previewBtn.updateLabelStyle(this.disLabelStyleXML);
 		}
 		
 		/**
@@ -189,6 +198,10 @@ package navBar
 			
 			TweenLite.to(progressBar, flashTime, {width: this.w});
 			TweenLite.to(progressImgMask, flashTime * 1.5, {width: this.w});
+			
+			this.templateBtn.updateLabelStyle(this.ableLabelStyleXML);
+			this.dataBtn.updateLabelStyle(this.ableLabelStyleXML);
+			this.previewBtn.updateLabelStyle(this.ableLabelStyleXML);
 		}
 		
 		/**

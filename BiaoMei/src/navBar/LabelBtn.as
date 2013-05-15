@@ -26,6 +26,14 @@ package navBar
 		
 		/**
 		 */		
+		public function updateLabelStyle(style:XML):void
+		{
+			XMLVOMapper.fuck(style, labelStyle);
+			this.render();
+		}
+		
+		/**
+		 */		
 		public function ready():void
 		{
 			labelUI.style = this.labelStyle;
@@ -195,7 +203,7 @@ package navBar
 											<fill color='#DDDDDD' alpha='0'/>
 										</normal>
 										<hover>
-											<fill color='#EEEEEE, #EFEFEF' alpha='0.5, 0.5' angle="90"/>
+											<fill color='#EEEEEE, #EFEFEF' alpha='0.8, 0.8' angle="90"/>
 										</hover>
 										<down>
 											<fill color='#4EA6EA' alpha='0.1' angle="90"/>
@@ -204,7 +212,7 @@ package navBar
 			
 			
 		public var labelStyleXML:XML =  <label vAlign="center">
-							                <format color='555555' font='微软雅黑' size='12'/>
+							                <format color='555555' font='微软雅黑' size='12' letterSpacing="3"/>
 							            </label>
 
 	}
