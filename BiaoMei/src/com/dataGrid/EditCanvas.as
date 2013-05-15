@@ -358,7 +358,13 @@
 			// 暂时不做限制
 			if (this.newRowIndex >= rows.length)
 			{
-				//newRowIndex = rows.length - 1;
+				//最大高度限制
+				if (this.height >= maxHeight)
+				{
+					newRowIndex = rows.length;
+					return;
+				}
+				
 				this.dispatchEvent(new DataGridEvent(DataGridEvent.ADD_ROW));
 				this.swtichCell();
 			}
@@ -367,6 +373,10 @@
 				this.swtichCell();
 			}
 		}
+		
+		/**
+		 */		
+		public var maxHeight:uint = 1000;
 
 		/**
 		 */		

@@ -96,12 +96,16 @@ package
 		private var pageContainer:PageContainer = new PageContainer
 		
 		/**
+		 */			
+		private var flashTime:Number = 0.7;
+			
+		/**
 		 */		
 		public function toTemplatePage():void
 		{
 			//templatePage.reset();
 			exchangeToPage(templatePage);
-			TweenLite.to(pageContainer, 0.5, {x:0});
+			TweenLite.to(pageContainer, flashTime, {x:0});
 		}
 		
 		/**
@@ -109,7 +113,7 @@ package
 		public function toEditPage():void
 		{
 			exchangeToPage(editPage);
-			TweenLite.to(pageContainer, 0.5, {x:- editPage.x});
+			TweenLite.to(pageContainer, flashTime, {x:- editPage.x});
 		}
 		
 		/**
@@ -131,7 +135,7 @@ package
 		public function toPreviewPage():void
 		{
 			exchangeToPage(previewPage);
-			TweenLite.to(pageContainer, 0.5, {x:- previewPage.x});
+			TweenLite.to(pageContainer, flashTime, {x:- previewPage.x});
 			
 			if (editPage.ifDataChanged)
 			{

@@ -119,7 +119,7 @@ package navBar
 				currState.height = this.h;
 				StyleManager.drawRect(this, currState);
 				
-				LayoutManager.excuteVLayout(labelUI, this);
+				LayoutManager.excuteVLayout(labelUI, this, this.labelStyle.vAlign, labelStyle.padding);
 				LayoutManager.excuteHLayout(labelUI, this);
 			}
 			else
@@ -195,21 +195,16 @@ package navBar
 											<fill color='#DDDDDD' alpha='0'/>
 										</normal>
 										<hover>
-											<fill color='#DDDDDD' alpha='0.6'/>
+											<fill color='#EEEEEE, #EFEFEF' alpha='0.5, 0.5' angle="90"/>
 										</hover>
 										<down>
-											<fill color='#DDDDDD' alpha='0.4'/>
+											<fill color='#4EA6EA' alpha='0.1' angle="90"/>
 										</down>
 									</states>
 			
 			
-		public var labelStyleXML:XML =  <label>
-							                <format color='555555' font='微软雅黑' size='16'/>
-											<text>
-												<effects>
-													<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
-												</effects>
-											</text>
+		public var labelStyleXML:XML =  <label vAlign="center">
+							                <format color='555555' font='微软雅黑' size='12'/>
 							            </label>
 
 	}

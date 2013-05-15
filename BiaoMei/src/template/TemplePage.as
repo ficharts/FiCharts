@@ -13,6 +13,16 @@ package template
 	 */	
 	public class TemplePage extends PageBase
 	{
+		/**
+		 * 图表模板配置文件 
+		 */		
+		private var chartTemplates:XML;
+		
+		[Embed(source="./templates.xml", mimeType="application/octet-stream")]
+		public var TEMPL:Class;
+		
+		/**
+		 */		
 		public function TemplePage(main:BiaoMei)
 		{
 			super(); 
@@ -120,14 +130,6 @@ package template
 		/**
 		 */		
 		private var main:BiaoMei;
-		
-		/**
-		 * 图表模板配置文件 
-		 */		
-		private var chartTemplates:XML;
-		
-		[Embed(source="./templates.xml", mimeType="application/octet-stream")]
-		public var TEMPL:Class;
 		
 	}
 }

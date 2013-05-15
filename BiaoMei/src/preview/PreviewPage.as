@@ -1,5 +1,6 @@
 package preview
 {
+	import com.adobe.images.JPGEncoder;
 	import com.adobe.images.PNGEncoder;
 	import com.fiCharts.charts.chart2D.encry.CSB;
 	import com.fiCharts.utils.PerformaceTest;
@@ -204,23 +205,31 @@ package preview
 			stylePanel.render();
 			stylePanel.addEventListener(Event.CHANGE, styleChangedHandler, false, 0, true);
 			
+			var btnH:uint = 35;
+			
 			// 发微博
 			weiboBtn.text = "发微博";
 			weiboBtn.w = 150;
-			weiboBtn.h = 40;
+			weiboBtn.h = btnH;
 			weiboBtn.x = (this.w - weiboBtn.w - 20);
 			weiboBtn.y = (topGutter - weiboBtn.h) / 2;
 			weiboBtn.bgStyleXML = <states>
 										<normal>
-											<fill color='#CCCCCC' alpha='1'/>
+											<fill color='#4EA6EA' alpha='1'/>
 										</normal>
 										<hover>
-											<fill color='#DDDDDD' alpha='1'/>
+											<fill color='#4EA6EA' alpha='0.6'/>
 										</hover>
 										<down>
-											<fill color='#EEEEEE' alpha='1'/>
+											<fill color='#4EA6EA' alpha='1'/>
 										</down>
 									</states>;
+			
+			weiboBtn.labelStyleXML = <label vAlign="center">
+						                <format color='FFFFFF' font='微软雅黑' size='12'/>
+						            </label>
+				
+			
 			weiboBtn.render();
 			weiboBtn.addEventListener(MouseEvent.CLICK, sendWeiboHandler, false, 0, true);
 			editPanel.addChild(weiboBtn);
@@ -228,13 +237,13 @@ package preview
 			
 			// 存图片
 			savaImgBtn.w = 150;
-			savaImgBtn.h = 40;
+			savaImgBtn.h = btnH;
 			savaImgBtn.x = weiboBtn.x - savaImgBtn.w - 20;
 			savaImgBtn.y = (topGutter - savaImgBtn.h) / 2;
 			savaImgBtn.text = "存图片";
 			savaImgBtn.bgStyleXML = <states>
 										<normal>
-											<fill color='#CCCCCC' alpha='1'/>
+											<fill color='#EEEEEE' alpha='1'/>
 										</normal>
 										<hover>
 											<fill color='#DDDDDD' alpha='1'/>
@@ -243,10 +252,6 @@ package preview
 											<fill color='#EEEEEE' alpha='1'/>
 										</down>
 									</states>;
-			
-			savaImgBtn.labelStyleXML = <label>
-											<format color='666666' font='微软雅黑' size='16'/>
-										</label>
 			
 			savaImgBtn.render();
 			savaImgBtn.addEventListener(MouseEvent.CLICK, saveImgHandler, false, 0, true);
@@ -257,14 +262,21 @@ package preview
 		 */		
 		private function sendWeiboHandler(evt:MouseEvent):void
 		{
-			var data:Object = {};
 			var bmd:ByteArray = PNGEncoder.encode(BitmapUtil.getBitmapData(chart));
+			var data:Object = {"status": "表魅，给数据添加清新之味！", "access_token":this.token, "pic":bmd, "visible":1};
 			
-			data.status = "表魅，给数据添加清新味道";
-			data.access_token = this.token;
+			//post = new Post("https://api.weibo.com/2/statuses/upload.json", data);
+			
+			data = {};
+			
 			data.pic = bmd;
+			data.uid = "2431448684";
+			data.appkey = "1166443256";
+			data.token = token;
+			data.cbkIndex = "cbk_1";
 			
-			post = new Post("https://api.weibo.com/2/statuses/upload.json", data);
+			
+			post = new Post("https://service.t.sina.com.cn/widget/jssdk/aj_uploadpic.php", data);
 			post.sendfile();
 		}
 		

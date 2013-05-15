@@ -20,7 +20,7 @@ package com.fiCharts.utils.net
 		
 		private var req:URLRequest;
 		
-		private static var _boundary:String = "wallen";
+		private static var _boundary:String = "";
 		
 		protected static const HTTP_SEPARATOR:String="\r\n";
 		
@@ -47,10 +47,9 @@ package com.fiCharts.utils.net
 		 */	
 		public function sendfile():void
 		{
-			var uploader:URLLoader = new URLLoader;
 			uploader.addEventListener(Event.COMPLETE, complete);
 			uploader.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
-			uploader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
+			uploader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securyityHandler);
 			uploader.dataFormat = URLLoaderDataFormat.BINARY;
 			
 			req.data = getMultipart();
@@ -58,10 +57,21 @@ package com.fiCharts.utils.net
 		}
 		
 		/**
-		 */	
-		private function errorHandler(e:Event):void
+		 */		
+		private function securyityHandler(e:SecurityErrorEvent):void
 		{
-			FiTrace.info("error-" + e.type);
+			FiTrace.info("error-" + e.type + e.text + e.target.data);
+		}
+		
+		/**
+		 */		
+		private var uploader:URLLoader = new URLLoader;;
+		
+		/**
+		 */	
+		private function errorHandler(e:IOErrorEvent):void
+		{
+			FiTrace.info("error-" + e.type + e.text + e.target.data);
 		}
 		
 		/**
@@ -70,15 +80,16 @@ package com.fiCharts.utils.net
 		{
 			var body:ByteArray = new ByteArray;
 			var key:String;
+			
 			for (key in this.data)
 			{
 				if (this.data[key] is ByteArray)
 				{
 					body.writeUTFBytes("--" + Post.getBoundary());
 					body.writeUTFBytes(Post.HTTP_SEPARATOR);
-					body.writeUTFBytes("Content-Disposition: form-data; name=\"" + key + "\"; filename=\"" + "userface.gif" + "\"");
+					body.writeUTFBytes("Content-Disposition: form-data; name=\"" + key + "\"; filename=\"" + "ficharts.jpg" + "\"");
 					body.writeUTFBytes(Post.HTTP_SEPARATOR);
-					body.writeUTFBytes("application/octet-stream");//Content-Type: application/octet-stream
+					body.writeUTFBytes("Content-Type: image/png");
 					body.writeUTFBytes(Post.HTTP_SEPARATOR);
 					body.writeUTFBytes(Post.HTTP_SEPARATOR);
 					body.writeBytes(this.data[key], 0, this.data[key].length);
@@ -107,8 +118,7 @@ package com.fiCharts.utils.net
 		 */	
 		private function complete(e:Event):void
 		{
-			var loader:URLLoader = e.target as URLLoader;
-			FiTrace.info("sendfile: " + loader.data);
+			FiTrace.info("sendfile: " + this.uploader.data);
 		}
 		
 		/**

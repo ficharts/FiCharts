@@ -1,8 +1,10 @@
 package navBar
 {
+	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.layout.LayoutManager;
 	import com.greensock.TweenLite;
 	
+	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -15,27 +17,97 @@ package navBar
 		{
 			super();
 			this.main = main;
+			this.addChild(progressBar);
 			this.addChild(btnContainer);
-			this.addChild(progressLine);
 			
-			progressLine.graphics.beginFill(0x4EA6EA, 1);
-			progressLine.graphics.drawRect(0, this.h -3, w, 3);
-			progressLine.graphics.endFill();
-			
-			this.graphics.clear();
-			this.graphics.beginFill(0xCCCCCC);
-			this.graphics.drawRect(0, this.h -3, w, 3); 
-			this.graphics.endFill();
+			this.addChild(progressImgsOut);
+			this.addChild(this.progressImgsOver);
+			this.addChild(progressImgMask);
 			
 			init();
 			
-			progressLine.width = 0;
-			TweenLite.to(progressLine, 0.3, {width: dataBtn.x});
+			
+			initPogressBar();
+			initProgressImg();
 		}
 		
 		/**
 		 */		
-		private var progressLine:Shape = new Shape;
+		private function initPogressBar():void
+		{
+			this.graphics.clear();
+			this.graphics.beginFill(0xCCCCCC);
+			this.graphics.drawRect(0, this.h - progreesLineH, w, progreesLineH); 
+			this.graphics.endFill();
+			
+			progressBar.graphics.beginFill(0x4EA6EA, 1);
+			progressBar.graphics.drawRect(0, this.h - progreesLineH, w, progreesLineH);
+			progressBar.graphics.endFill();
+			
+			progressBar.width = 0;
+			TweenLite.to(progressBar, flashTime, {width: dataBtn.x});
+		}
+		
+		/**
+		 */		
+		private var flashTime:Number = 0.7;
+		
+		/**
+		 */		
+		private function initProgressImg():void
+		{
+			var temOver:BitmapData = new tmp_over;
+			var temOut:BitmapData = new tmp_out;
+			
+			var tx:Number = this.templateBtn.x + (templateBtn.w - temOver.width) / 2;
+			BitmapUtil.drawBitmapDataToUI(temOver, progressImgsOver, temOver.width, temOver.height, tx);
+			BitmapUtil.drawBitmapDataToUI(temOut, progressImgsOut, temOut.width, temOut.height, tx);
+			
+			var dataOver:BitmapData = new data_over;
+			var dataOut:BitmapData = new data_out;
+			
+			tx = this.dataBtn.x + (dataBtn.w - dataOver.width) / 2;
+			BitmapUtil.drawBitmapDataToUI(dataOver, progressImgsOver, dataOver.width, dataOver.height, tx);
+			BitmapUtil.drawBitmapDataToUI(dataOut, progressImgsOut, dataOut.width, dataOut.height, tx);
+			
+			var reviewOver:BitmapData = new show_over;
+			var showOut:BitmapData = new show_out;
+			
+			tx = this.previewBtn.x + (previewBtn.w - reviewOver.width) / 2;
+			BitmapUtil.drawBitmapDataToUI(reviewOver, progressImgsOver, reviewOver.width, reviewOver.height, tx);
+			BitmapUtil.drawBitmapDataToUI(showOut, progressImgsOut, showOut.width, showOut.height, tx);
+			
+			progressImgsOver.y = progressImgsOut.y = 20;
+			progressImgsOver.mouseEnabled = progressImgsOut.mouseEnabled = false;
+			
+			progressImgMask.graphics.clear();
+			progressImgMask.graphics.beginFill(0);
+			progressImgMask.graphics.drawRect(0, 0, w, h);
+			progressImgsOver.mask = progressImgMask;
+			
+			progressImgMask.width = 0;
+			TweenLite.to(progressImgMask, flashTime, {width: dataBtn.x});
+		}
+		
+		/**
+		 */		
+		private var progressImgMask:Shape = new Shape;
+		
+		/**
+		 */		
+		private var progressImgsOver:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var progressImgsOut:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var progreesLineH:uint = 3;
+		
+		/**
+		 */		
+		private var progressBar:Shape = new Shape;
 		
 		/**
 		 */		
@@ -47,9 +119,8 @@ package navBar
 		{
 			currentNav = this.templateNav;
 		
-			
 			var btnWidth:uint = 100;
-			var btnHeight:uint = 40;
+			var btnHeight:uint = 90;
 			
 			templateBtn.w = dataBtn.w = previewBtn.w = btnWidth;
 			templateBtn.h = dataBtn.h = previewBtn.h = btnHeight;
@@ -58,19 +129,28 @@ package navBar
 			dataBtn.x = this.w - btnWidth * 2;
 			previewBtn.x = this.w - btnWidth;
 			
-			templateBtn.y = dataBtn.y = previewBtn.y = this.h - btnHeight - 3;
+			templateBtn.y = dataBtn.y = previewBtn.y = this.h - btnHeight - progreesLineH;
 			
 			templateBtn.text = "选模板" ;
+			templateBtn.labelStyleXML = <label vAlign="bottom">
+							                <format color='555555' font='微软雅黑' size='12'/>
+							            </label>
 			templateBtn.render();
 			btnContainer.addChild(templateBtn);
 			templateBtn.addEventListener(MouseEvent.CLICK, toTemplatePageHandler, false, 0, true);
 			
-			dataBtn.text = "写数据";
+			dataBtn.text = "填数据";
+			dataBtn.labelStyleXML = <label vAlign="bottom">
+														<format color='555555' font='微软雅黑' size='12'/>
+													</label>
 			dataBtn.render();
 			btnContainer.addChild(dataBtn);
 			dataBtn.addEventListener(MouseEvent.CLICK, toEditPageHandler, false, 0, true);
 			
 			previewBtn.text = "秀图表"
+			previewBtn.labelStyleXML = <label vAlign="bottom">
+														<format color='555555' font='微软雅黑' size='12'/>
+													</label>
 			previewBtn.render();
 			btnContainer.addChild(previewBtn);
 			previewBtn.addEventListener(MouseEvent.CLICK, toPreviewPageHandler, false, 0, true);
@@ -85,7 +165,8 @@ package navBar
 			this.currentNav.toTemplatePage(this);
 			exchangePageBtn(this.templateBtn);
 			
-			TweenLite.to(progressLine, 0.3, {width: dataBtn.x});
+			TweenLite.to(progressBar, flashTime, {width: dataBtn.x});
+			TweenLite.to(progressImgMask, flashTime * 1.5, {width: dataBtn.x});
 		}
 		
 		/**
@@ -95,7 +176,8 @@ package navBar
 			this.currentNav.toEditPage(this);
 			exchangePageBtn(this.dataBtn);
 			
-			TweenLite.to(progressLine, 0.3, {width: dataBtn.x + dataBtn.w});
+			TweenLite.to(progressBar, flashTime, {width: dataBtn.x + dataBtn.w});
+			TweenLite.to(progressImgMask, flashTime * 1.5, {width: dataBtn.x + dataBtn.w});
 		}
 		
 		/**
@@ -105,7 +187,8 @@ package navBar
 			this.currentNav.toPreviewPage(this);
 			exchangePageBtn(this.previewBtn);
 			
-			TweenLite.to(progressLine, 0.3, {width: this.w});
+			TweenLite.to(progressBar, flashTime, {width: this.w});
+			TweenLite.to(progressImgMask, flashTime * 1.5, {width: this.w});
 		}
 		
 		/**

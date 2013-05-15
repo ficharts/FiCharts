@@ -78,6 +78,7 @@ package edit
 		 */		
 		private function updateDataGridSizeHandler(evt:DataGridEvent):void
 		{
+
 			evt.stopPropagation();
 			
 			dataGrid.fillColumnBG(0);
@@ -103,7 +104,7 @@ package edit
 		 */		
 		private function initTitles():void
 		{
-			titleLabel.defaultTxt = "主标题";
+			titleLabel.defaultTxt = "请输入主标题";
 			titleLabel.w = 30;
 			titleLabel.render();
 			titleLabel.x = (this.w - titleLabel.w) / 2;
@@ -112,7 +113,7 @@ package edit
 			titleLabel.addEventListener(Event.RESIZE, resizeTitle, false, 0, true);
 			this.addChild(titleLabel);
 			
-			hTitleLabel.defaultTxt = '横轴标题';
+			hTitleLabel.defaultTxt = '请输入横轴标题';
 			hTitleLabel.setTextFormat(14);
 			hTitleLabel.w = 30;
 			hTitleLabel.render();
@@ -122,7 +123,7 @@ package edit
 			hTitleLabel.addEventListener(Event.RESIZE, resizeHTitle, false, 0, true);
 			this.addChild(hTitleLabel);
 			
-			vTitleLabel.defaultTxt = '纵轴标题';
+			vTitleLabel.defaultTxt = '请输入纵轴标题';
 			vTitleLabel.setTextFormat(14);
 			vTitleLabel.w = 30;
 			vTitleLabel.render();

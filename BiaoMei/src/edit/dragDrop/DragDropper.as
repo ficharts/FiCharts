@@ -122,8 +122,11 @@ package edit.dragDrop
 			BitmapUtil.drawBitmapDataToUI(data, draggingUI, data.width, data.height);
 			
 			startDartPos = evt.dragedUI.parent.localToGlobal(new Point(evt.dragedUI.x, evt.dragedUI.y))
-			draggingUI.x = startDartPos.x;
-			draggingUI.y = startDartPos.y;
+			
+			//添加偏移量让用户感觉可以拖动
+			draggingUI.x = startDartPos.x + 5;
+			draggingUI.y = startDartPos.y + 5;
+			
 			root.addChild(draggingUI);
 			root.addChild(addIcon);
 			
