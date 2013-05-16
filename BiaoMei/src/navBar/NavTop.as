@@ -127,19 +127,19 @@ package navBar
 			
 			templateBtn.y = dataBtn.y = previewBtn.y = this.h - btnHeight - progreesLineH;
 			
-			templateBtn.text = "①选模板" ;
+			templateBtn.text = "选模板" ;
 			templateBtn.labelStyleXML = disLabelStyleXML;
 			templateBtn.render();
 			btnContainer.addChild(templateBtn);
 			templateBtn.addEventListener(MouseEvent.CLICK, toTemplatePageHandler, false, 0, true);
 			
-			dataBtn.text = "②填数据";
+			dataBtn.text = "填数据";
 			dataBtn.labelStyleXML = disLabelStyleXML;
 			dataBtn.render();
 			btnContainer.addChild(dataBtn);
 			dataBtn.addEventListener(MouseEvent.CLICK, toEditPageHandler, false, 0, true);
 			
-			previewBtn.text = "③秀图表"
+			previewBtn.text = "秀图表"
 			previewBtn.labelStyleXML = disLabelStyleXML;
 			previewBtn.render();
 			btnContainer.addChild(previewBtn);

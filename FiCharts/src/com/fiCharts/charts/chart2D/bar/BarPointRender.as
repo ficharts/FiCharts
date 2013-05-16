@@ -19,11 +19,16 @@ package com.fiCharts.charts.chart2D.bar
 		{
 			valueLabelUI.y = - valueLabelUI.height / 2;
 			
+			var offset:uint = this.radius;
+			
+			if (offset < 3)
+				offset = 3;
+			
 			if (Number(_itemVO.xValue) > 0)
-				valueLabelUI.x = - valueLabelUI.width - this.radius;
+				valueLabelUI.x = - valueLabelUI.width - offset;
 			else
-				valueLabelUI.x = this.radius;
-				
+				valueLabelUI.x = offset;
+				  
 				// 当柱体太小不能容纳标签时隐藏标签；
 				if (Math.abs(columnDataItem.width) < valueLabelUI.width)
 					valueLabelUI.visible = false;
@@ -35,12 +40,17 @@ package com.fiCharts.charts.chart2D.bar
 		 */		
 		override protected function layoutValueLabel():void
 		{
+			var offset:uint = this.radius;
+			
+			if (offset < 5)
+				offset = 5;
+			
 			valueLabelUI.y = - valueLabelUI.height / 2;
 			
 			if (Number(_itemVO.xValue) > 0)
-				valueLabelUI.x = this.radius;
+				valueLabelUI.x = offset;
 			else
-				valueLabelUI.x = - this.radius - valueLabelUI.width;
+				valueLabelUI.x = - offset - valueLabelUI.width;
 		}
 		
 	}

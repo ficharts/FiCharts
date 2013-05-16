@@ -14,6 +14,10 @@ package preview.stylePanel
 		{
 			super();
 			
+			simple
+			classic
+			black;
+			
 			this.addEventListener(StyleChangedEvt.STYLE_SELECTED, styleChangedHandler, false, 0, true);
 		}
 		
@@ -41,7 +45,7 @@ package preview.stylePanel
 		public function render():void
 		{
 			boxLayout.setLoc(0, 0);
-			boxLayout.setHoriHeightAndGap(this.h, 5);
+			boxLayout.setHoriHeightAndGap(this.h, 26,5);
 			boxLayout.ready();
 			
 			var styleItem:StyleItemUI;
@@ -49,6 +53,20 @@ package preview.stylePanel
 			for each (var item:XML in styleConfig.children())
 			{
 				styleItem = new StyleItemUI(item.@type, item.@img);
+				
+				styleItem.styleXML = <states>
+										<normal>
+											<border color='#555555' alpha='0'/>
+										</normal>
+										<hover>
+											<border color='#111111' thikness='1' alpha='1'/>
+										</hover>
+										<down>
+											<border color='#555555' thikness='2' alpha='1'/>
+										</down>
+									</states>
+				
+				styleItem.ready();
 				boxLayout.horiLayout(styleItem);
 				styleItem.render();
 				this.addChild(styleItem);
@@ -90,9 +108,9 @@ package preview.stylePanel
 		/**
 		 */		
 		private var styleConfig:XML = <charts>
-										<item type='Simple' img="type_line"/>
-										<item type='Classic' img="type_line"/>
-										<item type='Black' img="type_line"/>
+										<item type='Simple' img="simple"/>
+										<item type='Classic' img="classic"/>
+										<item type='Black' img="black"/>
 									</charts>
 	}
 }

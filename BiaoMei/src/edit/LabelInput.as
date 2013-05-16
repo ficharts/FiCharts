@@ -36,10 +36,15 @@ package edit
 			hoverShape.visible = false;
 			this.addChild(hoverShape);
 			this.addChild(frame);
+			this.addChild(this.canvas);
 			
 			this.addEventListener(MouseEvent.ROLL_OVER, rollOver, false, 0, true);
 			this.addEventListener(MouseEvent.ROLL_OUT, rollOut, false, 0, true);
 		}
+		
+		/**
+		 */		
+		public var ifWordwrap:Boolean = false;
 		
 		/**
 		 */		
@@ -360,33 +365,35 @@ package edit
 			{
 				field = new TextField;
 				field.type = TextFieldType.INPUT;
-				//field.antiAliasType = AntiAliasType.ADVANCED;
-				//field.gridFitType = GridFitType.SUBPIXEL
+				
+				if (ifWordwrap)
+				{
+					field.multiline = true;
+					field.wordWrap = true;
+				}
+				
 				field.x = field.y = gap;
 				
 				XMLVOMapper.fuck(beforeInputStyleXML, style);
+				
 				field.defaultTextFormat = (style as LabelStyle).getTextFormat();
 				field.text = defaultTxt;
 				
 				field.width = this.w - gap * 2;
-				field.height = this.h - gap * 2;
 				this.h = field.textHeight + gap * 2;
 				
 				this.updateFieldSize();
 				
-				/*if (this.w > this.defalutW)
-					this.defalutW = this.w;*/
-				
 				bgField = BitmapUtil.getBitmap(field);
 				bgField.x = bgField.y = gap;
-				this.addChild(bgField);
+				this.canvas.addChild(bgField);
 				
 				XMLVOMapper.fuck(inputStyleXML, style);
 				field.defaultTextFormat = (style as LabelStyle).getTextFormat();
 				field.text = '';
 				field.autoSize = TextFieldAutoSize.LEFT;
 				field.addEventListener(Event.CHANGE, inputHandler, false, 0, true);
-				this.addChild(field);
+				canvas.addChild(field);
 			}
 			
 			defaultStyle.width = this.selectStyle.width = w;
@@ -395,6 +402,10 @@ package edit
 			drawHoverShape();
 			drawFrame();
 		}
+		
+		/**
+		 */		
+		private var canvas:Sprite = new Sprite;
 		
 		/**
 		 */		
@@ -413,8 +424,51 @@ package edit
 		
 		/**
 		 */		
+		public function hideField():void
+		{
+			canvas.visible = false;
+		}
+		
+		/**
+		 */		
+		public function showField():void
+		{
+			canvas.visible = true;
+		}
+		
+		/**
+		 */		
+		private var currentNumline:uint = 1;
+		
+		/**
+		 */		
 		private function updateFieldSize():void
 		{
+			if (this.ifWordwrap)
+			{
+				field.width = _w - gap * 2;
+				
+				defaultStyle.width = selectStyle.width = _w;
+				
+				h = field.textHeight + gap * 2;
+					
+				if (field.numLines > 1)
+					h += 6;
+				
+				defaultStyle.height = this.selectStyle.height = h;
+				
+				drawFrame();
+				drawHoverShape();
+				
+				if (field.numLines != currentNumline)
+				{
+					currentNumline = field.numLines;
+					this.dispatchEvent(new Event(Event.RESIZE));
+				}
+				
+				return;
+			}
+			
 			if (field.textWidth + gap * 2 > this.maxWidth)
 			{
 				ifOverMaxWidth = true;

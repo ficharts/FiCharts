@@ -771,7 +771,7 @@
 			</area>
 
 			<column style='Simple' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='SimplePoint'/>
+				<dataRender style='SimplePoint' enable="false"/>
 			</column>
 
 			<stackedColumn style='Simple' labelDisplay="normal">
@@ -779,7 +779,7 @@
 			</stackedColumn>
 
 			<bar style='Simple' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='SimplePoint'/>
+				<dataRender style='SimplePoint' enable="false"/>
 			</bar>
 
 			<stackedBar style='Simple' labelDisplay="normal">
@@ -882,7 +882,7 @@
 			</area>
 
 			<column style='Classic' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='ClassicPoint'/>
+				<dataRender style='ClassicPoint' enable="false"/>
 			</column>
 
 			<stackedColumn style='Classic' labelDisplay="normal">
@@ -891,7 +891,7 @@
 
 			
 			<bar style='Classic' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='ClassicPoint'/>
+				<dataRender style='ClassicPoint' enable="false"/>
 			</bar>
 
 			<stackedBar style='Classic' labelDisplay="normal">
@@ -994,16 +994,15 @@
 			</area>
 
 			<column style='Classic' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='ClassicPoint'/>
+				<dataRender style='ClassicPoint' enable="false"/>
 			</column>
 
 			<stackedColumn style='Classic' labelDisplay="normal">
 				<dataRender style='ClassicPoint' enable='false'/>
 			</stackedColumn>
-
 			
 			<bar style='Classic' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='ClassicPoint'/>
+				<dataRender style='ClassicPoint' enable="false"/>
 			</bar>
 
 			<stackedBar style='Classic' labelDisplay="normal">

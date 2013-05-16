@@ -53,14 +53,20 @@ package com.fiCharts.charts.chart2D.column2D
 			var temY:Number;
 			valueLabelUI.rotation = 0;
 			
+			var offset:uint = this.radius;
+			
+			if (offset < 5)
+				offset = 5;
+			
 			if (columnDataItem.width < valueLabelUI.width)
 			{
 				valueLabelUI.rotation = - 90;
 				temX = - valueLabelUI.width / 2;
+				
 				if (Number(_itemVO.yValue) < 0)
-					temY = - this.radius;
+					temY = - offset;
 				else
-					temY = this.radius + valueLabelUI.height;
+					temY = offset + valueLabelUI.height;
 				
 				// 当柱体的高度和宽度都无法容下label时，隐藏他
 				if (temHeight < valueLabelUI.height /*|| columnDataItem.width < temWidth*/)
@@ -72,9 +78,9 @@ package com.fiCharts.charts.chart2D.column2D
 			{
 				temX = - valueLabelUI.width / 2;
 				if (Number(_itemVO.yValue) < 0)
-					temY = - valueLabelUI.height - this.radius;
+					temY = - valueLabelUI.height - offset;
 				else
-					temY = this.radius;
+					temY = offset;
 				
 				// 当柱体太小不能容纳标签时隐藏标签；
 				if (temHeight < valueLabelUI.height)

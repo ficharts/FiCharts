@@ -9,19 +9,6 @@ package preview.stylePanel
 	{
 		public function StyleItemUI(type:String, img:String)
 		{
-			this.styleXML = <states>
-								<normal>
-									<border color='#EEEEEE' alpha='0.6'/>
-								</normal>
-								<hover>
-									<border color='#555555' thikness='1' alpha='1'/>
-									<fill color='#4EA6EA' alpha='0.3'/>
-								</hover>
-								<down>
-									<border color='#000000' thikness='2' alpha='1'/>
-								</down>
-							</states>
-				
 			 super(type, img);
 		}
 		

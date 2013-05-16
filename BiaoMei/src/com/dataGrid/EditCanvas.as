@@ -376,7 +376,7 @@
 		
 		/**
 		 */		
-		public var maxHeight:uint = 1000;
+		public var maxHeight:uint = 2000;
 
 		/**
 		 */		

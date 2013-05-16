@@ -23,7 +23,7 @@ package
 		
 		/**
 		 */		
-		protected var styleXML:XML = <states>
+		public var styleXML:XML = <states>
 										<normal>
 											<border color='#BCBCBC' alpha='0.6'/>
 										</normal>
@@ -48,12 +48,22 @@ package
 			
 			this.type = type;
 			this.img = img;
-			
+		}
+		
+		/**
+		 */		
+		public function ready():void
+		{
 			this.states = new States;
 			XMLVOMapper.fuck(this.styleXML, states);
 			
 			stateControl = new StatesControl(this, states);
+			ifReady = true;
 		}
+		
+		/**
+		 */		
+		private var ifReady:Boolean = false;
 		
 		/**
 		 */		
@@ -108,6 +118,9 @@ package
 				
 				ifDrawed = true;
 			}
+			
+			if (ifReady == false)
+				this.ready();
 			
 			canvas.graphics.clear();
 			currState.width = this.itemW;
