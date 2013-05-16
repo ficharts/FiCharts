@@ -44,6 +44,13 @@ package edit
 		
 		/**
 		 */		
+		public function get hasText():Boolean
+		{
+			return !RexUtil.ifTextNull(this.text);
+		}
+		
+		/**
+		 */		
 		public var ifWordwrap:Boolean = false;
 		
 		/**
@@ -208,6 +215,8 @@ package edit
 		 */		
 		private function keyDownHandler(evt:KeyboardEvent):void
 		{
+			return;
+			
 			if (evt.keyCode == Keyboard.ENTER)
 			{
 				_unSelect();

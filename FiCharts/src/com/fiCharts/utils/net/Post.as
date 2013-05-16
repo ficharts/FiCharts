@@ -118,7 +118,7 @@ package com.fiCharts.utils.net
 		 */	
 		private function complete(e:Event):void
 		{
-			FiTrace.info("sendfile: " + this.uploader.data);
+			FiTrace.info("sendComplete");
 		}
 		
 		/**

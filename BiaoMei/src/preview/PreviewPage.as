@@ -231,18 +231,26 @@ package preview
 			
 			weiboBtn.bgStyleXML = <states>
 										<normal>
-											<fill color='#329AE7' alpha='1'/>
+											<border color="#167AC5"/>
+											<fill color='#3BB0FB' alpha='1'/>
 										</normal>
 										<hover>
-											<fill color='#4EA6EA' alpha='1'/>
+											<border color="#3BB0FB"/>
+											<fill color='#88CEFD' alpha='1'/>
 										</hover>
 										<down>
-											<fill color='#4EA6EA' alpha='1'/>
+											<border color="#167AC5"/>
+											<fill color='#167AC5' alpha='1'/>
 										</down>
 									</states>;
 			
 			weiboBtn.labelStyleXML = <label>
 						                <format color='FFFFFF' font='微软雅黑' size='12' letterSpacing="3"/>
+											<!--text>
+												<effects>
+													<shadow color='555555' distance='1' angle='90' blur='1' alpha='0.9'/>
+												</effects>
+											</text-->
 						            </label>
 				
 			
@@ -276,14 +284,19 @@ package preview
 											<fill color='#DDDDDD' alpha='1'/>
 										</hover>
 										<down>
-											<border color="#CCCCCC"/>
-											<fill color='#DCDCDC' alpha='1'/>
+											<border color="#BBBBBB"/>
+											<fill color='#CCCCCC' alpha='1'/>
 										</down>
 									</states>;
 			
 			savaImgBtn.render();
 			savaImgBtn.addEventListener(MouseEvent.CLICK, saveImgHandler, false, 0, true);
 			editPanel.addChild(savaImgBtn);
+			
+			
+			
+			
+			
 			
 			weiboField.defaultTxt = "说点啥吧";
 			weiboField.setTextFormat(12);
@@ -298,28 +311,112 @@ package preview
 											<border color='#2494E6' thikness='1' alpha='0.6' pixelHinting='true'/>
 										</style>
 			weiboField.h = 40;
-			weiboField.w = 220;
+			weiboField.w = 420;
 			weiboField.render();
 			weiboField.y = (this.topGutter - weiboField.h) / 2;
-			weiboField.x = 550;
+			weiboField.x = 350;
 			weiboField.addEventListener(Event.RESIZE, weiboFieldResized);
-			weiboField.addEventListener(Event.SELECT, selectWeiboField);
-			weiboField.addEventListener(Event.MOUSE_LEAVE, unSelectWeiboField);
+			weiboField.addEventListener(Event.CHANGE, weiboFieldTextChanged);
 			editPanel.addChild(weiboField);
+			
+			
+			textLenLabel.style = textLenLabelStyle;
+			XMLVOMapper.fuck(textLenLabelStyleXML, textLenLabelStyle);
+			textLenLabel.text = "140";
+			textLenLabel.render();
+			editPanel.addChild(textLenLabel);
+			
+			layoutTextLenLabel();
 		}
 		
 		/**
 		 */		
-		private function selectWeiboField(evt:Event):void
+		private function layoutTextLenLabel():void
 		{
-			
+			textLenLabel.x = weiboField.x - textLenLabel.width - 5;
+			textLenLabel.y =  - 2;
 		}
 		
 		/**
 		 */		
-		private function unSelectWeiboField(evt:Event):void
+		private var textLenLabel:LabelUI = new LabelUI;
+		
+		/**
+		 */		
+		private var textLenLabelStyle:LabelStyle = new LabelStyle;
+		
+		/**
+		 */		
+		private var textLenLabelStyleXML:XML = <label>
+													<format color='AAAAAA' font='Constantia' size='30' letterSpacing="3"/>
+														<text>
+															<effects>
+																<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
+															</effects>
+														</text>
+												</label>
+		
+		/**
+		 * 
+		 */		
+		private function weiboFieldTextChanged(evt:Event):void
 		{
+			var textLeft:int = 140 - textareastrlen(weiboField.text);
 			
+			if (textLeft < 0 && ifRightTextLen)
+			{
+				ifRightTextLen = false;
+				(textLenLabel.style as LabelStyle).format.color = "FF0000";
+				textLenLabel.render();
+				
+				this.weiboBtn.alpha = 0.6;
+				weiboBtn.mouseEnabled = false;
+			}
+			else if (this.ifRightTextLen == false && textLeft >= 0)
+			{
+				ifRightTextLen = true;
+				(textLenLabel.style as LabelStyle).format.color = "AAAAAA";
+				textLenLabel.render();
+				
+				this.weiboBtn.alpha = 1;
+				weiboBtn.mouseEnabled = true;
+			}
+			
+			textLenLabel.text = textLeft.toString();
+			textLenLabel.render();
+			layoutTextLenLabel();
+		}
+		
+		/**
+		 */		
+		private var ifRightTextLen:Boolean = true;
+		
+		/**
+		 */		
+		private function textareastrlen(str:String):uint
+		{
+			var len:uint;
+			var i:uint;
+			len = 0;
+			
+			for (i = 0; i < str.length; i ++)
+			{
+				if (str.charCodeAt(i) > 255)
+				{
+					len += 2;
+				}
+				else
+				{
+					len ++;
+				}
+			}
+			
+			if (len % 2 != 0)
+			{
+				len = len + 1;
+			}
+			
+			return len / 2;
 		}
 		
 		/**
@@ -445,7 +542,7 @@ package preview
 		 */		
 		private var editBgStyleXML:XML = <style>
 											<border color="EEEEEE"/>
-											<fill color="#EFEFEF, #EFEFEF" alpha="0.2,0.2" angle="-90"/>
+											<fill color="#EFEFEF, #EFEFEF" alpha="0.3,0.3" angle="-90"/>
 										</style>
 		
 		/**
