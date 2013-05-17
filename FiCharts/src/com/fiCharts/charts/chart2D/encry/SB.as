@@ -962,7 +962,8 @@ package com.fiCharts.charts.chart2D.encry
 			
 			var seriesDataItem:SeriesDataPoint;
 			var item:Object;
-			var i:uint = 0;
+			var souceDataIndex:uint = 0;
+			var actualDataIndex:uint = 0;
 			
 			dataItemVOs.length = 0;
 			horizontalValues.length = 0; 
@@ -987,11 +988,18 @@ package com.fiCharts.charts.chart2D.encry
 				seriesDataItem.xVerifyValue = this.horizontalAxis.getVerifyData(seriesDataItem.xValue);
 				seriesDataItem.yVerifyValue = this.verticalAxis.getVerifyData(seriesDataItem.yValue);
 				
-				horizontalValues[i] = seriesDataItem.xVerifyValue;
-				verticalValues[i] = seriesDataItem.yVerifyValue;
-				dataItemVOs[i] = sourceDataItems[i] = seriesDataItem;
+				horizontalValues[souceDataIndex] = seriesDataItem.xVerifyValue;
+				verticalValues[souceDataIndex] = seriesDataItem.yVerifyValue;
 				
-				i ++;
+				if (RexUtil.ifTextNull(seriesDataItem.xValue) || RexUtil.ifTextNull(seriesDataItem.yValue))
+					seriesDataItem = null;
+				else
+				{
+					dataItemVOs[actualDataIndex] = sourceDataItems[actualDataIndex] = seriesDataItem;
+					actualDataIndex += 1;
+				}
+				
+				souceDataIndex ++;
 			}
 			
 			updateMaxIndex();

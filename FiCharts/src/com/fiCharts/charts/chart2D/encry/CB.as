@@ -648,7 +648,12 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function get temTopSpace():Number
 		{
-			return chartModel.chartBG.paddingTop + this.topAxisContainer.height + this.title.boxHeight;
+			var tem:Number = chartModel.chartBG.paddingTop + this.topAxisContainer.height + this.title.boxHeight;
+			
+			if (tem < chartModel.minTopPadding)
+				tem = chartModel.minTopPadding;
+			
+			return tem;
 		}
 		
 		/**

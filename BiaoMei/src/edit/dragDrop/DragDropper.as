@@ -117,7 +117,7 @@ package edit.dragDrop
 			//sender.disEnable(); 
 			
 			//拖动图标
-			var data:BitmapData = BitmapUtil.getBitmapData(evt.dragedUI, true);
+			var data:BitmapData = BitmapUtil.getBitmapData(evt.dragedUI, false);
 			draggingUI.graphics.clear();
 			BitmapUtil.drawBitmapDataToUI(data, draggingUI, data.width, data.height);
 			

@@ -183,39 +183,34 @@ package edit
 		 */		
 		private function rollOver(evt:MouseEvent):void
 		{
+			ifOver = true;
+			
 			hoverShape.visible = true;
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, select, false, 0, true);
 		}
 		
 		/**
-		 * 此时文本框被激活
 		 */		
-		private function select(evt:MouseEvent):void
-		{
-			ifSlected = true;
-			
-			this.dispatchEvent(new Event(Event.SELECT));
-			
-			stage.focus = field;
-			
-			this.drawFrame();
-			this.drawHoverShape();
-			
-			if (bgField)
-				bgField.visible = false;
-			
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler, false, 0, true);
-		}
+		private var ifOver:Boolean = false;
 		
 		/**
 		 */		
-		private var ifSlected:Boolean = false;
+		private function rollOut(evt:MouseEvent):void
+		{
+			ifOver = false;
+			hoverShape.visible = false;
+			
+			stage.removeEventListener(MouseEvent.MOUSE_DOWN, select);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, unSelect, false, 0, true);
+		}
 		
 		/**
 		 */		
 		private function keyDownHandler(evt:KeyboardEvent):void
 		{
-			return;
+			// 此时回车是换行
+			if (this.ifWordwrap && ifBreakLine == true)
+				return;
 			
 			if (evt.keyCode == Keyboard.ENTER)
 			{
@@ -225,12 +220,34 @@ package edit
 		
 		/**
 		 */		
-		private function rollOut(evt:MouseEvent):void
+		public var ifBreakLine:Boolean = true;
+		
+		/**
+		 * 此时文本框被激活
+		 */		
+		private function select(evt:MouseEvent):void
 		{
-			hoverShape.visible = false;
-			stage.removeEventListener(MouseEvent.MOUSE_DOWN, select);
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, unSelect, false, 0, true);
+			if (ifOver)
+			{
+				ifSlected = true;
+				
+				this.dispatchEvent(new Event(Event.SELECT));
+				
+				stage.focus = field;
+				
+				this.drawFrame();
+				this.drawHoverShape();
+				
+				if (bgField)
+					bgField.visible = false;
+				
+				stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler, false, 0, true);
+			}
 		}
+		
+		/**
+		 */		
+		private var ifSlected:Boolean = false;
 		
 		/**
 		 */		
@@ -243,7 +260,8 @@ package edit
 		 */		
 		private function unSelect(evt:MouseEvent):void
 		{
-			_unSelect();
+			if (this.ifOver == false)
+				_unSelect();
 		}
 		
 		/**
@@ -269,6 +287,75 @@ package edit
 		
 		/**
 		 */		
+		private function updateFieldSize():void
+		{
+			field.autoSize = TextFieldAutoSize.LEFT;
+			
+			if (this.ifWordwrap)
+			{
+				field.width = _w - gap * 2;
+				defaultStyle.width = selectStyle.width = _w;
+				
+				h = field.textHeight + gap * 2;
+				
+				if (field.numLines > 1)
+					h += 6;
+				
+				defaultStyle.height = this.selectStyle.height = h;
+				
+				drawFrame();
+				drawHoverShape();
+				
+				if (field.numLines != currentNumline)
+				{
+					currentNumline = field.numLines;
+					this.dispatchEvent(new Event(Event.RESIZE));
+				}
+				
+				return;
+			}
+			
+			if (field.textWidth + gap * 2 > this.maxWidth)
+			{
+				ifOverMaxWidth = true;
+				field.autoSize = TextFieldAutoSize.NONE;
+			}
+			else if (field.textWidth + gap * 2 > this.defalutW)
+			{
+				if (ifOverMaxWidth)
+				{
+					field.autoSize = TextFieldAutoSize.LEFT;
+					ifOverMaxWidth = false;
+				}
+				
+				defaultStyle.width = selectStyle.width = _w = field.textWidth + gap * 2 + 6;
+				field.width = field.textWidth + 6;
+				
+				drawFrame();
+				
+				this.dispatchEvent(new Event(Event.RESIZE));
+			}
+			else
+			{
+				if (ifOverMaxWidth)
+				{
+					field.autoSize = TextFieldAutoSize.LEFT;
+					ifOverMaxWidth = false;
+				}
+				
+				defaultStyle.width = selectStyle.width = _w = this.defalutW;
+				field.width = this.defalutW - gap * 2;
+				
+				drawFrame();
+				
+				this.dispatchEvent(new Event(Event.RESIZE));
+			}
+			
+			drawHoverShape();
+		}
+		
+		/**
+		 */		
 		private function checkIfShowDefaultText():void
 		{
 			if (bgField)
@@ -283,6 +370,10 @@ package edit
 						this.drawFrame();
 						this.drawHoverShape();
 					}
+					
+					field.autoSize = TextFieldAutoSize.NONE;
+					this.field.width = this.w;
+					this.dispatchEvent(new Event(Event.RESIZE));
 				}
 				else
 				{
@@ -355,7 +446,6 @@ package edit
 		 */		
 		private var _defaultTxt:String;
 		
-		
 		/**
 		 */		
 		public function setRotation(value:Number):void
@@ -374,6 +464,7 @@ package edit
 			{
 				field = new TextField;
 				field.type = TextFieldType.INPUT;
+				field.autoSize = TextFieldAutoSize.LEFT;
 				
 				if (ifWordwrap)
 				{
@@ -389,6 +480,7 @@ package edit
 				field.text = defaultTxt;
 				
 				field.width = this.w - gap * 2;
+				field.height = field.textHeight;
 				this.h = field.textHeight + gap * 2;
 				
 				this.updateFieldSize();
@@ -399,8 +491,11 @@ package edit
 				
 				XMLVOMapper.fuck(inputStyleXML, style);
 				field.defaultTextFormat = (style as LabelStyle).getTextFormat();
+				
 				field.text = '';
-				field.autoSize = TextFieldAutoSize.LEFT;
+				field.autoSize = TextFieldAutoSize.NONE;
+				field.width = this.w - gap * 2;
+				
 				field.addEventListener(Event.CHANGE, inputHandler, false, 0, true);
 				canvas.addChild(field);
 			}
@@ -448,74 +543,6 @@ package edit
 		/**
 		 */		
 		private var currentNumline:uint = 1;
-		
-		/**
-		 */		
-		private function updateFieldSize():void
-		{
-			if (this.ifWordwrap)
-			{
-				field.width = _w - gap * 2;
-				
-				defaultStyle.width = selectStyle.width = _w;
-				
-				h = field.textHeight + gap * 2;
-					
-				if (field.numLines > 1)
-					h += 6;
-				
-				defaultStyle.height = this.selectStyle.height = h;
-				
-				drawFrame();
-				drawHoverShape();
-				
-				if (field.numLines != currentNumline)
-				{
-					currentNumline = field.numLines;
-					this.dispatchEvent(new Event(Event.RESIZE));
-				}
-				
-				return;
-			}
-			
-			if (field.textWidth + gap * 2 > this.maxWidth)
-			{
-				ifOverMaxWidth = true;
-				field.autoSize = TextFieldAutoSize.NONE;
-			}
-			else if (field.textWidth + gap * 2 > this.defalutW)
-			{
-				if (ifOverMaxWidth)
-				{
-					field.autoSize = TextFieldAutoSize.LEFT;
-					ifOverMaxWidth = false;
-				}
-				
-				defaultStyle.width = selectStyle.width = _w = field.textWidth + gap * 2 + 6;
-				field.width = field.textWidth + 6;
-				
-				drawFrame();
-				
-				this.dispatchEvent(new Event(Event.RESIZE));
-			}
-			else
-			{
-				if (ifOverMaxWidth)
-				{
-					field.autoSize = TextFieldAutoSize.LEFT;
-					ifOverMaxWidth = false;
-				}
-				
-				defaultStyle.width = selectStyle.width = _w = this.defalutW;
-				field.width = this.defalutW - gap * 2;
-				
-				drawFrame();
-				
-				this.dispatchEvent(new Event(Event.RESIZE));
-			}
-			
-			drawHoverShape();
-		}
 		
 		/**
 		 */		

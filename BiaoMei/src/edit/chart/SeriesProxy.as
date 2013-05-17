@@ -2,7 +2,9 @@ package edit.chart
 {
 	import com.dataGrid.CellData;
 	import com.dataGrid.Column;
+	import com.fiCharts.utils.ClassUtil;
 	import com.fiCharts.utils.RexUtil;
+	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.greensock.TweenLite;
 	
 	import edit.IconBtn;
@@ -12,6 +14,7 @@ package edit.chart
 	import fl.motion.easing.Back;
 	import fl.transitions.easing.Bounce;
 	
+	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -27,7 +30,8 @@ package edit.chart
 	{
 		public function SeriesProxy()
 		{
-			blueDel;
+			del_over;
+			del_out;
 		}
 		
 		/**
@@ -171,14 +175,12 @@ package edit.chart
 			
 			initHeadGraphic();
 			
-			delBtn.x = (headWidth - this.chartSize) / 2;
-			delBtn.y = (headHeight - this.chartSize) / 2;
-			delBtn.init(ChartTypePanel.getChartBitmapByType(type), 'blueDel', 'blueDel', 20, 20);
-			delBtn.addEventListener(MouseEvent.CLICK, deleteThisHandler, false, 0, true);
-			//delBtn.addEventListener(MouseEvent.ROLL_OVER, delBtnOver, false, 0, true);
-			//delBtn.addEventListener(MouseEvent.ROLL_OUT, delBtnOut, false, 0, true);
-			delBtn.render();
 			
+			delBtn.init("del_over", 'del_out', 'del_out', 8, 8);
+			delBtn.render();
+			delBtn.x = (headWidth - delBtn.width - 10);
+			delBtn.y = (headHeight - delBtn.height) / 2;
+			delBtn.addEventListener(MouseEvent.CLICK, deleteThisHandler, false, 0, true);
 			headTop.addChild(delBtn);
 			header.addChild(headTop);
 			
@@ -186,28 +188,51 @@ package edit.chart
 				
 			TweenLite.from(headerHolder, 0.5, {alpha: 0, scaleX:0, scaleY:0, ease: Back.easeOut, onComplete: rendered});
 			
-			headTop.addEventListener(MouseEvent.ROLL_OVER, overHeader, false, 0, true);
+			header.addEventListener(MouseEvent.ROLL_OVER, overHeader, false, 0, true);
 			header.addEventListener(MouseEvent.ROLL_OUT, outHeader, false, 0, true);
 		}
 		
 		/**
-		 * 这里的奇葩动画会影响  nameTxtField 文本尺寸的渲染；
+		 * 用户回车后的隐藏
 		 */		
-		private function rendered():void
+		private function leaveNameField(evt:Event):void
 		{
-			if (ifNameChanged)
-			{
-				nameTxtField.text = this.name;
-				
-				headBottom.width = delBtn.width;
-				headBottom.height = delBtn.height;	
-				
-				headBottom.x = delBtn.x;
-				headBottom.y = delBtn.y;
-			}
-			
-			this.mouseEnabled = this.mouseChildren = true;
+			hideNameField();
 		}
+		
+		/**
+		 */		
+		private function outHeader(evt:MouseEvent):void
+		{
+			isOver = false;
+			
+			if (ifLabelShow)
+				stage.addEventListener(MouseEvent.MOUSE_DOWN, hideNameLabel);
+		}
+		
+		/**
+		 */		
+		private function hideNameLabel(evt:MouseEvent):void
+		{
+			this.hideNameField();
+		}
+		
+		/**
+		 */		
+		private function overHeader(evt:MouseEvent):void
+		{
+			isOver = true;
+			
+			if (ifLabelShow == false)
+				showNameField();
+			
+			if (stage.hasEventListener(MouseEvent.MOUSE_DOWN))
+				stage.removeEventListener(MouseEvent.MOUSE_DOWN, hideNameLabel);
+		}
+		
+		/**
+		 */		
+		private var isOver:Boolean = false;
 		
 		/**
 		 */		
@@ -233,6 +258,9 @@ package edit.chart
 			headTop.graphics.beginFill(0xDDDDDD, 0.2);
 			headTop.graphics.drawRect(1, 0, headWidth - 2, this.headHeight);
 			headTop.graphics.endFill();
+			
+			var chartBmd:BitmapData = ClassUtil.getObjectByClassPath(ChartTypePanel.getChartBitmapByType(type)) as BitmapData
+			BitmapUtil.drawBitmapDataToUI(chartBmd, headTop, 22, 22, 5, 8);
 		}
 		
 		/**
@@ -251,9 +279,11 @@ package edit.chart
 			nameTxtField.setTextFormat(12, 'FFFFFF');
 			nameTxtField.defaultTxt = this.name;
 			nameTxtField.w = headWidth - 2;
+			nameTxtField.ifWordwrap = true;
+			nameTxtField.ifBreakLine = false;
 			nameTxtField.addEventListener(Event.RESIZE, resizeTxtField, false, 0, true);
 			nameTxtField.addEventListener(Event.CHANGE, txtFieldChanged, false, 0, true);
-			nameTxtField.addEventListener(Event.MOUSE_LEAVE, nameFieldEditComplete, false, 0, true);
+			nameTxtField.addEventListener(Event.MOUSE_LEAVE, leaveNameField);
 			nameTxtField.render();
 			nameTxtField.x = (headWidth - nameTxtField.w) / 2;
 			nameTxtField.y = 3;
@@ -265,6 +295,20 @@ package edit.chart
 			drawNameFieldBG();
 			
 			headBottom.mouseChildren = headBottom.mouseEnabled = false;
+		}
+		
+		/**
+		 * 这里的奇葩动画会影响  nameTxtField 文本尺寸的渲染；
+		 */		
+		private function rendered():void
+		{
+			if (ifNameChanged)
+				nameTxtField.text = this.name;
+			
+			headBottom.height = headHeight;	
+			headBottom.y = 0;
+			
+			this.mouseEnabled = this.mouseChildren = true;
 		}
 		
 		/**
@@ -291,7 +335,6 @@ package edit.chart
 		 */		
 		private function resizeTxtField(evt:Event):void
 		{
-			nameTxtField.x = (headWidth - nameTxtField.w) / 2;
 			drawNameFieldBG();
 		}
 		
@@ -318,32 +361,22 @@ package edit.chart
 		
 		/**
 		 */		
-		private function overHeader(evt:MouseEvent):void
-		{
-			showNameField();
-		}
-		
-		/**
-		 */		
-		private function nameFieldEditComplete(evt:Event):void
-		{
-			hideNameField();
-		}
-		
-		/**
-		 */		
-		private function outHeader(evt:MouseEvent):void
-		{
-			hideNameField();
-		}
-		
-		/**
-		 */		
 		private function showNameField():void
 		{
-			headBottom.mouseChildren = headBottom.mouseEnabled = true;
-			TweenLite.to(headBottom, 0.3, {alpha: 1, x: 0, y: headHeight - 3, scaleX: 1, scaleY: 1});
+			TweenLite.to(headBottom, 0.3, {alpha: 1, y: this.headHeight - 3, scaleY: 1, onComplete: labelShowed});
 		}
+		
+		/**
+		 */		
+		private function labelShowed():void
+		{
+			ifLabelShow = true;
+			headBottom.mouseChildren = headBottom.mouseEnabled = true;
+		}
+		
+		/**
+		 */		
+		private var ifLabelShow:Boolean = false;
 		
 		/**
 		 */		
@@ -351,7 +384,12 @@ package edit.chart
 		{
 			nameTxtField.leave();
 			headBottom.mouseChildren = headBottom.mouseEnabled = false;
-			TweenLite.to(headBottom, 0.3, {alpha: 0, x: delBtn.x, y: delBtn.y ,width: delBtn.width, height: delBtn.height});
+			TweenLite.to(headBottom, 0.3, {alpha: 0, y: 0, height: this.headHeight});
+			
+			if (stage.hasEventListener(MouseEvent.MOUSE_DOWN))
+				stage.removeEventListener(MouseEvent.MOUSE_DOWN, hideNameLabel);
+			
+			ifLabelShow = false;
 		}
 		
 		/**

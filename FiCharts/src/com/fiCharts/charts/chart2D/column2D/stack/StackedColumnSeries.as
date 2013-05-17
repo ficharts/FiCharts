@@ -228,6 +228,8 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
 			
+			if (dataItemVOs.length == 0) return;
+			
 			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
 			for (var i:uint = 0; i < length; i++)
 			{

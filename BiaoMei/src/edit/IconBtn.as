@@ -136,18 +136,15 @@ package edit
 		 */		
 		public var styleXML:XML = <states>
 										<normal>
-											<border color='#2494E6' thikness='1' alpha='0.8' pixelHinting='true'/>
-											<fill color='#FFFFFF' alpha='1'/>
-											<img width='20' height='20'/>
+											<fill color='#FFFFFF' alpha='0'/>
+											<img width='8' height='8'/>
 										</normal>
 										<hover>
-											<border color='#2494E6' thikness='1' pixelHinting='true'/>
-											<fill color='#FFFFFF' alpha='1'/>
+											<fill color='#FFFFFF' alpha='0'/>
 											<img/>
 										</hover>
 										<down>
-											<border color='#2494E6' thikness='1' pixelHinting='true'/>
-											<fill color='#2494E6' alpha='0.5'/>
+											<fill color='#2494E6' alpha='0'/>
 											<img/>
 										</down>
 									</states>
