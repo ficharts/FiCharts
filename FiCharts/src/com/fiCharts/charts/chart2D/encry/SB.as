@@ -1138,7 +1138,7 @@ package com.fiCharts.charts.chart2D.encry
 			var legendVOes:Vector.<LegendVO> = new Vector.<LegendVO>;
 			var legendVO:LegendVO;
 			
-			if (this.seriesCount > 1)
+			if (this.seriesCount > 1 ||  ifSeriesLegend)
 			{
 				legendVO = new LegendVO();
 				legendVO.addEventListener(LegendEvent.LEGEND_ITEM_OVER, seriesLegendOverHandler, false, 0, true);
@@ -1167,6 +1167,22 @@ package com.fiCharts.charts.chart2D.encry
 			
 			return legendVOes;
 		}
+		
+		/**
+		 */		
+		public function get ifSeriesLegend():Object
+		{
+			return _ifSeriesLegend;
+		}
+		
+		public function set ifSeriesLegend(value:Object):void
+		{
+			_ifSeriesLegend = XMLVOMapper.boolean(value);
+		}
+
+		/**
+		 */		
+		private var _ifSeriesLegend:Boolean = true;
 		
 		
 		//----------------------------------------------------

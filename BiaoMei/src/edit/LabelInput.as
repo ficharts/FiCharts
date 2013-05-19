@@ -1,6 +1,7 @@
 package edit
 {
 	import com.fiCharts.utils.RexUtil;
+	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -33,6 +34,13 @@ package edit
 			super();
 			
 			this.w = 50;
+			StageUtil.initApplication(this, init);
+		}
+		
+		/**
+		 */		
+		private function init():void
+		{
 			hoverShape.visible = false;
 			this.addChild(hoverShape);
 			this.addChild(frame);
@@ -40,6 +48,16 @@ package edit
 			
 			this.addEventListener(MouseEvent.ROLL_OVER, rollOver, false, 0, true);
 			this.addEventListener(MouseEvent.ROLL_OUT, rollOut, false, 0, true);
+			
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler, false, 0, true);
+		}
+		
+		/**
+		 */		
+		public function setFocus():void
+		{
+			this._select();
+			stage.focus = this.field;
 		}
 		
 		/**
@@ -208,13 +226,18 @@ package edit
 		 */		
 		private function keyDownHandler(evt:KeyboardEvent):void
 		{
-			// 此时回车是换行
-			if (this.ifWordwrap && ifBreakLine == true)
-				return;
-			
-			if (evt.keyCode == Keyboard.ENTER)
+			if (this.ifSlected)
 			{
-				_unSelect();
+				// 此时回车是换行
+				if (this.ifWordwrap && ifBreakLine == true)
+					return;
+				
+				if (evt.keyCode == Keyboard.ENTER)
+				{
+					this.dispatchEvent(new LabelInputEvent(LabelInputEvent.ENTER_LEAVE));
+					
+					_unSelect();
+				}
 			}
 		}
 		
@@ -229,20 +252,26 @@ package edit
 		{
 			if (ifOver)
 			{
-				ifSlected = true;
-				
-				this.dispatchEvent(new Event(Event.SELECT));
-				
-				stage.focus = field;
-				
-				this.drawFrame();
-				this.drawHoverShape();
-				
-				if (bgField)
-					bgField.visible = false;
-				
-				stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler, false, 0, true);
+				_select();
 			}
+		}
+		
+		/**
+		 */		
+		private function _select():void
+		{
+			ifSlected = true;
+			
+			this.dispatchEvent(new Event(Event.SELECT));
+			
+			stage.focus = field;
+			
+			this.drawFrame();
+			this.drawHoverShape();
+			
+			if (bgField)
+				bgField.visible = false;
+				
 		}
 		
 		/**
@@ -271,9 +300,6 @@ package edit
 			if (ifSlected)
 			{
 				ifSlected = false;
-				
-				stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-				
 				checkIfShowDefaultText();
 				
 				stage.focus = null;

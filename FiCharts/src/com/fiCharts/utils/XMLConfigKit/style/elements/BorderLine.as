@@ -25,6 +25,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		}
 		
 		/**
+		 * 圆角时 pixelHinting = true
 		 */		
 		private var _pixelHinting:Object = false;
 

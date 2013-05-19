@@ -7,12 +7,15 @@ package edit
 	import com.greensock.TweenLite;
 	
 	import edit.chart.ChartProxy;
+	import edit.chart.SeriesHeader;
+	import edit.chart.SeriesHeaderEvt;
 	import edit.chart.SeriesProxy;
 	import edit.chartTypeBox.ChartTypePanel;
 	import edit.dragDrop.DragDropper;
 	import edit.dragDrop.IDragDropReiver;
 	
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
 	
@@ -40,7 +43,7 @@ package edit
 		private function init():void
 		{
 			dataGrid.addEventListener(DataGridEvent.UPDATA_SEIZE, updateDataGridSizeHandler, false, 0, true);
-			dataGrid.gridW = 840;
+			dataGrid.gridW = 810;
 			dataGrid.gridH = this.h - 180// 上下空白;
 			
 			dataGrid.x = (this.w - dataGrid.gridW) * 0.5;
@@ -72,7 +75,39 @@ package edit
 			dragDropper.addReceiver(this, dataGrid);
 			
 			initTitles();
+			
+			chartProxy.addEventListener(SeriesHeaderEvt.HEADER_SELECT, headerSelectedHandler, false, 0, true);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, stateDownForHeader, false, 0, true);
 		}
+		
+		/**
+		 */		
+		private function stateDownForHeader(evt:MouseEvent):void
+		{
+			if (!chartProxy.hitTestPoint(stage.mouseX,stage.mouseY))
+			{
+				if (currentHeader)
+				{
+					currentHeader.close();
+					currentHeader = null;					
+				}
+			}
+		}
+		
+		/**
+		 */		
+		private function headerSelectedHandler(evt:SeriesHeaderEvt):void
+		{
+			if (currentHeader)
+				currentHeader.close();
+			
+			currentHeader = evt.header;
+			currentHeader.open();
+		}
+		
+		/**
+		 */		
+		private var currentHeader:SeriesHeader;
 		
 		/**
 		 */		
@@ -652,10 +687,11 @@ package edit
 				setSeriesColumns(newSeries, dropStartColumnIndex, dropEndColumnIndex);
 				newSeries.setField(draggingSeriesType, dropStartColumnIndex, dropEndColumnIndex);
 				chartProxy.addSeries(newSeries);
+				
+				newSeries.reName(oldSeries.name);
+				
 				newSeries.verifyFieldData(this.dataGrid.verifyColumnData);
 				
-				newSeries.name = oldSeries.name;
-				newSeries.renderNameField();
 			}
 			else// 此时无法加入序列
 			{

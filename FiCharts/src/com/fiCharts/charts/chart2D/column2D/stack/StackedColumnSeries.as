@@ -236,6 +236,9 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				positiveValue = negativeValue = 0;
 				for each (stack in stacks)
 				{
+					if (stack.dataItemVOs.length <= i)
+						continue;
+						
 					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataPoint);
 					stackedSeriesDataItem.index = i;
 					

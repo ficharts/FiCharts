@@ -185,6 +185,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 				
 				for each (stack in stacks)
 				{
+					if (stack.dataItemVOs.length <= i)
+						continue;
+					
 					xValue = Number(stack.dataItemVOs[i].xVerifyValue);
 					yValue = stack.dataItemVOs[i].yVerifyValue;
 					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataPoint);

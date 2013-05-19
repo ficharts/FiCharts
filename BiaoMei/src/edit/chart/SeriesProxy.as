@@ -2,21 +2,15 @@ package edit.chart
 {
 	import com.dataGrid.CellData;
 	import com.dataGrid.Column;
-	import com.fiCharts.utils.ClassUtil;
 	import com.fiCharts.utils.RexUtil;
-	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.greensock.TweenLite;
+	import com.greensock.easing.Back;
 	
 	import edit.IconBtn;
-	import edit.LabelInput;
-	import edit.chartTypeBox.ChartTypePanel;
 	
-	import fl.motion.easing.Back;
 	import fl.transitions.easing.Bounce;
 	
-	import flash.display.BitmapData;
 	import flash.display.Sprite;
-	import flash.events.Event;
 	import flash.events.MouseEvent;
 
 	/**
@@ -30,8 +24,10 @@ package edit.chart
 	{
 		public function SeriesProxy()
 		{
-			del_over;
-			del_out;
+			this.header = new SeriesHeader(this);
+			
+			this.addChild(headerHolder);
+			headerHolder.addChild(header);
 		}
 		
 		/**
@@ -46,7 +42,7 @@ package edit.chart
 		public function del():void
 		{
 			this.mouseChildren = this.mouseEnabled = false;
-			
+			this.header.ifSelected = false;
 			TweenLite.to(headerHolder, 0.5, {alpha: 0, scaleX: 0, scaleY: 0, onComplete: _del});
 		}
 		
@@ -104,7 +100,7 @@ package edit.chart
 		{
 			xField = sXML.@xField;
 			yField = sXML.@yField;
-			this.name = sXML.@name;
+			this.reName(sXML.@name);
 			
 			setColumnDataField();
 		}
@@ -117,7 +113,7 @@ package edit.chart
 			xField = ChartProxy.SHARE_FIELD;
 			yField = type + startIndex;
 			
-			this.name = "序列" + this.startColumnIndex;
+			//this.name = "序列" + this.startColumnIndex;
 			
 			setColumnDataField();
 		}
@@ -159,9 +155,6 @@ package edit.chart
 
 			// 这样做是为了实现动画效果时从中心点开始
 			//--------------------------------------
-			this.addChild(headerHolder);
-			headerHolder.addChild(header);
-			
 			var tx:Number = headWidth / 2;
 			var ty:Number = headHeight / 2;
 			
@@ -171,238 +164,26 @@ package edit.chart
 			header.x = - tx;
 			header.y = - ty;
 			
+			this.header.render();
 			//---------------------------------------
 			
-			initHeadGraphic();
-			
-			
-			delBtn.init("del_over", 'del_out', 'del_out', 8, 8);
-			delBtn.render();
-			delBtn.x = (headWidth - delBtn.width - 10);
-			delBtn.y = (headHeight - delBtn.height) / 2;
-			delBtn.addEventListener(MouseEvent.CLICK, deleteThisHandler, false, 0, true);
-			headTop.addChild(delBtn);
-			header.addChild(headTop);
-			
-			initLabelField();
-				
 			TweenLite.from(headerHolder, 0.5, {alpha: 0, scaleX:0, scaleY:0, ease: Back.easeOut, onComplete: rendered});
-			
-			header.addEventListener(MouseEvent.ROLL_OVER, overHeader, false, 0, true);
-			header.addEventListener(MouseEvent.ROLL_OUT, outHeader, false, 0, true);
 		}
 		
-		/**
-		 * 用户回车后的隐藏
-		 */		
-		private function leaveNameField(evt:Event):void
-		{
-			hideNameField();
-		}
 		
-		/**
-		 */		
-		private function outHeader(evt:MouseEvent):void
-		{
-			isOver = false;
-			
-			if (ifLabelShow)
-				stage.addEventListener(MouseEvent.MOUSE_DOWN, hideNameLabel);
-		}
-		
-		/**
-		 */		
-		private function hideNameLabel(evt:MouseEvent):void
-		{
-			this.hideNameField();
-		}
-		
-		/**
-		 */		
-		private function overHeader(evt:MouseEvent):void
-		{
-			isOver = true;
-			
-			if (ifLabelShow == false)
-				showNameField();
-			
-			if (stage.hasEventListener(MouseEvent.MOUSE_DOWN))
-				stage.removeEventListener(MouseEvent.MOUSE_DOWN, hideNameLabel);
-		}
-		
-		/**
-		 */		
-		private var isOver:Boolean = false;
-		
-		/**
-		 */		
-		public function renderNameField():void
-		{
-			ifNameChanged = true;
-		}
-		
-		/**
-		 */		
-		private var ifNameChanged:Boolean = false;
-		
-		/**
-		 */		
-		private function initHeadGraphic():void
-		{
-			headTop.graphics.clear();
-			
-			headTop.graphics.beginFill(0x2494E6, 0.8);
-			headTop.graphics.drawRect(1, headHeight - 3,  headWidth - 2, 3);
-			headTop.graphics.endFill();
-			
-			headTop.graphics.beginFill(0xDDDDDD, 0.2);
-			headTop.graphics.drawRect(1, 0, headWidth - 2, this.headHeight);
-			headTop.graphics.endFill();
-			
-			var chartBmd:BitmapData = ClassUtil.getObjectByClassPath(ChartTypePanel.getChartBitmapByType(type)) as BitmapData
-			BitmapUtil.drawBitmapDataToUI(chartBmd, headTop, 22, 22, 5, 8);
-		}
-		
-		/**
-		 */		
-		private var headTop:Sprite = new Sprite;
-		
-		/**
-		 */		
-		protected function initLabelField():void
-		{
-			nameTxtField.defaultStyleXML = nameTxtField.selectStyleXML = <style>
-																			<border alpha='0'/>
-																			<fill alpha='0'/>
-																		</style>;
-			 
-			nameTxtField.setTextFormat(12, 'FFFFFF');
-			nameTxtField.defaultTxt = this.name;
-			nameTxtField.w = headWidth - 2;
-			nameTxtField.ifWordwrap = true;
-			nameTxtField.ifBreakLine = false;
-			nameTxtField.addEventListener(Event.RESIZE, resizeTxtField, false, 0, true);
-			nameTxtField.addEventListener(Event.CHANGE, txtFieldChanged, false, 0, true);
-			nameTxtField.addEventListener(Event.MOUSE_LEAVE, leaveNameField);
-			nameTxtField.render();
-			nameTxtField.x = (headWidth - nameTxtField.w) / 2;
-			nameTxtField.y = 3;
-			
-			headBottom.alpha = 0;
-			headBottom.addChild(nameTxtField);
-			header.addChild(headBottom);
-			
-			drawNameFieldBG();
-			
-			headBottom.mouseChildren = headBottom.mouseEnabled = false;
-		}
 		
 		/**
 		 * 这里的奇葩动画会影响  nameTxtField 文本尺寸的渲染；
 		 */		
 		private function rendered():void
 		{
-			if (ifNameChanged)
-				nameTxtField.text = this.name;
-			
-			headBottom.height = headHeight;	
-			headBottom.y = 0;
-			
+			header.ready();
 			this.mouseEnabled = this.mouseChildren = true;
 		}
 		
 		/**
 		 */		
-		private function drawNameFieldBG():void
-		{
-			headBottom.graphics.clear();
-			headBottom.graphics.beginFill(0x2494E6, 0.9);
-			
-			var x:Number = 1;
-			var w:Number = headWidth - 2;
-			
-			if (nameTxtField.w > w)
-			{
-				w = nameTxtField.w;
-				x = (headWidth - w ) /2 
-			}
-			
-			headBottom.graphics.drawRect(x, 0,  w, nameTxtField.h + 5);
-			headBottom.graphics.endFill();
-		}
-		
-		/**
-		 */		
-		private function resizeTxtField(evt:Event):void
-		{
-			drawNameFieldBG();
-		}
-		
-		/**
-		 */		
-		private function txtFieldChanged(evt:Event):void
-		{
-			this.name = nameTxtField.text;
-		}
-		
-		/**
-		 */		
-		private function delBtnOver(evt:MouseEvent):void
-		{
-			this.hideNameField();
-		}
-		
-		/**
-		 */		
-		private function delBtnOut(evt:MouseEvent):void
-		{
-			this.showNameField();
-		}
-		
-		/**
-		 */		
-		private function showNameField():void
-		{
-			TweenLite.to(headBottom, 0.3, {alpha: 1, y: this.headHeight - 3, scaleY: 1, onComplete: labelShowed});
-		}
-		
-		/**
-		 */		
-		private function labelShowed():void
-		{
-			ifLabelShow = true;
-			headBottom.mouseChildren = headBottom.mouseEnabled = true;
-		}
-		
-		/**
-		 */		
-		private var ifLabelShow:Boolean = false;
-		
-		/**
-		 */		
-		private function hideNameField():void
-		{
-			nameTxtField.leave();
-			headBottom.mouseChildren = headBottom.mouseEnabled = false;
-			TweenLite.to(headBottom, 0.3, {alpha: 0, y: 0, height: this.headHeight});
-			
-			if (stage.hasEventListener(MouseEvent.MOUSE_DOWN))
-				stage.removeEventListener(MouseEvent.MOUSE_DOWN, hideNameLabel);
-			
-			ifLabelShow = false;
-		}
-		
-		/**
-		 */		
-		private var nameTxtField:LabelInput = new LabelInput;
-		
-		/**
-		 */		
-		private var header:Sprite = new Sprite;
-		
-		/**
-		 */		
-		private var headBottom:Sprite = new Sprite;
+		private var header:SeriesHeader;
 		
 		/**
 		 */		
@@ -410,7 +191,7 @@ package edit.chart
 		
 		/**
 		 */		
-		private function deleteThisHandler(evt:MouseEvent):void
+		internal function deleteThisHandler(evt:MouseEvent):void
 		{
 			this.del();
 		}
@@ -424,10 +205,6 @@ package edit.chart
 			
 			this.dispatchEvent(seriesDelEvt);
 		}
-		
-		/**
-		 */		
-		private var delBtn:IconBtn = new IconBtn;
 		
 		/**
 		 */		
@@ -461,18 +238,25 @@ package edit.chart
 		
 		/**
 		 */		
-		private function get headHeight():Number
+		internal function get headHeight():Number
 		{
 			return 35;
 		}
 		
 		/**
 		 */		
-		private function get headWidth():Number
+		internal function get headWidth():Number
 		{
-			var lastColumn:Column = columns[columns.length - 1];
-			
-			return lastColumn.x + lastColumn.width - getX();
+			if (columns.length)
+			{
+				var lastColumn:Column = columns[columns.length - 1];
+				
+				return lastColumn.x + lastColumn.width - getX();
+			}
+			else
+			{
+				return 0;
+			}
 		}
 		
 		/**
@@ -610,6 +394,19 @@ package edit.chart
 		/**
 		 */		
 		private var _zField:String;
+		
+		/**
+		 */		
+		public function reName(value:String):void
+		{
+			this.name = value;
+			
+			ifRename = true;
+		}
+		
+		/**
+		 */		
+		internal var ifRename:Boolean = false;
 
 		/**
 		 */

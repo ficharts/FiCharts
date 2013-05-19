@@ -19,6 +19,7 @@ package preview
 	import edit.LabelInput;
 	
 	import fl.controls.TextInput;
+	import fl.core.UIComponent;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -230,16 +231,16 @@ package preview
 			weiboBtn.y = (topGutter - weiboBtn.h) / 2;
 			
 			weiboBtn.bgStyleXML = <states>
-										<normal>
-											<border color="#167AC5"/>
+										<normal radius="3">
+											<border color="#167AC5" pixelHinting="true"/>
 											<fill color='#3BB0FB' alpha='1'/>
 										</normal>
-										<hover>
-											<border color="#3BB0FB"/>
+										<hover radius="3">
+											<border color="#3BB0FB" pixelHinting="true"/>
 											<fill color='#88CEFD' alpha='1'/>
 										</hover>
-										<down>
-											<border color="#167AC5"/>
+										<down radius="3">
+											<border color="#167AC5" pixelHinting="true"/>
 											<fill color='#167AC5' alpha='1'/>
 										</down>
 									</states>;
@@ -256,7 +257,10 @@ package preview
 			
 			weiboBtn.render();
 			weiboBtn.addEventListener(MouseEvent.CLICK, sendWeiboHandler, false, 0, true);
+			disWeiBoBen();
 			editPanel.addChild(weiboBtn);
+			
+			
 			
 			// 存图片
 			savaImgBtn.w = 70;
@@ -275,16 +279,16 @@ package preview
 										</label>
 				
 			savaImgBtn.bgStyleXML = <states>
-										<normal>
-											<border color="#DDDDDD"/>
+										<normal radius="3">
+											<border color="#DDDDDD" pixelHinting="true"/>
 											<fill color='#EEEEEE' alpha='1'/>
 										</normal>
-										<hover>
-											<border color="#CCCCCC"/>
+										<hover radius="3">
+											<border color="#CCCCCC" pixelHinting="true"/>
 											<fill color='#DDDDDD' alpha='1'/>
 										</hover>
-										<down>
-											<border color="#BBBBBB"/>
+										<down radius="3">
+											<border color="#BBBBBB" pixelHinting="true"/>
 											<fill color='#CCCCCC' alpha='1'/>
 										</down>
 									</states>;
@@ -361,7 +365,8 @@ package preview
 		 */		
 		private function weiboFieldTextChanged(evt:Event):void
 		{
-			var textLeft:int = 140 - textareastrlen(weiboField.text);
+			var textLen:uint = textareastrlen(weiboField.text);
+			var textLeft:int = 140 - textLen;
 			
 			if (textLeft < 0 && ifRightTextLen)
 			{
@@ -369,8 +374,7 @@ package preview
 				(textLenLabel.style as LabelStyle).format.color = "FF0000";
 				textLenLabel.render();
 				
-				this.weiboBtn.alpha = 0.6;
-				weiboBtn.mouseEnabled = false;
+				disWeiBoBen();
 			}
 			else if (this.ifRightTextLen == false && textLeft >= 0)
 			{
@@ -378,13 +382,61 @@ package preview
 				(textLenLabel.style as LabelStyle).format.color = "AAAAAA";
 				textLenLabel.render();
 				
-				this.weiboBtn.alpha = 1;
-				weiboBtn.mouseEnabled = true;
+				enWeiboBtn();
+			}
+			else
+			{
+				if (ifJustSpaceWords)
+					disWeiBoBen();
+				else
+					enWeiboBtn();
 			}
 			
+			// 刷新数字
 			textLenLabel.text = textLeft.toString();
 			textLenLabel.render();
 			layoutTextLenLabel();
+		}
+		
+		/**
+		 */		
+		private function get ifJustSpaceWords():Boolean
+		{
+			var text:String = weiboField.text
+			var len:uint = text.length;
+			
+			var result:Boolean = true;
+			var code:Number;
+			
+			for (var i:uint = 0; i < len; i ++)
+			{
+				code = text.charCodeAt(i);
+				if(code != 32 && code != 13)
+				{
+					result = false;
+					break;
+				}
+			}
+			
+			return result;
+		}
+		
+		/**
+		 */		
+		private function disWeiBoBen():void
+		{
+			
+			this.weiboBtn.alpha = 0.6;
+			weiboBtn.mouseEnabled = false;
+		}
+		
+		/**
+		 */		
+		private function enWeiboBtn():void
+		{
+			
+			this.weiboBtn.alpha = 1;
+			weiboBtn.mouseEnabled = true;
 		}
 		
 		/**

@@ -298,6 +298,11 @@
 					downCell();
 					break;
 				}
+				case Keyboard.TAB:
+				{
+					downCell();
+					break;
+				}
                 case Keyboard.DELETE:
                 {
                     this.clearCell();

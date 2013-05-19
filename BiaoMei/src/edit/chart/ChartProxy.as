@@ -3,6 +3,7 @@ package edit.chart
 	import com.dataGrid.Column;
 	import com.fiCharts.utils.ClassUtil;
 	import com.fiCharts.utils.Map;
+	import com.fiCharts.utils.RexUtil;
 	
 	import edit.chartTypeBox.ChartTypePanel;
 	
@@ -539,7 +540,7 @@ package edit.chart
 			checkAxis(result);
 			getSeriesConfigXML(result);
 			
-			if (this.len > 1)
+			if (this.len > 1 || (series.length && !RexUtil.ifTextNull(this.series[0].name)))
 				result.appendChild(<legend enable='true'/>);
 			
 			return result;
