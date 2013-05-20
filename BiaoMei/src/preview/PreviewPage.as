@@ -217,7 +217,7 @@ package preview
 			this.addChild(editPanel);
 			
 			stylePanel.w = 200;
-			stylePanel.h = 30;
+			stylePanel.h = 27;
 			stylePanel.x =  stylePanel.y = ( this.topGutter - stylePanel.h ) /2 ;
 			editPanel.addChild(stylePanel);
 			stylePanel.render();
@@ -544,7 +544,7 @@ package preview
 		
 		/**
 		 */		
-		private var topGutter:uint = 50;
+		private var topGutter:uint = 51;
 		
 		/**
 		 */		

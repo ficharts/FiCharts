@@ -52,13 +52,13 @@ package preview
 			else if (icon == "alert")
 				bmd = alertBMD;
 				
-			BitmapUtil.drawBitmapDataToUI(bmd, labelUI, 30, 30, 14, 14);
+			BitmapUtil.drawBitmapDataToUI(bmd, labelUI, 30, 30, 14, (this.height - 30) / 2);
 			
 			this.x = (rect.width - this.width) / 2;
 			this.y = (rect.height - this.height) / 2;
 			
 			this.visible = true;
-			TweenLite.to(this, 0.5, {alpha: 0, delay: 1, onComplete: dispare});
+			TweenLite.to(this, 0.5, {alpha: 0, delay: 1.5, onComplete: dispare});
 		}
 		
 		/**
@@ -79,7 +79,7 @@ package preview
 		
 		/**
 		 */		
-		private var styleXML:XML = <label radius='0' paddingLeft='58'paddingRight="50" vPadding="20">
+		private var styleXML:XML = <label radius='10' paddingLeft='58'paddingRight="30" vPadding="30">
 										<format font="微软雅黑" color='FFFFFF'/>
 										<fill color='333333' alpha='0.9' angle='90'/>
 									</label>

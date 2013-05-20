@@ -157,9 +157,11 @@ package edit.chartTypeBox
 			}
 			
 			this.h = boxLayout.getRectHeight() + bar.h;
+			
 			bg.graphics.clear();
-			bg.graphics.beginFill(0xFFFFFF, 0.6);
-			bg.graphics.drawRoundRect(0, 0, w, h, 5, 5);
+			bg.graphics.lineStyle(1, 0xDDDDDD);
+			bg.graphics.beginFill(0xEEEEEE, 0.9);
+			bg.graphics.drawRoundRect(0, 0, w, h, 0, 0);
 			//this.filters =[new GlowFilter(0xCCCCCC, 1)]
 		}
 		

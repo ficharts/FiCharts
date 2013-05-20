@@ -13,7 +13,6 @@ package
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
-	import flash.filters.GlowFilter;
 	
 	/**
 	 * 
@@ -115,7 +114,7 @@ package
 			if (ifDrawed == false)
 			{
 				var imgData:BitmapData = ClassUtil.getObjectByClassPath(this.img) as BitmapData;
-				BitmapUtil.drawBitmapDataToUI(imgData, imgCanvas, itemW, itemH);
+				BitmapUtil.drawBitmapDataToUI(imgData, imgCanvas, itemW - gap * 2, itemH - gap * 2, gap, gap, false);
 				
 				ifDrawed = true;
 			}
@@ -128,6 +127,10 @@ package
 			currState.height = this.itemH;
 			StyleManager.drawRectOnShape(canvas, currState);
 		}
+		
+		/**
+		 */		
+		public var gap:uint = 0;
 		
 		/**
 		 */		
@@ -199,10 +202,6 @@ package
 		public function normalHandler():void
 		{
 		}
-		
-		/**
-		 */		
-		protected var hoverFilter:Array = [new GlowFilter(0x4EA6EA, 1, 4, 4, 3, 3)];
 		
 		/**
 		 */		

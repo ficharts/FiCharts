@@ -34,7 +34,7 @@ package edit.chartTypeBox
 			this.graphics.clear();
 			currState.width = this.w;
 			currState.height = this.h;
-			currState.radius = 5;
+			currState.radius = 0;
 			StyleManager.drawRect(this, currState);
 		}
 		
@@ -96,12 +96,15 @@ package edit.chartTypeBox
 		 */		
 		private var styleXML:XML = <states>
 										<normal>
+											<border color="4EA6EA"/>
 											<fill color='#4EA6EA' alpha='0.8'/>
 										</normal>
 										<hover>
+											<border color="4EA6EA"/>
 											<fill color='#87C5F1' alpha='0.8'/>
 										</hover>
 										<down>
+											<border color="4EA6EA"/>
 											<fill color='#4EA6EA' alpha='0.8'/>
 										</down>
 									</states>

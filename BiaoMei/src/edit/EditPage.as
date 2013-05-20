@@ -61,6 +61,8 @@ package edit
 			chartProxy.y = dataGrid.y;
 			addChild(chartProxy);
 			
+			initTitles();
+			
 			this.addChild(chartTypePanel);
 			chartTypePanel.render();
 			chartTypePanel.x = this.dataGrid.x + dataGrid.gridW - chartTypePanel.w;
@@ -73,8 +75,6 @@ package edit
 			dragDropper = new DragDropper(stage);
 			dragDropper.addSender(chartTypePanel);
 			dragDropper.addReceiver(this, dataGrid);
-			
-			initTitles();
 			
 			chartProxy.addEventListener(SeriesHeaderEvt.HEADER_SELECT, headerSelectedHandler, false, 0, true);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, stateDownForHeader, false, 0, true);
