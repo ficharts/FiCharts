@@ -371,13 +371,16 @@ package preview
 			var textLen:uint = textareastrlen(weiboField.text);
 			var textLeft:int = 140 - textLen;
 			
-			if (textLeft < 0 && ifRightTextLen)
+			if (textLeft < 0)
 			{
-				ifRightTextLen = false;
-				(textLenLabel.style as LabelStyle).format.color = "FF0000";
-				textLenLabel.render();
-				
 				disWeiBoBen();
+				
+				if (ifRightTextLen)
+				{
+					ifRightTextLen = false;
+					(textLenLabel.style as LabelStyle).format.color = "FF0000";
+					textLenLabel.render();
+				}
 			}
 			else if (this.ifRightTextLen == false && textLeft >= 0)
 			{
@@ -387,6 +390,11 @@ package preview
 				
 				enWeiboBtn();
 			}
+			else if (textLeft >= 140)
+			{
+				disWeiBoBen();
+			}
+				
 			else
 			{
 				if (ifJustSpaceWords)
