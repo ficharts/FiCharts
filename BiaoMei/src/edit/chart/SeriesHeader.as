@@ -218,7 +218,7 @@ package edit.chart
 			
 			var imgSize:uint = 22;
 			BitmapUtil.drawBitmapDataToUI(chartBmd, headTop, imgSize, imgSize, 
-				8, series.headHeight - imgSize - 8);
+				8, series.headHeight - imgSize - 5);
 		}
 		
 		/**
@@ -229,10 +229,10 @@ package edit.chart
 		 */		
 		private function initTopHeader():void
 		{
-			delBtn.init("del_over", 'del_out', 'del_out', 8, 8);
+			delBtn.init("del_out", 'del_over', 'del_out', 14, 14);
 			delBtn.render();
-			delBtn.x = (series.headWidth - delBtn.width - 10);
-			delBtn.y = (series.headHeight - delBtn.height) / 2;
+			delBtn.x = (series.headWidth - delBtn.width - 5);
+			delBtn.y = 5//(series.headHeight - delBtn.height)// / 2;
 			delBtn.addEventListener(MouseEvent.CLICK, series.deleteThisHandler, false, 0, true);
 			this.addChild(delBtn);
 		}

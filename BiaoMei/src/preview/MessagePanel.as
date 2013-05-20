@@ -3,11 +3,16 @@ package preview
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
-	import com.fiCharts.utils.XMLConfigKit.style.Style;
+	import com.fiCharts.utils.graphic.BitmapUtil;
+	import com.fiCharts.utils.graphic.StyleManager;
+	import com.greensock.TweenLite;
 	
-	import fl.controls.Label;
-	
+	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
+	
+	import navBar.LabelBtn;
 	
 	/**
 	 */	
@@ -17,54 +22,83 @@ package preview
 		{
 			super();
 			
-			XMLVOMapper.fuck(labelStyleXML, textStyle);
-			XMLVOMapper.fuck(bgStyleXML, bgStyle);
 			this.addChild(labelUI);
-		}
-		
-		/**
-		 */		
-		public function alert(value:String):void
-		{
 			
+			XMLVOMapper.fuck(styleXML, labelStyleVO);
+			labelUI.style = this.labelStyleVO;
+			
+			sucessBMD = new success;
+			alertBMD = new alert;
+			
+			this.visible = false;
+			this.mouseEnabled = this.mouseChildren = false;
 		}
 		
 		/**
 		 */		
-		private var labelUI:Label = new LabelUI;
+		public var rect:Rectangle;
 		
 		/**
 		 */		
-		private var bgStyle:Style = new Style;
+		public function info(mes:String, icon:String = "succ"):void
+		{
+			labelUI.text = mes;
+			labelUI.render();
+			
+			var bmd:BitmapData;
+			
+			if (icon == "succ")
+				bmd = sucessBMD;
+			else if (icon == "alert")
+				bmd = alertBMD;
+				
+			BitmapUtil.drawBitmapDataToUI(bmd, labelUI, 30, 30, 14, 14);
+			
+			this.x = (rect.width - this.width) / 2;
+			this.y = (rect.height - this.height) / 2;
+			
+			this.visible = true;
+			TweenLite.to(this, 0.5, {alpha: 0, delay: 1, onComplete: dispare});
+		}
 		
 		/**
 		 */		
-		private var textStyle:LabelStyle = new LabelStyle;
+		private function dispare():void
+		{
+			this.visible = false;
+			this.alpha = 1;
+		}
 		
 		/**
 		 */		
-		private var bgStyleXML:XML = <style>
-				<fill color="555555" alpha="0.7"/>
-			</style>
+		private var labelUI:LabelUI = new LabelUI;
 		
+		/**
+		 */		
+		private var labelStyleVO:LabelStyle = new LabelStyle;
+		
+		/**
+		 */		
+		private var styleXML:XML = <label radius='0' paddingLeft='58'paddingRight="50" vPadding="20">
+										<format font="微软雅黑" color='FFFFFF'/>
+										<fill color='333333' alpha='0.9' angle='90'/>
+									</label>
 		
 		/**
 		 */			
-		private var labelStyleXML:XML = <label>
-											<format color='FFFFFF' font='Constantia' size='30' letterSpacing="3"/>
-												<text>
-													<effects>
-														<shadow color='555555' distance='1' angle='90' blur='1' alpha='0.9'/>
-													</effects>
-												</text>
-										</label>
-			
-		/**
-		 */		
-		public var w:uint = 200;
+		private var sucessBMD:BitmapData;
 		
 		/**
 		 */		
-		public var h:uint = 100;
+		private var alertBMD:BitmapData;
+			
+		/**
+		 */		
+		public var w:Number;
+		
+		/**
+		 */		
+		public var h:Number;
+		
 	}
 }

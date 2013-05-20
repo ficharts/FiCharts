@@ -29,7 +29,7 @@ package
 										</normal>
 										<hover>
 											<border color='#4EA6EA' thikness='1' alpha='1'/>
-											<fill color='#4EA6EA' alpha='0.3'/>
+											<fill color='#4EA6EA' alpha='0.'/>
 										</hover>
 										<down>
 											<border color='#4EA6EA' thikness='2' alpha='1'/>
@@ -45,7 +45,8 @@ package
 			
 			this.mouseChildren = false;
 			this.addChild(canvas);
-			
+			this.addChild(imgCanvas);
+				
 			this.type = type;
 			this.img = img;
 		}
@@ -114,7 +115,7 @@ package
 			if (ifDrawed == false)
 			{
 				var imgData:BitmapData = ClassUtil.getObjectByClassPath(this.img) as BitmapData;
-				BitmapUtil.drawBitmapDataToUI(imgData, this, itemW, itemH);
+				BitmapUtil.drawBitmapDataToUI(imgData, imgCanvas, itemW, itemH);
 				
 				ifDrawed = true;
 			}
@@ -127,6 +128,10 @@ package
 			currState.height = this.itemH;
 			StyleManager.drawRectOnShape(canvas, currState);
 		}
+		
+		/**
+		 */		
+		private var imgCanvas:Sprite = new Sprite;
 		
 		/**
 		 */		

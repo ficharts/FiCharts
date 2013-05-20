@@ -1,8 +1,5 @@
 package
 {
-	import alert.AlertEvent;
-	import alert.AlertPanel;
-	
 	import com.dataGrid.DataGridEvent;
 	import com.fiCharts.utils.ExternalUtil;
 	import com.fiCharts.utils.StageUtil;
@@ -12,9 +9,7 @@ package
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
-	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
-	import flash.system.Security;
 	
 	import navBar.NavTop;
 	

@@ -88,7 +88,7 @@ package edit
 			var img:Img = currState.getImg;
 			var tx:Number = (currState.width - img.width ) / 2;
 			var ty:Number = (currState.height - img.height ) / 2;
-			BitmapUtil.drawBitmapDataToUI(img.data, this, img.width, img.height, tx, ty);
+			BitmapUtil.drawBitmapDataToUI(img.data, this, img.width, img.height, tx, ty, false);
 			this.graphics.endFill();
 			
 			StyleManager.setLineStyle(this.graphics, currState.getBorder, currState);
@@ -137,7 +137,7 @@ package edit
 		public var styleXML:XML = <states>
 										<normal>
 											<fill color='#FFFFFF' alpha='0'/>
-											<img width='8' height='8'/>
+											<img/>
 										</normal>
 										<hover>
 											<fill color='#FFFFFF' alpha='0'/>

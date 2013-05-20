@@ -3,6 +3,7 @@ package com.fiCharts.utils.net
 	import com.fiCharts.utils.system.FiTrace;
 	
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
@@ -14,7 +15,7 @@ package com.fiCharts.utils.net
 	
 	/**
 	 */
-	public class Post
+	public class Post extends EventDispatcher
 	{
 		private var data:Object;
 		
@@ -71,6 +72,8 @@ package com.fiCharts.utils.net
 		 */	
 		private function errorHandler(e:IOErrorEvent):void
 		{
+			this.dispatchEvent(e);
+			
 			FiTrace.info("error-" + e.type + e.text + e.target.data);
 		}
 		
@@ -118,7 +121,7 @@ package com.fiCharts.utils.net
 		 */	
 		private function complete(e:Event):void
 		{
-			FiTrace.info("sendComplete");
+			this.dispatchEvent(e);
 		}
 		
 		/**

@@ -2,6 +2,8 @@ package com.fiCharts.utils.system
 {
 	import com.fiCharts.utils.ExternalUtil;
 
+	/**
+	 */	
 	public class FiTrace
 	{
 		public function FiTrace()
@@ -10,11 +12,11 @@ package com.fiCharts.utils.system
 		
 		/**
 		 */		
-		public static var isOpen:Boolean = true;
+		public static var isOpen:Boolean = false;
 		
 		/**
 		 */		
-		public static var ifAlert:Boolean = true;
+		public static var ifAlert:Boolean = false;
 		
 		/**
 		 * 

@@ -23,6 +23,7 @@ package preview
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
@@ -56,6 +57,8 @@ package preview
 			renderBG();
 			initEditPanel();
 			disableEditPanel();
+			
+			this.addChild(messagePanel);
 		}
 		
 		/**
@@ -496,7 +499,23 @@ package preview
 			var data:Object = {"status": this.weiboField.text, "access_token":this.token, "pic":bmd, "visible":1};
 			
 			post = new Post("https://api.weibo.com/2/statuses/upload.json", data);
+			post.addEventListener(Event.COMPLETE, complete);
+			post.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
 			post.sendfile();
+		}
+		
+		/**
+		 */		
+		private function complete(evt:Event):void
+		{
+			messagePanel.info("发布成功");
+		}
+		
+		/**
+		 */		
+		private function errorHandler(evt:IOErrorEvent):void
+		{
+			messagePanel.info("太贪心了，发过了还发", "alert");
 		}
 		
 		/**
@@ -570,6 +589,8 @@ package preview
 			
 			// 存储下原始页面高度，页面高度因微博输入框高度变化时便有了根据
 			sourceHeight = this.h;
+			
+			messagePanel.rect = this.getBounds(this);
 		}
 		
 		/**
@@ -607,7 +628,7 @@ package preview
 											<format color='555555' font='微软雅黑' size='15'/>
 											<text>
 												<effects>
-													<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
+													<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='1'/>
 												</effects>
 											</text>
 										</label>
@@ -619,6 +640,10 @@ package preview
 		/**
 		 */		
 		private var alertLabel:LabelUI = new LabelUI;
+		
+		/**
+		 */		
+		private var messagePanel:MessagePanel = new MessagePanel;
 		
 		/**
 		 */		
