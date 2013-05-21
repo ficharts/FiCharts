@@ -28,5 +28,6 @@ package com.fiCharts.charts.chart2D.column2D.stack
 		
 		
 		
+		
 	}
 }

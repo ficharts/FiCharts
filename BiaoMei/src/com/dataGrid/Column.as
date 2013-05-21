@@ -11,7 +11,7 @@
     {
 		/**
 		 */		
-		public var textFormat:TextFormat = new TextFormat("Arial", 12, 0x555555, false, false);
+		public var textFormat:TextFormat = new TextFormat("微软雅黑", 12, 0x555555, false, false);
 		
 		/**
 		 */		

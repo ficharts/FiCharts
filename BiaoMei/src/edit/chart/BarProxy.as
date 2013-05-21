@@ -1,5 +1,6 @@
 package edit.chart
 {
+	import com.dataGrid.CellData;
 	import com.dataGrid.Column;
 	import com.fiCharts.utils.RexUtil;
 	
@@ -93,6 +94,35 @@ package edit.chart
 			
 			xColumn.dataType = ChartProxy.LINEAR;
 			yColumn.dataType = ChartProxy.FIELD;
+		}
+		
+		/**
+		 */		
+		override public function checkPrefixAndSuffix():void
+		{
+			var yColumn:Column = columns[1];
+			for each (var item:CellData in yColumn.data)
+			{
+				if (item && item.ifVerified)
+				{
+					var formatter:Array = item.label.split(item.label.match(/-?\d+\.?\d*/g)[0]);
+					
+					if (formatter.length == 2)
+					{
+						xPreffix = formatter[0];
+						xSuffix = formatter[1];
+					}
+					else
+					{
+						if (item.label.indexOf(formatter[0]) == 0)
+							xPreffix = formatter[0];
+						else
+							xSuffix = formatter[0];
+					}
+					
+					break;
+				}
+			}
 		}
 		
 	}

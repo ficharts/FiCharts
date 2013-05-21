@@ -52,7 +52,7 @@ package preview
 			else if (icon == "alert")
 				bmd = alertBMD;
 				
-			BitmapUtil.drawBitmapDataToUI(bmd, labelUI, 30, 30, 14, (this.height - 30) / 2);
+			BitmapUtil.drawBitmapDataToSprite(bmd, labelUI, 30, 30, 14, (this.height - 30) / 2);
 			
 			this.x = (rect.width - this.width) / 2;
 			this.y = (rect.height - this.height) / 2;

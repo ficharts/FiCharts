@@ -59,22 +59,22 @@ package navBar
 			var temOut:BitmapData = new tmp_out;
 			
 			var tx:Number = this.templateBtn.x + (templateBtn.w - temOver.width) / 2;
-			BitmapUtil.drawBitmapDataToUI(temOver, progressImgsOver, temOver.width, temOver.height, tx);
-			BitmapUtil.drawBitmapDataToUI(temOut, progressImgsOut, temOut.width, temOut.height, tx);
+			BitmapUtil.drawBitmapDataToSprite(temOver, progressImgsOver, temOver.width, temOver.height, tx);
+			BitmapUtil.drawBitmapDataToSprite(temOut, progressImgsOut, temOut.width, temOut.height, tx);
 			
 			var dataOver:BitmapData = new data_over;
 			var dataOut:BitmapData = new data_out;
 			
 			tx = this.dataBtn.x + (dataBtn.w - dataOver.width) / 2;
-			BitmapUtil.drawBitmapDataToUI(dataOver, progressImgsOver, dataOver.width, dataOver.height, tx);
-			BitmapUtil.drawBitmapDataToUI(dataOut, progressImgsOut, dataOut.width, dataOut.height, tx);
+			BitmapUtil.drawBitmapDataToSprite(dataOver, progressImgsOver, dataOver.width, dataOver.height, tx);
+			BitmapUtil.drawBitmapDataToSprite(dataOut, progressImgsOut, dataOut.width, dataOut.height, tx);
 			
 			var reviewOver:BitmapData = new show_over;
 			var showOut:BitmapData = new show_out;
 			
 			tx = this.previewBtn.x + (previewBtn.w - reviewOver.width) / 2;
-			BitmapUtil.drawBitmapDataToUI(reviewOver, progressImgsOver, reviewOver.width, reviewOver.height, tx);
-			BitmapUtil.drawBitmapDataToUI(showOut, progressImgsOut, showOut.width, showOut.height, tx);
+			BitmapUtil.drawBitmapDataToSprite(reviewOver, progressImgsOver, reviewOver.width, reviewOver.height, tx);
+			BitmapUtil.drawBitmapDataToSprite(showOut, progressImgsOut, showOut.width, showOut.height, tx);
 			
 			progressImgsOver.y = progressImgsOut.y = 20;
 			progressImgsOver.mouseEnabled = progressImgsOut.mouseEnabled = false;

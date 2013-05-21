@@ -171,6 +171,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 			// 将子序列的数据节点合并到一起；
 			for each (stack in stacks)
 			{
+				stack.value = "xValue"
 				stack.dataProvider = this.dataProvider;
 				stack.initData();
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);

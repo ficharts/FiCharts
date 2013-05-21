@@ -1,7 +1,12 @@
 ﻿package com.dataGrid 
 {
+	import com.fiCharts.utils.graphic.BitmapUtil;
+	
+	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.TextEvent;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFieldType;
@@ -22,13 +27,51 @@
         {
 			field.type = TextFieldType.INPUT;
 			field.autoSize = TextFieldAutoSize.LEFT;
+			//field.background = true;
+			//field.backgroundColor = 0xFFFFFF;
 			//field.defaultTextFormat = new TextFormat("微软雅黑", 14, 0x333333);
 			//field.defaultTextFormat.align = "left";
+			field.addEventListener(Event.CHANGE, textInputHandler, false, 0, true);
 			
             this.visible = false;
 			addChild(bg);
             addChild(field);
         }
+		
+		/**
+		 */		
+		public function get fieldHeight():Number
+		{
+			return field.height;
+		}
+		
+		/**
+		 	
+		override public function get width():Number
+		{
+			return field.textWidth + 8;
+		}*/	
+		
+		/**
+		 */		
+		private function textInputHandler(evt:Event):void
+		{
+			this.dispatchEvent(evt);
+		}
+		
+		/**
+		 */		
+		public function getBmd():BitmapData
+		{
+			var bmd:BitmapData;
+			
+			//field.background = false;
+			//field.border = false;
+			bmd = BitmapUtil.getBitmapData(field);
+			//field.background = true;
+			
+			return bmd;
+		}
 
 		/**
 		 */		
@@ -87,6 +130,7 @@
         }
 		
 		/**
+		 * 刷新tex值
 		 */		
 		public function setTxt(txt:String):void
 		{

@@ -300,6 +300,16 @@ package edit.chart
 		public var ySuffix:String = '';
 		
 		/**
+		 * x值前缀
+		 */		
+		public var xPreffix:String = '';
+		
+		/**
+		 * x值后缀
+		 */		
+		public var xSuffix:String = '';
+		
+		/**
 		 * 将字符串中属于数字类型的值剥离出来 
 		 */		
 		protected function filterNumValue(value:String):String

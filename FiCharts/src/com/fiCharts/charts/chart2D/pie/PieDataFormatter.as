@@ -33,12 +33,12 @@ package com.fiCharts.charts.chart2D.pie
 		
 		public function get valuePrefix():String
 		{
-			return _valuePrefix;
+			return this.yPrefix;
 		}
 		
 		public function set valuePrefix(value:String):void
 		{
-			_valuePrefix = value;
+			yPrefix = value;
 		}
 		
 		/**
@@ -47,12 +47,12 @@ package com.fiCharts.charts.chart2D.pie
 		
 		public function get valueSuffix():String
 		{
-			return _valueSuffix;
+			return this.ySuffix;
 		}
 		
 		public function set valueSuffix(value:String):void
 		{
-			_valueSuffix = value;
+			ySuffix = value;
 		}
 		
 		/**
@@ -61,12 +61,12 @@ package com.fiCharts.charts.chart2D.pie
 		
 		public function get labelPrefix():String
 		{
-			return _labelPrefix;
+			return this.xPrefix;
 		}
 		
 		public function set labelPrefix(value:String):void
 		{
-			_labelPrefix = value;
+			xPrefix = value;
 		}
 		
 		/**
@@ -75,12 +75,12 @@ package com.fiCharts.charts.chart2D.pie
 		
 		public function get labelSuffix():String
 		{
-			return _labelSuffix;
+			return this.xSuffix;
 		}
 		
 		public function set labelSuffix(value:String):void
 		{
-			_labelSuffix = value;
+			xSuffix = value;
 		}
 	}
 }

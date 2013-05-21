@@ -114,7 +114,7 @@ package
 			if (ifDrawed == false)
 			{
 				var imgData:BitmapData = ClassUtil.getObjectByClassPath(this.img) as BitmapData;
-				BitmapUtil.drawBitmapDataToUI(imgData, imgCanvas, itemW - gap * 2, itemH - gap * 2, gap, gap, false);
+				BitmapUtil.drawBitmapDataToSprite(imgData, imgCanvas, itemW - gap * 2, itemH - gap * 2, gap, gap, false);
 				
 				ifDrawed = true;
 			}

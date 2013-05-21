@@ -270,8 +270,8 @@ package com.fiCharts.charts.chart2D.column2D.stack
 					combleSeriesDataItem.index = i;
 					combleSeriesDataItem.metaData = new Object;
 					
-					combleSeriesDataItem.xVerifyValue = xVerifyValue;
-					combleSeriesDataItem.yVerifyValue = ((positiveValue + negativeValue) >= 0) ? positiveValue : negativeValue;
+					combleSeriesDataItem.xValue = combleSeriesDataItem.xVerifyValue = xVerifyValue;
+					combleSeriesDataItem.yValue = combleSeriesDataItem.yVerifyValue = ((positiveValue + negativeValue) >= 0) ? positiveValue : negativeValue;
 					
 					combleSeriesDataItem.xLabel = horizontalAxis.getXLabel(combleSeriesDataItem.xVerifyValue);
 					combleSeriesDataItem.yLabel = verticalAxis.getYLabel(positiveValue + negativeValue);

@@ -52,7 +52,7 @@ package edit
 			
 			dataGrid.preRender();
 			dataGrid.fillColumnBG(0);
-			dataGrid.setColumnTextFormat(0, new TextFormat("Arial", 14, 0x333333, false, true));
+			dataGrid.setColumnTextFormat(0, new TextFormat("微软雅黑", 12, 0, false, true));
 			
 			// 背景
 			renderBG();

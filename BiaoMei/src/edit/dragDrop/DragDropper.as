@@ -36,7 +36,7 @@ package edit.dragDrop
 			
 			addIcon.visible = false;
 			var iconData:BitmapData = new add;
-			BitmapUtil.drawBitmapDataToUI(iconData, addIcon, iconData.width, iconData.height);
+			BitmapUtil.drawBitmapDataToSprite(iconData, addIcon, iconData.width, iconData.height);
 			
 			addIcon.mouseEnabled = draggingUI.mouseEnabled = false;
 			draggingUI.cacheAsBitmap = true;
@@ -119,7 +119,7 @@ package edit.dragDrop
 			//拖动图标
 			var data:BitmapData = BitmapUtil.getBitmapData(evt.dragedUI, false);
 			draggingUI.graphics.clear();
-			BitmapUtil.drawBitmapDataToUI(data, draggingUI, data.width, data.height);
+			BitmapUtil.drawBitmapDataToSprite(data, draggingUI, data.width, data.height);
 			
 			startDartPos = evt.dragedUI.parent.localToGlobal(new Point(evt.dragedUI.x, evt.dragedUI.y))
 			

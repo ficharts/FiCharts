@@ -3,6 +3,7 @@
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.graphic.BitmapUtil;
+	import com.greensock.TweenLite;
 	
 	import edit.chart.ChartProxy;
 	
@@ -12,7 +13,9 @@
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
+	import flash.text.TextField;
 	import flash.ui.Keyboard;
 
 	/**
@@ -52,6 +55,10 @@
 		
 		/**
 		 */		
+		private var textFrame:Shape = new Shape;
+		
+		/**
+		 */		
 		private var cellUI:CellUI = new CellUI;
 
 		/**
@@ -59,14 +66,36 @@
         public function EditCanvas()
         {
             this.addChild(this.textCanvas);
-            this.addChild(this.cellUI);
-            this.addEventListener(Event.ADDED_TO_STAGE, this.init);
+			addChild(labelLayer);
+			
+			labelLayer.mouseEnabled = false;
+			labelLayer.addChild(textBG);
+			labelLayer.addChild(curTextCanvas);
+			
+			labelLayer.addChild(this.cellUI);
+			
+			labelLayer.addChild(textFrame);
+			
+            addEventListener(Event.ADDED_TO_STAGE, this.init);
         }
+		
+		/**
+		 */		
+		private var labelLayer:Sprite = new Sprite;
+		
+		/**
+		 */		
+		private var curTextCanvas:Shape = new Shape;
+		
+		/**
+		 */		
+		private var textBG:Shape = new Shape;
 
 		/**
 		 */		
         private function init(event:Event):void
         {
+			// 绘制这个是为了双击进入文本编辑无干扰，否则第一次双击摸个单元格时不生效
 			textCanvas.graphics.clear();
 			textCanvas.graphics.beginFill(0, 0);
 			textCanvas.graphics.drawRect(0, 0, w, h);
@@ -78,7 +107,17 @@
 			
             this.doubleClickEnabled = true;
             this.addEventListener(MouseEvent.DOUBLE_CLICK, this.doubleHandler, false, 0, true);
+			
+			this.addEventListener(Event.CHANGE, textInputHandler, false, 0, true);
         }
+		
+		/**
+		 * 文本输入的工程中文本框动态绘制
+		 */		
+		private function textInputHandler(evt:Event):void
+		{
+			drawTexOnSelect(true);
+		}
 		
 		/**
 		 */		
@@ -92,6 +131,8 @@
 			{
 				this.readyToTex();
 				this.cellUI.setTxtAndHover(this.cellData.label);
+				
+				drawTexOnSelect(true);
 			}
         }
 
@@ -108,6 +149,10 @@
         {
 			if (ifActivation)
 			{
+				// 当前选中的是正在编辑的文本框，此时不切换
+				if (event.target is TextField  && cellUI.visible == true)
+					return;
+				
 				this.findNewCell();
 				
 				if (this.ifNewCell)
@@ -176,14 +221,60 @@
             this.currentColumn = this.columns[this.currentColumnIndex];
             this.currentRow = this.rows[this.currentRowIndex];
 			
-            this.graphics.clear();
-            this.graphics.lineStyle(2, 0x4EA6EA, 1);
-            this.graphics.drawRect(this.currentColumn.x, this.currentRow.y, this.currentColumn.width, this.currentRow.height);
-			
 			cellUI.setTextFormat(currentColumn.textFormat);
-            this.cellUI.moveTo(this.currentColumn.x, this.currentRow.y, this.currentColumn.width, this.currentRow.height);
-            this.cellUI.setTxtAndHover(this.currentColumn.getCellData(this.currentRowIndex).label);
+            this.cellUI.setTxt(this.currentColumn.getCellData(this.currentRowIndex).label);
+			this.cellUI.moveTo(getCellX(currentColumn), getCellY(currentRow), this.currentColumn.width, this.currentRow.height);
+			
+			drawTexOnSelect(true, true);
         }
+		
+		/**
+		 */		
+		private function getCellX(column:Column):Number
+		{
+			return column.x + 2;
+		}
+		
+		/**
+		 */		
+		private function getCellY(row:Row):Number
+		{
+			return row.y + (row.height - cellUI.fieldHeight) / 2;
+		}
+		
+		/**
+		 * 绘制当前选中的单元格内容
+		 */		
+		private function drawTexOnSelect(ifCheck:Boolean = false, ifDrawText:Boolean = false):void
+		{
+			textFrame.graphics.clear();
+			textFrame.graphics.lineStyle(2, 0x4EA6EA, 1);
+			
+			var w:Number = currentColumn.width;
+			
+			if (ifCheck && w < cellUI.width)
+				w = cellUI.width;
+			
+			textFrame.graphics.drawRect(this.currentColumn.x, this.currentRow.y, w, this.currentRow.height);
+			textFrame.graphics.endFill();
+			
+			textBG.graphics.clear();
+			textBG.graphics.beginFill(0xFFFFFF);
+			textBG.graphics.drawRect(this.currentColumn.x, this.currentRow.y, w, this.currentRow.height);
+			textBG.graphics.endFill();
+			
+			curTextCanvas.graphics.clear();
+			
+			if (ifDrawText)
+			{
+				var bmd:BitmapData = cellUI.getBmd();
+				BitmapUtil.drawBitmapDataToShape(bmd, curTextCanvas, bmd.width, bmd.height, 
+					getCellX(currentColumn), getCellY(currentRow), false);
+			}
+			
+			TweenLite.killTweensOf(textFrame, true);
+			TweenLite.from(textFrame, 0.3, {alpha: 0.5});
+		}
 		
 		/**
 		 * 当点击非表格区域时，取消当前单元格选择
@@ -223,15 +314,16 @@
 		 */		
 		public function drawAndSaveCell(column:Column, rowIndex:int, row:Row):void
 		{
-			var bmd:BitmapData = BitmapUtil.getBitmapData(this.cellUI);
+			var bmd:BitmapData = cellUI.getBmd();
 			var shape:Shape = column.saveCellData(cellUI.label, rowIndex);
 			
 			shape.graphics.clear();
-			shape.graphics.beginBitmapFill(bmd);
-			shape.graphics.drawRect(0, 0, bmd.width, bmd.height);
+			shape.graphics.beginBitmapFill(bmd, null, false);
+			shape.graphics.drawRect(0, 0, column.width - 5, row.height);
 			
-			shape.x = column.x;
-			shape.y = row.y;
+			currentColumn = column;
+			shape.x = getCellX(column);
+			shape.y = getCellY(row);
 			
 			this.textCanvas.addChild(shape);
 			
@@ -395,6 +487,7 @@
         }
 
 		/**
+		 * 文本进入编辑状态
 		 */		
         private function readyToTex() : void
         {

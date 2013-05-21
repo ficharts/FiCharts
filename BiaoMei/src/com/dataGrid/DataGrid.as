@@ -1,5 +1,7 @@
 ﻿package com.dataGrid 
 {
+	import com.fiCharts.utils.StageUtil;
+	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -35,21 +37,28 @@
 		 */		
         public function DataGrid()
         {
-            this.editCanvas.columns = this.columns;
-            this.editCanvas.rows = this.rows;
+			StageUtil.initApplication(this, init);
+        }
+		
+		/**
+		 */		
+		private function init():void
+		{
+			this.editCanvas.columns = this.columns;
+			this.editCanvas.rows = this.rows;
 			
-            this.editCanvas.w = this.gridW;
-            this.editCanvas.h = this.gridH;
+			this.editCanvas.w = this.gridW;
+			this.editCanvas.h = this.gridH;
 			
 			addChild(this.grid);
-            addChild(this.editCanvas);
+			addChild(this.editCanvas);
 			
 			this.addEventListener(MouseEvent.ROLL_OVER, rollOverHandler, false, 0, true);
 			this.addEventListener(MouseEvent.ROLL_OUT, rollOutHandler, false, 0, true);
 			
 			this.addEventListener(DataGridEvent.DATA_CHNAGED, dataChanged, false, 0, true);
 			this.addEventListener(DataGridEvent.ADD_ROW, addRowHandler, false, 0, true);
-        }
+		}
 		
 		/**
 		 */		

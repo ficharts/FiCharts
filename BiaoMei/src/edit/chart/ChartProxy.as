@@ -587,8 +587,12 @@ package edit.chart
 				if (seriesProxy)
 				{
 					seriesProxy.checkPrefixAndSuffix();
+					
 					yPreffix = seriesProxy.yPreffix;
 					ySuffix = seriesProxy.ySuffix;
+					
+					xPreffix = seriesProxy.xPreffix;
+					xSuffix = seriesProxy.xSuffix;
 					
 					break;
 				}
@@ -596,6 +600,9 @@ package edit.chart
 			
 			config.@yPreffix = yPreffix;
 			config.@ySuffix = ySuffix;
+			
+			config.@xPreffix = xPreffix;
+			config.@xSuffix = xSuffix;
 		}
 		
 		/**
@@ -607,6 +614,16 @@ package edit.chart
 		 * Y值后缀
 		 */		
 		public var ySuffix:String = '';
+		
+		/**
+		 * Y值前缀
+		 */		
+		public var xPreffix:String = '';
+		
+		/**
+		 * Y值后缀
+		 */		
+		public var xSuffix:String = '';
 		
 		/**
 		 * 动态获取图表的配置文件

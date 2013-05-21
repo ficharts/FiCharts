@@ -21,6 +21,28 @@ package com.fiCharts.utils
 				return true;
 		}
 		
+		/**
+		 * 计算小数点后字符位数
+		 */		
+		public static function checkPrecision(value:String):uint
+		{
+			if (ifHasNumValue(value))
+			{
+				if (value.indexOf('.') == - 1)
+				{
+					return 0;
+				}
+				else
+				{
+					return value.split(".")[1].length;
+				}
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		
 		/*
 		 * 判断字符串是否为数字类型
 		 */		

@@ -217,7 +217,7 @@ package edit.chart
 			headTop.graphics.endFill();
 			
 			var imgSize:uint = 22;
-			BitmapUtil.drawBitmapDataToUI(chartBmd, headTop, imgSize, imgSize, 
+			BitmapUtil.drawBitmapDataToSprite(chartBmd, headTop, imgSize, imgSize, 
 				8, series.headHeight - imgSize - 5);
 		}
 		

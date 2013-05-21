@@ -154,6 +154,20 @@ package com.fiCharts.charts.chart2D.pie
 			_dataFormatter.valuePrefix = value;
 		}
 		
+		
+		/**
+		 * 数值前缀
+		 */		
+		public function get yPrefix():String
+		{
+			return _dataFormatter.valuePrefix;
+		}
+		
+		public function set yPrefix(value:String):void
+		{
+			_dataFormatter.valuePrefix = value;
+		}
+		
 		/**
 		 * 数值后缀
 		 */		
@@ -167,7 +181,19 @@ package com.fiCharts.charts.chart2D.pie
 			_dataFormatter.valueSuffix = value;
 		}
 		
+		/**
+		 */		
+		public function set ySuffix(value:String):void
+		{
+			_dataFormatter.valueSuffix = value
+		}
 		
+		/**
+		 */		
+		public function get ySuffix():String
+		{
+			return _dataFormatter.valueSuffix
+		}
 		
 		
 		//-------------------------------------------------

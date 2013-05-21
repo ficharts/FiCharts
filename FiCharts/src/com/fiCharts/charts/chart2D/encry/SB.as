@@ -1,5 +1,6 @@
 package com.fiCharts.charts.chart2D.encry
 {
+	import com.fiCharts.charts.chart2D.bar.BarSeries;
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
@@ -970,6 +971,9 @@ package com.fiCharts.charts.chart2D.encry
 			verticalValues.length = 0;
 			sourceDataItems.length = 0;
 			
+			var precision:uint = 0;
+			var temPrecision:uint = 0;
+			
 			for each (item in dataProvider)
 			{
 				seriesDataItem = this.seriesDataItem;
@@ -997,9 +1001,24 @@ package com.fiCharts.charts.chart2D.encry
 				{
 					dataItemVOs[actualDataIndex] = sourceDataItems[actualDataIndex] = seriesDataItem;
 					actualDataIndex += 1;
+					
+					temPrecision = RexUtil.checkPrecision(seriesDataItem[this.value].toString())
+					if ( temPrecision > precision)
+						precision = temPrecision;
 				}
 				
 				souceDataIndex ++;
+			}
+			
+			if (this is BarSeries)
+			{
+				if (precision > horizontalAxis.dataFormatter.precision)
+					horizontalAxis.dataFormatter.precision = precision;
+			}
+			else
+			{
+				if (precision > verticalAxis.dataFormatter.precision)				
+					verticalAxis.dataFormatter.precision = precision;
 			}
 			
 			updateMaxIndex();
@@ -1395,7 +1414,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 用于 toolTip 的取值方向判断， �或��
 		 */		
-		protected var value:String = 'yValue';
+		public var value:String = 'yValue';
 		
 		/**
 		 */		
