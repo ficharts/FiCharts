@@ -16,6 +16,7 @@ package com.fiCharts.charts.chart2D.core.axis
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.PixelSnapping;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -414,7 +415,7 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			if (label.layout == LabelStyle.ROTATION)
 			{
-				bm = new Bitmap(labelUI);
+				bm = new Bitmap(labelUI, PixelSnapping.ALWAYS, true);
 				bm.x = - Math.cos(Math.PI / 4) * labelUI.width + valuePositon;
 				
 				labelY = Math.sin(Math.PI / 4) * labelUI.width;

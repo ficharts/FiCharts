@@ -13,6 +13,10 @@ package
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.IOErrorEvent;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	
 	/**
 	 * 
@@ -49,6 +53,11 @@ package
 			this.type = type;
 			this.img = img;
 		}
+		
+		/**
+		 * 是否启用加载图片方式，默认是类绑定方式，提供图片类名 
+		 */		
+		public var ifLoadImg:Boolean = false;
 		
 		/**
 		 */		
@@ -113,10 +122,22 @@ package
 		{
 			if (ifDrawed == false)
 			{
-				var imgData:BitmapData = ClassUtil.getObjectByClassPath(this.img) as BitmapData;
-				BitmapUtil.drawBitmapDataToSprite(imgData, imgCanvas, itemW - gap * 2, itemH - gap * 2, gap, gap, false);
-				
-				ifDrawed = true;
+				if (ifLoadImg)
+				{
+					imgLoader = new URLLoader();
+					imgLoader.addEventListener(Event.COMPLETE, imgLoaded, false, 0, true);
+					imgLoader.addEventListener(IOErrorEvent.IO_ERROR, imgLoadFail, false, 0, true);
+					imgLoader.load(new URLRequest(this.img));
+					
+					ifDrawed = true;
+				}
+				else
+				{
+					var imgData:BitmapData = ClassUtil.getObjectByClassPath(this.img) as BitmapData;
+					BitmapUtil.drawBitmapDataToSprite(imgData, imgCanvas, itemW - gap * 2, itemH - gap * 2, gap, gap, false);
+					
+					ifDrawed = true;
+				}
 			}
 			
 			if (ifReady == false)
@@ -127,6 +148,25 @@ package
 			currState.height = this.itemH;
 			StyleManager.drawRectOnShape(canvas, currState);
 		}
+		
+		/**
+		 */		
+		private function imgLoaded(evt:Event):void
+		{
+			var data:Object = evt.target.data;
+			trace(data as BitmapData)
+		}
+		
+		/**
+		 */		
+		private function imgLoadFail(evt:IOErrorEvent):void
+		{
+			
+		}
+		
+		/**
+		 */		
+		private var imgLoader:URLLoader;
 		
 		/**
 		 */		

@@ -216,9 +216,19 @@ package edit.chart
 			headTop.graphics.drawRect(1, series.headHeight - 3,  series.headWidth - 2, 3);
 			headTop.graphics.endFill();
 			
-			var imgSize:uint = 22;
+			var imgSize:uint = 25;
+			var ifSmooth:Boolean = false;
+			
+			// 不同图表类型有圆有方，绘制方式不同
+			if (series.type == ChartTypePanel.BUBBLE || series.type == ChartTypePanel.PIE || 
+				series.type == ChartTypePanel.AREA || series.type == ChartTypePanel.LINE)
+			{
+				
+				ifSmooth = true;
+			}
+			
 			BitmapUtil.drawBitmapDataToSprite(chartBmd, headTop, imgSize, imgSize, 
-				8, series.headHeight - imgSize - 5);
+				8, series.headHeight - imgSize - 5, ifSmooth);
 		}
 		
 		/**

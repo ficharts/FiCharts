@@ -452,7 +452,7 @@ package edit
 			{
 				if (chartProxy.ifHasSeries())
 				{
-					var len:uint = chartProxy.series[0].getDataLen();
+					var len:uint = chartProxy.dataLen;
 					var dataItem:Object;
 					
 					for (var i:uint = 0; i < len; i ++)

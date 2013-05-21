@@ -281,7 +281,10 @@
 		 */		
 		public function unSelectCell():void
 		{
-			this.graphics.clear();
+			textFrame.graphics.clear();
+			textBG.graphics.clear();
+			curTextCanvas.graphics.clear();
+			
 			this.cellUI.leave();
 			this.drawCurCell();
 			

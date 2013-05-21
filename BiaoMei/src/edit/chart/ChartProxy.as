@@ -386,6 +386,13 @@ package edit.chart
 		}
 		
 		/**
+		 */		
+		public function get dataLen():uint
+		{
+			return series[0].getDataLen();
+		}
+		
+		/**
 		 * 序列的总长度
 		 */		
 		public function get len():uint
@@ -536,6 +543,15 @@ package edit.chart
 			var result:XML = <config title={this.title}>
 							 </config>;
 			
+			if (this.dataLen > maxLabelNumForNormal)
+			{
+				this.labelDisplay = "rotation";
+			}
+			else
+			{
+				this.labelDisplay = "normal";
+			}
+			
 			checkPrefixAndSuffix(result);
 			checkAxis(result);
 			getSeriesConfigXML(result);
@@ -545,6 +561,11 @@ package edit.chart
 			
 			return result;
 		}
+		
+		/**
+		 * 大于此值时标签倾斜排列
+		 */		
+		public var maxLabelNumForNormal:uint = 10;
 		
 		/**
 		 * 设置坐标轴的配置文件
@@ -569,13 +590,17 @@ package edit.chart
 			else
 			{
 				axis = <axis>
-						 <x type={ChartProxy.FIELD} title={this.hTitle}/>
+						 <x type={ChartProxy.FIELD} title={this.hTitle} labelDisplay={this.labelDisplay}/>
 						 <y type={ChartProxy.LINEAR} title={this.vTitle}/>
 					   </axis>;
 				
 				config.appendChild(axis);
 			}
 		}
+		
+		/**
+		 */		
+		private var labelDisplay:String = "normal";
 		
 		/**
 		 */		

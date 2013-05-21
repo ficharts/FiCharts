@@ -30,10 +30,12 @@ package com.fiCharts.charts.chart2D.bar
 		 */		
 		override protected function preInitData():void
 		{
-			super.preInitData();
+			dataProvider.reverse();
 			
-			dataItemVOs.reverse();
-			sourceDataItems.reverse();
+			super.preInitData();
+			//
+			//dataItemVOs.reverse();
+			//sourceDataItems.reverse();
 		}
 		
 		/**

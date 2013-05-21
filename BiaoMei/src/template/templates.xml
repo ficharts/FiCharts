@@ -1,26 +1,34 @@
 <template>
-	<chart type='line' img='type_bubble'>
-		<config title='2010年度销售状况' ySuffix="万">
+	<chart type='line' img='./assets/line.jpg'>
+		<config title='2013年中国移动开发者已开发及未来计划开发应用类型变化'>
 			<axis>
-				<x type="field" title="月份" />
-				<y type="linear" title="销售额" />
+				<x type="field" title="" />
+				<y type="linear" title="" />
 			</axis>
 			<series>
-				<line xField='label' yField='value' name='序列' />
+				<line xField='label' yField='value' name='过去已开发过'/>
+				<line xField='label' yField='valueB' name='未来计划开发'/>
 			</series>
 			<data>
-				<set label='1月' value='279' />
-				<set label='2月' value='410' />
-				<set label='3月' value='325' />
-				<set label='4月' value='572' />
-				<set label='5月' value='629' />
-				<set label='6月' value='710' />
-				<set label='7月' value='489' />
-				<set label='8月' value='635' />
-				<set label='9月' value='750' />
-				<set label='10月' value='600' />
-				<set label='11月' value='760' />
-				<set label='12月' value='950' />
+				<set label='搜索类' value='5.7%' valueB='9.7%'/>
+				<set label='手机安全' value='7.7%' valueB='7.7%'/>
+				<set label='手机浏览器' value='6.5%' valueB='10.3%'/>
+				<set label='移动支付' value='9.7%' valueB='10.5%'/>
+				<set label='广告&营销类' value='7.7%' valueB='13.2%'/>
+				<set label='网购类' value='13.8%' valueB='22.5%'/>
+				<set label='音乐类' value='13.2%' valueB='14.6%'/>
+				<set label='视频类' value='11.5%' valueB='12.5%'/>
+				<set label='学习类' value='21.7%' valueB='9.5%'/>
+				<set label='美化类' value='12.6%' valueB='18.8%'/>
+				<set label='微博类' value='14.2%' valueB='16.0%'/>
+				<set label='LBS应用' value='11.7%' valueB='13.2%'/>
+				<set label='LBS应用' value='11.7%' valueB='13.2%'/>
+				<set label='电子书' value='33.2%' valueB='9.9%'/>
+				<set label='管理工具' value='14.6%' valueB='17.4%'/>
+				<set label='SNS社区' value='12.1%' valueB='16.6%'/>
+				<set label='生活消费' value='13.8%' valueB='14.2%'/>
+				<set label='手机网游' value='39.9%' valueB='24.3%'/>
+				<set label='手机游戏' value='40.7%' valueB='25.5%'/>
 			</data>
 		</config>
 	</chart>

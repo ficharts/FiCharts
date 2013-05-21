@@ -31,6 +31,21 @@
 		
 		/**
 		 */		
+		public function get dataLen():uint
+		{
+			var len:uint = 0;
+			
+			for each (var item:String in data)
+			{
+				if (RexUtil.ifTextNull(item) == false)
+					len += 1;
+			}
+				
+			return len;
+		}
+		
+		/**
+		 */		
 		public function get ifHasData():Boolean
 		{
 			var result:Boolean = false;

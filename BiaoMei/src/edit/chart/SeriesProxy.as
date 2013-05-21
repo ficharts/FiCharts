@@ -90,7 +90,7 @@ package edit.chart
 		 */		
 		public function getDataLen():uint
 		{
-			return this.columns[0].rowLen;
+			return this.columns[0].dataLen;
 		}
 		
 		/**

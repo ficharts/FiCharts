@@ -17,9 +17,11 @@ package template
 	{
 		/**
 		 */		
-		public function ChartTempleItem(type:String, imgID:String, config:XML)
+		public function ChartTempleItem(type:String, imgURL:String, config:XML)
 		{
-			super(type, imgID);
+			this.ifLoadImg = true;
+			
+			super(type, imgURL);
 			
 			this.config = config;
 			
