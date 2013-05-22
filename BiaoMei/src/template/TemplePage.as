@@ -4,6 +4,7 @@ package template
 	import com.fiCharts.utils.layout.BoxLayout;
 	
 	import flash.display.Sprite;
+	import flash.filters.DropShadowFilter;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
@@ -78,13 +79,29 @@ package template
 			for each(var item:XML in chartTemplates.chart)
 			{
 				chart = new ChartTempleItem(item.@type, item.@img, XML(item.config.toXMLString()));
+				chart.styleXML = chartStyleXML;
+					
 				boxLayout.layout(chart);
 				chart.render();
+				chart.filters = [new DropShadowFilter(2, 45, 0, 0.2, 2, 2, 1, 3)];
 				addChild(chart);
 			}
 			
 			this.h = boxLayout.getRectHeight();
 		}
+		
+		private var chartStyleXML:XML = <states>
+											<normal radius='0'>
+												<border pixelHinting='true' thikness='1' color='#DDDDDD' alpha='0.8'/>
+											</normal>
+											<hover radius='0' >
+												<border pixelHinting='true'  thikness='4' color='#4EA6EA' alpha='0.7'/>
+												<fill color='#4EA6EA' alpha='0.2'/>
+											</hover>
+											<down radius='0' >
+												<border pixelHinting='true' color='#4EA6EA' thikness='4' alpha='1'/>
+											</down>
+										</states>;
 		
 		/**
 		 */		

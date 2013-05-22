@@ -17,6 +17,8 @@
 	import flash.filters.GlowFilter;
 	import flash.text.TextField;
 	import flash.ui.Keyboard;
+	
+	import flashx.textLayout.elements.BreakElement;
 
 	/**
 	 * 单元格数据的绘制与编辑
@@ -273,7 +275,7 @@
 			}
 			
 			TweenLite.killTweensOf(textFrame, true);
-			TweenLite.from(textFrame, 0.3, {alpha: 0.5});
+			//TweenLite.from(textFrame, 0.3, {alpha: 0.5});
 		}
 		
 		/**
@@ -281,9 +283,7 @@
 		 */		
 		public function unSelectCell():void
 		{
-			textFrame.graphics.clear();
-			textBG.graphics.clear();
-			curTextCanvas.graphics.clear();
+			clearCurCellBm();
 			
 			this.cellUI.leave();
 			this.drawCurCell();
@@ -291,6 +291,15 @@
 			currentColumn = null;
 			currentRow = null;
 			currentColumnIndex = currentRowIndex = - 1;
+		}
+		
+		/**
+		 */		
+		private function clearCurCellBm():void
+		{
+			textFrame.graphics.clear();
+			textBG.graphics.clear();
+			curTextCanvas.graphics.clear();
 		}
 
 		/**
@@ -381,6 +390,11 @@
             if (this.currentRow == null || currentColumn == null)
                 return;
 			
+			if (event.altKey || event.shiftKey || event.ctrlKey)
+			{
+				return;
+			}
+			
             switch(event.keyCode)
             {
                 case Keyboard.ENTER:
@@ -434,6 +448,10 @@
 					
                     break;
                 }
+				case Keyboard.CONTROL:
+				{
+					break;
+				}
                 default:
                 {
                     if (this.cellUI.visible == false)
@@ -487,6 +505,8 @@
 			cell.label = "";
 			cell.shape.graphics.clear();
 			cellUI.setTxtAndHover();
+			
+			clearCurCellBm();
         }
 
 		/**

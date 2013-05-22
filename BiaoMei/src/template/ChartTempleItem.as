@@ -29,6 +29,7 @@ package template
 			
 			this.doubleClickEnabled = true;
 			this.addEventListener(MouseEvent.DOUBLE_CLICK, doubbleHandler, false, 0, true);
+			this.addEventListener(MouseEvent.CLICK, clickHandler, false, 0, true);
 		}
 		
 		/**
@@ -61,7 +62,7 @@ package template
 		}
 		/**
 		 */		
-		override public  function downHandler():void
+		private function clickHandler(evt:MouseEvent):void
 		{
 			var event:ChartCreatEvent = new ChartCreatEvent(ChartCreatEvent.SELECT_CHART);
 			event.chart = this;

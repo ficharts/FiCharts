@@ -206,7 +206,7 @@ package navBar
 											<fill color='#EEEEEE, #EFEFEF' alpha='0.8, 0.8' angle="90"/>
 										</hover>
 										<down>
-											<fill color='#4EA6EA' alpha='0.1' angle="90"/>
+											<fill color='#DDDDDD' alpha='0.3' angle="90"/>
 										</down>
 									</states>
 			

@@ -4,10 +4,14 @@ package navBar
 	import com.fiCharts.utils.layout.LayoutManager;
 	import com.greensock.TweenLite;
 	
+	import fl.transitions.Tween;
+	
 	import flash.display.BitmapData;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	
+	import flashx.textLayout.tlf_internal;
 	
 	/**
 	 */	
@@ -18,6 +22,7 @@ package navBar
 			super();
 			this.main = main;
 			this.addChild(progressBar);
+			this.addChild(curSelectShape);
 			this.addChild(btnContainer);
 			
 			this.addChild(progressImgsOut);
@@ -26,10 +31,13 @@ package navBar
 			
 			init();
 			
-			
 			initPogressBar();
 			initProgressImg();
 		}
+		
+		/**
+		 */		
+		private var curSelectShape:Shape = new Shape;
 		
 		/**
 		 */		
@@ -146,6 +154,14 @@ package navBar
 			previewBtn.addEventListener(MouseEvent.CLICK, toPreviewPageHandler, false, 0, true);
 			
 			this.currentNav = this.previewChartNav;
+			
+			curSelectShape.alpha = 0;
+			curSelectShape.graphics.clear();
+			curSelectShape.graphics.beginFill(0x555555, 0.2);
+			curSelectShape.graphics.drawRect(0, 0, btnWidth, btnHeight);
+			curSelectShape.graphics.endFill();
+			
+			//TweenLite.to(curSelectShape, 1, {alpha: 1});
 		}
 		
 		/**
@@ -167,11 +183,14 @@ package navBar
 			exchangePageBtn(this.templateBtn);
 			
 			TweenLite.to(progressBar, flashTime, {width: dataBtn.x});
-			TweenLite.to(progressImgMask, flashTime * 1.5, {width: dataBtn.x});
+			TweenLite.to(progressImgMask, flashTime, {width: dataBtn.x});
+			
 			
 			this.templateBtn.updateLabelStyle(this.ableLabelStyleXML);
 			this.dataBtn.updateLabelStyle(this.disLabelStyleXML);
 			this.previewBtn.updateLabelStyle(this.disLabelStyleXML);
+			
+			TweenLite.to(curSelectShape, flashTime / 2, {x: templateBtn.x, alpha: 1});
 		}
 		
 		/**
@@ -182,11 +201,13 @@ package navBar
 			exchangePageBtn(this.dataBtn);
 			
 			TweenLite.to(progressBar, flashTime, {width: dataBtn.x + dataBtn.w});
-			TweenLite.to(progressImgMask, flashTime * 1.5, {width: dataBtn.x + dataBtn.w});
+			TweenLite.to(progressImgMask, flashTime, {width: dataBtn.x + dataBtn.w});
 			
 			this.templateBtn.updateLabelStyle(this.ableLabelStyleXML);
 			this.dataBtn.updateLabelStyle(this.ableLabelStyleXML);
 			this.previewBtn.updateLabelStyle(this.disLabelStyleXML);
+			
+			TweenLite.to(curSelectShape, flashTime / 2, {x: dataBtn.x});
 		}
 		
 		/**
@@ -197,11 +218,13 @@ package navBar
 			exchangePageBtn(this.previewBtn);
 			
 			TweenLite.to(progressBar, flashTime, {width: this.w});
-			TweenLite.to(progressImgMask, flashTime * 1.5, {width: this.w});
+			TweenLite.to(progressImgMask, flashTime, {width: this.w});
 			
 			this.templateBtn.updateLabelStyle(this.ableLabelStyleXML);
 			this.dataBtn.updateLabelStyle(this.ableLabelStyleXML);
 			this.previewBtn.updateLabelStyle(this.ableLabelStyleXML);
+			
+			TweenLite.to(curSelectShape, flashTime / 2, {x: previewBtn.x});
 		}
 		
 		/**

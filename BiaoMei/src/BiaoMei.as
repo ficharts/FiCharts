@@ -98,7 +98,7 @@ package
 		 */		
 		public function toTemplatePage():void
 		{
-			//templatePage.reset();
+			templatePage.reset();
 			exchangeToPage(templatePage);
 			TweenLite.to(pageContainer, flashTime, {x:0});
 		}
