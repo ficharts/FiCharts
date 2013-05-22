@@ -184,7 +184,6 @@ package preview
 				}
 			}
 			
-			
 			PerformaceTest.end("创建图表");
 		}
 		
@@ -192,8 +191,8 @@ package preview
 		 */		
 		private function initChart():void
 		{
-			chart.width = 880;
-			chart.height = 540;
+			chart.width = 910;
+			chart.height = 570;
 			
 			chart.x = (this.w - chart.width) / 2;
 			chart.y = topGutter + (this.h - topGutter - chart.height) / 2;

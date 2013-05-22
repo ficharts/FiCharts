@@ -19,6 +19,7 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
+	import com.fiCharts.utils.dec.NullPad;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
@@ -296,6 +297,12 @@ package com.fiCharts.charts.chart2D.pie.series
 				
 				seriesDataItem.label = item[this.labelField]; 
 				seriesDataItem.value = item[this.valueField]; 
+				
+				if (Number(seriesDataItem.value) < 0)
+				{
+					seriesDataItem = null;
+					continue;				
+				}
 				
 				if (color)
 					seriesDataItem.color = uint(color);

@@ -232,7 +232,7 @@
 		
 		<states id='SimpleBar'>
 			<normal>
-				<fill color='${color}{adjustColor:1.2},${color}' alpha='0.8,0.8' angle='180'/>
+				<fill color='${color}{adjustColor:1.1},${color}' alpha='0.8,0.8' angle='180'/>
 			</normal>
 			<hover>
 				<fill color='${color}{adjustColor:1.4},${color}{adjustColor:1.2}' alpha='0.8,0.8' angle='180'/>
@@ -733,7 +733,7 @@
 				</title>
 				<tickMark color='E4E2E2' thikness='1' alpha='0'/>
 				<label format='FontFormat'>
-					<format color='9F9F9F'/>
+					<format color='575757'/>
 					<text value='${label}'/>
 				</label>
 			</xAxis>
@@ -744,7 +744,7 @@
 				</title>
 				<tickMark color='E4E2E2' alpha='0'/>
 				<label format='FontFormat'>
-					<format color='9F9F9F'/>
+					<format color='575757'/>
 					<text value='${label}'/>
 				</label>
 			</yAxis>

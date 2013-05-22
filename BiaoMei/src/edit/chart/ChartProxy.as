@@ -44,6 +44,7 @@ package edit.chart
 			BubbleProxy;
 			StackedColumnProxy;
 			StackedBarProxy;
+			StackedPercentColumnProxy;
 			
 			seriesClassMap.put(ChartTypePanel.LINE, "edit.chart.LineProxy");
 			seriesClassMap.put(ChartTypePanel.COLUMN, "edit.chart.ColumnProxy");
@@ -54,6 +55,7 @@ package edit.chart
 			seriesClassMap.put(ChartTypePanel.BUBBLE, "edit.chart.BubbleProxy");
 			seriesClassMap.put(ChartTypePanel.STACKED_COLUMN, "edit.chart.StackedColumnProxy");
 			seriesClassMap.put(ChartTypePanel.STACKED_BAR, "edit.chart.StackedBarProxy");
+			seriesClassMap.put(ChartTypePanel.STACKED_PERCENT_COLUMN, "edit.chart.StackedPercentColumnProxy");
 			
 			
 			this.addEventListener(ChartEvent.DELETE_SERIES, deleteSeriesHandler, false, 0, true);
@@ -389,7 +391,10 @@ package edit.chart
 		 */		
 		public function get dataLen():uint
 		{
-			return series[0].getDataLen();
+			if (series.length)
+				return series[0].getDataLen();
+			else
+				return 0;
 		}
 		
 		/**
@@ -667,6 +672,7 @@ package edit.chart
 			var result:Array = [];
 			var stackedColumns:Array = [];
 			var stackedBars:Array = [];
+			var stackedPercentColumns:Array = [];
 			
 			for each (var seriesH:SeriesProxy in this.series)
 			{
@@ -697,6 +703,10 @@ package edit.chart
 				else if (seriesH.type == ChartTypePanel.STACKED_BAR)
 				{
 					stackedBars.push(seriesH);
+				}
+				else if (seriesH.type == ChartTypePanel.STACKED_PERCENT_COLUMN)
+				{
+					stackedPercentColumns.push(seriesH);
 				}
 				else // 此时为饼图或者条形图
 				{
@@ -729,6 +739,18 @@ package edit.chart
 				stackedBarXML.appendChild(<stack xField={item.xField} yField={item.yField} name={item.name}/>);
 			}
 			
+			var stackedPercentColumnXML:XML;
+			if (stackedPercentColumns.length)
+			{
+				stackedPercentColumnXML = <stackedPercentColumn>
+										 </stackedPercentColumn>
+					
+				for each(item in stackedPercentColumns)
+				{
+					stackedPercentColumnXML.appendChild(<stack xField={item.xField} yField={item.yField} name={item.name}/>);
+				}
+			}
+			
 			for each (item in result)
 				chartConfig.series.appendChild(item.getXML());
 				
@@ -737,6 +759,11 @@ package edit.chart
 			
 			if (stackedBarXML)
 				chartConfig.series.appendChild(stackedBarXML);
+			
+			if (stackedPercentColumnXML)
+			{
+				chartConfig.series.appendChild(stackedPercentColumnXML);
+			}
 				
 			return chartConfig;
 		}

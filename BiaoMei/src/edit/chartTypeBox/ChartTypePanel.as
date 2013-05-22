@@ -57,6 +57,10 @@ package edit.chartTypeBox
 		
 		/**
 		 */		
+		public static const STACKED_PERCENT_COLUMN:String = 'stackedPercentColumn';
+		
+		/**
+		 */		
 		public static function getChartBitmapByType(type:String):String
 		{
 			var img:String = CHART_BM.item.(@type==type).@img;
@@ -138,16 +142,16 @@ package edit.chartTypeBox
 			{
 				chart = new ChartTypeItem(item.@type, item.@img);
 				chart.styleXML = <states>
-										<normal>
-											<border color='#4EA6EA' alpha='0.6'/>
+										<normal radius='5'>
+											<border pixelHinting='true' color='#4EA6EA' alpha='0.6'/>
 											<fill color='#FFFFFF' alpha='0.8'/>
 										</normal>
-										<hover>
-											<border color='#4EA6EA' thikness='1' alpha='1'/>
+										<hover radius='5'>
+											<border pixelHinting='true' color='#4EA6EA' thikness='1' alpha='1'/>
 											<fill color='#4EA6EA' alpha='0.3'/>
 										</hover>
-										<down>
-											<border color='#4EA6EA' thikness='2' alpha='1'/>
+										<down radius='5'>
+											<border pixelHinting='true' color='#4EA6EA' thikness='2' alpha='1'/>
 										</down>
 									</states>
 				boxLayout.layout(chart);

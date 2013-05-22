@@ -1,3 +1,4 @@
+
 package com.fiCharts.charts.chart2D.encry
 {
 	import com.fiCharts.charts.chart2D.bar.BarSeries;

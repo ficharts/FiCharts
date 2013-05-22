@@ -191,5 +191,7 @@ package
 		 * 底部导航条
 		 */		
 		public var nav:NavTop;
+		
+
 	}
 }

@@ -20,6 +20,8 @@ package template
 		public function ChartTempleItem(type:String, imgURL:String, config:XML)
 		{
 			this.ifLoadImg = true;
+			ifSmoothImg = true;
+			this.gap = 0;
 			
 			super(type, imgURL);
 			

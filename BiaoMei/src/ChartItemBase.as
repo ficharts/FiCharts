@@ -10,7 +10,9 @@ package
 	import com.fiCharts.utils.graphic.StyleManager;
 	import com.fiCharts.utils.layout.IBoxItem;
 	
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.Loader;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -27,18 +29,17 @@ package
 		/**
 		 */		
 		public var styleXML:XML = <states>
-										<normal>
-											<border color='#BCBCBC' alpha='0.6'/>
+										<normal radius='6'>
+											<border pixelHinting='true' color='#BCBCBC' alpha='0.6'/>
 										</normal>
-										<hover>
-											<border color='#4EA6EA' thikness='1' alpha='1'/>
+										<hover radius='6' >
+											<border pixelHinting='true' color='#4EA6EA' thikness='1' alpha='1'/>
 											<fill color='#4EA6EA' alpha='0.'/>
 										</hover>
-										<down>
-											<border color='#4EA6EA' thikness='2' alpha='1'/>
+										<down radius='6' >
+											<border pixelHinting='true' color='#4EA6EA' thikness='2' alpha='1'/>
 										</down>
 									</states>
-			
 			
 		/**
 		 */		
@@ -49,10 +50,15 @@ package
 			this.mouseChildren = false;
 			this.addChild(canvas);
 			this.addChild(imgCanvas);
+			addChild(frame);
 				
 			this.type = type;
 			this.img = img;
 		}
+		
+		/**
+		 */		
+		private var frame:Shape = new Shape;
 		
 		/**
 		 * 是否启用加载图片方式，默认是类绑定方式，提供图片类名 
@@ -120,13 +126,16 @@ package
 		 */		
 		public function render():void
 		{
+			if (ifReady == false)
+				this.ready();
+			
 			if (ifDrawed == false)
 			{
 				if (ifLoadImg)
 				{
-					imgLoader = new URLLoader();
-					imgLoader.addEventListener(Event.COMPLETE, imgLoaded, false, 0, true);
-					imgLoader.addEventListener(IOErrorEvent.IO_ERROR, imgLoadFail, false, 0, true);
+					imgLoader = new Loader
+					imgLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, imgLoaded, false, 0, true);
+					imgLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, imgLoadFail, false, 0, true);
 					imgLoader.load(new URLRequest(this.img));
 					
 					ifDrawed = true;
@@ -134,27 +143,41 @@ package
 				else
 				{
 					var imgData:BitmapData = ClassUtil.getObjectByClassPath(this.img) as BitmapData;
-					BitmapUtil.drawBitmapDataToSprite(imgData, imgCanvas, itemW - gap * 2, itemH - gap * 2, gap, gap, false);
+					drawImg(imgData);
 					
 					ifDrawed = true;
 				}
 			}
 			
-			if (ifReady == false)
-				this.ready();
-			
 			canvas.graphics.clear();
 			currState.width = this.itemW;
 			currState.height = this.itemH;
-			StyleManager.drawRectOnShape(canvas, currState);
+			StyleManager.setFillStyle(canvas.graphics, currState);
+			canvas.graphics.drawRoundRect(0, 0, itemW, itemH, currState.radius, currState.radius);
+			canvas.graphics.endFill();
+			
+			frame.graphics.clear();
+			StyleManager.setLineStyle(frame.graphics, currState.getBorder, currState);
+			frame.graphics.drawRoundRect(0, 0, itemW, itemH, currState.radius, currState.radius);
+			frame.graphics.endFill();
 		}
+		
+		/**
+		 */		
+		public var ifSmoothImg:Boolean = false;
 		
 		/**
 		 */		
 		private function imgLoaded(evt:Event):void
 		{
-			var data:Object = evt.target.data;
-			trace(data as BitmapData)
+			drawImg((imgLoader.content as Bitmap).bitmapData);
+		}
+		
+		/**
+		 */		
+		private function drawImg(bmd:BitmapData):void
+		{
+			BitmapUtil.drawBitmapDataToSprite(bmd, imgCanvas, itemW - gap * 2, itemH - gap * 2, gap, gap, ifSmoothImg, currState.radius)
 		}
 		
 		/**
@@ -166,7 +189,7 @@ package
 		
 		/**
 		 */		
-		private var imgLoader:URLLoader;
+		private var imgLoader:Loader;
 		
 		/**
 		 */		

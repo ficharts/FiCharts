@@ -157,6 +157,8 @@ package com.fiCharts.charts.chart2D.bar.stack
 		 */		
 		override protected function preInitData():void
 		{
+			this.dataProvider.reverse();
+			
 			var xValue:Number, yValue:Object, positiveValue:Number, negativeValue:Number;
 			var length:uint = dataProvider.length;
 			var stack:StackedSeries;

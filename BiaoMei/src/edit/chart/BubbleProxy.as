@@ -65,7 +65,7 @@ package edit.chart
 			yField = sXML.@yField;
 			zField = sXML.@zField;
 			
-			this.name = sXML.@name;
+			this.reName(sXML.@name)
 			
 			setColumnDataField();
 		}
@@ -79,7 +79,7 @@ package edit.chart
 			yField = type + startIndex;
 			zField = type + endIndex;
 			
-			this.name = "序列" + this.startColumnIndex;
+			//this.name = "序列" + this.startColumnIndex;
 			
 			setColumnDataField();
 		}
