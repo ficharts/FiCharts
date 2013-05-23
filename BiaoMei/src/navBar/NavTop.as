@@ -54,6 +54,12 @@ package navBar
 			progressBar.graphics.endFill();
 			
 			progressBar.width = 0;
+			
+			// 绘制logo
+			//this.graphics.clear();
+			var logoBMD:BitmapData = new logo;
+			BitmapUtil.drawBitmapDataToSprite(logoBMD, this, logoBMD.width, logoBMD.height, 20, 20, false);
+			this.graphics.endFill();
 		}
 		
 		/**
@@ -178,6 +184,7 @@ package navBar
 		 */			
 		private var ableLabelStyleXML:XML = <label vAlign="bottom">
 												<format color='#329AE7' font='微软雅黑' size='13' letterSpacing="3"/>
+												
 											</label>
 		/**
 		 */		

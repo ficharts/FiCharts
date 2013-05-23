@@ -21,6 +21,7 @@ package preview
 	import fl.controls.TextInput;
 	import fl.core.UIComponent;
 	
+	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
