@@ -6,23 +6,25 @@
         <title>表魅</title>      
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <link type="text/css" rel="stylesheet" media="screen" href="index.css" />
+        <script type="text/javascript" src='BiaoMei.js'></script>
     </head>
     <body>
         <div id="content">
-            <embed id="BiaoMei" src="BiaoMei.swf" allowFullScreen="false" wmode="transparent"
-            quality="high" width="950" height="900" align="middle" 
-            allowScriptAccess="always" type="application/x-shockwave-flash"></embed>
         </div>
         <div id="foot">
         </div>
         <script type="text/javascript">
         
+            var biaomei = new BiaoMei("content", "100%", "100%");
+
         	function ready(){
 			}
 			
             function updatePageHeight(value){
-                document.getElementById("BiaoMei").height = value  + 2;
+               document.getElementById("content").style.height = value  + 2 + 'px';
             }
+
         </script>
+
    </body>
 </html>

@@ -1,6 +1,7 @@
 package
 {
 	import com.dataGrid.DataGridEvent;
+	import com.fiCharts.charts.toolTips.ToolTipsManager;
 	import com.fiCharts.utils.ExternalUtil;
 	import com.fiCharts.utils.StageUtil;
 	import com.greensock.TweenLite;
@@ -55,8 +56,20 @@ package
 			
 			this.addEventListener(DataGridEvent.UPDATA_SEIZE, sizeChangedHandler, false, 0, true);
 			
+			tipsManager = new ToolTipsManager(this);
+			tipsManager.setStyleXML(<label radius='0' padding='5' vMargin='10' hMargin='20' format='FontFormat'>
+										<border thikness='0.1' alpha='1' color='555555' pixelHinting='false'/>
+										<fill color='333333' alpha='0.7'/>
+										<format color='FFFFFF'/>
+										<text value='${tips}'/>
+									</label>);
+			
 			initAPI();
 		}
+		
+		/**
+		 */		
+		private var tipsManager:ToolTipsManager;
 		
 		/**
 		 */		

@@ -71,15 +71,15 @@ package edit.chartTypeBox
 		/**
 		 */		
 		public static const CHART_BM:XML = <charts>
-											<item type='line' img="type_line"/>
-											<item type='area' img="type_area"/>
-											<item type='column' img="type_column"/>
-											<item type='stackedColumn' img="type_stackedColumn"/>
-											<item type='bar' img="type_bar"/>
-											<item type='stackedBar' img="type_stackedBar"/>
-											<item type='marker' img="type_marker"/>
-											<item type='bubble' img="type_bubble"/>
-											<item type='pie' img="type_pie"/>
+											<item type='line' img="type_line" tips='拖放创建'/>
+											<item type='area' img="type_area" tips='拖放创建'/>
+											<item type='column' img="type_column" tips='拖放创建'/>
+											<item type='stackedColumn' img="type_stackedColumn" tips='拖放创建'/>
+											<item type='bar' img="type_bar" tips='拖放创建'/>
+											<item type='stackedBar' img="type_stackedBar" tips='拖放创建'/>
+											<item type='marker' img="type_marker" tips='拖放创建'/>
+											<item type='bubble' img="type_bubble" tips='拖放创建'/>
+											<item type='pie' img="type_pie" tips='拖放创建'/>
 										</charts>
 		
 		/**
@@ -155,6 +155,7 @@ package edit.chartTypeBox
 										</down>
 									</states>
 				boxLayout.layout(chart);
+				chart.tips = item.@tips;
 				chart.render();
 				
 				this.addChild(chart);

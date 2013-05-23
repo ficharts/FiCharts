@@ -82,14 +82,21 @@ package template
 				chart.styleXML = chartStyleXML;
 					
 				boxLayout.layout(chart);
+				chart.tips = item.@tips;
 				chart.render();
-				chart.filters = [new DropShadowFilter(2, 45, 0, 0.2, 2, 2, 1, 3)];
+				chart.filters = chartFilter;
 				addChild(chart);
 			}
 			
 			this.h = boxLayout.getRectHeight();
 		}
 		
+		/**
+		 */		
+		private var chartFilter:Array = [new DropShadowFilter(2, 45, 0, 0.1, 2, 2, 1, 3)];
+		
+		/**
+		 */		
 		private var chartStyleXML:XML = <states>
 											<normal radius='0'>
 												<border pixelHinting='true' thikness='1' color='#DDDDDD' alpha='0.8'/>

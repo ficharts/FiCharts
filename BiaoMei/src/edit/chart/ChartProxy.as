@@ -550,7 +550,7 @@ package edit.chart
 			
 			if (this.dataLen > maxLabelNumForNormal)
 			{
-				this.labelDisplay = "rotation";
+				this.labelDisplay = "vertical";
 			}
 			else
 			{

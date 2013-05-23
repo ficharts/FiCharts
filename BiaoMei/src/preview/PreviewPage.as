@@ -192,7 +192,7 @@ package preview
 		private function initChart():void
 		{
 			chart.width = 910;
-			chart.height = 570;
+			chart.height = 580;
 			
 			chart.x = (this.w - chart.width) / 2;
 			chart.y = topGutter + (this.h - topGutter - chart.height) / 2;

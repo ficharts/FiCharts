@@ -4,6 +4,8 @@ package edit
 	import com.dataGrid.DataGridEvent;
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.XMLConfigKit.style.Style;
+	import com.fiCharts.utils.graphic.StyleManager;
 	import com.greensock.TweenLite;
 	
 	import edit.chart.ChartProxy;
@@ -14,10 +16,13 @@ package edit
 	import edit.dragDrop.DragDropper;
 	import edit.dragDrop.IDragDropReiver;
 	
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
+	
+	import navBar.LabelBtn;
 	
 	/**
 	 * 图表数据和配置编辑页
@@ -44,10 +49,10 @@ package edit
 		{
 			dataGrid.addEventListener(DataGridEvent.UPDATA_SEIZE, updateDataGridSizeHandler, false, 0, true);
 			dataGrid.gridW = 810;
-			dataGrid.gridH = this.h - 180// 上下空白;
+			dataGrid.gridH = this.h - 180 - gutterTop// 上下空白;
 			
 			dataGrid.x = (this.w - dataGrid.gridW) * 0.5;
-			dataGrid.y = (this.h - dataGrid.gridH) * 0.5;
+			dataGrid.y = gutterTop + (this.h - gutterTop - dataGrid.gridH) * 0.5;
 			addChild(dataGrid);
 			
 			dataGrid.preRender();
@@ -78,7 +83,116 @@ package edit
 			
 			chartProxy.addEventListener(SeriesHeaderEvt.HEADER_SELECT, headerSelectedHandler, false, 0, true);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, stateDownForHeader, false, 0, true);
+			
+			initEditPanel();
 		}
+		
+		/**
+		 */		
+		private function initEditPanel():void
+		{
+			addChild(editPanel);
+			
+			XMLVOMapper.fuck(editPanleStyleXML, editPanelStyle);
+			
+			editPanel.graphics.clear();
+			editPanelStyle.width = this.w;
+			editPanelStyle.height = gutterTop;
+			StyleManager.drawRect(editPanel, editPanelStyle);
+			
+			savaImgBtn.w = resetBtn.w = 80;
+			savaImgBtn.h = resetBtn.h = 26;
+			
+			resetBtn.x = (this.w - resetBtn.w - 20);
+			
+			savaImgBtn.x = (this.w - resetBtn.w - savaImgBtn.w - 35);
+			savaImgBtn.y = resetBtn.y = (gutterTop - savaImgBtn.h) / 2;
+			
+			savaImgBtn.text = "清空表格";
+			resetBtn.text = "重设所有";
+			
+			savaImgBtn.labelStyleXML = resetBtn.labelStyleXML = btnLabelStyle;
+			savaImgBtn.bgStyleXML = resetBtn.bgStyleXML = btnStyle;
+			
+			savaImgBtn.render();
+			resetBtn.render();
+			savaImgBtn.addEventListener(MouseEvent.CLICK, clearGridDataHandler, false, 0, true);
+			resetBtn.addEventListener(MouseEvent.CLICK, resetAllHandler, false, 0, true);
+			editPanel.addChild(savaImgBtn);
+			editPanel.addChild(resetBtn);
+		}
+		
+		/**
+		 */		
+		private var btnStyle:XML = <states>
+										<normal radius="3">
+											<border color="#DDDDDD" pixelHinting="true"/>
+											<fill color='#EEEEEE' alpha='1'/>
+										</normal>
+										<hover radius="3">
+											<border color="#CCCCCC" pixelHinting="true"/>
+											<fill color='#DDDDDD' alpha='1'/>
+										</hover>
+										<down radius="3">
+											<border color="#BBBBBB" pixelHinting="true"/>
+											<fill color='#CCCCCC' alpha='1'/>
+										</down>
+									</states>;
+		
+		/**
+		 */		
+		private var btnLabelStyle:XML = <label>
+											<format color='666666' font='微软雅黑' size='12' letterSpacing="2"/>
+											<text>
+												<effects>
+													<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
+												</effects>
+											</text>
+										</label>
+		
+		/**
+		 */
+		private function clearGridDataHandler(evt:MouseEvent):void
+		{
+			dataGrid.clear();
+		}
+		
+		/**
+		 */		
+		private function resetAllHandler(evt:MouseEvent):void
+		{
+			this.chartProxy.reset();
+			resetTitles();
+			dataGrid.clear();
+		}
+		
+		/**
+		 */		
+		private var resetBtn:LabelBtn = new LabelBtn;
+		
+		/**
+		 */		
+		private var savaImgBtn:LabelBtn = new LabelBtn;
+		
+		/**
+		 */		
+		private var gutterTop:uint = 50;
+		
+		/**
+		 */		
+		private var editPanel:Sprite = new Sprite;
+		
+				
+		/**
+		 */		
+		private var editPanelStyle:Style = new Style;
+		
+		/**
+		 */		
+		private var editPanleStyleXML:XML = <style>
+												<border color="EEEEEE"/>
+												<fill color="#EFEFEF, #EFEFEF" alpha="0.3,0.3" angle="-90"/>
+											</style>
 		
 		/**
 		 */		
@@ -113,7 +227,6 @@ package edit
 		 */		
 		private function updateDataGridSizeHandler(evt:DataGridEvent):void
 		{
-
 			evt.stopPropagation();
 			
 			dataGrid.fillColumnBG(0);
@@ -143,7 +256,7 @@ package edit
 			titleLabel.w = 30;
 			titleLabel.render();
 			titleLabel.x = (this.w - titleLabel.w) / 2;
-			titleLabel.y = 15;
+			titleLabel.y = gutterTop + 15;
 			titleLabel.addEventListener(Event.CHANGE, titleChanged, false, 0, true);
 			titleLabel.addEventListener(Event.RESIZE, resizeTitle, false, 0, true);
 			this.addChild(titleLabel);
@@ -282,7 +395,6 @@ package edit
 		 * 主程序
 		 */		
 		private var main:BiaoMei;
-		
 		
 		/**
 		 */		

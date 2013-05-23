@@ -1,7 +1,9 @@
 <template>
-	<chart type='new' img='./assets/add.jpg'>
+	<chart type='new' img='./assets/add.jpg'  tips="创建新图表">
 	</chart>
-	<chart type='line' img='./assets/line.jpg'>
+	
+	
+	<chart type='line' img='./assets/line.jpg' tips="趋势图">
 		<config title='2013年中国移动开发者已开发及未来计划开发应用类型变化'>
 			<axis>
 				<x type="field" title="" />
@@ -34,8 +36,46 @@
 			</data>
 		</config>
 	</chart>
-
-	<chart type='column' img='./assets/column.jpg'>
+	
+	<chart type='area' img='./assets/area.jpg' tips="区域图">
+		<config title='Facebook移动端月活跃用户量' ySuffix="万">
+			<axis>
+				<x type="field" title="" />
+				<y type="linear" title="" />
+			</axis>
+			<series>
+				<area xField='label' yField='value' />
+			</series>
+			<data>
+				<set label='Q1,12' value='0.83亿'/>
+				<set label='Q2,12' value='1.02亿'/>
+				<set label='Q3,12' value='1.26亿'/>
+				<set label='Q4,12' value='1.57亿'/>
+				<set label='Q1,13' value='1.89亿'/>
+			</data>
+		</config>
+	</chart>
+	
+	<chart type='pie' img='./assets/pie.jpg' tips="饼图">
+		<config title='2013年第20周单片票房比例图'>
+			<dataFormatter precision='5'/>
+			<series>
+				<pie xField='label' yField='value'/>
+			</series>
+			<data>
+				<set label='中国合伙人' value='1.04亿' />
+				<set label='钢铁侠' value='0.826亿' />
+				<set label='致我们终将逝去的青春' value='0.574亿'/>
+				<set label='遗落战境' value='0.532亿' />
+				<set label='疯狂原始人' value='0.385亿' />
+				<set label='被解救的姜戈' value='0.095亿' />
+				<set label='临终囧事' value='0.036亿' />
+				<set label='同谋' value='0.0037亿' />
+			</data> 
+		</config>
+	</chart>
+	
+	<chart type='column' img='./assets/column.jpg' tips="柱状图">
 		<config title='2013年Q1国内互联网巨头营收及净利润' ySuffix="万">
 			<axis>
 				<x type="field" title="" />
@@ -55,26 +95,9 @@
 			</data>
 		</config>
 	</chart>
-	<chart type='pie' img='./assets/pie.jpg'>
-		<config title='2013年第20周单片票房比例图'>
-			<dataFormatter precision='5'/>
-			<series>
-				<pie xField='label' yField='value'/>
-			</series>
-			<data>
-				<set label='中国合伙人' value='1.04亿' />
-				<set label='钢铁侠' value='0.826亿' />
-				<set label='致我们终将逝去的青春' value='0.574亿'/>
-				<set label='遗落战境' value='0.532亿' />
-				<set label='疯狂原始人' value='0.385亿' />
-				<set label='被解救的姜戈' value='0.095亿' />
-				<set label='临终囧事' value='0.036亿' />
-				<set label='同谋' value='0.0037亿' />
-			</data> 
-		</config>
-	</chart>
+	
 
-	<chart type='bar' img='./assets/bar.jpg'>
+	<chart type='bar' img='./assets/bar.jpg' tips="条形图">
 		<config title='2013年移动互联网用户经常使用的手机客户端或APP数量分布'>
 			<axis>
 				<x type='field' title='' />
@@ -94,25 +117,8 @@
 			</data>
 		</config>
 	</chart>
-	<chart type='area' img='./assets/area.jpg'>
-		<config title='Facebook移动端月活跃用户量' ySuffix="万">
-			<axis>
-				<x type="field" title="" />
-				<y type="linear" title="" />
-			</axis>
-			<series>
-				<area xField='label' yField='value' />
-			</series>
-			<data>
-				<set label='Q1,12' value='0.83亿'/>
-				<set label='Q2,12' value='1.02亿'/>
-				<set label='Q3,12' value='1.26亿'/>
-				<set label='Q4,12' value='1.57亿'/>
-				<set label='Q1,13' value='1.89亿'/>
-			</data>
-		</config>
-	</chart>
-	<chart type='stackedColumn' img='./assets/stackedColumn.jpg'>
+	
+	<chart type='stackedColumn' img='./assets/stackedColumn.jpg' tips="堆积柱状图">
 		<config title='2012年Q4与2013年Q1新浪微博营收规模及结构'>
 			<axis>
 				<x type='linear' title='' />
@@ -129,7 +135,7 @@
 		</config>
 	</chart>
 
-	<chart type='stackedBar' img='./assets/stackedBar.jpg'>
+	<chart type='stackedBar' img='./assets/stackedBar.jpg' tips="堆积条形图">
 		<config title='2011-2013年中国移动开发者应用开发盈利状况变化'>
 			<axis>
 				<x type='field' title='' />
@@ -148,7 +154,7 @@
 		</config>
 	</chart>
 
-	<chart type='bubble' img='./assets/bubble.jpg'>
+	<chart type='bubble' img='./assets/bubble.jpg' tips="气泡图">
 		<config title='降雨量与颗粒分布'>
 			<axis>
 				<x type='field' title='日期' />
@@ -171,7 +177,7 @@
 		</config>
 	</chart>
 	
-	<chart type='group' img='./assets/group.jpg'>
+	<chart type='group' img='./assets/group.jpg' tips="组合图表">
 		<config title='手机新闻客户端评分排行榜'>
 			<axis>
 				<x type='field' title='app' />

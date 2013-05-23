@@ -298,6 +298,12 @@ package com.fiCharts.charts.chart2D.pie.series
 				seriesDataItem.label = item[this.labelField]; 
 				seriesDataItem.value = item[this.valueField]; 
 				
+				if (RexUtil.ifTextNull(seriesDataItem.label)&& RexUtil.ifTextNull(seriesDataItem.value))
+				{
+					seriesDataItem = null;				
+					continue;
+				}
+				
 				if (Number(seriesDataItem.value) < 0)
 				{
 					seriesDataItem = null;

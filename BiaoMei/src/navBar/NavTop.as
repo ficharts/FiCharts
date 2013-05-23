@@ -10,6 +10,7 @@ package navBar
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import flash.filters.DropShadowFilter;
 	
 	import flashx.textLayout.tlf_internal;
 	
@@ -93,6 +94,9 @@ package navBar
 			progressImgsOver.mask = progressImgMask;
 			
 			progressImgMask.width = 0;
+			
+			
+			//progressImgsOver.filters = [new DropShadowFilter(1, 90,0x000000, 1, 1,1,1,3)];
 		}
 		
 		/**

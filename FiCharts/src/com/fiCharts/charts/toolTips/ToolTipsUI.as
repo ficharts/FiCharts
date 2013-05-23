@@ -133,7 +133,9 @@ package com.fiCharts.charts.toolTips
 			}
 			else// 饼图的tips直接以holder为载�
 			{
-				this.style = tooltipHolder.style;
+				if (tooltipHolder.style)
+					this.style = tooltipHolder.style;
+				
 				updateBgSize();
 				
 				labelUI.style = this.style;
