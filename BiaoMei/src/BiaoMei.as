@@ -133,7 +133,7 @@ package
 		{
 			if (templatePage.changed)
 			{
-				editPage.preUpdateData(templatePage.templateXML);
+				editPage.loadChartTemplate(templatePage.templateXML);
 				templatePage.changed = false;
 			}
 		}
@@ -147,7 +147,7 @@ package
 			
 			if (editPage.ifDataChanged)
 			{
-				previewPage.renderChart(editPage.getChartConfigXML(), editPage.getChartData());
+				previewPage.renderChart(editPage.getChartConfigXMLForRender(), editPage.getChartDataForRender());
 				this.editPage.chartRenderd();
 			}
 		}
@@ -188,7 +188,7 @@ package
 		/**
 		 * 编辑页
 		 */		
-		private var editPage:EditPage;
+		public var editPage:EditPage;
 		
 		/**
 		 * 预览页

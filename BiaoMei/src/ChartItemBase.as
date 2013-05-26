@@ -20,10 +20,14 @@ package
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	
+	import ui.FiUI;
+	import ui.ITipsSender;
+	import ui.TipsHolder;
+	
 	/**
 	 * 
 	 */	
-	public class ChartItemBase extends Sprite implements IBoxItem, IStyleStatesUI, ITipsSender
+	public class ChartItemBase extends FiUI implements IBoxItem, IStyleStatesUI
 	{
 		
 		/**
@@ -54,17 +58,7 @@ package
 				
 			this.type = type;
 			this.img = img;
-			
-			tipsHolder = new TipsHolder(this);
 		}
-		
-		/**
-		 */		
-		private var _tips:String;
-		
-		/**
-		 */		
-		private var tipsHolder:TipsHolder;
 		
 		/**
 		 */		
@@ -75,16 +69,6 @@ package
 		 */		
 		public var ifLoadImg:Boolean = false;
 		
-		public function get tips():String
-		{
-			return _tips;
-		}
-
-		public function set tips(value:String):void
-		{
-			_tips = value;
-		}
-
 		/**
 		 */		
 		public function ready():void

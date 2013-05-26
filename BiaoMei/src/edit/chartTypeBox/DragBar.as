@@ -9,10 +9,12 @@ package edit.chartTypeBox
 	
 	import flash.display.Sprite;
 	
+	import ui.FiUI;
+	
 	/**
 	 * 面板头，控制拖动
 	 */	
-	public class DragBar extends Sprite implements IStyleStatesUI
+	public class DragBar extends FiUI implements IStyleStatesUI
 	{
 		public function DragBar()
 		{
@@ -32,6 +34,7 @@ package edit.chartTypeBox
 		public function render():void
 		{
 			this.graphics.clear();
+			
 			currState.width = this.w;
 			currState.height = this.h;
 			currState.radius = 0;

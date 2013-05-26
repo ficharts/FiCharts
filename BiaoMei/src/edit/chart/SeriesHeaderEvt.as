@@ -1,6 +1,7 @@
 package edit.chart
 {
 	import flash.events.Event;
+	import edit.chart.header.SeriesHeader;
 	
 	/**
 	 */	

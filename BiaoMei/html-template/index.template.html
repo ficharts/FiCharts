@@ -16,12 +16,19 @@
         <script type="text/javascript">
         
             var biaomei = new BiaoMei("content", "100%", "100%");
+            var curHeight = 0;
 
         	function ready(){
 			}
 			
             function updatePageHeight(value){
-               document.getElementById("content").style.height = value  + 2 + 'px';
+
+                if (value + 2 > curHeight)
+                {
+                    curHeight = value + 2;
+                     document.getElementById("content").style.height = curHeight + 'px';
+                }
+              
             }
 
         </script>

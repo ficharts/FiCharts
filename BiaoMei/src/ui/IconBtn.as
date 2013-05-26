@@ -1,4 +1,4 @@
-package edit
+package ui
 {
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
@@ -13,7 +13,7 @@ package edit
 	
 	/**
 	 */	
-	public class IconBtn extends Sprite implements IStyleStatesUI
+	public class IconBtn extends FiUI implements IStyleStatesUI
 	{
 		public function IconBtn()
 		{

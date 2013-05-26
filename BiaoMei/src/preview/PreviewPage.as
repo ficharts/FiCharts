@@ -16,8 +16,6 @@ package preview
 	import com.fiCharts.utils.system.FiTrace;
 	import com.greensock.TweenLite;
 	
-	import edit.LabelInput;
-	
 	import fl.controls.TextInput;
 	import fl.core.UIComponent;
 	
@@ -27,13 +25,15 @@ package preview
 	import flash.events.IOErrorEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
+	import flash.net.FileReference;
 	import flash.utils.ByteArray;
 	
 	import flashx.textLayout.tlf_internal;
 	
-	import navBar.LabelBtn;
-	
 	import preview.stylePanel.ChartStylePanel;
+	
+	import ui.LabelBtn;
+	import ui.LabelInput;
 	
 	/**
 	 * 图表呈现及发布页
@@ -59,12 +59,12 @@ package preview
 			initEditPanel();
 			disableEditPanel();
 			
-			this.addChild(messagePanel);
+			this.addChild(weiboControl.messagePanel);
 		}
 		
 		/**
 		 */		
-		private var bottomPartContainer:Sprite = new Sprite;
+		internal var bottomPartContainer:Sprite = new Sprite;
 		
 		/**
 		 */		
@@ -75,7 +75,7 @@ package preview
 		
 		/**
 		 */		
-		private var token:String = "";
+		internal var token:String = "";
 		
 		/**
 		 */		
@@ -223,56 +223,60 @@ package preview
 			stylePanel.render();
 			stylePanel.addEventListener(Event.CHANGE, styleChangedHandler, false, 0, true);
 			
-			var btnH:uint = 26;
-			var btnW:uint = 70;
-			
-			// 发微博
-			weiboBtn.text = "发微博";
-			weiboBtn.w = btnW;
-			weiboBtn.h = btnH;
-			weiboBtn.x = (this.w - weiboBtn.w * 2 - 30);
-			weiboBtn.y = (topGutter - weiboBtn.h) / 2;
-			
-			weiboBtn.bgStyleXML = <states>
-										<normal radius="3">
-											<border color="#167AC5" pixelHinting="true"/>
-											<fill color='#3BB0FB' alpha='1'/>
-										</normal>
-										<hover radius="3">
-											<border color="#3BB0FB" pixelHinting="true"/>
-											<fill color='#88CEFD' alpha='1'/>
-										</hover>
-										<down radius="3">
-											<border color="#167AC5" pixelHinting="true"/>
-											<fill color='#167AC5' alpha='1'/>
-										</down>
-									</states>;
-			
-			weiboBtn.labelStyleXML = <label>
-						                <format color='FFFFFF' font='微软雅黑' size='12' letterSpacing="3"/>
-											<!--text>
-												<effects>
-													<shadow color='555555' distance='1' angle='90' blur='1' alpha='0.9'/>
-												</effects>
-											</text-->
-						            </label>
-				
-			
-			weiboBtn.render();
-			weiboBtn.addEventListener(MouseEvent.CLICK, sendWeiboHandler, false, 0, true);
-			disWeiBoBen();
-			editPanel.addChild(weiboBtn);
-			
-			
-			
 			// 存图片
-			savaImgBtn.w = 70;
-			savaImgBtn.h = 26;
-			savaImgBtn.x = (this.w - savaImgBtn.w - 20);
+			savaImgBtn.w = btnW;
+			savaImgBtn.h = btnH;
+			savaImgBtn.x = (this.w - savaImgBtn.w * 2 - 20 - 10);
 			savaImgBtn.y = (topGutter - savaImgBtn.h) / 2;
 			savaImgBtn.text = "存图片";
+			savaImgBtn.tips = "图表存为图片至本地"
+				
+			savaImgBtn.labelStyleXML = btnLabelStyleXML;
+			savaImgBtn.bgStyleXML = btnBgStyleXML;
 			
-			savaImgBtn.labelStyleXML = <label>
+			savaImgBtn.render();
+			savaImgBtn.addEventListener(MouseEvent.CLICK, saveImgHandler, false, 0, true);
+			editPanel.addChild(savaImgBtn);
+			
+			//保存数据按钮
+			saveBtn.w = btnW;
+			saveBtn.h = btnH;
+			saveBtn.x = (this.w - saveBtn.w - 20);
+			saveBtn.y = (topGutter - saveBtn.h) / 2;
+			saveBtn.text = "导出文件";
+			saveBtn.tips = "导出包含数据和图表配置的文件";
+			saveBtn.labelStyleXML = btnLabelStyleXML;
+			saveBtn.bgStyleXML = btnBgStyleXML;
+			
+			saveBtn.render();
+			saveBtn.addEventListener(MouseEvent.CLICK, saveDataHandler, false, 0, true);
+			editPanel.addChild(saveBtn);
+			
+			weiboControl = new WeiboControl(this);
+		}
+		
+		/**
+		 */		
+		private function saveDataHandler(evt:MouseEvent):void
+		{
+			var configXML:XML = main.editPage.exportConfig();
+			
+			trace(configXML);
+			var dataByteArray:ByteArray = new ByteArray();
+			dataByteArray.writeUTFBytes(configXML.toXMLString());
+			
+			var file:FileReference = new FileReference();
+			file.save(dataByteArray, "biaoMei.xml");
+		}
+		
+		/**
+		 * 保存数据按钮 
+		 */		
+		private var saveBtn:LabelBtn = new LabelBtn;
+		
+		/**
+		 */		
+		private var btnLabelStyleXML:XML = <label>
 											<format color='666666' font='微软雅黑' size='12' letterSpacing="3"/>
 											<text>
 												<effects>
@@ -280,8 +284,10 @@ package preview
 												</effects>
 											</text>
 										</label>
-				
-			savaImgBtn.bgStyleXML = <states>
+		
+		/**
+		 */			
+		private var btnBgStyleXML:XML = <states>
 										<normal radius="3">
 											<border color="#DDDDDD" pixelHinting="true"/>
 											<fill color='#EEEEEE' alpha='1'/>
@@ -296,245 +302,6 @@ package preview
 										</down>
 									</states>;
 			
-			savaImgBtn.render();
-			savaImgBtn.addEventListener(MouseEvent.CLICK, saveImgHandler, false, 0, true);
-			editPanel.addChild(savaImgBtn);
-			
-			
-			
-			
-			
-			
-			weiboField.defaultTxt = "说点啥吧";
-			weiboField.setTextFormat(12);
-			weiboField.ifWordwrap = true;
-			weiboField.defaultStyleXML = <style radius="5">
-											<fill color="FFFFFF" alpha='1'/>
-											<border color='#eeeeee' thikness='1' alpha='1' pixelHinting='true'/>
-										</style>
-				
-			weiboField.selectStyleXML = <style radius="5">
-											<fill color="FFFFFF" alpha='1'/>
-											<border color='#2494E6' thikness='1' alpha='0.6' pixelHinting='true'/>
-										</style>
-			weiboField.h = 40;
-			weiboField.w = 420;
-			weiboField.render();
-			weiboField.y = (this.topGutter - weiboField.h) / 2;
-			weiboField.x = 350;
-			weiboField.addEventListener(Event.RESIZE, weiboFieldResized);
-			weiboField.addEventListener(Event.CHANGE, weiboFieldTextChanged);
-			editPanel.addChild(weiboField);
-			
-			
-			textLenLabel.style = textLenLabelStyle;
-			XMLVOMapper.fuck(textLenLabelStyleXML, textLenLabelStyle);
-			textLenLabel.text = "140";
-			textLenLabel.render();
-			editPanel.addChild(textLenLabel);
-			
-			layoutTextLenLabel();
-		}
-		
-		/**
-		 */		
-		private function layoutTextLenLabel():void
-		{
-			textLenLabel.x = weiboField.x - textLenLabel.width - 5;
-			textLenLabel.y =  - 2;
-		}
-		
-		/**
-		 */		
-		private var textLenLabel:LabelUI = new LabelUI;
-		
-		/**
-		 */		
-		private var textLenLabelStyle:LabelStyle = new LabelStyle;
-		
-		/**
-		 */		
-		private var textLenLabelStyleXML:XML = <label>
-													<format color='AAAAAA' font='Constantia' size='30' letterSpacing="3"/>
-														<text>
-															<effects>
-																<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
-															</effects>
-														</text>
-												</label>
-		
-		/**
-		 * 
-		 */		
-		private function weiboFieldTextChanged(evt:Event):void
-		{
-			var textLen:uint = textareastrlen(weiboField.text);
-			var textLeft:int = 140 - textLen;
-			
-			if (textLeft < 0)
-			{
-				disWeiBoBen();
-				
-				if (ifRightTextLen)
-				{
-					ifRightTextLen = false;
-					(textLenLabel.style as LabelStyle).format.color = "FF0000";
-					textLenLabel.render();
-				}
-			}
-			else if (this.ifRightTextLen == false && textLeft >= 0)
-			{
-				ifRightTextLen = true;
-				(textLenLabel.style as LabelStyle).format.color = "AAAAAA";
-				textLenLabel.render();
-				
-				enWeiboBtn();
-			}
-			else if (textLeft >= 140)
-			{
-				disWeiBoBen();
-			}
-				
-			else
-			{
-				if (ifJustSpaceWords)
-					disWeiBoBen();
-				else
-					enWeiboBtn();
-			}
-			
-			// 刷新数字
-			textLenLabel.text = textLeft.toString();
-			textLenLabel.render();
-			layoutTextLenLabel();
-		}
-		
-		/**
-		 */		
-		private function get ifJustSpaceWords():Boolean
-		{
-			var text:String = weiboField.text
-			var len:uint = text.length;
-			
-			var result:Boolean = true;
-			var code:Number;
-			
-			for (var i:uint = 0; i < len; i ++)
-			{
-				code = text.charCodeAt(i);
-				if(code != 32 && code != 13)
-				{
-					result = false;
-					break;
-				}
-			}
-			
-			return result;
-		}
-		
-		/**
-		 */		
-		private function disWeiBoBen():void
-		{
-			
-			this.weiboBtn.alpha = 0.6;
-			weiboBtn.mouseEnabled = false;
-		}
-		
-		/**
-		 */		
-		private function enWeiboBtn():void
-		{
-			
-			this.weiboBtn.alpha = 1;
-			weiboBtn.mouseEnabled = true;
-		}
-		
-		/**
-		 */		
-		private var ifRightTextLen:Boolean = true;
-		
-		/**
-		 */		
-		private function textareastrlen(str:String):uint
-		{
-			var len:uint;
-			var i:uint;
-			len = 0;
-			
-			for (i = 0; i < str.length; i ++)
-			{
-				if (str.charCodeAt(i) > 255)
-				{
-					len += 2;
-				}
-				else
-				{
-					len ++;
-				}
-			}
-			
-			if (len % 2 != 0)
-			{
-				len = len + 1;
-			}
-			
-			return len / 2;
-		}
-		
-		/**
-		 */		
-		private function weiboFieldResized(evt:Event):void
-		{
-			this.drawTopPanel(weiboField.h + 20);
-			
-			var heightDis:Number = weiboField.h - this.topGutter + 20;
-			TweenLite.to(bottomPartContainer, 0.3, {y: heightDis});
-			
-			this.h = sourceHeight + heightDis;
-			this.dispatchEvent(new DataGridEvent(DataGridEvent.UPDATA_SEIZE));
-		}
-		
-		/**
-		 */		
-		private var weiboField:LabelInput = new LabelInput;
-		
-		/**
-		 */		
-		private function sendWeiboHandler(evt:MouseEvent):void
-		{
-			var bmd:ByteArray = PNGEncoder.encode(BitmapUtil.getBitmapData(chart));
-			var data:Object = {"status": this.weiboField.text, "access_token":this.token, "pic":bmd, "visible":1};
-			
-			post = new Post("https://api.weibo.com/2/statuses/upload.json", data);
-			post.addEventListener(Event.COMPLETE, complete);
-			post.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
-			post.sendfile();
-		}
-		
-		/**
-		 */		
-		private function complete(evt:Event):void
-		{
-			messagePanel.info("发布成功");
-		}
-		
-		/**
-		 */		
-		private function errorHandler(evt:IOErrorEvent):void
-		{
-			messagePanel.info("太贪心了，发过了还发", "alert");
-		}
-		
-		/**
-		 */		
-		private var post:Post;
-		
-		/**
-		 * 发送微博按钮
-		 */		
-		private var weiboBtn:LabelBtn = new LabelBtn;
-		
 		/**
 		 */		
 		private function saveImgHandler(evt:MouseEvent):void
@@ -544,7 +311,15 @@ package preview
 		
 		/**
 		 */		
-		private var editPanel:Sprite = new Sprite;
+		internal var btnH:uint = 26;
+		
+		/**
+		 */		
+		internal var btnW:uint = 70;
+		
+		/**
+		 */		
+		internal var editPanel:Sprite = new Sprite;
 		
 		/**
 		 */		
@@ -552,7 +327,7 @@ package preview
 		
 		/**
 		 */		
-		private var topGutter:uint = 51;
+		internal var topGutter:uint = 51;
 		
 		/**
 		 */		
@@ -597,17 +372,15 @@ package preview
 			
 			// 存储下原始页面高度，页面高度因微博输入框高度变化时便有了根据
 			sourceHeight = this.h;
-			
-			messagePanel.rect = this.getBounds(this);
 		}
 		
 		/**
 		 */		
-		private var sourceHeight:Number = 0;
+		internal var sourceHeight:Number = 0;
 		
 		/**
 		 */		
-		private function drawTopPanel(height:Number):void
+		internal function drawTopPanel(height:Number):void
 		{
 			editPanel.graphics.clear();
 			editBgStyle.width = this.w;
@@ -651,11 +424,12 @@ package preview
 		
 		/**
 		 */		
-		private var messagePanel:MessagePanel = new MessagePanel;
+		internal var chart:CSB;
 		
 		/**
+		 * 微博相关控制，避免页面代码过多
 		 */		
-		private var chart:CSB;
+		private var weiboControl:WeiboControl;
 		
 	}
 }

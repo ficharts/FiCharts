@@ -105,7 +105,7 @@ package edit.chart
 		public function resetDataFields():void
 		{
 			for each (var item:SeriesProxy in this.series)
-				item.setField(item.type, item.startColumnIndex, item.endColumnIndex);
+				item.setField();
 		}
 		
 		
@@ -438,7 +438,35 @@ package edit.chart
 		//
 		//--------------------------------------------------
 		
-
+		
+		/**
+		 * 
+		 * 导出配置文件
+		 * 
+		 */		
+		public function exportConfig():XML
+		{
+			var result:XML = <config title={this.title}>
+							 </config>;
+			checkAxis(result);
+			exportSeriesConfig(result);
+			
+			return result;
+		}
+		
+		/**
+		 */		
+		private function exportSeriesConfig(config:XML):void
+		{
+			var seriesXML:XML = <series/>;
+			for each (var series:SeriesProxy in this.series)
+			{
+				seriesXML.appendChild(series.exportXML());	
+			}
+			
+			config.appendChild(seriesXML);
+		}
+		
 		/**
 		 */		
 		private var _hAxisType:String = "field";

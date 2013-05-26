@@ -1,4 +1,4 @@
-package edit
+package ui
 {
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.StageUtil;
@@ -27,7 +27,7 @@ package edit
 	
 	/**
 	 */	
-	public class LabelInput extends Sprite implements IStyleUI
+	public class LabelInput extends FiUI implements IStyleUI, ITipsSender
 	{
 		public function LabelInput()
 		{
@@ -51,6 +51,7 @@ package edit
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler, false, 0, true);
 		}
+		
 		
 		/**
 		 */		

@@ -2,6 +2,8 @@ package com.fiCharts.charts.toolTips
 {
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
+	import com.greensock.TweenLite;
+	import com.greensock.TweenMax;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -16,6 +18,10 @@ package com.fiCharts.charts.toolTips
 		 * toolTips will show in this. 
 		 */		
 		private var container:Sprite;
+		
+		/**
+		 */		
+		public static var tipsShowTime:Number = 0.8;
 		
 		/**
 		 */		
@@ -63,7 +69,9 @@ package com.fiCharts.charts.toolTips
 		 */		
 		private function init():void
 		{
-			toolTipUI.visible = false;
+			//toolTipUI.visible = false;
+			
+			toolTipUI.alpha = 0;
 			container.addChild(toolTipUI);
 			container.addEventListener(ToolTipsEvent.SHOW_TOOL_TIPS, showToolTipsHandler, false, 0, true);
 			container.addEventListener(ToolTipsEvent.HIDE_TOOL_TIPS, hideToolTipsHandler, false, 0, true);
@@ -76,7 +84,22 @@ package com.fiCharts.charts.toolTips
 		{
 			evt.stopPropagation();
 			
-			toolTipUI.visible = false;
+			if (isHiding)
+			{
+				TweenLite.killTweensOf(toolTipUI, true);
+				isHiding = false;
+				toolTipUI.alpha = 1;
+			}
+			else
+			{
+				if (toolTipUI.alpha == 0)
+				{
+					isShowing = true;
+					TweenLite.to(toolTipUI, 0.3, {alpha: 1, delay: tipsShowTime, onComplete:finishShow});
+				}
+			}
+				
+			//toolTipUI.visible = false;
 			locked = evt.toolTipsHolder.locked;
 			
 			toolTipUI.tooltipHolder = evt.toolTipsHolder;
@@ -120,16 +143,50 @@ package com.fiCharts.charts.toolTips
 		
 		/**
 		 */		
-		private var isHorizontal:Boolean = false;
-		
-		/**
-		 */		
 		private function hideToolTipsHandler(evt:ToolTipsEvent):void
 		{
 			ifMoving = false;
 			evt.stopPropagation();
-			toolTipUI.hide();
+			//toolTipUI.hide();
+			
+			if (isShowing)
+			{
+				TweenLite.killTweensOf(toolTipUI, true);
+				isShowing = false;
+				toolTipUI.alpha = 0;
+			}
+			else
+			{
+				isHiding = true;
+				TweenLite.to(toolTipUI, 0.3, {alpha: 0, onComplete:finishHide});
+			}
 		}
+		
+		/**
+		 */		
+		private var isHiding:Boolean = false;
+		
+		/**
+		 */		
+		private var isHorizontal:Boolean = false;
+		
+		/**
+		 */		
+		private function finishHide():void
+		{
+			isHiding = false;
+		}
+		
+		/**
+		 */		
+		private function finishShow():void
+		{
+			isShowing = false;
+		}
+		
+		/**
+		 */		
+		private var isShowing:Boolean = false;
 		
 		/**
 		 * 非锁定状态下，tip只按先右后左方式布局
@@ -146,7 +203,7 @@ package com.fiCharts.charts.toolTips
 			if (ifMoving)
 			{
 				toolTipUI.x = container.mouseX + toolTipUI.width / 2 + toolTipUI.style.hMargin;
-				toolTipUI.y = container.mouseY;
+				toolTipUI.y = container.mouseY + 30//toolTipUI.height;
 				
 				adjustTipUILocation();
 			}
@@ -182,7 +239,7 @@ package com.fiCharts.charts.toolTips
 				time ++;
 			}
 			
-			toolTipUI.visible = true;
+			//toolTipUI.visible = true;
 		}
 		
 		/**

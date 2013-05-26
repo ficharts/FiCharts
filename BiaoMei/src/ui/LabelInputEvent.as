@@ -1,4 +1,4 @@
-package edit
+package ui
 {
 	import flash.events.Event;
 	

@@ -4,13 +4,15 @@ package edit.chartTypeBox
 	import com.fiCharts.utils.interactive.IDragCanvas;
 	import com.fiCharts.utils.layout.BoxLayout;
 	
-	import edit.dragDrop.DragDropEvent;
-	import edit.dragDrop.IDragDrapSender;
+	import ui.dragDrop.DragDropEvent;
+	import ui.dragDrop.IDragDrapSender;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.filters.GlowFilter;
 	import flash.geom.Rectangle;
+	import ui.dragMove.Drager;
+	import ui.dragMove.IDragTarget;
 	
 	/**
 	 * 
@@ -71,15 +73,15 @@ package edit.chartTypeBox
 		/**
 		 */		
 		public static const CHART_BM:XML = <charts>
-											<item type='line' img="type_line" tips='拖放创建'/>
-											<item type='area' img="type_area" tips='拖放创建'/>
-											<item type='column' img="type_column" tips='拖放创建'/>
-											<item type='stackedColumn' img="type_stackedColumn" tips='拖放创建'/>
-											<item type='bar' img="type_bar" tips='拖放创建'/>
-											<item type='stackedBar' img="type_stackedBar" tips='拖放创建'/>
-											<item type='marker' img="type_marker" tips='拖放创建'/>
-											<item type='bubble' img="type_bubble" tips='拖放创建'/>
-											<item type='pie' img="type_pie" tips='拖放创建'/>
+											<item type='line' img="type_line" tips='拖放创建，趋势图'/>
+											<item type='area' img="type_area" tips='拖放创建，区域图'/>
+											<item type='column' img="type_column" tips='拖放创建，柱状图'/>
+											<item type='stackedColumn' img="type_stackedColumn" tips='拖放创建，堆积柱状图'/>
+											<item type='bar' img="type_bar" tips='拖放创建，条形图'/>
+											<item type='stackedBar' img="type_stackedBar" tips='拖放创建，堆积条形图'/>
+											<item type='marker' img="type_marker" tips='拖放创建，散点图'/>
+											<item type='bubble' img="type_bubble" tips='拖放创建，气泡图'/>
+											<item type='pie' img="type_pie" tips='拖放创建，饼图'/>
 										</charts>
 		
 		/**
@@ -132,6 +134,7 @@ package edit.chartTypeBox
 		{
 			bar.w = this.w;
 			bar.render();
+			bar.tips = "可拖动";
 			
 			boxLayout.setLoc(0, this.bar.h);
 			boxLayout.setItemSizeAndFullWidth(w, 45, 45);
@@ -168,6 +171,20 @@ package edit.chartTypeBox
 			bg.graphics.beginFill(0xEEEEEE, 0.9);
 			bg.graphics.drawRoundRect(0, 0, w, h, 0, 0);
 			//this.filters =[new GlowFilter(0xCCCCCC, 1)]
+		}
+		
+		/**
+		 */		
+		public function startDragHandler():void
+		{
+			this.bar.tipsHolder.disEnable();
+		}
+		
+		/**
+		 */		
+		public function stopDragHandler():void
+		{
+			this.bar.tipsHolder.enable();
 		}
 		
 		/**

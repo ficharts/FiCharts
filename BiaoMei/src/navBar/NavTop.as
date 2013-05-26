@@ -1,5 +1,6 @@
 package navBar
 {
+	import com.fiCharts.charts.chart2D.core.axis.TickMarkStyle;
 	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.layout.LayoutManager;
 	import com.greensock.TweenLite;
@@ -13,6 +14,7 @@ package navBar
 	import flash.filters.DropShadowFilter;
 	
 	import flashx.textLayout.tlf_internal;
+	import ui.LabelBtn;
 	
 	/**
 	 */	
@@ -101,7 +103,6 @@ package navBar
 			
 			progressImgMask.width = 0;
 			
-			
 			//progressImgsOver.filters = [new DropShadowFilter(1, 90,0x000000, 1, 1,1,1,3)];
 		}
 		
@@ -136,6 +137,10 @@ package navBar
 			var btnWidth:uint = 100;
 			var btnHeight:uint = 90;
 			
+			templateBtn.tips = "根据模板创建图表";
+			dataBtn.tips = "填写数据，详细定义图表类型及属性";
+			previewBtn.tips = "发布图表";
+			
 			templateBtn.w = dataBtn.w = previewBtn.w = btnWidth;
 			templateBtn.h = dataBtn.h = previewBtn.h = btnHeight;
 			
@@ -167,8 +172,9 @@ package navBar
 			
 			curSelectShape.alpha = 0;
 			curSelectShape.graphics.clear();
-			curSelectShape.graphics.beginFill(0x555555, 0.2);
-			curSelectShape.graphics.drawRect(0, 0, btnWidth, btnHeight);
+			//curSelectShape.graphics.lineStyle(2, 0xFFFFFF);
+			curSelectShape.graphics.beginFill(0xDDDDDDD, 0.5);
+			curSelectShape.graphics.drawRoundRect(25, 10, btnWidth - 50, btnHeight - 45, 0, 0);
 			curSelectShape.graphics.endFill();
 			
 			//TweenLite.to(curSelectShape, 1, {alpha: 1});

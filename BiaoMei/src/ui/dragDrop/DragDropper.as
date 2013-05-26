@@ -1,4 +1,4 @@
-package edit.dragDrop
+package ui.dragDrop
 {
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
@@ -42,6 +42,7 @@ package edit.dragDrop
 			draggingUI.cacheAsBitmap = true;
 			draggingUI.alpha = 0.8;
 			XMLVOMapper.fuck(this.interactStyleXML, this.interactStyle);
+			XMLVOMapper.fuck(receiveAlertStyleXML, receiveAlertUIStyle);
 		}
 		
 		/**
@@ -56,6 +57,8 @@ package edit.dragDrop
 			receiver.into();
 			
 			interactUI.graphics.clear();
+			
+			dragDragAlertUI();
 		}
 		
 		/**
@@ -66,6 +69,7 @@ package edit.dragDrop
 			receiver.out();
 			
 			interactUI.graphics.clear();
+			dragDragAlertUI();
 		}
 		
 		/**
@@ -77,13 +81,20 @@ package edit.dragDrop
 		
 		/**
 		 */		
-		public function addReceiver(receiver:IDragDropReiver, receiveUI:Sprite):void
+		public function addReceiver(receiver:IDragDropReiver, receiveUI:Sprite, tx:Number = 0):void
 		{
 			this.receiver = receiver;
 			this.receiveUI = receiveUI;
+			recieveTx = tx;
 			
 			receiveUI.addChild(receiveFrameUI);
+			receiveUI.addChild(receiveAlertUI);
 		}
+		
+		/**
+		 * 
+		 */		
+		private var recieveTx:Number = 0;
 		
 		/**
 		 */		
@@ -144,7 +155,37 @@ package edit.dragDrop
 			
 			interactUI.graphics.clear();
 			receiveUI.addChild(interactUI);
+			isDragging = true;
+			
+			dragDragAlertUI();
 		}
+		
+		/**
+		 */		
+		private function dragDragAlertUI():void
+		{
+			receiveAlertUI.graphics.clear();
+			
+			var offset:uint = 0;
+			if (ifInReceiver == false)
+			{
+				this.color =  0x4EA6EA;
+				StyleManager.setShapeStyle(receiveAlertUIStyle, receiveAlertUI.graphics, this);
+				receiveAlertUIStyle.tx = recieveTx + offset;
+				receiveAlertUIStyle.ty = offset;
+				receiveAlertUIStyle.width = receiveUI.width - recieveTx - offset * 2;
+				receiveAlertUIStyle.height = receiveUI.height - offset * 2;
+					
+				receiveAlertUI.graphics.drawRoundRect(recieveTx + offset, offset, 
+					receiveUI.width - offset * 2 - recieveTx - 2, receiveUI.height - offset * 2 - 2, 0, 0);
+				
+				TweenLite.from(receiveAlertUI, 0.5, {alpha : 0});
+			}
+		}
+		
+		/**
+		 */		
+		private var isDragging:Boolean = false;
 		
 		/**
 		 */		
@@ -152,8 +193,10 @@ package edit.dragDrop
 		{
 			receiveFrameUI.graphics.clear();
 			receiveFrameUI.graphics.lineStyle(2, 0x4EA6EA, 0.6); 
-			receiveFrameUI.graphics.drawRoundRect(- frameOffset, - frameOffset, 
-				receiveUI.width + frameOffset * 2, receiveUI.height + frameOffset * 2, 0, 0);
+			receiveFrameUI.graphics.drawRoundRect(- frameOffset + recieveTx, - frameOffset, 
+				receiveUI.width + frameOffset * 2 - recieveTx, receiveUI.height + frameOffset * 2, 0, 0);
+			
+			TweenLite.from(receiveFrameUI, 0.5, {alpha : 0});
 		}
 		
 		/**
@@ -236,6 +279,11 @@ package edit.dragDrop
 													<fill type='linear' angle='90' color='${color}{adjustColor:1.6},${color}{adjustColor:1.1}' alpha='0.3,0' radioes='0, 150'/>	
 												</cover>
 											</style>
+			
+		private var receiveAlertStyleXML:XML = <style radius='0'>
+													<border color='${color}' alpha='0.2'/>
+													<fill type='linear' angle='90' color='${color}{adjustColor:1.2},${color}{adjustColor:1.1}' alpha='0.2,0.2'/>
+												</style>
 		
 		/**
 		 * 结束拖放过程
@@ -264,8 +312,10 @@ package edit.dragDrop
 			root.removeEventListener(MouseEvent.MOUSE_UP, endDragDrop);
 			
 			receiveFrameUI.graphics.clear();
+			receiveAlertUI.graphics.clear();
 			interactUI.graphics.clear();
 			receiveUI.removeChild(interactUI);
+			isDragging = false;
 		}
 		
 		/**
@@ -307,6 +357,15 @@ package edit.dragDrop
 		 * 用于拖放开启/关闭的视觉反馈UI
 		 */		
 		private var receiveFrameUI:Shape = new Shape;
+		
+		/**
+		 * 信息提示UI，开始拖放时提示，划入图拖放区域时，隐藏
+		 */		
+		private var receiveAlertUI:Shape = new Shape;
+		
+		/**
+		 */		
+		private var receiveAlertUIStyle:Style = new Style;
 		
 		/**
 		 * 用于拖放目标感应区块的视觉反馈UI

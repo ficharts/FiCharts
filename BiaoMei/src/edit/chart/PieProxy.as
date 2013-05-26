@@ -23,10 +23,10 @@ package edit.chart
 		/**
 		 * 根据序列类型和字段列序号动态组合出字段
 		 */		
-		override public function setField(type:String, startIndex:uint, endIndex:uint):void
+		override public function setField():void
 		{
 			xField = ChartProxy.SHARE_FIELD;
-			yField = type + startIndex;
+			yField = type + startColumnIndex;
 			
 			//this.name = "序列" + this.startColumnIndex;
 			

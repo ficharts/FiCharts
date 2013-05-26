@@ -1,4 +1,4 @@
-package navBar
+package ui
 {
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -16,14 +16,34 @@ package navBar
 	/**
 	 * 基本的按钮组件
 	 */	
-	public class LabelBtn extends Sprite implements IStyleStatesUI
+	public class LabelBtn extends Sprite implements IStyleStatesUI, ITipsSender
 	{
 		public function LabelBtn()
 		{
 			super();
 			this.mouseChildren = false;
+			tipsHolder = new TipsHolder(this);
 		}
 		
+		/**
+		 */		
+		private var tipsHolder:TipsHolder;
+		
+		
+		/**
+		 */		
+		private var _tips:String = '';
+		
+		public function get tips():String
+		{
+			return _tips;
+		}
+
+		public function set tips(value:String):void
+		{
+			_tips = value;
+		}
+
 		/**
 		 */		
 		public function updateLabelStyle(style:XML):void

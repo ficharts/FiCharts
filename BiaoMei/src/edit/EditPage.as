@@ -5,24 +5,28 @@ package edit
 	import com.fiCharts.utils.StageUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
+	import com.fiCharts.utils.dec.NullPad;
 	import com.fiCharts.utils.graphic.StyleManager;
+	import com.fiCharts.utils.interactive.TipCanvasControl;
 	import com.greensock.TweenLite;
 	
 	import edit.chart.ChartProxy;
-	import edit.chart.SeriesHeader;
 	import edit.chart.SeriesHeaderEvt;
 	import edit.chart.SeriesProxy;
+	import edit.chart.header.SeriesHeader;
 	import edit.chartTypeBox.ChartTypePanel;
-	import edit.dragDrop.DragDropper;
-	import edit.dragDrop.IDragDropReiver;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
+	import flash.net.FileReference;
 	import flash.text.TextFormat;
 	
-	import navBar.LabelBtn;
+	import ui.LabelBtn;
+	import ui.LabelInput;
+	import ui.dragDrop.DragDropper;
+	import ui.dragDrop.IDragDropReiver;
 	
 	/**
 	 * 图表数据和配置编辑页
@@ -43,112 +47,6 @@ package edit
 			this.h = 680;
 		}
 		
-		/**
-		 */		
-		private function init():void
-		{
-			dataGrid.addEventListener(DataGridEvent.UPDATA_SEIZE, updateDataGridSizeHandler, false, 0, true);
-			dataGrid.gridW = 810;
-			dataGrid.gridH = this.h - 180 - gutterTop// 上下空白;
-			
-			dataGrid.x = (this.w - dataGrid.gridW) * 0.5;
-			dataGrid.y = gutterTop + (this.h - gutterTop - dataGrid.gridH) * 0.5;
-			addChild(dataGrid);
-			
-			dataGrid.preRender();
-			dataGrid.fillColumnBG(0);
-			dataGrid.setColumnTextFormat(0, new TextFormat("微软雅黑", 12, 0, false, true));
-			
-			// 背景
-			renderBG();
-			
-			chartProxy.x = dataGrid.x;
-			chartProxy.y = dataGrid.y;
-			addChild(chartProxy);
-			
-			initTitles();
-			
-			this.addChild(chartTypePanel);
-			chartTypePanel.render();
-			chartTypePanel.x = this.dataGrid.x + dataGrid.gridW - chartTypePanel.w;
-			chartTypePanel.y = dataGrid.y;
-			
-			var rect:Rectangle = this.getRect(this);
-			chartTypePanel.setDragRect(rect);
-			
-			//拖放控制器
-			dragDropper = new DragDropper(stage);
-			dragDropper.addSender(chartTypePanel);
-			dragDropper.addReceiver(this, dataGrid);
-			
-			chartProxy.addEventListener(SeriesHeaderEvt.HEADER_SELECT, headerSelectedHandler, false, 0, true);
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, stateDownForHeader, false, 0, true);
-			
-			initEditPanel();
-		}
-		
-		/**
-		 */		
-		private function initEditPanel():void
-		{
-			addChild(editPanel);
-			
-			XMLVOMapper.fuck(editPanleStyleXML, editPanelStyle);
-			
-			editPanel.graphics.clear();
-			editPanelStyle.width = this.w;
-			editPanelStyle.height = gutterTop;
-			StyleManager.drawRect(editPanel, editPanelStyle);
-			
-			savaImgBtn.w = resetBtn.w = 80;
-			savaImgBtn.h = resetBtn.h = 26;
-			
-			resetBtn.x = (this.w - resetBtn.w - 20);
-			
-			savaImgBtn.x = (this.w - resetBtn.w - savaImgBtn.w - 35);
-			savaImgBtn.y = resetBtn.y = (gutterTop - savaImgBtn.h) / 2;
-			
-			savaImgBtn.text = "清空表格";
-			resetBtn.text = "重设所有";
-			
-			savaImgBtn.labelStyleXML = resetBtn.labelStyleXML = btnLabelStyle;
-			savaImgBtn.bgStyleXML = resetBtn.bgStyleXML = btnStyle;
-			
-			savaImgBtn.render();
-			resetBtn.render();
-			savaImgBtn.addEventListener(MouseEvent.CLICK, clearGridDataHandler, false, 0, true);
-			resetBtn.addEventListener(MouseEvent.CLICK, resetAllHandler, false, 0, true);
-			editPanel.addChild(savaImgBtn);
-			editPanel.addChild(resetBtn);
-		}
-		
-		/**
-		 */		
-		private var btnStyle:XML = <states>
-										<normal radius="3">
-											<border color="#DDDDDD" pixelHinting="true"/>
-											<fill color='#EEEEEE' alpha='1'/>
-										</normal>
-										<hover radius="3">
-											<border color="#CCCCCC" pixelHinting="true"/>
-											<fill color='#DDDDDD' alpha='1'/>
-										</hover>
-										<down radius="3">
-											<border color="#BBBBBB" pixelHinting="true"/>
-											<fill color='#CCCCCC' alpha='1'/>
-										</down>
-									</states>;
-		
-		/**
-		 */		
-		private var btnLabelStyle:XML = <label>
-											<format color='666666' font='微软雅黑' size='12' letterSpacing="2"/>
-											<text>
-												<effects>
-													<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
-												</effects>
-											</text>
-										</label>
 		
 		/**
 		 */
@@ -161,38 +59,18 @@ package edit
 		 */		
 		private function resetAllHandler(evt:MouseEvent):void
 		{
+			resetAll();
+		}
+		
+		/**
+		 * 重设表格数据、标题、序列
+		 */		
+		private function resetAll():void
+		{
 			this.chartProxy.reset();
 			resetTitles();
 			dataGrid.clear();
 		}
-		
-		/**
-		 */		
-		private var resetBtn:LabelBtn = new LabelBtn;
-		
-		/**
-		 */		
-		private var savaImgBtn:LabelBtn = new LabelBtn;
-		
-		/**
-		 */		
-		private var gutterTop:uint = 50;
-		
-		/**
-		 */		
-		private var editPanel:Sprite = new Sprite;
-		
-				
-		/**
-		 */		
-		private var editPanelStyle:Style = new Style;
-		
-		/**
-		 */		
-		private var editPanleStyleXML:XML = <style>
-												<border color="EEEEEE"/>
-												<fill color="#EFEFEF, #EFEFEF" alpha="0.3,0.3" angle="-90"/>
-											</style>
 		
 		/**
 		 */		
@@ -240,56 +118,6 @@ package edit
 		
 		/**
 		 */		
-		override public function renderBG():void
-		{
-			super.renderBG();
-			this.graphics.beginFill(0xEEEEEE);
-			this.graphics.drawRoundRect(dataGrid.x - dis, dataGrid.y - dis, 
-				dataGrid.gridW + 2 * dis, dataGrid.gridH + 2 * dis, 5, 5);
-		}
-		
-		/**
-		 */		
-		private function initTitles():void
-		{
-			titleLabel.defaultTxt = "请输入主标题";
-			titleLabel.w = 30;
-			titleLabel.render();
-			titleLabel.x = (this.w - titleLabel.w) / 2;
-			titleLabel.y = gutterTop + 15;
-			titleLabel.addEventListener(Event.CHANGE, titleChanged, false, 0, true);
-			titleLabel.addEventListener(Event.RESIZE, resizeTitle, false, 0, true);
-			this.addChild(titleLabel);
-			
-			hTitleLabel.defaultTxt = '请输入横轴标题';
-			hTitleLabel.setTextFormat(14);
-			hTitleLabel.w = 30;
-			hTitleLabel.render();
-			hTitleLabel.x = (this.w - hTitleLabel.w) / 2;
-			layoutHTitileY();
-			hTitleLabel.addEventListener(Event.CHANGE, hTitleChanged, false, 0, true);
-			hTitleLabel.addEventListener(Event.RESIZE, resizeHTitle, false, 0, true);
-			this.addChild(hTitleLabel);
-			
-			vTitleLabel.defaultTxt = '请输入纵轴标题';
-			vTitleLabel.setTextFormat(14);
-			vTitleLabel.w = 30;
-			vTitleLabel.render();
-			vTitleLabel.toImgMode();
-			vTitleLabel.setRotation(- 90);
-			vTitleLabel.x = (this.dataGrid.x - vTitleLabel.h) / 2;
-			layoutVTitleY();
-			vTitleLabel.addEventListener(Event.CHANGE, vTitleChanged, false, 0, true);
-			vTitleLabel.addEventListener(Event.RESIZE, resizeVTitle, false, 0, true);
-			
-			vTitleLabel.addEventListener(Event.SELECT, vTitleSelected, false, 0, true);
-			vTitleLabel.addEventListener(Event.MOUSE_LEAVE, vTitleUnSelected, false, 0, true);
-			
-			this.addChild(vTitleLabel);
-		}
-		
-		/**
-		 */		
 		private function layoutHTitileY():void
 		{
 			hTitleLabel.y = this.h / 2 + (this.dataGrid.height + this.dataGrid.y) / 2 - hTitleLabel.h / 2;
@@ -322,15 +150,6 @@ package edit
 		{
 			vTitleLabel.toImgMode();
 			TweenLite.to(vTitleLabel, 0.3, {rotation: - 90});
-		}
-		
-		/**
-		 */		
-		private function resetTitles():void
-		{
-			titleLabel.reset();
-			hTitleLabel.reset();
-			vTitleLabel.reset();
 		}
 		
 		/**
@@ -398,82 +217,43 @@ package edit
 		
 		/**
 		 */		
-		public function preUpdateData(config:XML):void
+		public function loadChartTemplate(config:XML):void
 		{
 			configXML = config.copy();
 			
 			if (configXML.children().length() == 0)
 			{
-				this.chartProxy.reset();
-				resetTitles();
-				dataGrid.clear();
+				// 空模板，重设
+				resetAll();
 			}
 			else if (this.dataGrid.ifHasData)//已存在数据和序列定义，仅更新序列及图表配置
 			{
-				this.chartProxy.reset();
-				resetTitles();
-				this.chartProxy.setConfig(configXML);
-				createSeries();
-				upateTitlesData();
-				
+				dataControl.importChartConfigTemplate();
 			}
 			else// 没有数据时， 根据模板数据全新创建图表
 			{
-				updateData();
+				dataGrid.clear();// 要先清空
+				dataControl.importChartConfigTemplate();
+				dataControl.importChartDataTemplate();
 			}
 		}
 		
 		/**
-		 * 保留表格数据，仅刷新图表配置
 		 */		
-		public function updateChartConfig():void
-		{
-			this.chartProxy.reset();
-			this.chartProxy.setConfig(configXML);
-			createSeries();
-			upateTitlesData();
-		}
-		
-		/**
-		 * 更新表格和图表配置数据;
-		 */		
-		public function updateData():void
-		{
-			dataGrid.clear();
-			
-			updateChartConfig();
-			
-			var curData:Array = [];
-			var vo:Object;
-			for each (var item:XML in configXML.data.children())
-			{
-				vo = new Object();
-				XMLVOMapper.pushAppedXMLDataToVO(item, vo);
-				curData.push(vo);
-			}
-			
-			// 删除模板文件的数据节点，只用到配置部分；数据采用表格中的
-			delete configXML.data;
-			
-			dataGrid.data = curData;
-			dataGrid.render();
-			
-			chartProxy.resetDataFields();
-		}
-		
-		/**
-		 */		
-		private function upateTitlesData():void
+		internal function resetTitles():void
 		{
 			titleLabel.reset();
-			titleLabel.text = chartProxy.title;
-			
 			hTitleLabel.reset();
-			hTitleLabel.text = chartProxy.hTitle;
-			
 			vTitleLabel.reset();
+		}
+		
+		/**
+		 */		
+		internal function upateTitlesData():void
+		{
+			titleLabel.text = chartProxy.title;
+			hTitleLabel.text = chartProxy.hTitle;
 			vTitleLabel.text = chartProxy.vTitle;
-			//vTitleLabel.disEnable();
 		}
 		
 		/**
@@ -486,41 +266,9 @@ package edit
 		public var data:Array = [];
 		
 		/**
-		 * 根据模板创建并分配序列
-		 * 
-		 * 数据输入按照配置数据映射，输出时进行数据分组，并重新分配
-		 * 
-		 * 序列的数据字段
-		 */		
-		private function createSeries():void
-		{
-			var startColumnFieldIndex:uint = 1;
-			var endColumnFileIndex:uint;
-			
-			var seriesColumnLen:uint;
-			var series:SeriesProxy;
-			var type:String;
-			
-			for each (var sXML:XML in configXML.series.children())
-			{
-				type = sXML.name().toString()
-				series = this.chartProxy.getSeriesByType(type);
-					
-				seriesColumnLen = this.chartProxy.getColumnLenByChartType(type);
-				endColumnFileIndex = startColumnFieldIndex + seriesColumnLen - 1;
-				
-				setSeriesColumns(series, startColumnFieldIndex, endColumnFileIndex);
-				series.setFieldsByXML(sXML);
-				chartProxy.addSeries(series);
-				
-				startColumnFieldIndex = endColumnFileIndex + 1;
-			}
-		}
-		
-		/**
 		 * 动态获取图表的配置文件
 		 */		
-		public function getChartConfigXML():XML
+		public function getChartConfigXMLForRender():XML
 		{
 			if (ifDataChanged)
 				currentConfig = this.chartProxy.getConfigXML();;
@@ -556,7 +304,7 @@ package edit
 		/**
 		 * 动态获取图表的数据
 		 */		
-		public function getChartData():Array
+		public function getChartDataForRender():Array
 		{
 			var result:Array = [];
 			
@@ -585,16 +333,16 @@ package edit
 		
 		/**
 		 */		
-		private var configXML:XML = null;
+		internal var configXML:XML = null;
 			
 		/**
 		 * 图表的代理器，负责图表配置，坐标轴配置模型
 		 */			
-		private var chartProxy:ChartProxy = new ChartProxy;
+		internal var chartProxy:ChartProxy = new ChartProxy;
 		
 		/**
 		 */		
-		private var dataGrid:DataGrid = new DataGrid;
+		internal var dataGrid:DataGrid = new DataGrid;
 		
 		/**
 		 * 表格宽度
@@ -635,6 +383,8 @@ package edit
 		{
 			_gridW = value;
 		}
+		
+		
 		
 		
 		
@@ -785,7 +535,7 @@ package edit
 			{
 				newSeries = this.chartProxy.getSeriesByType(draggingSeriesType);
 				setSeriesColumns(newSeries, dropStartColumnIndex, dropEndColumnIndex);
-				newSeries.setField(draggingSeriesType, dropStartColumnIndex, dropEndColumnIndex);
+				newSeries.setField();
 				chartProxy.addSeries(newSeries);
 				newSeries.verifyFieldData(this.dataGrid.verifyColumnData);
 			}
@@ -797,13 +547,12 @@ package edit
 				
 				newSeries = this.chartProxy.getSeriesByType(draggingSeriesType);
 				setSeriesColumns(newSeries, dropStartColumnIndex, dropEndColumnIndex);
-				newSeries.setField(draggingSeriesType, dropStartColumnIndex, dropEndColumnIndex);
+				newSeries.setField();
 				chartProxy.addSeries(newSeries);
 				
 				newSeries.reName(oldSeries.name);
 				
 				newSeries.verifyFieldData(this.dataGrid.verifyColumnData);
-				
 			}
 			else// 此时无法加入序列
 			{
@@ -814,11 +563,10 @@ package edit
 			}
 		}
 		
-		
 		/**
 		 * 设置序列的列序号及所包含的表格列
 		 */		
-		private function setSeriesColumns(series:SeriesProxy, startFieldIndex:uint, endFieldIndex:uint):void
+		internal function setSeriesColumns(series:SeriesProxy, startFieldIndex:uint, endFieldIndex:uint):void
 		{
 			series.columns.push(this.dataGrid.columns[0]);
 			series.columns = series.columns.concat(this.dataGrid.columns.slice(startFieldIndex, endFieldIndex + 1));
@@ -840,6 +588,257 @@ package edit
 		{
 		}
 		
+
+		
+		
+		
+		
+		//------------------------------------------------------------
+		//
+		// 初始化
+		//
+		//------------------------------------------------------------
+		
+		/**
+		 */		
+		private function init():void
+		{
+			dataControl = new DataControl(this);
+			
+			dataGrid.addEventListener(DataGridEvent.UPDATA_SEIZE, updateDataGridSizeHandler, false, 0, true);
+			dataGrid.gridW = 810;
+			dataGrid.gridH = this.h - 180 - gutterTop// 上下空白;
+			
+			dataGrid.x = (this.w - dataGrid.gridW) * 0.5;
+			dataGrid.y = gutterTop + (this.h - gutterTop - dataGrid.gridH) * 0.5;
+			addChild(dataGrid);
+			
+			dataGrid.preRender();
+			dataGrid.fillColumnBG(0);
+			dataGrid.setColumnTextFormat(0, new TextFormat("微软雅黑", 12, 0, false, true));
+			
+			// 背景
+			renderBG();
+			
+			chartProxy.x = dataGrid.x;
+			chartProxy.y = dataGrid.y;
+			addChild(chartProxy);
+			
+			initTitles();
+			initEditPanel();
+			
+			this.addChild(chartTypePanel);
+			chartTypePanel.render();
+			chartTypePanel.x = this.dataGrid.x + dataGrid.gridW - chartTypePanel.w;
+			chartTypePanel.y = dataGrid.y;
+			
+			var rect:Rectangle = this.getBounds(this);
+			chartTypePanel.setDragRect(rect);
+			
+			//拖放控制器
+			dragDropper = new DragDropper(stage);
+			dragDropper.addSender(chartTypePanel);
+			dragDropper.addReceiver(this, dataGrid, 90);
+			
+			chartProxy.addEventListener(SeriesHeaderEvt.HEADER_SELECT, headerSelectedHandler, false, 0, true);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, stateDownForHeader, false, 0, true);
+		}
+		
+		/**
+		 */		
+		private function initEditPanel():void
+		{
+			addChild(editPanel);
+			
+			XMLVOMapper.fuck(editPanleStyleXML, editPanelStyle);
+			
+			editPanel.graphics.clear();
+			editPanelStyle.width = this.w;
+			editPanelStyle.height = gutterTop;
+			StyleManager.drawRect(editPanel, editPanelStyle);
+			
+			importBtn.w = 80;
+			importBtn.h = 26;
+			importBtn.x = 20;
+			importBtn.y = (gutterTop - importBtn.h) / 2;
+			importBtn.text = "导入文件";
+			importBtn.tips = "导入包含数据和图表配置的文件"
+			importBtn.labelStyleXML = btnLabelStyle;
+			importBtn.bgStyleXML = btnStyle;
+			importBtn.render();
+			importBtn.addEventListener(MouseEvent.CLICK, dataControl.browseFileHandler, false, 0, true);
+			editPanel.addChild(importBtn);
+			
+			clearGridDataBtn.w = resetBtn.w = 80;
+			clearGridDataBtn.h = resetBtn.h = 26;
+			
+			resetBtn.x = importBtn.x + importBtn.w + 10;
+			
+			clearGridDataBtn.x = resetBtn.x + resetBtn.w  + 10;
+			clearGridDataBtn.y = resetBtn.y = (gutterTop - clearGridDataBtn.h) / 2;
+			
+			clearGridDataBtn.text = "清空表格";
+			clearGridDataBtn.tips = "删除表格中的数据";
+			
+			resetBtn.text = "重设所有";
+			resetBtn.tips = "清空表格数据和图表配置";
+			
+			clearGridDataBtn.labelStyleXML = resetBtn.labelStyleXML = btnLabelStyle;
+			clearGridDataBtn.bgStyleXML = resetBtn.bgStyleXML = btnStyle;
+			
+			clearGridDataBtn.render();
+			resetBtn.render();
+			clearGridDataBtn.addEventListener(MouseEvent.CLICK, clearGridDataHandler, false, 0, true);
+			resetBtn.addEventListener(MouseEvent.CLICK, resetAllHandler, false, 0, true);
+			editPanel.addChild(clearGridDataBtn);
+			editPanel.addChild(resetBtn);
+		}
+		
+		/**
+		 */		
+		private var importBtn:LabelBtn = new LabelBtn;
+		
+		/**
+		 */		
+		private var resetBtn:LabelBtn = new LabelBtn;
+		
+		/**
+		 */		
+		private var clearGridDataBtn:LabelBtn = new LabelBtn;
+		
+		/**
+		 */		
+		private var gutterTop:uint = 50;
+		
+		/**
+		 */		
+		private var editPanel:Sprite = new Sprite;
+		
+		
+		/**
+		 */		
+		private var editPanelStyle:Style = new Style;
+		
+		/**
+		 */		
+		private var editPanleStyleXML:XML = <style>
+												<border color="EEEEEE"/>
+												<fill color="#EFEFEF, #EFEFEF" alpha="0.3,0.3" angle="-90"/>
+											</style>
+		
+		/**
+		 */		
+		override public function renderBG():void
+		{
+			super.renderBG();
+			this.graphics.beginFill(0xEEEEEE);
+			this.graphics.drawRoundRect(dataGrid.x - dis, dataGrid.y - dis, 
+				dataGrid.gridW + 2 * dis, dataGrid.gridH + 2 * dis, 5, 5);
+		}
+		
+		/**
+		 */		
+		private function initTitles():void
+		{
+			titleLabel.defaultTxt = "请输入主标题";
+			titleLabel.w = 30;
+			titleLabel.render();
+			titleLabel.x = (this.w - titleLabel.w) / 2;
+			titleLabel.y = gutterTop + 15;
+			titleLabel.addEventListener(Event.CHANGE, titleChanged, false, 0, true);
+			titleLabel.addEventListener(Event.RESIZE, resizeTitle, false, 0, true);
+			this.addChild(titleLabel);
+			
+			hTitleLabel.defaultTxt = '请输入横轴标题';
+			hTitleLabel.setTextFormat(14);
+			hTitleLabel.w = 30;
+			hTitleLabel.render();
+			hTitleLabel.x = (this.w - hTitleLabel.w) / 2;
+			layoutHTitileY();
+			hTitleLabel.addEventListener(Event.CHANGE, hTitleChanged, false, 0, true);
+			hTitleLabel.addEventListener(Event.RESIZE, resizeHTitle, false, 0, true);
+			this.addChild(hTitleLabel);
+			
+			vTitleLabel.defaultTxt = '请输入纵轴标题';
+			vTitleLabel.setTextFormat(14);
+			vTitleLabel.w = 30;
+			vTitleLabel.render();
+			vTitleLabel.toImgMode();
+			vTitleLabel.setRotation(- 90);
+			vTitleLabel.x = (this.dataGrid.x - vTitleLabel.h) / 2;
+			layoutVTitleY();
+			vTitleLabel.addEventListener(Event.CHANGE, vTitleChanged, false, 0, true);
+			vTitleLabel.addEventListener(Event.RESIZE, resizeVTitle, false, 0, true);
+			
+			vTitleLabel.addEventListener(Event.SELECT, vTitleSelected, false, 0, true);
+			vTitleLabel.addEventListener(Event.MOUSE_LEAVE, vTitleUnSelected, false, 0, true);
+			
+			this.addChild(vTitleLabel);
+		}
+		
+		/**
+		 */		
+		private var btnStyle:XML = <states>
+										<normal radius="3">
+											<border color="#DDDDDD" pixelHinting="true"/>
+											<fill color='#EEEEEE' alpha='1'/>
+										</normal>
+										<hover radius="3">
+											<border color="#CCCCCC" pixelHinting="true"/>
+											<fill color='#DDDDDD' alpha='1'/>
+										</hover>
+										<down radius="3">
+											<border color="#BBBBBB" pixelHinting="true"/>
+											<fill color='#CCCCCC' alpha='1'/>
+										</down>
+									</states>;
+		
+		/**
+		 */		
+		private var btnLabelStyle:XML = <label>
+											<format color='666666' font='微软雅黑' size='12' letterSpacing="2"/>
+											<text>
+												<effects>
+													<shadow color='FFFFFF' distance='1' angle='90' blur='1' alpha='0.9'/>
+												</effects>
+											</text>
+										</label>
+			
+		
+		
+		
+		
+		
+		//------------------------------------------------------------
+		//
+		//
+		// 导入导出数据， 图表数据与表格数据时分开的
+		// 
+		//
+		//--------------------------------------------------------------
+		
+		/**
+		 * 
+		 */		
+		public function importData():void
+		{
+			
+		}
+		
+		/**
+		 */		
+		public function exportConfig():XML
+		{
+			return chartProxy.exportConfig();
+		}
+		
+		/**
+		 */		
+		public function expertData():XML
+		{
+			return null; 
+		}
+		
 		/**
 		 * 对于大多数图表类型，dropStartColumnIndex 与  dropEndColumnIndex
 		 * 
@@ -859,6 +858,10 @@ package edit
 		/**
 		 */		
 		private var dragDropper:DragDropper;
+		
+		/**
+		 */		
+		private var dataControl:DataControl;
 		
 	}
 }

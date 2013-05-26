@@ -1,4 +1,4 @@
-package edit.dragDrop
+package ui.dragDrop
 {
 	import flash.display.DisplayObject;
 	import flash.events.IEventDispatcher;

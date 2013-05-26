@@ -1,4 +1,4 @@
-package edit.dragDrop
+package ui.dragDrop
 {
 	import com.fiCharts.utils.Map;
 

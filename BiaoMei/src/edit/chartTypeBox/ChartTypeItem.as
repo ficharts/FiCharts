@@ -1,6 +1,6 @@
 package edit.chartTypeBox
 {
-	import edit.dragDrop.DragDropEvent;
+	import ui.dragDrop.DragDropEvent;
 
 	/**
 	 * 代表序列类型，通过拖拽此完成创建和替换序列

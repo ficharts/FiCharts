@@ -67,6 +67,7 @@ package preview.stylePanel
 										</down>
 									</states>
 				
+				styleItem.tips = item.@tips;
 				styleItem.ready();
 				boxLayout.horiLayout(styleItem);
 				styleItem.render();
@@ -109,9 +110,9 @@ package preview.stylePanel
 		/**
 		 */		
 		private var styleConfig:XML = <charts>
-										<item type='Simple' img="simple"/>
-										<item type='Classic' img="classic"/>
-										<item type='Black' img="black"/>
+										<item type='Simple' img="simple" tips="清爽样式"/>
+										<item type='Classic' img="classic" tips="经典样式"/>
+										<item type='Black' img="black" tips="酷黑样式"/>
 									</charts>
 	}
 }

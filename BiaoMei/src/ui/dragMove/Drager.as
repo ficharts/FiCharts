@@ -1,4 +1,4 @@
-package edit.chartTypeBox
+package ui.dragMove
 {
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -15,7 +15,7 @@ package edit.chartTypeBox
 			this.dragArea = dragArea;
 			this.dragTarget = dragTarget;
 			
-			dragArea.addEventListener(MouseEvent.MOUSE_DOWN, downHandler, false, 0, true);
+			dragArea.addEventListener(MouseEvent.MOUSE_DOWN, startDragHandler, false, 0, true);
 		}
 		
 		/**
@@ -25,6 +25,17 @@ package edit.chartTypeBox
 		{
 			this.dragRect = rect;
 			//rect.bottom -= bottomPadding;
+		}
+		
+		/**
+		 */		
+		private function stopMoveHandler(evt:MouseEvent):void
+		{
+			dragArea.stage.removeEventListener(MouseEvent.MOUSE_MOVE, moveHandler);
+			dragArea.stage.removeEventListener(MouseEvent.MOUSE_UP, stopMoveHandler);
+			dragTarget.cacheAsBitmap = false;
+			
+			(dragTarget as IDragTarget).stopDragHandler();
 		}
 		
 		/**
@@ -38,7 +49,7 @@ package edit.chartTypeBox
 		
 		/**
 		 */		
-		private function downHandler(evt:MouseEvent):void
+		private function startDragHandler(evt:MouseEvent):void
 		{
 			dragArea.stage.addEventListener(MouseEvent.MOUSE_MOVE, moveHandler, false, 0, true);
 			dragArea.stage.addEventListener(MouseEvent.MOUSE_UP, stopMoveHandler, false, 0, true);
@@ -50,6 +61,7 @@ package edit.chartTypeBox
 			startY = dragTarget.y;
 			
 			dragTarget.cacheAsBitmap = true;
+			(dragTarget as IDragTarget).startDragHandler();
 		}
 		
 		/**
@@ -94,15 +106,6 @@ package edit.chartTypeBox
 			dragTarget.y = newY; 
 			
 			evt.updateAfterEvent();
-		}
-		
-		/**
-		 */		
-		private function stopMoveHandler(evt:MouseEvent):void
-		{
-			dragArea.stage.removeEventListener(MouseEvent.MOUSE_MOVE, moveHandler);
-			dragArea.stage.removeEventListener(MouseEvent.MOUSE_UP, stopMoveHandler);
-			dragTarget.cacheAsBitmap = false;
 		}
 		
 		/**

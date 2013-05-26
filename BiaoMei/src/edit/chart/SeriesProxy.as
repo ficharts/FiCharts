@@ -6,12 +6,14 @@ package edit.chart
 	import com.greensock.TweenLite;
 	import com.greensock.easing.Back;
 	
-	import edit.IconBtn;
+	import edit.chart.header.SeriesHeader;
 	
 	import fl.transitions.easing.Bounce;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	
+	import ui.IconBtn;
 
 	/**
 	 * 每个序列默认映射两列表格数据，位置与index有关
@@ -47,7 +49,7 @@ package edit.chart
 		}
 		
 		/**
-		 * 验证数据列的数据有效性，用于表格先有数据，
+		 * 验证数据列的数据有效性，由于表格先有数据，
 		 * 
 		 * 添加/改变序列时验证数据的有效性
 		 */		
@@ -108,10 +110,10 @@ package edit.chart
 		/**
 		 * 根据序列类型和字段列序号动态组合出字段
 		 */		
-		public function setField(type:String, startIndex:uint, endIndex:uint):void
+		public function setField():void
 		{
 			xField = ChartProxy.SHARE_FIELD;
-			yField = type + startIndex;
+			yField = type + this.startColumnIndex;
 			
 			//this.name = "序列" + this.startColumnIndex;
 			
@@ -191,7 +193,7 @@ package edit.chart
 		
 		/**
 		 */		
-		internal function deleteThisHandler(evt:MouseEvent):void
+		public function deleteThisHandler(evt:MouseEvent):void
 		{
 			this.del();
 		}
@@ -238,14 +240,14 @@ package edit.chart
 		
 		/**
 		 */		
-		internal function get headHeight():Number
+		public function get headHeight():Number
 		{
 			return 35;
 		}
 		
 		/**
 		 */		
-		internal function get headWidth():Number
+		public function get headWidth():Number
 		{
 			if (columns.length)
 			{
@@ -336,6 +338,13 @@ package edit.chart
 		}
 		
 		/**
+		 */		
+		public function exportXML():XML
+		{
+			return <{this.type} name={this.name} startIndex={this.startColumnIndex} endIndex={this.endColumnIndex}/>
+		}
+		
+		/**
 		 * 序列序号 
 		 */		
 		private var _index:uint = 0;
@@ -416,7 +425,7 @@ package edit.chart
 		
 		/**
 		 */		
-		internal var ifRename:Boolean = false;
+		public var ifRename:Boolean = false;
 
 		/**
 		 */

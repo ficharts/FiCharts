@@ -1,4 +1,4 @@
-package
+package ui
 {
 	import com.fiCharts.charts.toolTips.ToolTipHolder;
 	import com.fiCharts.charts.toolTips.ToolTipsEvent;
@@ -7,6 +7,8 @@ package
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 
+	/**
+	 */	
 	public class TipsHolder
 	{
 		/**
@@ -23,6 +25,33 @@ package
 		
 		/**
 		 */		
+		private var isShowing:Boolean = false;
+		
+		/**
+		 */		
+		public function disEnable():void
+		{
+			if (isShowing)
+			{
+				_hideTips();
+			}
+			
+			isEnable = false;
+		}
+		
+		/**
+		 */		
+		private var isEnable:Boolean = true;
+		
+		/**
+		 */		
+		public function enable():void
+		{
+			isEnable = true;
+		}
+		
+		/**
+		 */		
 		private function get target():EventDispatcher
 		{
 			return _target as EventDispatcher
@@ -32,8 +61,12 @@ package
 		 */		
 		private function overHandler(evt:MouseEvent):void
 		{
-			if (RexUtil.ifTextNull(_target.tips) == false)
+			if (isEnable && RexUtil.ifTextNull(_target.tips) == false)
+			{
+				
 				target.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.SHOW_TOOL_TIPS, tipsVO));
+				isShowing = true;
+			}
 		}
 		
 		/**
@@ -44,7 +77,15 @@ package
 		 */		
 		private function outHandler(evt:MouseEvent):void
 		{
+			_hideTips();
+		}
+		
+		/**
+		 */		
+		private function _hideTips():void
+		{
 			target.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
+			isShowing = false;
 		}
 		
 		/**

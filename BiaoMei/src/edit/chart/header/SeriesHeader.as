@@ -1,4 +1,4 @@
-package edit.chart
+package edit.chart.header
 {
 	import com.fiCharts.utils.ClassUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -10,9 +10,11 @@ package edit.chart
 	import com.fiCharts.utils.graphic.StyleManager;
 	import com.greensock.TweenLite;
 	
-	import edit.IconBtn;
-	import edit.LabelInput;
-	import edit.LabelInputEvent;
+	import ui.IconBtn;
+	import ui.LabelInput;
+	import ui.LabelInputEvent;
+	import edit.chart.SeriesHeaderEvt;
+	import edit.chart.SeriesProxy;
 	import edit.chartTypeBox.ChartTypePanel;
 	
 	import flash.display.BitmapData;
@@ -46,6 +48,7 @@ package edit.chart
 		 */		
 		public var ifOver:Boolean = false;
 		
+
 		/**
 		 */		
 		private function headerClickHandler(evt:MouseEvent):void
@@ -75,6 +78,7 @@ package edit.chart
 				headBottom.visible = true;
 				
 				this.nameTxtField.setFocus();
+				headTop.isInteractive = false;
 				ifSelected = true;
 			}
 		}
@@ -91,6 +95,7 @@ package edit.chart
 				//nameTxtField.leave();
 				//headBottom.mouseChildren = headBottom.mouseEnabled = false;
 				TweenLite.to(headBottom, 0.3, {alpha: 0, onComplete:closed});
+				headTop.isInteractive = true;
 				ifSelected = false;
 			}
 		}
@@ -104,7 +109,7 @@ package edit.chart
 		
 		/**
 		 */		
-		internal var ifSelected:Boolean = false;
+		public var ifSelected:Boolean = false;
 		
 		/**
 		 */		
@@ -243,6 +248,7 @@ package edit.chart
 			delBtn.render();
 			delBtn.x = (series.headWidth - delBtn.width - 5);
 			delBtn.y = 5//(series.headHeight - delBtn.height)// / 2;
+			delBtn.tips = "删除图表，保留数据"
 			delBtn.addEventListener(MouseEvent.CLICK, series.deleteThisHandler, false, 0, true);
 			this.addChild(delBtn);
 		}
@@ -282,7 +288,7 @@ package edit.chart
 		
 		/**
 		 */		
-		internal function ready():void
+		public function ready():void
 		{
 //			/headBottom.height = h;	
 			
@@ -337,7 +343,7 @@ package edit.chart
 		
 		/**
 		 */		
-		private var headTop:Sprite = new Sprite;
+		private var headTop:HeaderTop = new HeaderTop;
 		
 		/**
 		 */		

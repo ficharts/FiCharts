@@ -12,7 +12,7 @@ package preview
 	import flash.events.MouseEvent;
 	import flash.geom.Rectangle;
 	
-	import navBar.LabelBtn;
+	import ui.LabelBtn;
 	
 	/**
 	 */	

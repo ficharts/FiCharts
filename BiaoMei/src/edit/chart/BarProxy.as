@@ -72,9 +72,9 @@ package edit.chart
 		/**
 		 * 根据序列类型和字段列序号动态组合出字段
 		 */		
-		override public function setField(type:String, startIndex:uint, endIndex:uint):void
+		override public function setField():void
 		{
-			xField = type + startIndex;
+			xField = type + this.startColumnIndex;
 			yField = ChartProxy.SHARE_FIELD;
 			
 			//this.name = "序列" + this.startColumnIndex;
