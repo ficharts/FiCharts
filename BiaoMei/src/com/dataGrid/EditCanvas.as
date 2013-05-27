@@ -1,11 +1,10 @@
 ﻿package com.dataGrid 
 {
-	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.greensock.TweenLite;
 	
-	import edit.chart.ChartProxy;
+	import com.biaomei.edit.chart.ChartProxy;
 	
 	import flash.display.BitmapData;
 	import flash.display.Shape;
@@ -13,12 +12,9 @@
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
-	import flash.events.TextEvent;
 	import flash.filters.GlowFilter;
 	import flash.text.TextField;
 	import flash.ui.Keyboard;
-	
-	import flashx.textLayout.elements.BreakElement;
 
 	/**
 	 * 单元格数据的绘制与编辑

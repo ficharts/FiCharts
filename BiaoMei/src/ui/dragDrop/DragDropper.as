@@ -17,7 +17,7 @@ package ui.dragDrop
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
-	import navBar.INav;
+	import com.biaomei.navBar.INav;
 
 	/**
 	 * 一个拖放控制器，包含一个发送者和接受者

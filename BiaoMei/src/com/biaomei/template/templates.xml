@@ -1,0 +1,209 @@
+<template>
+	<chart type='new' img='./assets/add.jpg'  tips="创建新图表">
+	</chart>
+	
+	
+	<chart type='line' img='./assets/line.jpg' tips="趋势图">
+		<config title='2013年中国移动开发者已开发及未来计划开发应用类型变化'>
+			<axis>
+				<x type="field" title="" />
+				<y type="linear" title="" />
+			</axis>
+			<series>
+				<line xField='label' yField='value' name='过去已开发过'/>
+				<line xField='label' yField='valueB' name='未来计划开发'/>
+			</series>
+			<data>
+				<set label='搜索类' value='5.7%' valueB='9.7%'/>
+				<set label='手机安全' value='7.7%' valueB='7.7%'/>
+				<set label='手机浏览器' value='6.5%' valueB='10.3%'/>
+				<set label='移动支付' value='9.7%' valueB='10.5%'/>
+				<set label='广告&营销类' value='7.7%' valueB='13.2%'/>
+				<set label='网购类' value='13.8%' valueB='22.5%'/>
+				<set label='音乐类' value='13.2%' valueB='14.6%'/>
+				<set label='视频类' value='11.5%' valueB='12.5%'/>
+				<set label='学习类' value='21.7%' valueB='9.5%'/>
+				<set label='美化类' value='12.6%' valueB='18.8%'/>
+				<set label='微博类' value='14.2%' valueB='16.0%'/>
+				<set label='LBS应用' value='11.7%' valueB='13.2%'/>
+				<set label='LBS应用' value='11.7%' valueB='13.2%'/>
+				<set label='电子书' value='33.2%' valueB='9.9%'/>
+				<set label='管理工具' value='14.6%' valueB='17.4%'/>
+				<set label='SNS社区' value='12.1%' valueB='16.6%'/>
+				<set label='生活消费' value='13.8%' valueB='14.2%'/>
+				<set label='手机网游' value='39.9%' valueB='24.3%'/>
+				<set label='手机游戏' value='40.7%' valueB='25.5%'/>
+			</data>
+		</config>
+	</chart>
+	
+	<chart type='area' img='./assets/area.jpg' tips="区域图">
+		<config title='Facebook移动端月活跃用户量' ySuffix="万">
+			<axis>
+				<x type="field" title="" />
+				<y type="linear" title="" />
+			</axis>
+			<series>
+				<area xField='label' yField='value' />
+			</series>
+			<data>
+				<set label='Q1,12' value='0.83亿'/>
+				<set label='Q2,12' value='1.02亿'/>
+				<set label='Q3,12' value='1.26亿'/>
+				<set label='Q4,12' value='1.57亿'/>
+				<set label='Q1,13' value='1.89亿'/>
+			</data>
+		</config>
+	</chart>
+	
+	<chart type='pie' img='./assets/pie.jpg' tips="饼图">
+		<config title='2013年第20周单片票房比例图'>
+			<dataFormatter precision='5'/>
+			<series>
+				<pie xField='label' yField='value'/>
+			</series>
+			<data>
+				<set label='中国合伙人' value='1.04亿' />
+				<set label='钢铁侠' value='0.826亿' />
+				<set label='致我们终将逝去的青春' value='0.574亿'/>
+				<set label='遗落战境' value='0.532亿' />
+				<set label='疯狂原始人' value='0.385亿' />
+				<set label='被解救的姜戈' value='0.095亿' />
+				<set label='临终囧事' value='0.036亿' />
+				<set label='同谋' value='0.0037亿' />
+			</data> 
+		</config>
+	</chart>
+	
+	<chart type='column' img='./assets/column.jpg' tips="柱状图">
+		<config title='2013年Q1国内互联网巨头营收及净利润' ySuffix="万">
+			<axis>
+				<x type="field" title="" />
+				<y type="linear" title="单位:亿美元" />
+			</axis>
+			<series>
+				<column xField='label' name='营收' yField='value' />
+				<column xField='label' name='净利润' yField='valueB' />
+			</series>
+			<data>
+				<set label='腾讯' value='21.61亿' valueB='6.494亿'/>
+				<set label='百度' value='9.61亿' valueB='3.289亿'/>
+				<set label='网易' value='3.64亿' valueB='1.710亿'/>
+				<set label='搜狐' value='3.08亿' valueB='0.228亿'/>
+				<set label='新浪' value='1.26亿' valueB='-0.132亿'/>
+				<set label='360' value='1.10亿' valueB='0.056亿'/>
+			</data>
+		</config>
+	</chart>
+	
+
+	<chart type='bar' img='./assets/bar.jpg' tips="条形图">
+		<config title='2013年移动互联网用户经常使用的手机客户端或APP数量分布'>
+			<axis>
+				<x type='field' title='' />
+				<y type='linear' title='' />
+			</axis>
+			<series>
+				<bar name='' xField='value' yField='label' />
+			</series>
+			<data>
+				<set label='1~2个' value='14.9%'/>
+				<set label='3~5个' value='32.1%'/>
+				<set label='6~10个' value='26.9%'/>
+				<set label='11~20个' value='14.1%'/>
+				<set label='21~50个' value='6.1%'/>
+				<set label='50个以上' value='2.7%'/>
+				<set label='不使用任何手机软件' value='3.1%'/>
+			</data>
+		</config>
+	</chart>
+	
+	<chart type='stackedColumn' img='./assets/stackedColumn.jpg' tips="堆积柱状图">
+		<config title='2012年Q4与2013年Q1新浪微博营收规模及结构'>
+			<axis>
+				<x type='linear' title='' />
+				<y type='field' title='' />
+			</axis>
+			<series>
+				<stackedColumn name='广告营收' xField='label' yField='valueA' />
+				<stackedColumn name='增值服务收入' xField='label' yField='valueB' />
+			</series>
+			<data>
+				<set label='2012年Q4' valueA='2131万' valueB='720万' />
+				<set label='2013年Q1' valueA='1880万' valueB='700万' />
+			</data>
+		</config>
+	</chart>
+
+	<chart type='stackedBar' img='./assets/stackedBar.jpg' tips="堆积条形图">
+		<config title='2011-2013年中国移动开发者应用开发盈利状况变化'>
+			<axis>
+				<x type='field' title='' />
+				<y type='linear' title='' />
+			</axis>
+			<series>
+				<stackedBar name='盈利' xField='valueA' yField='label' />
+				<stackedBar name='持平' xField='valueB' yField='label' />
+				<stackedBar name='亏损' xField='valueC' yField='label' />
+			</series>
+			<data>
+				<set label='2011年' valueA='25.2%' valueB='40.4%' valueC='34.4%'/>
+				<set label='2012年' valueA='29.5%' valueB='37.2%' valueC='33.3%'/>
+				<set label='2013年' valueA='39.2%' valueB='43.5%' valueC='17.3%'/>
+			</data>
+		</config>
+	</chart>
+
+	<chart type='bubble' img='./assets/bubble.jpg' tips="气泡图">
+		<config title='降雨量与颗粒分布'>
+			<axis>
+				<x type='field' title='日期' />
+				<y type='linear' title='日降雨量' />
+			</axis>
+			<series>
+				<bubble xField='label' yField='valueA' zField='valueB'/>
+			</series>
+			<data>
+				<set label='1/1/07' valueA='4.1' valueB='122'/>
+				<set label='1/2/07' valueA='4.3' valueB='117'/>
+				<set label='1/3/07' valueA='5.7' valueB='112'/>
+				<set label='1/4/07' valueA='5.4' valueB='114'/>
+				<set label='1/5/07' valueA='5.9' valueB='110'/>
+				<set label='1/6/07' valueA='5.0' valueB='114'/>
+				<set label='1/7/07' valueA='3.6' valueB='128'/>
+				<set label='1/8/07' valueA='1.9' valueB='137'/>
+				<set label='1/9/07' valueA='7.3' valueB='104'/>
+			</data>
+		</config>
+	</chart>
+	
+	<chart type='group' img='./assets/group.jpg' tips="组合图表">
+		<config title='手机新闻客户端评分排行榜'>
+			<axis>
+				<x type='field' title='app' />
+				<y type='linear' title='评分' />
+			</axis>
+			<series>
+				<column xField='label' yField='valueA' name='360手机助手评分'/>
+				<column xField='label' yField='valueB' name='豌豆荚评分'/>
+				<column xField='label' yField='valueC' name='安卓市场评分'/>
+				<line xField='label' yField='valueD' name='平均分'/>
+			</series>
+			<data>
+				<set label='百度新闻' valueA='6.6' valueB='8.5' valueC='4' valueD='6.37'/>
+				<set label='ZAKER(新闻阅读)' valueA='6.2' valueB='8.8' valueC='4' valueD='6.33'/>
+				<set label='腾讯新闻' valueA='5.4' valueB='9' valueC='3.5' valueD='5.97'/>
+				<set label='今日头条' valueA='4.8' valueB='8.2' valueC='3.5' valueD='5.50'/>
+				<set label='即时新闻' valueA='6' valueB='5.2' valueC='4.5' valueD='5.23'/>
+				<set label='经济新闻周刊' valueA='6' valueB='4' valueC='5' valueD='5.00'/>
+				<set label='会说话的汤姆猫和本播报新闻' valueA='4.8' valueB='7' valueC='3' valueD='4.93'/>
+				<set label='网易新闻' valueA='3.7' valueB='7.1' valueC='4' valueD='4.93'/>
+				<set label='凤凰新闻' valueA='4.1' valueB='6.4' valueC='3.5' valueD='4.67'/>
+				<set label='搜狐新闻' valueA='3.1' valueB='2.7' valueC='4.5' valueD='3.43'/>
+				<set label='掌中新浪' valueA='2.9' valueB='3' valueC='3.5' valueD='3.13'/>
+				<set label='蜜蜂新闻' valueA='0.9' valueB='0.9' valueC='4' valueD='1.93'/>
+			</data>
+		</config>
+	</chart>
+
+</template>

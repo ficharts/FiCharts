@@ -6,17 +6,17 @@ package
 	import com.fiCharts.utils.StageUtil;
 	import com.greensock.TweenLite;
 	
-	import edit.EditPage;
+	import com.biaomei.edit.EditPage;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.external.ExternalInterface;
 	
-	import navBar.NavTop;
+	import com.biaomei.navBar.NavTop;
 	
-	import preview.PreviewPage;
+	import com.biaomei.preview.PreviewPage;
 	
-	import template.TemplePage;
+	import com.biaomei.template.TemplePage;
 	
 	
 	/**

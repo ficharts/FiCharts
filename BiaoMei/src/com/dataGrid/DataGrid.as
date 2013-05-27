@@ -170,15 +170,36 @@
 		}
 		
 		/**
+		 */		
+		public function getDataFields():Array
+		{
+			var result:Array = [];
+			var columnIndex:uint = 0;
+			for each (var column:Column in columns)
+			{
+				if(column.dataField)
+					result.push(column.dataField);
+				else
+					result.push("field" + columnIndex);
+					
+				columnIndex += 1;
+			}
+			
+			return result;
+		}
+		
+		/**
 		 */
 		public function get data():Array
 		{
 			var value:Array = [];
 			var item:Object;
+			var columnIndex:uint = 0;
 			
 			for (var rowIndex:uint = 0; rowIndex < rows.length; rowIndex ++)
 			{
 				item = {};
+				columnIndex = 0;
 				for each(var column:Column in this.columns)
 				{
 					if(column.dataField)
@@ -186,6 +207,13 @@
 						if (rowIndex < column.data.length && column.data[rowIndex])
 							item[column.dataField] = column.data[rowIndex].label;
 					}
+					else
+					{
+						if (rowIndex < column.data.length && column.data[rowIndex])
+							item["field" + columnIndex] = column.data[rowIndex].label;
+					}
+					
+					columnIndex += 1;
 				}
 				
 				value.push(item);
@@ -205,8 +233,14 @@
 				soruceData = null;
 			}
 			
+			var index:uint = 0;
 			for each (var column:Column in this.columns)
+			{
 				column.clear();
+				column.dataField = "field" + index;
+				
+				index += 1;
+			}
 		}
 		
 		/**
@@ -293,7 +327,12 @@
 						field = columns[columnIndex].dataField;
 						
 						if (field)
+						{
+							if (item[field] == null)
+								item[field] = "";
+							
 							this.editCanvas.renderCell(columns[columnIndex], rowIndex, this.rows[rowIndex], item[field]);
+						}
 					}
 					
 					rowIndex ++;

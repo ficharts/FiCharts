@@ -23,6 +23,7 @@
         }
 
 		/**
+		 * 绘制背景网格，同时创建行列
 		 */		
         public function render(columns:Vector.<Column>, rows:Vector.<Row>) : void
         {
@@ -46,9 +47,13 @@
             while (temW < this.w)
             {
                 if (index >= columnLen)
+				{
 					column = columns[index] = new Column();
+				}
                 else
+				{
                     column = columns[index];
+				}
 				
 				column.x = temW;
 				column.width = this.defaultCellW;
