@@ -5,7 +5,6 @@ package com.fiCharts.charts.chart2D.core.axis
 	import com.fiCharts.charts.chart2D.core.model.Zoom;
 	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBar;
 	import com.fiCharts.charts.common.ChartDataFormatter;
-	import com.fiCharts.utils.ExternalUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
@@ -358,6 +357,17 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 			labelUI = createLabelUI(labelIndex);
 			temUintSize = minUintSize;//轴的尺寸刷新�minUintSize 会重新计算，避免之前的大尺寸和谐掉后继的小尺�
+			
+			// 自动调整label布局模式
+			if(isAutoLabelLayout)
+			{
+				if (labelUI.width > this.unitSize)
+					label.layout = autoLabelLayout;
+				else
+					label.layout = LabelStyle.NORMAL;
+			}
+			
+			
 			// 线性轴的label UI 每次渲染创建时都需要重新计� minUintSize ，因为每次的Label都是重新生成�
 			if (label.layout == LabelStyle.VERTICAL)
 			{
@@ -405,6 +415,45 @@ package com.fiCharts.charts.chart2D.core.axis
 			
 		}
 		
+		/**
+		 * 开启后，横向坐标轴自动计算label的布局方式，label宽度大于单元格宽度则旋转label
+		 */
+		public function get isAutoLabelLayout():Object
+		{
+			return _isAutoLabelLayout;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set isAutoLabelLayout(value:Object):void
+		{
+			_isAutoLabelLayout = XMLVOMapper.boolean(value);
+		}
+		
+		/**
+		 */		
+		private var _isAutoLabelLayout:Object = false;
+		
+		/**
+		 */		
+		private var _autoLabelLayout:String = "rotation";
+
+		/**
+		 */
+		public function get autoLabelLayout():String
+		{
+			return _autoLabelLayout;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set autoLabelLayout(value:String):void
+		{
+			_autoLabelLayout = value;
+		}
+
 		/**
 		 */		
 		private function drawHoriLabelUI(labelUI:BitmapData, valuePositon:Number):void

@@ -3,11 +3,8 @@
 	<type>Intranet</type>
 	<servers>
 		<url>www.ficharts.com</url>
-		
-		<!---试用版License-->
-		<url>127.0.0.1</url>
-		<url>lingtu.com</url>
-		<url>202.204.71.211</url>
+		<url>apps.weibo.com</url>
+		<url>biaomei.sinaapp.com</url>
 	</servers>
 	<desc>未授权版本,内部试用</desc>
 </license>

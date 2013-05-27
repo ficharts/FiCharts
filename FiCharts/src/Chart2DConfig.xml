@@ -842,7 +842,7 @@
 				</title>
 				<tickMark color='E4E2E2' thikness='1' alpha='0'/>
 				<label format='FontFormat'>
-					<format color='9F9F9F'/>
+					<format color='575757'/>
 					<text value='${label}'/>
 				</label>
 			</xAxis>
@@ -852,7 +852,7 @@
 				</title>
 				<tickMark color='E4E2E2' alpha='0'/>
 				<label format='FontFormat'>
-					<format color='9F9F9F'/>
+					<format color='575757'/>
 					<text value='${label}'/>
 				</label>
 			</yAxis>
