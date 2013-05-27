@@ -1,22 +1,22 @@
 package
 {
+	import com.biaomei.edit.EditPage;
+	import com.biaomei.navBar.NavTop;
+	import com.biaomei.preview.PreviewPage;
+	import com.biaomei.template.TemplePage;
 	import com.dataGrid.DataGridEvent;
 	import com.fiCharts.charts.toolTips.ToolTipsManager;
 	import com.fiCharts.utils.ExternalUtil;
 	import com.fiCharts.utils.StageUtil;
 	import com.greensock.TweenLite;
 	
-	import com.biaomei.edit.EditPage;
-	
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.ContextMenuEvent;
 	import flash.external.ExternalInterface;
-	
-	import com.biaomei.navBar.NavTop;
-	
-	import com.biaomei.preview.PreviewPage;
-	
-	import com.biaomei.template.TemplePage;
+	import flash.net.URLRequest;
+	import flash.ui.ContextMenu;
+	import flash.ui.ContextMenuItem;
 	
 	
 	/**
@@ -65,6 +65,36 @@ package
 									</label>);
 			
 			initAPI();
+			initRightMenue();
+		}
+		
+		/**
+		 */		
+		private function initRightMenue():void
+		{
+			if (ContextMenu.isSupported)
+			{
+				var myContextMenu:ContextMenu = new ContextMenu();
+				myContextMenu.hideBuiltInItems();
+				var item:ContextMenuItem;
+				
+				item = new ContextMenuItem("版本v1.0.0");				
+				item.enabled = false;
+				myContextMenu.customItems.push(item);
+				
+				item = new ContextMenuItem("内核基于FiCharts");
+				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, aboutFiChartsHandler);
+				myContextMenu.customItems.push(item);
+			
+				this.contextMenu = myContextMenu;
+			}
+		}
+		
+		/**
+		 */		
+		private function aboutFiChartsHandler(evt:ContextMenuEvent):void
+		{
+			flash.net.navigateToURL(new URLRequest('http://www.ficharts.com'), '_blank');
 		}
 		
 		/**

@@ -1,12 +1,12 @@
 package com.biaomei.edit
 {
+	import com.biaomei.edit.chart.SeriesProxy;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	
-	import com.biaomei.edit.chart.SeriesProxy;
-	
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.net.FileFilter;
 	import flash.net.FileReference;
 	import flash.utils.ByteArray;
 
@@ -197,7 +197,7 @@ package com.biaomei.edit
 		 */		
 		internal function browseFileHandler(evt:MouseEvent):void
 		{
-			file.browse();
+			file.browse([new FileFilter("表魅文件(*.bm)", "*.bm", "bm" )]);
 		}
 		
 		/**
