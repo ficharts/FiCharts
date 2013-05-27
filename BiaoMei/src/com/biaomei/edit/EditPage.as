@@ -1,5 +1,10 @@
 package com.biaomei.edit
 {
+	import com.biaomei.edit.chart.ChartProxy;
+	import com.biaomei.edit.chart.SeriesHeaderEvt;
+	import com.biaomei.edit.chart.SeriesProxy;
+	import com.biaomei.edit.chart.header.SeriesHeader;
+	import com.biaomei.edit.chartTypeBox.ChartTypePanel;
 	import com.dataGrid.DataGrid;
 	import com.dataGrid.DataGridEvent;
 	import com.fiCharts.utils.StageUtil;
@@ -9,12 +14,6 @@ package com.biaomei.edit
 	import com.fiCharts.utils.graphic.StyleManager;
 	import com.fiCharts.utils.interactive.TipCanvasControl;
 	import com.greensock.TweenLite;
-	
-	import com.biaomei.edit.chart.ChartProxy;
-	import com.biaomei.edit.chart.SeriesHeaderEvt;
-	import com.biaomei.edit.chart.SeriesProxy;
-	import com.biaomei.edit.chart.header.SeriesHeader;
-	import com.biaomei.edit.chartTypeBox.ChartTypePanel;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -120,14 +119,18 @@ package com.biaomei.edit
 		 */		
 		private function layoutHTitileY():void
 		{
-			hTitleLabel.y = this.h / 2 + (this.dataGrid.height + this.dataGrid.y) / 2 - hTitleLabel.h / 2;
+			var py:Number = this.h / 2 + (this.dataGrid.height + this.dataGrid.y) / 2 - hTitleLabel.h / 2;
+			
+			TweenLite.to(hTitleLabel, 0.3, {y : py});
 		}
 		
 		/**
 		 */		
 		private function layoutVTitleY():void
 		{
-			vTitleLabel.y = h / 2 + vTitleLabel.w / 2;
+			var py:Number = h / 2 + vTitleLabel.w / 2;
+			
+			TweenLite.to(vTitleLabel, 0.3, {y : py});
 		}
 		
 		/**
@@ -156,7 +159,9 @@ package com.biaomei.edit
 		 */		
 		private function resizeTitle(evt:Event):void
 		{
-			titleLabel.x = (this.w - titleLabel.w) / 2;
+			var px:Number = (this.w - titleLabel.w) / 2;
+				
+			TweenLite.to(titleLabel, 0.3, {x : px});
 		}
 		
 		/**
@@ -170,7 +175,9 @@ package com.biaomei.edit
 		 */		
 		private function resizeHTitle(evt:Event):void
 		{
-			hTitleLabel.x = (this.w - hTitleLabel.w) / 2;
+			var px:Number =  (this.w - hTitleLabel.w) / 2;
+				
+			TweenLite.to(hTitleLabel, 0.3, {x : px});
 		}
 		
 		/**

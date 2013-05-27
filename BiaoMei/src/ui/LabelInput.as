@@ -647,15 +647,15 @@ package ui
 										</label>
 		/**
 		 */		
-		public var defaultStyleXML:XML = <style>
+		public var defaultStyleXML:XML = <style radius="6">
 											<fill color="FFFFFF" alpha='0'/>
 											<border color='#eeeeee' thikness='1' alpha='0' pixelHinting='true'/>
 										</style>
 		/**
 		 */		
-		public var selectStyleXML:XML = <style>
-											<fill color="DDDDDD" alpha='0.2'/>
-											<border color='#2494E6' thikness='1' alpha='1' pixelHinting='true'/>
+		public var selectStyleXML:XML = <style radius="6">
+											<fill color="EFEFEF" alpha='0.8'/>
+											<border color='#DDDDDD' thikness='1' alpha='1' pixelHinting='true'/>
 										</style>
 			
 			
