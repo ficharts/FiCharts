@@ -41,6 +41,10 @@ package com.biaomei.navBar
 		private function initPogressBar():void
 		{
 			this.graphics.clear();
+			
+			this.graphics.beginFill(0xFFFFFF);
+			this.graphics.drawRect(0, 0, this.w, this.h);
+			
 			this.graphics.beginFill(0xCCCCCC);
 			this.graphics.drawRect(0, this.h - progreesLineH, w, progreesLineH); 
 			this.graphics.endFill();

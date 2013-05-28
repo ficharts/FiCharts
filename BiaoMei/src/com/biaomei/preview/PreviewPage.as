@@ -313,6 +313,8 @@ package com.biaomei.preview
 		 */		
 		override public function renderBG():void
 		{
+			super.renderBG();
+			
 			// 绘制编辑面板背景
 			XMLVOMapper.fuck(this.editBgStyleXML, this.editBgStyle);
 			drawTopPanel(this.topGutter);
