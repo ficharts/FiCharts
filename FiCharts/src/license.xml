@@ -1,10 +1,16 @@
 <license>
 	<!-- Trial, web, Intranet, Enterprise, Enterprise_Plus, Desk, App-->
-	<type>Intranet</type>
+	<type>web</type>
 	<servers>
 		<url>www.ficharts.com</url>
 		<url>apps.weibo.com</url>
 		<url>biaomei.sinaapp.com</url>
+		
+		<url>rc.qzone.qq.com</url>
+		<url>user.qzone.qq.com</url>
+		<url>apps.pengyou.com</url>
+		
+		<url>1.ficharts.app100714346.twsapp.com</url>
 	</servers>
 	<desc>未授权版本,内部试用</desc>
 </license>

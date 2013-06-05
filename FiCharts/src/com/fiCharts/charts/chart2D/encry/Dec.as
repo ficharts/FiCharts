@@ -18,6 +18,7 @@ package com.fiCharts.charts.chart2D.encry
 	
 	import flash.display.Bitmap;
 	import flash.events.Event;
+	import flash.external.ExternalInterface;
 	import flash.utils.ByteArray;
 	import flash.utils.getDefinitionByName;
 
