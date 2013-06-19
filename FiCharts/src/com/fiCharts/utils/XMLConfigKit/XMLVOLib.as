@@ -42,6 +42,29 @@ package com.fiCharts.utils.XMLConfigKit
 		
 		
 		/**
+		 */		
+		public static function createLib(key:String):XMLVOLib
+		{
+			if (libs.containsKey(key))
+			{
+				return libs.getValue(key) as XMLVOLib;
+			}
+			else
+			{
+				var lib:XMLVOLib = new XMLVOLib;
+				libs.put(key, lib);
+				
+				return lib;
+			}
+		}
+		
+		/**
+		 */		
+		private static var libs:Map = new Map;
+		
+		
+		
+		/**
 		 * 
 		 * 这里存储着共享库和基础元素类定义，共享库分全局库和临时库
 		 * 

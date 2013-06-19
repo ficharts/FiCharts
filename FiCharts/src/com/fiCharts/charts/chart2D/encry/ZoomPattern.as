@@ -10,8 +10,8 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBar;
 	import com.fiCharts.charts.chart2D.core.zoomBar.ZoomBarStyle;
 	import com.fiCharts.charts.common.Model;
-	import com.fiCharts.charts.toolTips.ToolTipHolder;
-	import com.fiCharts.charts.toolTips.ToolTipsEvent;
+	import com.fiCharts.ui.toolTips.ToolTipHolder;
+	import com.fiCharts.ui.toolTips.ToolTipsEvent;
 	import com.fiCharts.utils.ExternalUtil;
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;

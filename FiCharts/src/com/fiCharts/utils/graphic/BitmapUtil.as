@@ -23,21 +23,27 @@ package com.fiCharts.utils.graphic
 		 */		
 		public static function drawBitmapDataToSprite(bmd:BitmapData, ui:Sprite, w:Number, h:Number, tx:Number = 0, ty:Number = 0, smooth:Boolean = true, radius:uint = 0):void
 		{
-			var mat:Matrix = new Matrix;
-			mat.createBox(w / bmd.width, h / bmd.height, 0, tx, ty);
-			ui.graphics.beginBitmapFill(bmd, mat, false, smooth);
-			ui.graphics.drawRoundRect(tx, ty, w, h, radius, radius);
+			if (bmd)
+			{
+				var mat:Matrix = new Matrix;
+				mat.createBox(w / bmd.width, h / bmd.height, 0, tx, ty);
+				ui.graphics.beginBitmapFill(bmd, mat, false, smooth);
+				ui.graphics.drawRoundRect(tx, ty, w, h, radius, radius);
+			}
 		}
 		
 		/**
 		 * 将位图绘制到显示对象的指定区域内, 拟定宽高和位置
 		 */		
-		public static function drawBitmapDataToShape(bmd:BitmapData, ui:Shape, w:Number, h:Number, tx:Number = 0, ty:Number = 0, smooth:Boolean = true):void
+		public static function drawBitmapDataToShape(bmd:BitmapData, ui:Shape, w:Number, h:Number, tx:Number = 0, ty:Number = 0, smooth:Boolean = true, radius:uint = 0):void
 		{
-			var mat:Matrix = new Matrix;
-			mat.createBox(w / bmd.width, h / bmd.height, 0, tx, ty);
-			ui.graphics.beginBitmapFill(bmd, mat, false, smooth);
-			ui.graphics.drawRect(tx, ty, w, h);
+			if (bmd)
+			{
+				var mat:Matrix = new Matrix;
+				mat.createBox(w / bmd.width, h / bmd.height, 0, tx, ty);
+				ui.graphics.beginBitmapFill(bmd, mat, false, smooth);
+				ui.graphics.drawRoundRect(tx, ty, w, h, radius, radius);
+			}
 		}
 		
 		/**

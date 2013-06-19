@@ -1,4 +1,4 @@
-package com.fiCharts.charts.toolTips
+package com.fiCharts.ui.toolTips
 {
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;

@@ -1,7 +1,5 @@
-package com.fiCharts.ui.tips
+package com.fiCharts.ui.toolTips
 {
-	import com.fiCharts.charts.toolTips.ToolTipHolder;
-	import com.fiCharts.charts.toolTips.ToolTipsEvent;
 	import com.fiCharts.utils.RexUtil;
 	
 	import flash.events.EventDispatcher;

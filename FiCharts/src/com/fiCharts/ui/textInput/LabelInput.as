@@ -24,25 +24,28 @@ package com.fiCharts.ui.textInput
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
-	import com.fiCharts.ui.tips.ITipsSender;
+	import com.fiCharts.ui.toolTips.ITipsSender;
 	import com.fiCharts.ui.FiUI;
 	
 	/**
+	 * 文本输入框
 	 */	
 	public class LabelInput extends FiUI implements IStyleUI, ITipsSender
 	{
 		public function LabelInput()
 		{
-			super();
-			
 			this.w = 50;
-			StageUtil.initApplication(this, init);
+			this.h = 30;
+			
+			super();
 		}
 		
 		/**
 		 */		
-		private function init():void
+		override protected function init():void
 		{
+			super.init();
+			
 			hoverShape.visible = false;
 			this.addChild(hoverShape);
 			this.addChild(frame);
@@ -322,8 +325,8 @@ package com.fiCharts.ui.textInput
 			
 			if (this.ifWordwrap)
 			{
-				field.width = _w - gap * 2;
-				defaultStyle.width = selectStyle.width = _w;
+				field.width = w - gap * 2;
+				defaultStyle.width = selectStyle.width = w;
 				
 				h = field.textHeight + gap * 2;
 				
@@ -357,7 +360,7 @@ package com.fiCharts.ui.textInput
 					ifOverMaxWidth = false;
 				}
 				
-				defaultStyle.width = selectStyle.width = _w = field.textWidth + gap * 2 + 6;
+				defaultStyle.width = selectStyle.width = w = field.textWidth + gap * 2 + 6;
 				field.width = field.textWidth + 6;
 				
 				drawFrame();
@@ -372,7 +375,7 @@ package com.fiCharts.ui.textInput
 					ifOverMaxWidth = false;
 				}
 				
-				defaultStyle.width = selectStyle.width = _w = this.defalutW;
+				defaultStyle.width = selectStyle.width = w = this.defalutW;
 				field.width = this.defalutW - gap * 2;
 				
 				drawFrame();
@@ -395,7 +398,7 @@ package com.fiCharts.ui.textInput
 					
 					if (this.w < bgField.width + this.gap * 2)
 					{
-						this.selectStyle.width = this.defaultStyle.width = this._w = bgField.width + this.gap * 2;
+						this.selectStyle.width = this.defaultStyle.width = this.w = bgField.width + this.gap * 2;
 						this.drawFrame();
 						this.drawHoverShape();
 					}
@@ -421,33 +424,19 @@ package com.fiCharts.ui.textInput
 		 */		
 		private var selectStyle:Style = new Style;
 		
-		/**
-		 */		
-		private var _w:Number = 150;
-
-		/**
-		 */
-		public function get w():Number
-		{
-			return _w;
-		}
 
 		/**
 		 * @private
 		 */
-		public function set w(value:Number):void
+		override public function set w(value:Number):void
 		{
-			defalutW = _w = value;
+			defalutW = super.w = value;
 		}
 		
 		/**
 		 */		
 		private var defalutW:Number = 20;
 
-		/**
-		 */		
-		public var h:Number = 30;
-		
 		/**
 		 */		
 		private var field:TextField;

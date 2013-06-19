@@ -12,8 +12,8 @@ package com.fiCharts.ui.button
 	import com.fiCharts.utils.layout.LayoutManager;
 	
 	import flash.display.Sprite;
-	import com.fiCharts.ui.tips.ITipsSender;
-	import com.fiCharts.ui.tips.TipsHolder;
+	import com.fiCharts.ui.toolTips.ITipsSender;
+	import com.fiCharts.ui.toolTips.TipsHolder;
 	
 	/**
 	 * 基本的按钮组件

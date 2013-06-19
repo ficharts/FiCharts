@@ -3,9 +3,9 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.series.SeriesItemUIBase;
 	import com.fiCharts.charts.common.SeriesDataPoint;
-	import com.fiCharts.charts.toolTips.ToolTipHolder;
-	import com.fiCharts.charts.toolTips.ToolTipsEvent;
-	import com.fiCharts.charts.toolTips.TooltipStyle;
+	import com.fiCharts.ui.toolTips.ToolTipHolder;
+	import com.fiCharts.ui.toolTips.ToolTipsEvent;
+	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;
 	import com.fiCharts.utils.graphic.StyleManager;

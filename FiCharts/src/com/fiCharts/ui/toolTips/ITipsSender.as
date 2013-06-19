@@ -1,4 +1,4 @@
-package com.fiCharts.ui.tips
+package com.fiCharts.ui.toolTips
 {
 	public interface ITipsSender 
 	{

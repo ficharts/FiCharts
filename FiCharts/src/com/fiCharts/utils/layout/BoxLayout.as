@@ -48,8 +48,8 @@ package com.fiCharts.utils.layout
 		 */		
 		public function horiLayout(item:IBoxItem):void
 		{
-			item.itemW = this.cellW;
-			item.itemH = this.cellH;
+			item.w = this.cellW;
+			item.h = this.cellH;
 			
 			item.x = rect.x + gap + curColumn * (cellW + gap);
 			item.y = rect.y + gap;
@@ -100,8 +100,8 @@ package com.fiCharts.utils.layout
 				curColumn = 0;
 			}
 			
-			item.itemW = this.cellW;
-			item.itemH = this.cellH;
+			item.w = this.cellW;
+			item.h = this.cellH;
 			
 			item.x = rect.x + this.gap + cellW * curColumn + this.gap * curColumn;
 			item.y = rect.y + this.gap + cellH * curRow + this.gap * curRow;

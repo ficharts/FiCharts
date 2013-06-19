@@ -28,7 +28,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.legend.LegendPanel;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.legend.model.LegendVO;
-	import com.fiCharts.charts.toolTips.ToolTipsManager;
+	import com.fiCharts.ui.toolTips.ToolTipsManager;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.system.GC;

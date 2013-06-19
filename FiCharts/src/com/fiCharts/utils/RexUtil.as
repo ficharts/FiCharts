@@ -77,6 +77,7 @@ package com.fiCharts.utils
 		}
 		
 		/**
+		 * 字符为空/不存在时返回值为true
 		 */		
 		public static function ifTextNull(value:Object):Boolean
 		{
@@ -85,6 +86,14 @@ package com.fiCharts.utils
 			
 			var rex:RegExp = /^\s*$/g;
 			return rex.test(value.toString()); 
+		}
+		
+		/**
+		 * 含有字符（字符存在，并且不为空）时返回值为true
+		 */		
+		public static function ifHasText(value:Object):Boolean
+		{
+			return !ifTextNull(value);
 		}
 		
 		//---------------------------------------

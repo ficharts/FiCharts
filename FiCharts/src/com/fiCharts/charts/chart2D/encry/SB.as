@@ -19,8 +19,8 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
-	import com.fiCharts.charts.toolTips.TooltipDataItem;
-	import com.fiCharts.charts.toolTips.TooltipStyle;
+	import com.fiCharts.ui.toolTips.TooltipDataItem;
+	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;

@@ -9,7 +9,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.itemRender.PointRenderBace;
 	import com.fiCharts.charts.chart2D.marker.MarkerSeries;
 	import com.fiCharts.charts.common.IDisCombilePointRender;
-	import com.fiCharts.charts.toolTips.TooltipDataItem;
+	import com.fiCharts.ui.toolTips.TooltipDataItem;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;

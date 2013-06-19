@@ -1,4 +1,4 @@
-package com.fiCharts.charts.toolTips
+package com.fiCharts.ui.toolTips
 {
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;

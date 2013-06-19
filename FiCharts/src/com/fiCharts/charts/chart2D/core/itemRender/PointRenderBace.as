@@ -3,10 +3,10 @@ package com.fiCharts.charts.chart2D.core.itemRender
 	import com.fiCharts.charts.chart2D.core.events.FiChartsEvent;
 	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.common.SeriesDataPoint;
-	import com.fiCharts.charts.toolTips.ToolTipHolder;
-	import com.fiCharts.charts.toolTips.ToolTipsEvent;
-	import com.fiCharts.charts.toolTips.TooltipDataItem;
-	import com.fiCharts.charts.toolTips.TooltipStyle;
+	import com.fiCharts.ui.toolTips.ToolTipHolder;
+	import com.fiCharts.ui.toolTips.ToolTipsEvent;
+	import com.fiCharts.ui.toolTips.TooltipDataItem;
+	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelUI;

@@ -1,5 +1,6 @@
 package com.fiCharts.ui.button
 {
+	import com.fiCharts.ui.FiUI;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.IStyleStatesUI;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
@@ -9,31 +10,37 @@ package com.fiCharts.ui.button
 	import com.fiCharts.utils.graphic.BitmapUtil;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
-	import flash.display.Sprite;
-	import com.fiCharts.ui.FiUI;
-	
 	/**
+	 * 仅有图标构成的按钮, 图标可随按钮状态切换时也切换
 	 */	
 	public class IconBtn extends FiUI implements IStyleStatesUI
 	{
 		public function IconBtn()
 		{
 			super();
-			this.mouseChildren = false;
-			
-			this.states = new States;
-			XMLVOMapper.fuck(styleXML, states);
-			statesControl = new StatesControl(this, states);
 		}
 		
 		/**
 		 */		
-		public function init(normalImg:String, hoverImg:String, downImg:String, w:Number, h:Number):void
+		override protected function init():void
 		{
-			this.normalImg = normalImg;
-			this.hoverImg = hoverImg;
-			this.downImg = downImg;
+			super.init();
 			
+			this.mouseChildren = false;
+			this.buttonMode = true;
+			
+			this.states = new States;
+			XMLVOMapper.fuck(styleXML, states);
+			statesControl = new StatesControl(this, states);
+			
+			this.render();
+		}
+		
+		/**
+		 * 设置图片
+		 */		
+		protected function setIcons(normalImg:String, hoverImg:String, downImg:String, w:Number, h:Number):void
+		{
 			states.width = w;
 			states.height = h;
 			
@@ -41,18 +48,6 @@ package com.fiCharts.ui.button
 			states.getHover.getImg.classPath = hoverImg;
 			states.getDown.getImg.classPath = downImg;
 		}
-		
-		/**
-		 */		
-		private var normalImg:String;
-		
-		/**
-		 */		
-		private var hoverImg:String;
-		
-		/**
-		 */		
-		private var downImg:String;
 		
 		/**
 		 */		
@@ -77,6 +72,7 @@ package com.fiCharts.ui.button
 		}
 		
 		/**
+		 * 先绘制背景， 在绘制图片，最后绘制边框
 		 */		
 		public function render():void
 		{
@@ -87,6 +83,7 @@ package com.fiCharts.ui.button
 			this.graphics.endFill();
 			
 			var img:Img = currState.getImg;
+			img.ready();
 			var tx:Number = (currState.width - img.width ) / 2;
 			var ty:Number = (currState.height - img.height ) / 2;
 			BitmapUtil.drawBitmapDataToSprite(img.data, this, img.width, img.height, tx, ty, false);
@@ -95,6 +92,8 @@ package com.fiCharts.ui.button
 			StyleManager.setLineStyle(this.graphics, currState.getBorder, currState);
 			this.graphics.drawRect(0, 0, this.currState.width, currState.height);	
 			this.graphics.endFill();
+			
+			StyleManager.setEffects(this, currState);
 		}
 		
 		/**
