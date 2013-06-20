@@ -112,7 +112,7 @@ package com.fiCharts.charts.legend.view.itemRender
 		public function set states(value:States):void
 		{
 			_states = value;
-			statesControl.setDefault();
+			statesControl.states = value;
 		}
 
 		/**

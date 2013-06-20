@@ -88,6 +88,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			var seriesDataFeature:SeriesDataFeature = new SeriesDataFeature;
 			
+			// 从小到大排列
 			seriesData.sort(Array.NUMERIC);
 			
 			// 单值的情况�

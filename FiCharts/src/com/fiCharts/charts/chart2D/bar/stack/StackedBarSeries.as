@@ -157,6 +157,8 @@ package com.fiCharts.charts.chart2D.bar.stack
 		 */		
 		override protected function preInitData():void
 		{
+			this.dataProvider.reverse();
+			
 			var xValue:Number, yValue:Object, positiveValue:Number, negativeValue:Number;
 			var length:uint = dataProvider.length;
 			var stack:StackedSeries;
@@ -171,10 +173,13 @@ package com.fiCharts.charts.chart2D.bar.stack
 			// 将子序列的数据节点合并到一起；
 			for each (stack in stacks)
 			{
+				stack.value = "xValue"
 				stack.dataProvider = this.dataProvider;
 				stack.initData();
 				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
 			}
+			
+			if (dataItemVOs.length == 0) return;
 			
 			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
 			for (var i:uint = 0; i < length; i++)
@@ -183,6 +188,9 @@ package com.fiCharts.charts.chart2D.bar.stack
 				
 				for each (stack in stacks)
 				{
+					if (stack.dataItemVOs.length <= i)
+						continue;
+					
 					xValue = Number(stack.dataItemVOs[i].xVerifyValue);
 					yValue = stack.dataItemVOs[i].yVerifyValue;
 					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataPoint);

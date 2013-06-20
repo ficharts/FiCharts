@@ -1,7 +1,12 @@
 package com.fiCharts.utils
 {
+	import com.fiCharts.utils.system.FiTrace;
+	
 	import flash.utils.getTimer;
 
+	/**
+	 * 
+	 */	
 	public class PerformaceTest
 	{
 		public function PerformaceTest()
@@ -10,14 +15,14 @@ package com.fiCharts.utils
 		
 		/**
 		 */		
-		public static var ifRun:Boolean = true;
+		public static var ifRun:Boolean = false;
 		
 		/**
 		 */		
 		public static function end(desc:String = 'tem'):void
 		{
 			if (ifRun)
-				trace("end: " +  desc + " --- " + (getTimer() - time) / 1000 + "s");
+				FiTrace.info("end: " +  desc + " --- " + (getTimer() - time) / 1000 + "s");
 		}
 		
 		/**
@@ -27,7 +32,7 @@ package com.fiCharts.utils
 			if (ifRun)
 			{
 				time = getTimer();
-				trace("start : " + value);
+				FiTrace.info("start : " + value);
 			}
 		}
 		
@@ -45,7 +50,7 @@ package com.fiCharts.utils
 				
 				fun();
 				
-				trace(desc + " : " + (getTimer() - preT) / 1000 + "s");
+				FiTrace.info(desc + " : " + (getTimer() - preT) / 1000 + "s");
 			}
 			
 		}

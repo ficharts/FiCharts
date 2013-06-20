@@ -269,7 +269,7 @@
 	            <format color='555555'/>
 	        </subTitle>
 
-	        <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10' gutterRight='10'>
+	        <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10' gutterTop='80' gutterRight='10'>
 	            <border color='EEEEEE'/>
 	            <fill color='FFFFFF'/>
 	        </chartBG>
@@ -315,7 +315,7 @@
 	            <format color='555555'/>
 	        </subTitle>
 
-	        <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10' gutterRight='10'>
+	        <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10' gutterTop='80' gutterRight='10'>
 	            <border color='EEEEEE'/>
 	            <fill color='FFFFFF'/>
 	        </chartBG>
@@ -365,7 +365,7 @@
                 <format color='ADADAD'/>
 	        </subTitle>
 	        
-	        <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10' gutterRight='10'>
+	        <chartBG paddingLeft='10' paddingRight='10' paddingTop='10' paddingBottom='10' radius='10' gutterTop='80' gutterRight='10'>
 	            <border color='595959'/>
                 <fill type='radial' color='#757575,#1E1E1E' alpha='1,1' radioes='0,255'/>
 	        </chartBG>

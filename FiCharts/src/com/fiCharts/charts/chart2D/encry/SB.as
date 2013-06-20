@@ -1,5 +1,7 @@
+
 package com.fiCharts.charts.chart2D.encry
 {
+	import com.fiCharts.charts.chart2D.bar.BarSeries;
 	import com.fiCharts.charts.chart2D.core.axis.AxisBase;
 	import com.fiCharts.charts.chart2D.core.axis.LinearAxis;
 	import com.fiCharts.charts.chart2D.core.events.DataResizeEvent;
@@ -17,8 +19,8 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
-	import com.fiCharts.charts.toolTips.TooltipDataItem;
-	import com.fiCharts.charts.toolTips.TooltipStyle;
+	import com.fiCharts.ui.toolTips.TooltipDataItem;
+	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.PerformaceTest;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
@@ -962,12 +964,16 @@ package com.fiCharts.charts.chart2D.encry
 			
 			var seriesDataItem:SeriesDataPoint;
 			var item:Object;
-			var i:uint = 0;
+			var souceDataIndex:uint = 0;
+			var actualDataIndex:uint = 0;
 			
 			dataItemVOs.length = 0;
 			horizontalValues.length = 0; 
 			verticalValues.length = 0;
 			sourceDataItems.length = 0;
+			
+			var precision:uint = 0;
+			var temPrecision:uint = 0;
 			
 			for each (item in dataProvider)
 			{
@@ -987,11 +993,33 @@ package com.fiCharts.charts.chart2D.encry
 				seriesDataItem.xVerifyValue = this.horizontalAxis.getVerifyData(seriesDataItem.xValue);
 				seriesDataItem.yVerifyValue = this.verticalAxis.getVerifyData(seriesDataItem.yValue);
 				
-				horizontalValues[i] = seriesDataItem.xVerifyValue;
-				verticalValues[i] = seriesDataItem.yVerifyValue;
-				dataItemVOs[i] = sourceDataItems[i] = seriesDataItem;
+				horizontalValues[souceDataIndex] = seriesDataItem.xVerifyValue;
+				verticalValues[souceDataIndex] = seriesDataItem.yVerifyValue;
 				
-				i ++;
+				if (RexUtil.ifTextNull(seriesDataItem.xValue) || RexUtil.ifTextNull(seriesDataItem.yValue))
+					seriesDataItem = null;
+				else
+				{
+					dataItemVOs[actualDataIndex] = sourceDataItems[actualDataIndex] = seriesDataItem;
+					actualDataIndex += 1;
+					
+					temPrecision = RexUtil.checkPrecision(seriesDataItem[this.value].toString())
+					if ( temPrecision > precision)
+						precision = temPrecision;
+				}
+				
+				souceDataIndex ++;
+			}
+			
+			if (this is BarSeries)
+			{
+				if (precision > horizontalAxis.dataFormatter.precision)
+					horizontalAxis.dataFormatter.precision = precision;
+			}
+			else
+			{
+				if (precision > verticalAxis.dataFormatter.precision)				
+					verticalAxis.dataFormatter.precision = precision;
 			}
 			
 			updateMaxIndex();
@@ -1130,7 +1158,7 @@ package com.fiCharts.charts.chart2D.encry
 			var legendVOes:Vector.<LegendVO> = new Vector.<LegendVO>;
 			var legendVO:LegendVO;
 			
-			if (this.seriesCount > 1)
+			if (this.seriesCount > 1 ||  ifSeriesLegend)
 			{
 				legendVO = new LegendVO();
 				legendVO.addEventListener(LegendEvent.LEGEND_ITEM_OVER, seriesLegendOverHandler, false, 0, true);
@@ -1159,6 +1187,22 @@ package com.fiCharts.charts.chart2D.encry
 			
 			return legendVOes;
 		}
+		
+		/**
+		 */		
+		public function get ifSeriesLegend():Object
+		{
+			return _ifSeriesLegend;
+		}
+		
+		public function set ifSeriesLegend(value:Object):void
+		{
+			_ifSeriesLegend = XMLVOMapper.boolean(value);
+		}
+
+		/**
+		 */		
+		private var _ifSeriesLegend:Boolean = true;
 		
 		
 		//----------------------------------------------------
@@ -1371,7 +1415,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 用于 toolTip 的取值方向判断， �或��
 		 */		
-		protected var value:String = 'yValue';
+		public var value:String = 'yValue';
 		
 		/**
 		 */		

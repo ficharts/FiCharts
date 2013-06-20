@@ -1,4 +1,4 @@
-package com.fiCharts.charts.toolTips
+package com.fiCharts.ui.toolTips
 {
 	import flash.geom.Point;
 

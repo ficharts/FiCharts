@@ -2,6 +2,7 @@ package com.fiCharts.charts.chart2D.line
 {
 	import com.fiCharts.charts.chart2D.core.series.SeriesItemUIBase;
 	import com.fiCharts.charts.common.SeriesDataPoint;
+	import com.fiCharts.utils.RexUtil;
 	
 	import flash.display.Shape;
 	import flash.display.Sprite;

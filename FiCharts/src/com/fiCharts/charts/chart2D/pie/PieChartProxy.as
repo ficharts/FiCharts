@@ -9,7 +9,7 @@ package com.fiCharts.charts.chart2D.pie
 	import com.fiCharts.charts.common.ChartDataFormatter;
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.legend.LegendStyle;
-	import com.fiCharts.charts.toolTips.TooltipStyle;
+	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 
@@ -50,7 +50,7 @@ package com.fiCharts.charts.chart2D.pie
 			XMLVOLib.registerObjectToProperty('label', 'text', 'value');
 			
 			TooltipStyle;
-			XMLVOLib.registerCustomClasses(<tooltip path='com.fiCharts.charts.toolTips.TooltipStyle'/>);
+			XMLVOLib.registerCustomClasses(<tooltip path='com.fiCharts.ui.toolTips.TooltipStyle'/>);
 			
 			LegendStyle;
 			XMLVOLib.registerCustomClasses(<legend path='com.fiCharts.charts.legend.LegendStyle'/>);

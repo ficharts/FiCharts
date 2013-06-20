@@ -19,12 +19,14 @@ package com.fiCharts.charts.chart2D.bar.stack
 		{
 			valueLabelUI.y = - valueLabelUI.height / 2;
 			
-			if (Number(_itemVO.xValue) > 0)
-				valueLabelUI.x = - valueLabelUI.width - this.radius;
-			else
-				valueLabelUI.x = this.radius;
+			var offset:uint = Math.max(this.radius, 5);
 			
-			// 当柱体太小不能容纳标签时隐藏标签�
+			if (Number(_itemVO.xValue) > 0)
+				valueLabelUI.x = - valueLabelUI.width - offset;
+			else
+				valueLabelUI.x = offset;
+			
+			// 当柱体太小不能容纳标签时隐藏标签�
 			if (Math.abs(columnDataItem.width) < valueLabelUI.width)
 				valueLabelUI.visible = false;
 			else
@@ -47,7 +49,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 				valueLabelUI.x = - stackWidth / 2 - valueLabelUI.width / 2;
 			}
 			
-			// 当柱体太小不能容纳标签时隐藏标签�
+			// 当柱体太小不能容纳标签时隐藏标签�
 			if (stackWidth < valueLabelUI.width)
 				valueLabelUI.visible = false;
 			else

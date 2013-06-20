@@ -28,6 +28,18 @@ package com.fiCharts.charts.chart2D.bar
 		
 		/**
 		 */		
+		override protected function preInitData():void
+		{
+			dataProvider.reverse();
+			
+			super.preInitData();
+			//
+			//dataItemVOs.reverse();
+			//sourceDataItems.reverse();
+		}
+		
+		/**
+		 */		
 		override protected function getClassicPattern():ISeriesRenderPattern
 		{
 			return new ClassicBarRender(this)

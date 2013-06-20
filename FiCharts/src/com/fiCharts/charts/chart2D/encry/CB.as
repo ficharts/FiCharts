@@ -28,7 +28,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.legend.LegendPanel;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.legend.model.LegendVO;
-	import com.fiCharts.charts.toolTips.ToolTipsManager;
+	import com.fiCharts.ui.toolTips.ToolTipsManager;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.system.GC;
@@ -190,6 +190,12 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			_dataXML = value;
 
+			if (dataVOes)
+			{
+				dataVOes.length = 0;
+				dataVOes = null;
+			}
+			
 			ifDataChanged = true;
 		}
 		
@@ -642,7 +648,12 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function get temTopSpace():Number
 		{
-			return chartModel.chartBG.paddingTop + this.topAxisContainer.height + this.title.boxHeight;
+			var tem:Number = chartModel.chartBG.paddingTop + this.topAxisContainer.height + this.title.boxHeight;
+			
+			if (tem < chartModel.minTopPadding)
+				tem = chartModel.minTopPadding;
+			
+			return tem;
 		}
 		
 		/**

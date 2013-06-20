@@ -72,7 +72,8 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function valueToSize(value:Object, index:int):Number
 		{
-			if (index == - 1)
+			// 有些节点为空，不能仅根据index信息计算
+			//if (index == - 1)
 				index = axis.sourceValues.indexOf(value.toString())
 					
 			var result:Number = axis.unitSize * .5 + index * axis.unitSize;

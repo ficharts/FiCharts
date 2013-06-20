@@ -8,6 +8,7 @@ package com.fiCharts.charts.chart2D.bubble
 	import com.fiCharts.charts.common.ChartColors;
 	import com.fiCharts.charts.common.Model;
 	import com.fiCharts.charts.common.SeriesDataPoint;
+	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	
@@ -223,6 +224,10 @@ package com.fiCharts.charts.chart2D.bubble
 			verticalValues.length = 0;
 			radiusValues = new Vector.<Object>;
 			
+			var precision:uint = 0;
+			var temYPrecision:uint = 0;
+			var temZPrecision:uint = 0;
+			
 			for each (var item:Object in dataProvider)
 			{
 				seriesDataItem = new BubbleDataPoint();
@@ -236,6 +241,30 @@ package com.fiCharts.charts.chart2D.bubble
 				seriesDataItem.xVerifyValue = this.horizontalAxis.getVerifyData(seriesDataItem.xValue);
 				seriesDataItem.yVerifyValue = this.verticalAxis.getVerifyData(seriesDataItem.yValue);
 				
+				setItemColor(seriesDataItem.metaData, seriesDataItem);
+				seriesDataItem.seriesName = seriesName;
+				
+				horizontalValues.push(seriesDataItem.xValue);
+				verticalValues.push(seriesDataItem.yValue);
+				radiusValues.push(seriesDataItem.zValue);
+				
+				dataItemVOs.push(seriesDataItem);
+				
+				temYPrecision = RexUtil.checkPrecision(seriesDataItem.yValue.toString())
+				temZPrecision = RexUtil.checkPrecision(seriesDataItem.zValue.toString())	
+					
+				if (temYPrecision > precision)
+					precision = temYPrecision;
+				
+				if (temZPrecision > precision)
+					precision = temZPrecision;
+			}
+			
+			if (precision > verticalAxis.dataFormatter.precision)				
+				verticalAxis.dataFormatter.precision = precision;
+			
+			for each (seriesDataItem in dataItemVOs)
+			{
 				seriesDataItem.xLabel = horizontalAxis.getXLabel(seriesDataItem.xVerifyValue);
 				seriesDataItem.yLabel = verticalAxis.getYLabel(seriesDataItem.yVerifyValue);
 				seriesDataItem.zLabel = this.radiusAxis.getZLabel(seriesDataItem.zValue);
@@ -244,20 +273,11 @@ package com.fiCharts.charts.chart2D.bubble
 				seriesDataItem.yDisplayName = verticalAxis.displayName;
 				seriesDataItem.zDisplayName = this.zDisplayName;
 				
-				setItemColor(seriesDataItem.metaData, seriesDataItem);
-				seriesDataItem.seriesName = seriesName;
-				
-				horizontalValues.push(seriesDataItem.xValue);
-				verticalValues.push(seriesDataItem.yValue);
-				radiusValues.push(seriesDataItem.zValue);
-				
 				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, 
 					['zValue', 'zLabel', 'zDisplayName',
-					 'xValue', 'xLabel', 'xDisplayName',
-					 'yValue', 'yLabel', 'yDisplayName',
-					 'seriesName', 'color']);
-				
-				dataItemVOs.push(seriesDataItem);
+						'xValue', 'xLabel', 'xDisplayName',
+						'yValue', 'yLabel', 'yDisplayName',
+						'seriesName', 'color']);
 			}
 			
 			dataOffsetter.maxIndex = maxDataItemIndex = dataItemVOs.length - 1;

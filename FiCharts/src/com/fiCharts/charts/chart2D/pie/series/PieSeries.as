@@ -8,8 +8,9 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.charts.common.SeriesDataPoint;
 	import com.fiCharts.charts.legend.model.LegendVO;
 	import com.fiCharts.charts.legend.view.LegendEvent;
-	import com.fiCharts.charts.toolTips.TooltipStyle;
+	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.MathUtil;
+	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.IEditableObject;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
@@ -18,6 +19,7 @@ package com.fiCharts.charts.chart2D.pie.series
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
 	import com.fiCharts.utils.XMLConfigKit.style.States;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
+	import com.fiCharts.utils.dec.NullPad;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
@@ -283,6 +285,9 @@ package com.fiCharts.charts.chart2D.pie.series
 			var partRad:Number = 0;
 			dataItemVOs = new Vector.<PieDataItem>;
 			
+			var precision:uint = 0;
+			var temPrecision:uint = 0;
+			
 			for each (var item:Object in value)
 			{
 				seriesDataItem = new PieDataItem;
@@ -293,25 +298,41 @@ package com.fiCharts.charts.chart2D.pie.series
 				seriesDataItem.label = item[this.labelField]; 
 				seriesDataItem.value = item[this.valueField]; 
 				
-				seriesDataItem.xLabel = dataFormatter.formatLabel(seriesDataItem.label);
-				seriesDataItem.yLabel = dataFormatter.formatValue(seriesDataItem.value);
+				if (RexUtil.ifTextNull(seriesDataItem.label)&& RexUtil.ifTextNull(seriesDataItem.value))
+				{
+					seriesDataItem = null;				
+					continue;
+				}
+				
+				if (Number(seriesDataItem.value) < 0)
+				{
+					seriesDataItem = null;
+					continue;				
+				}
 				
 				if (color)
 					seriesDataItem.color = uint(color);
 				else
 					seriesDataItem.color = chartColorManager.chartColor;
 				
-				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, 
-					['label', 'value', 'xLabel', 'yLabel', 'color']);
-				
 				dataSum += Number(seriesDataItem.value);
 				dataItemVOs.push(seriesDataItem);
+				
+				// 计算小数点保留位数用
+				temPrecision = RexUtil.checkPrecision(seriesDataItem.value.toString())
+				if ( temPrecision > precision)
+					precision = temPrecision;
 			}
+			
+			dataFormatter.precision = precision;
 			
 			startRad = this.angleToRad(startAngle);
 			 
 			for each (seriesDataItem in dataItemVOs)
 			{
+				seriesDataItem.xLabel = dataFormatter.formatLabel(seriesDataItem.label);
+				seriesDataItem.yLabel = dataFormatter.formatValue(seriesDataItem.value);
+				
 				seriesDataItem.zValue = Number(seriesDataItem.value) / dataSum * 100;
 				seriesDataItem.zLabel = MathUtil.round(Number(seriesDataItem.zValue), 2) + '%';
 				
@@ -320,7 +341,8 @@ package com.fiCharts.charts.chart2D.pie.series
 				seriesDataItem.endRad = startRad + partRad;
 				startRad += partRad;
 					
-				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, ['zValue', 'zLabel']);
+				XMLVOMapper.pushAttributesToObject(seriesDataItem, seriesDataItem.metaData, 
+					['label', 'value', 'xLabel', 'yLabel', 'color', 'zValue', 'zLabel']);
 				
 				// 默认数值标签的元数据内容
 				seriesDataItem.metaData.valueLabel = seriesDataItem.zLabel;

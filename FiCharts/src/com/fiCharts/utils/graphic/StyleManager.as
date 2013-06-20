@@ -374,7 +374,7 @@ package com.fiCharts.utils.graphic
 				else
 				{
 					graphic.beginFill(uint(fillColor), Number(fillStyle.alpha));
-				}
+				}  
 			}
 		}
 		

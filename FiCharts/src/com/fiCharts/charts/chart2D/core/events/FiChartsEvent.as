@@ -19,7 +19,7 @@ package com.fiCharts.charts.chart2D.core.events
 		/**
 		 * 图表创建完成事件
 		 */		
-		public static const READY:String="ready";
+		public static const READY:String = "ready";
 		
 		/**
 		 * 配置文件发生改变时触发 

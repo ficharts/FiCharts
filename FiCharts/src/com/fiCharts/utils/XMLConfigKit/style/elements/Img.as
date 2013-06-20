@@ -2,6 +2,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 {
 	import com.fiCharts.utils.ClassUtil;
 	
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 
 	/**
@@ -17,6 +18,8 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		 */		
 		private var _classPath:String = "";
 
+		/**
+		 */		
 		public function get height():Number
 		{
 			if (_height == 0 && data)
@@ -33,7 +36,6 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		}
 
 		/**
-		 * 
 		 */		
 		public function get width():Number
 		{
@@ -48,14 +50,31 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 			_width = value;
 		}
 
+		/**
+		 */		
 		public function get data():BitmapData
 		{
-			if (_data == null)
-				_data = ClassUtil.getObjectByClassPath(classPath) as BitmapData;
+			ready();
 				
 			return _data;
 		}
-
+		
+		/**
+		 * 初始化，创建图片数据
+		 */		
+		public function ready():void
+		{
+			if (_data == null)
+			{
+				var asset:Object = ClassUtil.getObjectByClassPath(classPath);
+				
+				if (asset is Bitmap)
+					_data = (asset as Bitmap).bitmapData;
+				else
+					_data = asset as BitmapData;  
+			}
+		}
+		
 		/**
 		 */		
 		public function set data(value:BitmapData):void

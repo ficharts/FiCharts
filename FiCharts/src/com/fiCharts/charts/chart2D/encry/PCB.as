@@ -12,7 +12,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.legend.LegendPanel;
 	import com.fiCharts.charts.legend.LegendStyle;
 	import com.fiCharts.charts.legend.model.LegendVO;
-	import com.fiCharts.charts.toolTips.ToolTipsManager;
+	import com.fiCharts.ui.toolTips.ToolTipsManager;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	
@@ -418,11 +418,16 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			_dataXML = value;
 			
+			if (dataVOes)
+			{
+				dataVOes.length = 0;
+				dataVOes = null;
+			}
+			
 			ifDataChanged = true;
 		}
 		
 		/**
-		 * 
 		 */		
 		private var ifDataChanged:Boolean = false;
 		

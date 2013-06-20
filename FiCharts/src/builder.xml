@@ -4,10 +4,10 @@
 	<property name="FLEX_HOME" value="D:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.6.0" />
 	<property name="WORK_SPACE" value="G:/FiCharts" />
 	
-	<!--property name="FLEX_HOME" value="I:/flex_sdk_4.6" />
-	<property name="WORK_SPACE" value="I:/FiCharts" /-->
+	<!--property name="FLEX_HOME" value="F:/project/flex_sdk_4.6" />
+	<property name="WORK_SPACE" value="F:/project/FiCharts" /-->
 	
-	<property name="VER" value="1.3.0" />
+	<property name="VER" value="1.3.2" />
 	<property name="controlFlowObfuscation" value="20"/>
 	<property name="dynamicCodeWrapping" value="1"/>
 	
@@ -167,4 +167,35 @@
 		<mkdir dir="${WORK_SPACE}/FiCharts/release/ficharts"/>
 	</target>
 
+	<target name="Release BiaoMei">
+		<mxmlc file="${WORK_SPACE}/BiaoMei/src/BiaoMei.as" output="${WORK_SPACE}/BiaoMei/release/BiaoMei.swf" 
+			actionscript-file-encoding="UTF-8" keep-generated-actionscript="false" incremental="false"
+			static-link-runtime-shared-libraries="true">
+			<load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+			<source-path path-element="${FLEX_HOME}/frameworks"/>
+			<source-path path-element="${basedir}/"/>
+			<library-path dir="${WORK_SPACE}/FiCharts/libs" includes="*.swc" />
+			<library-path dir="${WORK_SPACE}/BiaoMei/libs" includes="*.swc" />
+			<library-path dir="${FLEX_HOME}/frameworks/libs" includes="framework.swc"/>
+			<compiler.debug>false</compiler.debug>
+		</mxmlc>
+		
+		<protect keyFilePath="${WORK_SPACE}/secureSWF/key.data" outputPath="${WORK_SPACE}/BiaoMei/release/"
+			preset="best_size" superCompression="true" removeLinesNumbers="true" slr="true">
+			<fileset dir="${WORK_SPACE}/BiaoMei/release/" includes="BiaoMei.swf"/>
+
+			<rule filter="com.fiCharts.*" rename="false"/>
+			<rule filter="com.biaomei.edit.chart.*" rename="false"/>
+			<rule filter="com.fiCharts.utils.XMLConfigKit.XMLVOMapper.*" rename="true"/>
+			
+			<rule filter="com.fiCharts.charts.chart2D.encry" rename="true"/>
+			
+			<rule filter="com.fiCharts.charts.chart2D.encry.*" 
+				controlFlowObfuscation="${controlFlowObfuscation}" 
+				dynamicCodeWrapping="${dynamicCodeWrapping}"
+				publicOnly="false" rename="true"/>
+			
+			<rule filter="com.fiCharts.charts.chart2D.encry.IChartPattern.*" rename="false"/>
+		</protect>
+	</target>
 </project>

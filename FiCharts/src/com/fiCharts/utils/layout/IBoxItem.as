@@ -4,13 +4,13 @@ package com.fiCharts.utils.layout
 	{
 		/**
 		 */		
-		function set itemW(w:Number):void;
-		function get itemW():Number;
+		function set w(w:Number):void;
+		function get w():Number;
 		
 		/**
 		 */		
-		function set itemH(h:Number):void;
-		function get itemH():Number;
+		function set h(h:Number):void;
+		function get h():Number;
 		
 		function get x():Number;
 		function set x(value:Number):void;

@@ -229,6 +229,18 @@
 				<fill color='${color}{adjustColor:1.2},${color}{adjustColor:0.9}' alpha='0.8,0.8' angle='90'/>
 			</down>
 		</states>
+		
+		<states id='SimpleBar'>
+			<normal>
+				<fill color='${color}{adjustColor:1.1},${color}' alpha='0.8,0.8' angle='180'/>
+			</normal>
+			<hover>
+				<fill color='${color}{adjustColor:1.4},${color}{adjustColor:1.2}' alpha='0.8,0.8' angle='180'/>
+			</hover>
+			<down>
+				<fill color='${color}{adjustColor:1.1},${color}{adjustColor:0.9}' alpha='0.8,0.8' angle='180'/>
+			</down>
+		</states>
 
 		<states id='ClassicShape' normal='HighLight_Series' hover='HighLight_Series' down='HighLight_Series'>
 			<normal effects='Series'>
@@ -247,16 +259,25 @@
 
 		<states id='ClassicBar' normal='HighLight_Series' hover='HighLight_Series' down='HighLight_Series'>
 			<normal effects='Series'>
-				<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='180'
+				<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='225'
 				color='${color}{adjustColor:1.5},${color}{adjustColor:1.1},${color}{adjustColor:0.9}'/>
+				<cover>
+					<border angle='-135'/>
+				</cover>
 			</normal>
 			<hover effects='Series'>
-				<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='180'
+				<fill radioes='0,120,255' alpha='0.8,0.8,0.8' angle='225'
 				color='${color}{adjustColor:1.5},${color}{adjustColor:1.3},${color}{adjustColor:0.9}'/>
+				<cover>
+					<border angle='-135'/>
+				</cover>
 			</hover>
 			<down effects='Series'>
-				<fill radioes='0,255' alpha='0.8,0.8' angle='180'
+				<fill radioes='0,255' alpha='0.8,0.8' angle='225'
 				color='${color}{adjustColor:1},${color}{adjustColor:0.8}'/>
+				<cover>
+					<border angle='-135'/>
+				</cover>
 			</down>
 		</states>
 
@@ -266,10 +287,10 @@
 		<stackedColumn id='Simple' states='SimpleShape'/>
 		<stackedColumn id='Classic' states='ClassicShape'/>
 
-		<bar id='Simple' states='SimpleShape'/>
+		<bar id='Simple' states='SimpleBar'/>
 		<bar id='Classic' states='ClassicBar'/>
 
-		<stackedBar id='Simple' states='SimpleShape'/>
+		<stackedBar id='Simple' states='SimpleBar'/>
 		<stackedBar id='Classic' states='ClassicBar'/>
 
 
@@ -712,7 +733,7 @@
 				</title>
 				<tickMark color='E4E2E2' thikness='1' alpha='0'/>
 				<label format='FontFormat'>
-					<format color='9F9F9F'/>
+					<format color='575757'/>
 					<text value='${label}'/>
 				</label>
 			</xAxis>
@@ -723,7 +744,7 @@
 				</title>
 				<tickMark color='E4E2E2' alpha='0'/>
 				<label format='FontFormat'>
-					<format color='9F9F9F'/>
+					<format color='575757'/>
 					<text value='${label}'/>
 				</label>
 			</yAxis>
@@ -750,7 +771,7 @@
 			</area>
 
 			<column style='Simple' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='SimplePoint'/>
+				<dataRender style='SimplePoint' enable="false"/>
 			</column>
 
 			<stackedColumn style='Simple' labelDisplay="normal">
@@ -758,7 +779,7 @@
 			</stackedColumn>
 
 			<bar style='Simple' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='SimplePoint'/>
+				<dataRender style='SimplePoint' enable="false"/>
 			</bar>
 
 			<stackedBar style='Simple' labelDisplay="normal">
@@ -821,7 +842,7 @@
 				</title>
 				<tickMark color='E4E2E2' thikness='1' alpha='0'/>
 				<label format='FontFormat'>
-					<format color='9F9F9F'/>
+					<format color='575757'/>
 					<text value='${label}'/>
 				</label>
 			</xAxis>
@@ -831,7 +852,7 @@
 				</title>
 				<tickMark color='E4E2E2' alpha='0'/>
 				<label format='FontFormat'>
-					<format color='9F9F9F'/>
+					<format color='575757'/>
 					<text value='${label}'/>
 				</label>
 			</yAxis>
@@ -861,7 +882,7 @@
 			</area>
 
 			<column style='Classic' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='ClassicPoint'/>
+				<dataRender style='ClassicPoint' enable="false"/>
 			</column>
 
 			<stackedColumn style='Classic' labelDisplay="normal">
@@ -870,7 +891,7 @@
 
 			
 			<bar style='Classic' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='ClassicPoint'/>
+				<dataRender style='ClassicPoint' enable="false"/>
 			</bar>
 
 			<stackedBar style='Classic' labelDisplay="normal">
@@ -973,16 +994,15 @@
 			</area>
 
 			<column style='Classic' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='ClassicPoint'/>
+				<dataRender style='ClassicPoint' enable="false"/>
 			</column>
 
 			<stackedColumn style='Classic' labelDisplay="normal">
 				<dataRender style='ClassicPoint' enable='false'/>
 			</stackedColumn>
-
 			
 			<bar style='Classic' maxItemSize='100' labelDisplay="inner">
-				<dataRender style='ClassicPoint'/>
+				<dataRender style='ClassicPoint' enable="false"/>
 			</bar>
 
 			<stackedBar style='Classic' labelDisplay="normal">

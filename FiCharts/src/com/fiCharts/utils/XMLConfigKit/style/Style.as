@@ -241,7 +241,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */
 		public function set img(value:Object):void
 		{
-			_img = XMLVOMapper.updateObject(value, _img, "img", this) as Img;;
+			_img = XMLVOMapper.updateObject(value, _img, "img", this) as Img;
 		}
 		
 	}

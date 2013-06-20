@@ -53,15 +53,15 @@ package com.fiCharts.utils.XMLConfigKit.style
 				textField.wordWrap = true;
 				textField.autoSize = 'center';
 				
-				if (maxLabelWidth - labelStyle.hPadding * 2 < minLabelWidth)
+				if (maxLabelWidth - labelStyle.paddingLeft - labelStyle.paddingRight < minLabelWidth)
 					textField.width = minLabelWidth;
 				else
-					textField.width = maxLabelWidth - labelStyle.hPadding * 2;
+					textField.width = maxLabelWidth - labelStyle.paddingLeft - labelStyle.paddingRight;
 				
 				textField.defaultTextFormat = labelStyle.getTextFormat(metaData);
 				textField.text = text;
 				
-				textField.x = labelStyle.hPadding;
+				textField.x = labelStyle.paddingLeft;
 				textField.height = textField.textHeight;
 			}
 			else
@@ -73,7 +73,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 				textMetric = textField.getLineMetrics(0);  
 				textField.width = textField.textWidth + textMetric.leading;
 				textField.height = textField.textHeight;
-				textField.x = labelStyle.hPadding - textMetric.leading / 2;
+				textField.x = labelStyle.paddingLeft - textMetric.leading / 2;
 			}
 			
 			StyleManager.setEffects(textField, labelStyle.text as Text, metaData);
@@ -82,9 +82,10 @@ package com.fiCharts.utils.XMLConfigKit.style
 			this.graphics.clear();
 			StyleManager.setShapeStyle(labelStyle, this.graphics, this.metaData);
 			this.graphics.drawRoundRect(0, 0, this.uiWidth, this.uiHeight, labelStyle.radius, labelStyle.radius);
+			this.graphics.endFill();
 			
-			textField.x = labelStyle.hPadding;
-			textField.y = labelStyle.vPadding;
+			textField.x = labelStyle.paddingLeft;
+			textField.y = labelStyle.paddingTop;
 		}
 		
 		/**
@@ -153,7 +154,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function get uiWidth():Number
 		{
-			return textField.x + textField.width + labelStyle.hPadding; 
+			return textField.width + labelStyle.paddingLeft + labelStyle.paddingRight; 
 		}
 		
 		/**
@@ -161,7 +162,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		 */		
 		private function get uiHeight():Number
 		{
-			return textField.height + labelStyle.vPadding * 2;
+			return textField.height + labelStyle.paddingTop + labelStyle.paddingBottom;
 		}
 		
 		/**

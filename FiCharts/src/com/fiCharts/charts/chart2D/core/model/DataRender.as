@@ -130,7 +130,6 @@ package com.fiCharts.charts.chart2D.core.model
 					shape.size = size;
 				
 				shape.angle = this.angle;
-					
 				shape.render(canvas, metadata);
 			}
 		}

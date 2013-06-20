@@ -82,7 +82,7 @@ package com.fiCharts.utils.XMLConfigKit.style
 		/**
 		 *  top middle bottom
 		 */		
-		private var _vAlign:String = 'middle';
+		private var _vAlign:String = 'center';
 
 		public function get vAlign():String
 		{

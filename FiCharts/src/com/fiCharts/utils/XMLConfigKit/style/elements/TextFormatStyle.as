@@ -17,6 +17,21 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		}
 		
 		/**
+		 */
+		public function get letterSpacing():uint
+		{
+			return _letterSpacing;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set letterSpacing(value:uint):void
+		{
+			_letterSpacing = value;
+		}
+
+		/**
 		 */		
 		public function getFormat(metaData:Object):flash.text.TextFormat
 		{
@@ -26,10 +41,12 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 				_format.size = this.size;
 				_format.bold = this.bold;
 				_format.italic = this.italic;
+				_format.letterSpacing = this.letterSpacing;
 			}
 			else
 			{
 				_format = new flash.text.TextFormat(this.font, this.size, null, this.bold, this.italic);
+				_format.letterSpacing = this.letterSpacing;
 			}
 			
 			_format.leading = this.leading;
@@ -37,6 +54,10 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 			
 			return _format;
 		}
+		
+		/**
+		 */		
+		private var _letterSpacing:uint = 1;
 		
 		/**
 		 */		
@@ -122,6 +143,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		private var _leading:uint = 4;
 
 		/**
+		 * 行距
 		 */
 		public function get leading():uint
 		{

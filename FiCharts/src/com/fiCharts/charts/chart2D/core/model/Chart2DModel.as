@@ -430,6 +430,10 @@ package com.fiCharts.charts.chart2D.core.model
 		
 		/**
 		 */		
+		public var minTopPadding:Number = 80;
+		
+		/**
+		 */		
 		private var _gridField:GridFieldStyle = new GridFieldStyle;
 
 		public function get gridField():GridFieldStyle

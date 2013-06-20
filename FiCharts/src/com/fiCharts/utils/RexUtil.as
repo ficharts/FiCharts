@@ -21,6 +21,28 @@ package com.fiCharts.utils
 				return true;
 		}
 		
+		/**
+		 * 计算小数点后字符位数
+		 */		
+		public static function checkPrecision(value:String):uint
+		{
+			if (ifHasNumValue(value))
+			{
+				if (value.indexOf('.') == - 1)
+				{
+					return 0;
+				}
+				else
+				{
+					return value.split(".")[1].length;
+				}
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		
 		/*
 		 * 判断字符串是否为数字类型
 		 */		
@@ -55,14 +77,23 @@ package com.fiCharts.utils
 		}
 		
 		/**
+		 * 字符为空/不存在时返回值为true
 		 */		
-		public static function ifTextNull(value:String):Boolean
+		public static function ifTextNull(value:Object):Boolean
 		{
 			if (value == null)
 				return true;
 			
 			var rex:RegExp = /^\s*$/g;
-			return rex.test(value); 
+			return rex.test(value.toString()); 
+		}
+		
+		/**
+		 * 含有字符（字符存在，并且不为空）时返回值为true
+		 */		
+		public static function ifHasText(value:Object):Boolean
+		{
+			return !ifTextNull(value);
 		}
 		
 		//---------------------------------------
