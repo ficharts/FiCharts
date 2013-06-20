@@ -337,7 +337,6 @@ package com.fiCharts.charts.chart2D.core.axis
 			var labelVO:AxisLabelData;
 			var valuePositon:Number;
 			
-			
 			// 横向的最小间距不能小于Label的宽度， 这里要先获取这个宽度，从而决定单元间隔数
 			var i:uint;
 			

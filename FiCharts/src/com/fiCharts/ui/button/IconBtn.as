@@ -29,18 +29,36 @@ package com.fiCharts.ui.button
 			this.mouseChildren = false;
 			this.buttonMode = true;
 			
-			this.states = new States;
-			XMLVOMapper.fuck(styleXML, states);
-			statesControl = new StatesControl(this, states);
 			
+			ready();
 			this.render();
 		}
 		
 		/**
+		 */		
+		private function ready():void
+		{
+			if (ifReady == false)
+			{
+				this.states = new States;
+				XMLVOMapper.fuck(styleXML, states);
+				statesControl = new StatesControl(this, states);
+				
+				ifReady = true;
+			}
+		}
+		
+		/**
+		 */		
+		private var ifReady:Boolean = false;
+		
+		/**
 		 * 设置图片
 		 */		
-		protected function setIcons(normalImg:String, hoverImg:String, downImg:String, w:Number, h:Number):void
+		public function setIcons(normalImg:String, hoverImg:String, downImg:String, w:Number, h:Number):void
 		{
+			ready();
+			
 			states.width = w;
 			states.height = h;
 			
