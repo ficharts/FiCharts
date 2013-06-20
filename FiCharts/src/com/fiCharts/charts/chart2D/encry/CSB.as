@@ -7,6 +7,8 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.ExternalUtil;
 	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.StageUtil;
+	import com.fiCharts.utils.XMLConfigKit.App;
+	import com.fiCharts.utils.XMLConfigKit.IApp;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.XMLConfigKit.style.LabelStyle;
@@ -46,12 +48,12 @@ package com.fiCharts.charts.chart2D.encry
 	/**
 	 * 这是所有图表的主程序基类，负责初始化过程，包含对外接口�
 	 */	
-	public class CSB extends Sprite
+	public class CSB extends App
 	{
 		/**
 		 * 版本�
 		 */	
-		public static const VARSION:String = "1.3.1";
+		public static const VARSION:String = "1.3.2";
 		
 		/**
 		 */		
@@ -62,6 +64,7 @@ package com.fiCharts.charts.chart2D.encry
 		public function CSB()
 		{
 			super();
+			
 			StageUtil.initApplication(this, preInit);
 		}
 		
@@ -81,6 +84,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function preInit():void
 		{
+			resetLib();
 			dec.run(this);
 		}
 		
@@ -389,13 +393,17 @@ package com.fiCharts.charts.chart2D.encry
 		private function setConfigXMLHandler(value:String):void
 		{
 			if (value)
+			{
+				this.resetLib();				
 				chart.configXML = XML(value);
+			}
 		}
 		
 		/**
 		 */		
 		private function setStyleHandler(value:String):void
 		{
+			this.resetLib();
 			chart.setStyle(value);
 		}
 		
@@ -403,6 +411,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function setCustomStyleHandler(value:String):void
 		{
+			this.resetLib();
 			chart.setCustomStyle(XML(value));
 		}
 		
@@ -589,6 +598,8 @@ package com.fiCharts.charts.chart2D.encry
 			else
 				lauchApp();
 		}
+		
+		
 		
 		// ----------------------------------------
 		//

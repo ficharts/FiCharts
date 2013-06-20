@@ -40,10 +40,22 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static const EXTEND:String = 'extends';
 		
+		/**
+		 * 切换库
+		 */		
+		public static function switchLib(newLibKey:String):void
+		{
+			if (libs.containsKey(newLibKey))
+				currentLib = libs.getValue(newLibKey);		
+		}
 		
 		/**
 		 */		
-		public static function createLib(key:String):XMLVOLib
+		public static var currentLib:XMLVOLib;
+		
+		/**
+		 */		
+		public static function getLib(key:String):XMLVOLib
 		{
 			if (libs.containsKey(key))
 			{
@@ -61,8 +73,6 @@ package com.fiCharts.utils.XMLConfigKit
 		/**
 		 */		
 		private static var libs:Map = new Map;
-		
-		
 		
 		/**
 		 * 
@@ -95,16 +105,28 @@ package com.fiCharts.utils.XMLConfigKit
 			Triangle;
 		}
 		
-		/**
-		 */		
-		public static function initCore():void
-		{
-			
-		}
+		
+		
+		
+		
+		//----------------------------------------------------------------------------
+		//
+		//
+		// 公供静态接口
+		//
+		//
+		//-----------------------------------------------------------------------------
 		
 		/**
 		 */		
 		public static function addCreationHandler(name:String, handler:Function):void
+		{
+			currentLib.addCreationHandler(name, handler);
+		}
+		
+		/**
+		 */		
+		public function addCreationHandler(name:String, handler:Function):void
 		{
 			creationMaps.put(name, handler);
 		}
@@ -112,6 +134,13 @@ package com.fiCharts.utils.XMLConfigKit
 		/**
 		 */		
 		public static function removeCreationHandler(name:String, handler:Function):void
+		{
+			currentLib.removeCreationHandler(name);
+		}
+		
+		/**
+		 */		
+		public function removeCreationHandler(name:String):void
 		{
 			if (creationMaps.containsKey(name))
 				creationMaps.remove(name);
@@ -121,13 +150,21 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function dispatchCreation(name:String, value:Object = null):void
 		{
-			if (creationMaps.containsKey(name))
-				creationMaps.getValue(name)(value);
+			currentLib.dispatchCreation(name, value);
 		}
 		
 		/**
 		 */		
-		private static var creationMaps:Map = new Map;
+		public function dispatchCreation(name:String, value:Object = null):void
+		{
+			if (creationMaps.containsKey(name))
+				creationMaps.getValue(name)(value);
+		}
+		
+		
+		/**
+		 */		
+		private var creationMaps:Map = new Map;
 		
 		
 		
@@ -143,12 +180,26 @@ package com.fiCharts.utils.XMLConfigKit
 		
 		public static function isRegistedPropertyToProperty(object:String, sourceProperty:String):Boolean
 		{
+			return currentLib.isRegistedPropertyToProperty(object, sourceProperty);
+		}
+		
+		/**
+		 */		
+		public function isRegistedPropertyToProperty(object:String, sourceProperty:String):Boolean
+		{
 			return propertyToPropertyMap.containsKey(object + sourceProperty);
 		}
 		
 		/**
 		 */		
 		public static function registerPropertyToProperty(object:String, sourceProperty:String, targetProperty:String):void
+		{
+			currentLib.registerPropertyToProperty(object, sourceProperty, targetProperty);
+		}
+		
+		/**
+		 */		
+		public function registerPropertyToProperty(object:String, sourceProperty:String, targetProperty:String):void
 		{
 			propertyToPropertyMap.put(object + sourceProperty, targetProperty);
 		}
@@ -157,12 +208,19 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function getTargetProperty(object:String, sourceProperty:String):String
 		{
+			return currentLib.getTargetProperty(object, sourceProperty);
+		}
+		
+		/**
+		 */		
+		public function getTargetProperty(object:String, sourceProperty:String):String
+		{
 			return propertyToPropertyMap.getValue(object + sourceProperty);
 		}
 		
 		/**
 		 */		
-		private static var propertyToPropertyMap:Map = new Map;
+		private var propertyToPropertyMap:Map = new Map;
 		
 		
 		
@@ -187,24 +245,48 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function isObjectToProperyRegisted(key:String):Boolean
 		{
+			return currentLib.isObjectToProperyRegisted(key);
+		}
+		
+		/**
+		 */		
+		public function isObjectToProperyRegisted(key:String):Boolean
+		{
 			return objectToPropertyMap.containsKey(key);
 		}
+		
 		
 		/**
 		 */		
 		public static function registerObjectToProperty(baseOB:String, property:String, valueTag:String):void
 		{
+			currentLib.registerObjectToProperty(baseOB, property, valueTag);
+		}
+		
+		/**
+		 */		
+		public function registerObjectToProperty(baseOB:String, property:String, valueTag:String):void
+		{
 			objectToPropertyMap.put(baseOB + property, valueTag);
 		}
 		
+		/**
+		 */		
 		public static function getObjectToProperty(baseOB:String, property:String):String
+		{
+			return currentLib.getObjectToProperty(baseOB, property);
+		}
+		
+		/**
+		 */		
+		public function getObjectToProperty(baseOB:String, property:String):String
 		{
 			return objectToPropertyMap.getValue(baseOB + property)
 		}
 		
 		/**
 		 */		
-		private static var objectToPropertyMap:Map = new Map();
+		private var objectToPropertyMap:Map = new Map();
 		
 		
 		
@@ -225,6 +307,13 @@ package com.fiCharts.utils.XMLConfigKit
 		 * 
 		 */		
 		public static function isRegistedXML(key:String, type:String):Boolean
+		{
+			return currentLib.isRegistedXML(key, type);
+		}
+		
+		/**
+		 */		
+		public function isRegistedXML(key:String, type:String):Boolean
 		{
 			if (partXMLLib.containsKey(type))
 			{
@@ -249,6 +338,11 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function registWholeXML(key:String, xml:*, type:String):void
 		{
+			currentLib.registWholeXML(key, xml, type);
+		}
+		
+		public function registWholeXML(key:String, xml:*, type:String):void
+		{
 			if (wholeXmlLib.containsKey(type))
 			{
 				wholeXmlLib.getValue(type)[key] = xml;
@@ -264,6 +358,11 @@ package com.fiCharts.utils.XMLConfigKit
 		/**
 		 */		
 		public static function registerPartXML(key:String, xml:*, type:String):void
+		{
+			currentLib.registerPartXML(key, xml, type);
+		}
+		
+		public function registerPartXML(key:String, xml:*, type:String):void
 		{
 			if (partXMLLib.containsKey(type))
 			{
@@ -287,12 +386,17 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function getXML(key:String, type:String):*
 		{
+			return currentLib.getXML(key, type);
+		}
+		
+		public function getXML(key:String, type:String):*
+		{
 			var value:Object;
 			
 			if (partXMLLib.containsKey(type))
 			{
 				value = partXMLLib.getValue(type)[key];
-					
+				
 				if (value)
 					return value;
 			}
@@ -309,16 +413,21 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function clearPartLib():void
 		{
+			currentLib.clearPartLib();
+		}
+		
+		public function clearPartLib():void
+		{
 			partXMLLib.clear();
 		}
 		
 		/**
 		 */		
-		private static var wholeXmlLib:Map = new Map;
+		private var wholeXmlLib:Map = new Map;
 		
 		/**
 		 */		
-		private static var partXMLLib:Map = new Map;
+		private var partXMLLib:Map = new Map;
 		
 		
 		
@@ -345,23 +454,39 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function registerCustomClasses(value:XML):void
 		{
+			currentLib.registerCustomClasses(value);
+		}
+		
+		public function registerCustomClasses(value:XML):void
+		{
 			if (!registedClasses.hasOwnProperty(value.name().toString()))
 			{
 				registedClasses.appendChild(value);
 			}
 		}
 		
+		
 		/**
 		 * 根据样式的节点名称创建样式对象；
 		 */		
 		public static function createRegistedObject(name:String):Object
+		{
+			return currentLib.createRegistedObject(name);
+		}
+		
+		public function createRegistedObject(name:String):Object
 		{
 			return ClassUtil.getObjectByClassPath(registedClasses[name].@path);
 		}
 		
 		/**
 		 */		
-		internal static function isRegistedClass(name:String):Boolean
+		public static function isRegistedClass(name:String):Boolean
+		{
+			return currentLib.isRegistedClass(name);
+		}
+		
+		public function isRegistedClass(name:String):Boolean
 		{
 			if (registedClasses.hasOwnProperty(name))
 				return true;
@@ -373,12 +498,22 @@ package com.fiCharts.utils.XMLConfigKit
 		 */		
 		public static function setASLabelStyleKey(key:String):void
 		{
+			currentLib.setASLabelStyleKey(key);
+		}
+		
+		public function setASLabelStyleKey(key:String):void
+		{
 			registerCustomClasses(<{key} path='com.fiCharts.utils.XMLConfigKit.style.LabelStyle'/>);
 		}
 		
 		/**
 		 */		
 		public static function setASStyleKey(key:String):void
+		{
+			currentLib.setASStyleKey(key);
+		}
+		
+		public function setASStyleKey(key:String):void
 		{
 			registerCustomClasses(<{key} path='com.fiCharts.utils.XMLConfigKit.style.Style'/>);
 		}
@@ -388,7 +523,7 @@ package com.fiCharts.utils.XMLConfigKit
 		 * 
 		 * 默认的常见样式类可直接创建， 特定的类需要类信息才可以创建；
 		 */		
-		private static var registedClasses:XML = 
+		private var registedClasses:XML = 
 							<classes>
 								<!--基础样式元素-->
 								<border path='com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine'/>
