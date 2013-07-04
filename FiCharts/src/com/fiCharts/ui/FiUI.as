@@ -7,14 +7,38 @@ package com.fiCharts.ui
 	import flash.display.Sprite;
 	
 	/**
-	 * ui 基类， 享有所有UI共性
+	 * ui 基类， 享有所有UI共性， 初始化控制，信息提示机制等
 	 */	
 	public class FiUI extends Sprite implements ITipsSender
 	{
 		public function FiUI()
 		{
-			StageUtil.initApplication(this, init);
+			StageUtil.initApplication(this, preInit);
 		}
+		
+		/**
+		 * 保证了初始化仅会在初次加入显示列表时触发
+		 */		
+		private function preInit():void
+		{
+			if (ifInited == false)
+			{
+				init();
+				ifInited = true;
+			}
+		}
+		
+		/**
+		 */		
+		protected function init():void
+		{
+			tipsHolder = new TipsHolder(this);
+		}
+		
+		/**
+		 * 防止重复添加进显示列表造成的重复初始化
+		 */		
+		private var ifInited:Boolean = false;
 		
 		/**
 		 */		
@@ -82,13 +106,6 @@ package com.fiCharts.ui
 		public function set h(value:Number):void
 		{
 			_h = value;
-		}
-		
-		/**
-		 */		
-		protected function init():void
-		{
-			tipsHolder = new TipsHolder(this);
 		}
 		
 		/**

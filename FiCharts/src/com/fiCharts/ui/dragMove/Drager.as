@@ -5,6 +5,7 @@ package com.fiCharts.ui.dragMove
 	import flash.geom.Rectangle;
 
 	/**
+	 * 使得原件可以被拖动
 	 */	
 	public class Drager
 	{

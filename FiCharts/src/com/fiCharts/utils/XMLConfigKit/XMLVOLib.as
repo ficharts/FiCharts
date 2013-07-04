@@ -445,7 +445,7 @@ package com.fiCharts.utils.XMLConfigKit
 		//-------------------------------------------------------
 		
 		/**
-		 * 注册自定义的类， 以便后继根据XML信息创建此类;
+		 * 根据类路径注册自定义的类， 以便后继根据XML信息创建此类;
 		 * 
 		 * <br/>
 		 * 
@@ -465,6 +465,26 @@ package com.fiCharts.utils.XMLConfigKit
 			}
 		}
 		
+		/**
+		 * 根据名称注册类
+		 */		
+		public static function resisterClass(key:String, className:Class):void
+		{
+			currentLib.resisterClass(key, className);
+		}
+		
+		/**
+		 */		
+		public function resisterClass(key:String, className:Class):void
+		{
+			classMap.put(key, className);
+		}
+		
+		/**
+		 * 存放类定义的数据字典 
+		 */		
+		private var classMap:Map = new Map;
+		
 		
 		/**
 		 * 根据样式的节点名称创建样式对象；
@@ -474,9 +494,19 @@ package com.fiCharts.utils.XMLConfigKit
 			return currentLib.createRegistedObject(name);
 		}
 		
+		/**
+		 * 优先采用类对象方式创建类实例
+		 */		
 		public function createRegistedObject(name:String):Object
 		{
-			return ClassUtil.getObjectByClassPath(registedClasses[name].@path);
+			if (classMap.containsKey(name))
+			{
+				return new (classMap.getValue(name) as Class);			
+			}
+			else
+			{
+				return ClassUtil.getObjectByClassPath(registedClasses[name].@path);
+			}
 		}
 		
 		/**
@@ -486,9 +516,14 @@ package com.fiCharts.utils.XMLConfigKit
 			return currentLib.isRegistedClass(name);
 		}
 		
+		/**
+		 * 是否类已经被注册，类注册分两种：类路径或者类对象方式
+		 */		
 		public function isRegistedClass(name:String):Boolean
 		{
 			if (registedClasses.hasOwnProperty(name))
+				return true;
+			else if (classMap.containsKey(name))
 				return true;
 			else
 				return false;

@@ -40,12 +40,15 @@ package com.fiCharts.ui
 		{
 			super.init();
 			
+			this.buttonMode = true;
 			this.mouseChildren = false;
+			
 			addChild(canvas);
 			addChild(iconCanvas);
 			addChild(frameCanvas);
 			
 			ready();
+			render();
 		}
 		
 		/**
@@ -91,11 +94,14 @@ package com.fiCharts.ui
 		 */		
 		public function ready():void
 		{
-			this.states = new States;
-			XMLVOMapper.fuck(this.styleXML, states);
-			
-			stateControl = new StatesControl(this, states);
-			ifReady = true;
+			if (ifReady == false)
+			{
+				this.states = new States;
+				XMLVOMapper.fuck(this.styleXML, states);
+				
+				stateControl = new StatesControl(this, states);
+				ifReady = true;
+			}
 		}
 		
 		/**
@@ -106,8 +112,7 @@ package com.fiCharts.ui
 		 */		
 		public function render():void
 		{
-			if (ifReady == false)
-				this.ready();
+			ready();
 			
 			// 图表仅绘制一次， 状态切换实则是切换背景和边框样式
 			if (ifIConDrawed == false)
@@ -273,14 +278,14 @@ package com.fiCharts.ui
 		/**
 		 */		
 		public var styleXML:XML = <states>
-										<normal radius='6'>
+										<normal radius='0'>
 											<border pixelHinting='true' color='#BCBCBC' alpha='0.6'/>
 										</normal>
-										<hover radius='6' >
+										<hover radius='0' >
 											<border pixelHinting='true' color='#4EA6EA' thikness='1' alpha='1'/>
 											<fill color='#4EA6EA' alpha='0.'/>
 										</hover>
-										<down radius='6' >
+										<down radius='0' >
 											<border pixelHinting='true' color='#4EA6EA' thikness='2' alpha='1'/>
 										</down>
 									</states>		

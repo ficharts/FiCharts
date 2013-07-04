@@ -488,7 +488,7 @@ package com.fiCharts.charts.chart2D.encry
 			for each (var item:Object in arr)
 				dataVOes.push(item);
 				
-			chart.dataVOes = dataVOes;
+			setDataVOes(dataVOes);
 		}
 		
 		/**
@@ -496,8 +496,24 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function setDataVOes(vos:Vector.<Object>):void
 		{
-			chart.dataVOes = vos;
+			if (ifReady)
+			{
+				chart.dataVOes = vos;
+			}
+			else
+			{
+				dataVOes = vos;
+				ifDataVOesChanged = true;
+			}
 		}
+		
+		/**
+		 */		
+		private var dataVOes:Vector.<Object>;
+		
+		/**
+		 */		
+		private var ifDataVOesChanged:Boolean = false;
 		
 		/**
 		 */		
@@ -837,6 +853,12 @@ package com.fiCharts.charts.chart2D.encry
 			{
 				this.setDataXML(this._dataXML);
 				ifDataChanged = false;
+			}
+			
+			if (this.ifDataVOesChanged)
+			{
+				this.setDataVOes(this.dataVOes);
+				ifDataVOesChanged = false;
 			}
 			
 			if (this.ifStyleChanged)
