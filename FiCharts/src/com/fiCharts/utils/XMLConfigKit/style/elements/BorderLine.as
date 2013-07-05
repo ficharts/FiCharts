@@ -59,6 +59,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		}
 
 		/**
+		 * normal none
 		 */		
 		private var _scaleMode:String = 'normal';
 

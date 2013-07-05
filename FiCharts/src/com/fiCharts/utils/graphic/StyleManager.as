@@ -144,7 +144,7 @@ package com.fiCharts.utils.graphic
 		
 		/**
 		 */		
-		public static function drawCircle(target:Sprite, style:Style, metaData:Object, x:Number = 0, y:Number = 0):void
+		public static function drawCircle(target:Sprite, style:Style, metaData:Object = null, x:Number = 0, y:Number = 0):void
 		{
 			setShapeStyle(style, target.graphics, metaData);
 			target.graphics.drawCircle(x, y, style.radius);
