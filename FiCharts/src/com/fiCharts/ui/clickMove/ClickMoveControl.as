@@ -33,6 +33,8 @@ package com.fiCharts.ui.clickMove
 		 */		
 		private function moseDownHandler(evt:MouseEvent):void
 		{
+			evt.stopPropagation();
+			
 			ifMoving = false;
 			
 			startX = moveTarget.stage.mouseX;
@@ -83,7 +85,6 @@ package com.fiCharts.ui.clickMove
 			{
 				target.clicked();
 			}
-				
 		}
 		
 		/**
