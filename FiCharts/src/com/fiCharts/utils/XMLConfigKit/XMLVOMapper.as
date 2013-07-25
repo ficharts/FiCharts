@@ -337,7 +337,11 @@ package com.fiCharts.utils.XMLConfigKit
 			// 原始值不存在， 创建原始值
 			if (oldValue == null)
 			{
-				if (newValue is IFiElement)
+				if (newValue == null)
+				{
+					return null;
+				}
+				else if (newValue is IFiElement)
 				{
 					target = newValue;
 				}
