@@ -498,8 +498,11 @@ package com.fiCharts.utils.graphic
 		public static function getUintColor(value:Object):uint
 		{
 			var result:uint;
-			
-			if (String(value).indexOf('#') != - 1)
+			if (value is uint)
+			{
+			    return uint(value); 	
+			}
+			else if (String(value).indexOf('#') != - 1)
 			{
 				result = uint(String(value).replace('#', '0x'));
 			}
