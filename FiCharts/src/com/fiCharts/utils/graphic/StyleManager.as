@@ -344,7 +344,8 @@ package com.fiCharts.utils.graphic
 				}
 				else
 				{
-					graphic.lineStyle(lineStyle.thikness, uint(getColor(metaData, lineStyle.color)), 
+					var thickness:Number = Number(RexUtil.getTagValueFromMataData(lineStyle.thikness, metaData));
+					graphic.lineStyle(thickness, uint(getColor(metaData, lineStyle.color)), 
 						Number(lineStyle.alpha), lineStyle.pixelHinting, lineStyle.scaleMode, lineStyle.caps, lineStyle.joints);
 				}
 			}
