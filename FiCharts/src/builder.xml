@@ -2,7 +2,7 @@
 <project name="Ficharts Builder" basedir="." default="Release FiCharts">
 	
 	<property name="FLEX_HOME" value="D:/Program Files/Adobe/Adobe Flash Builder 4.5/sdks/4.6.0" />
-	<property name="WORK_SPACE" value="G:/FiCharts" />
+	<property name="WORK_SPACE" value="G:/project/FiCharts" />
 	
 	<!--property name="FLEX_HOME" value="F:/project/flex_sdk_4.6" />
 	<property name="WORK_SPACE" value="F:/project/FiCharts" /-->

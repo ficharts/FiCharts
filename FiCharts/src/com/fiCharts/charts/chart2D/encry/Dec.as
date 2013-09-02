@@ -158,7 +158,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function createLicenseInfo(info:String):void
 		{
-			return;
+			//return;
 			
 			var label:LabelUI = new LabelUI;
 			var labelStyle:LabelStyle = new LabelStyle;
