@@ -4,10 +4,13 @@
         <x type='field' title='月份'></x>
         <y type='linear' title='销售额'></y>
     </axis>
+    
     <series>
         <column xField='label' yField='value' />
-        <line xField='label' yField='valueB' />
-         <area xField='label' yField='valueC' />
+        <line xField='label' yField='valueB'>
+        	<dataRender enable='false'/>
+        </line>
+        <area xField='label' yField='valueC' />
     </series>
     <data>
         <set label='1月' valueB="26"/>

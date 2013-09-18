@@ -12,5 +12,6 @@
 		<line xField='label' yField='value'/>
 	</series>
 	<zoom enable='true' start='19950601' end='19990526'/>
+	<zoomBar visible='false'/>
 	
 </config>
