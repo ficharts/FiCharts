@@ -440,6 +440,35 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			assignedMaximum = v;
 		}
+		
+		/**
+		 * 位于此数值范围内的label才会被显示，默认label都显示
+		 */		
+		private var _minLabel:Number = NaN;
+		
+		public function get minLabel():Number
+		{
+			return _minLabel;
+		}
+		
+		public function set minLabel(value:Number):void
+		{
+			_minLabel = value;
+		}
+		
+		/**
+		 */		
+		private var _maxLabel:Number = NaN;
+		
+		public function get maxLabel():Number
+		{
+			return _maxLabel;
+		}
+		
+		public function set maxLabel(value:Number):void
+		{
+			_maxLabel = value;
+		}
 
 		/**
 		 */

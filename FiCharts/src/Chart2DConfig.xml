@@ -794,7 +794,9 @@
 			</bubble>
 
 			<zoomBar style='Simple'/>
-
+			<dataLine>
+				<border color='#097DDA'/>
+			</dataLine>
 			<template>
             </template>
 
@@ -905,7 +907,9 @@
 				<dataRender style='ClassicBubble'/>
 			</bubble>
 			<zoomBar style='Classic'/>
-
+			<dataLine>
+				<border color='#097DDA'/>
+			</dataLine>
 			<template></template>
 			<colors>RGB</colors>
 		</Classic>
@@ -1017,7 +1021,10 @@
 			</bubble>
 
 			<zoomBar style='Black'/>
-
+			<dataLine>
+				<border color='#EEEEEE'/>
+			</dataLine>
+			
 			<template></template>
 			<colors>RGB</colors>
 		</Black>

@@ -333,6 +333,13 @@ package com.fiCharts.charts.chart2D.core.axis
 			return result;
 		}
 		
+		/**
+		 */		
+		public function checkIfShowLabel(index:uint):Boolean
+		{
+			return true;
+		}
+		
 		
 	}
 }

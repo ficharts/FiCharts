@@ -198,7 +198,24 @@ package com.fiCharts.charts.chart2D.core.axis
 			return 0;
 		}
 		
-		
+		/**
+		 */		
+		public function checkIfShowLabel(index:uint):Boolean
+		{
+			if(isNaN(axis.minLabel) && isNaN(axis.maxLabel))
+			{
+				return true;
+			}
+			else
+			{
+				var value:Number = Number(axis.labelVOes[index].value);
+				
+				if (value >= axis.minLabel && value <= axis.maxLabel)
+					return true;
+				else
+					return false;
+			}
+		}
 		
 	}
 }

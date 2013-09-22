@@ -110,5 +110,12 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		function renderHorLabelUIs():void;
 		
+		/**
+		 * 判断此label是否被渲染，数值坐标轴可以设定数值显示范围，
+		 * 
+		 * 位于范围内的数值才会被渲染
+		 */		
+		function checkIfShowLabel(index:uint):Boolean;
+		
 	}
 }

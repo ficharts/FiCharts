@@ -298,6 +298,10 @@ package com.fiCharts.charts.chart2D.encry
 			drawMask(chartMask);
 			chartCanvas.drawBG(this.sizeX, this.sizeY);
 			
+			//数据缩放模式下，当数据线开启时，绘制数据线
+			if (chartModel.zoom.enable && chartModel.dataLine.enable)
+				chartCanvas.drawDataLine(sizeY, chartModel.dataLine.border);
+			
 			layoutElementsPos(); 
 		}
 		
@@ -362,7 +366,14 @@ package com.fiCharts.charts.chart2D.encry
 				title.render();
 				title.x = this.originX;
 				
-				title.y = (topSpace - this.topAxisContainer.height - title.boxHeight) * .5;
+				if (chartModel.legend.enable && chartModel.legend.position == 'top')
+				{
+					title.y = (topSpace - this.topAxisContainer.height - legendPanel.height - title.boxHeight - legendPanel.style.vMargin * 2) * .5;
+				}
+				else
+				{
+					title.y = (topSpace - this.topAxisContainer.height - title.boxHeight) * .5;
+				}
 			}
 		}
 		
@@ -530,13 +541,24 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		private function layoutLegendPanel():void
 		{
-			var bottomGutter:Number = bottomSpace;
-			
-			if (this.bottomAxisContainer.numChildren)
-				bottomGutter = bottomSpace - bottomAxisContainer.height;
-			
-			if (this.legendPanel)
+			if (this.legendPanel && chartModel.legend.enable && chartModel.legend.position == 'top')
 			{
+				//除去坐标轴容器顶部剩余空间
+				var topGuttor:Number = topSpace;
+				
+				if (this.topAxisContainer.numChildren)
+					topGuttor = topSpace - topAxisContainer.height;
+				
+				legendPanel.x = this.originX + (this.chartWidth - originX - legendPanel.width) / 2;
+				legendPanel.y = topGuttor - legendPanel.height - legendPanel.style.vMargin;
+			}
+			else if (this.legendPanel && chartModel.legend.enable && chartModel.legend.position != 'top')
+			{
+				var bottomGutter:Number = bottomSpace;
+				
+				if (this.bottomAxisContainer.numChildren)
+					bottomGutter = bottomSpace - bottomAxisContainer.height;
+				
 				legendPanel.x = (this.chartWidth - legendPanel.width) / 2;
 				legendPanel.y = this.chartHeight - bottomGutter / 2 - legendPanel.height / 2 //- legendPanel.style.vMargin
 			}
@@ -638,7 +660,7 @@ package com.fiCharts.charts.chart2D.encry
 			var result:Number = chartModel.chartBG.paddingBottom;
 			result =  this.bottomAxisContainer.height + result;
 			
-			if (legendPanel && chartModel.legend && chartModel.legend.enable)
+			if (legendPanel && chartModel.legend && chartModel.legend.enable && chartModel.legend.position != 'top')
 				result = result + this.legendPanel.height + legendPanel.style.vMargin * 2;
 			
 			return result;
@@ -649,6 +671,9 @@ package com.fiCharts.charts.chart2D.encry
 		private function get temTopSpace():Number
 		{
 			var tem:Number = chartModel.chartBG.paddingTop + this.topAxisContainer.height + this.title.boxHeight;
+			
+			if (legendPanel && chartModel.legend && chartModel.legend.enable && chartModel.legend.position == 'top')
+				tem = tem + this.legendPanel.height + legendPanel.style.vMargin * 2;
 			
 			if (tem < chartModel.minTopPadding)
 				tem = chartModel.minTopPadding;

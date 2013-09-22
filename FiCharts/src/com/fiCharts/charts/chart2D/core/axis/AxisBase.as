@@ -403,12 +403,15 @@ package com.fiCharts.charts.chart2D.core.axis
 				
 				if (enable)
 				{
-					labelUI = labelUIs[i];
-					
-					if (labelUI == null)
-						labelUI = createLabelUI(i);
-					
-					drawHoriLabelUI(labelUI, valuePositon);
+					if (curPattern.checkIfShowLabel(i))
+					{
+						labelUI = labelUIs[i];
+						
+						if (labelUI == null)
+							labelUI = createLabelUI(i);
+						
+						drawHoriLabelUI(labelUI, valuePositon);
+					}
 				}
 			}
 			
@@ -609,17 +612,20 @@ package com.fiCharts.charts.chart2D.core.axis
 					
 					if (enable)
 					{
-						labelUI = labelUIs[i];
-						
-						if (position == "left")
-							labelMartrix.tx = - labelUI.width - label.margin;
-						else
-							labelMartrix.tx = label.margin;
+						if (curPattern.checkIfShowLabel(i))
+						{
+							labelUI = labelUIs[i];
 							
-						labelMartrix.ty =  valuePositon -  labelUI.height / 2;
-						
-						labelUIsCanvas.graphics.beginBitmapFill(labelUI, labelMartrix, false);
-						labelUIsCanvas.graphics.drawRect(labelMartrix.tx, labelMartrix.ty, labelUI.width, labelUI.height);
+							if (position == "left")
+								labelMartrix.tx = - labelUI.width - label.margin;
+							else
+								labelMartrix.tx = label.margin;
+							
+							labelMartrix.ty =  valuePositon -  labelUI.height / 2;
+							
+							labelUIsCanvas.graphics.beginBitmapFill(labelUI, labelMartrix, false);
+							labelUIsCanvas.graphics.drawRect(labelMartrix.tx, labelMartrix.ty, labelUI.width, labelUI.height);
+						}
 					}
 				}
 				

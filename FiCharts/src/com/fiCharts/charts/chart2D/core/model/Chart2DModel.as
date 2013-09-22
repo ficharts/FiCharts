@@ -112,6 +112,12 @@ package com.fiCharts.charts.chart2D.core.model
 			_zoom = value;
 		}
 		
+		/**
+		 */		
+		public var dataLine:DataLine
+		
+		
+		
 		
 		//------------------------------
 		//

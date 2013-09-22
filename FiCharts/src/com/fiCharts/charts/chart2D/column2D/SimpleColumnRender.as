@@ -73,7 +73,7 @@ package com.fiCharts.charts.chart2D.column2D
 				{
 					dataItem = series.dataItemVOs[i] as ColumnDataPoint;
 					
-					w = series.horizontalAxis.unitSize;
+					w = series.horizontalAxis.unitSize - 1;
 					h = series.baseLine - dataItem.y;
 					
 					px = dataItem.x - w / 2;

@@ -533,9 +533,14 @@ package com.fiCharts.charts.chart2D.encry
 		private var zoomAxis:AxisBase;
 		
 		/**
+		 * 每个序列仅有一个数据节点
 		 */		
 		public function getItemRenderFromSereis():void
 		{
+			chartMain.chartCanvas.clearItemRenders();
+			
+			for each (var sereis:SB in chartMain.series)
+				chartMain.chartCanvas.addItemRender(sereis.simpleDataRender);
 		}
 		
 		/**
@@ -592,6 +597,11 @@ package com.fiCharts.charts.chart2D.encry
 				// 别忘了序列都被图例隐藏的情况
 				if(tipsHolder.tipLength)
 					chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.SHOW_TOOL_TIPS, tipsHolder));
+				
+				
+				series = chartMain.series[0];
+				chartMain.chartCanvas.dataLine.visible = true;
+				chartMain.chartCanvas.updataDataLinePos(series.simpleDataRender.x, series.simpleDataRender.y);
 			}
 		}
 		
@@ -601,6 +611,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			zoomAxis.hideDataRender();
 			chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
+			chartMain.chartCanvas.dataLine.visible = false;
 		}
 		
 		/**

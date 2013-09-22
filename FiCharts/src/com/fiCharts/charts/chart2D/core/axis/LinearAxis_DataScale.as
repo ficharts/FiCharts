@@ -363,5 +363,12 @@ package com.fiCharts.charts.chart2D.core.axis
 			return dataScaleProxy.posToPercent(pos, axis);
 		}
 		
+		/**
+		 */		
+		public function checkIfShowLabel(index:uint):Boolean
+		{
+			return true;
+		}
+		
 	}
 }

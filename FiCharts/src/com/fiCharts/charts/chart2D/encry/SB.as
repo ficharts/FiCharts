@@ -132,11 +132,8 @@ package com.fiCharts.charts.chart2D.encry
 			else
 				curRenderPattern = getClassicPattern();
 			
-			if (simpleDataRender && simpleDataRender.parent)
-			{
-				this.removeChild(simpleDataRender)
-				simpleDataRender = null;
-			}
+			if (simpleDataRender)
+				simpleDataRender.graphics.clear();
 			
 			if (tipItem)
 			{
@@ -154,14 +151,10 @@ package com.fiCharts.charts.chart2D.encry
 			else
 				curRenderPattern = getSimplePattern();
 			
-			if (simpleDataRender == null)
+			if (simpleDataRender)
 			{
-				simpleDataRender = new Sprite;
-				simpleDataRender.graphics.clear();
-				
 				dataRender.toHover();
 				dataRender.render(simpleDataRender, this);
-				this.addChild(simpleDataRender);
 			}
 			
 			if (tipItem == null)
@@ -272,8 +265,9 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 每个序列拥有一个渲染节点，用于数据缩放类型的图表
 		 */		
-		private var simpleDataRender:Sprite;
+		public var simpleDataRender:Sprite = new Sprite;
 		
 		/**
 		 * 数据缩放时的信息提示数据节点�每个序列仅有一个节�
@@ -1189,6 +1183,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 默认只有一个序列图例
 		 */		
 		public function get ifSeriesLegend():Object
 		{

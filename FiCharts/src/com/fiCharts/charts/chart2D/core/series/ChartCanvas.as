@@ -1,9 +1,12 @@
 package com.fiCharts.charts.chart2D.core.series
 {
 	import com.fiCharts.charts.chart2D.encry.SB;
+	import com.fiCharts.utils.XMLConfigKit.style.elements.BorderLine;
+	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	
@@ -16,10 +19,15 @@ package com.fiCharts.charts.chart2D.core.series
 			super();
 			
 			this.addChild(seriesCanvas);
+			this.addChild(dataLine);
 			this.addChild(itemRenderCanvas);
 			this.addChild(valueLabelsCanvas);
 			valueLabelsCanvas.mouseEnabled = valueLabelsCanvas.mouseChildren = false;
 		}
+		
+		/**
+		 */		
+		public var dataLine:Shape = new Shape;
 		
 		/**
 		 * 此背景透明区域的绘制是为了便于判断鼠标是否位于图表区域， 从而
@@ -32,6 +40,25 @@ package com.fiCharts.charts.chart2D.core.series
 			this.graphics.beginFill(0, 0);
 			this.graphics.drawRect(0, - h, w, h);
 			this.graphics.endFill();
+		}
+		
+		/**
+		 * 鼠标移动时更新数据线的位置， 这个位置是以数据节点为基准的
+		 */		
+		public function updataDataLinePos(x:Number, y:Number):void
+		{
+			dataLine.x = x;
+		}
+		
+		/**
+		 * 绘制跟随鼠标移动的数据线
+		 */		
+		public function drawDataLine(h:Number, border:BorderLine):void
+		{
+			this.dataLine.graphics.clear();
+			StyleManager.setLineStyle(dataLine.graphics, border);
+			this.dataLine.graphics.moveTo(0, 0);
+			this.dataLine.graphics.lineTo(0, - h);
 		}
 		
 		/**
