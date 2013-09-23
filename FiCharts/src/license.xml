@@ -2,6 +2,8 @@
 	<!-- Trial, web, Intranet, Enterprise, Enterprise_Plus, Desk, App-->
 	<type>web</type>
 	<servers>
+		<url>www.ficharts.com</url>
+		<url>ficharts.com</url>
 		<url>localhost:8088</url>
 		<url>192.168.10.158</url>
 	</servers>

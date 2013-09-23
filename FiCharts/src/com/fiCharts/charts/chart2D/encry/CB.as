@@ -293,6 +293,10 @@ package com.fiCharts.charts.chart2D.encry
 		private function coreRender():void
 		{
 			renderSeries();
+			
+			//最终重复渲染图例是因为，只有当序列渲染后图例中的节点数据
+			//才完全被设定好值
+			renderLegend();
 			renderBG();
 			
 			drawMask(chartMask);
@@ -385,6 +389,7 @@ package com.fiCharts.charts.chart2D.encry
 			if (legendPanel && chartModel.legend.enable)
 			{
 				legendPanel.panelWidth = this.chartWidth - legendPanel.style.hMargin * 2;
+				legendPanel.legendData = legendData;
 				legendPanel.render();
 			}
 		}
@@ -924,10 +929,10 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function configSeriesAndLegendData():void
 		{
-			var legends:Vector.<LegendVO> = new Vector.<LegendVO>();
-			
 			if (chartModel.series.changed || ifDataChanged)
 			{
+				legendData.length = 0;
+				
 				if (dataVOes == null)
 				{
 					dataVOes = new Vector.<Object>;
@@ -946,13 +951,14 @@ package com.fiCharts.charts.chart2D.encry
 					seriesItem.dataProvider = dataVOes;
 					
 					if (chartModel.legend.enable)
-						legends = legends.concat(seriesItem.legendData);
+						legendData = legendData.concat(seriesItem.legendData);
 				}
-				
-				if (legendPanel && chartModel.legend.enable)
-					legendPanel.legendData = legends;
 			}
 		}
+		
+		/**
+		 */		
+		private var legendData:Vector.<LegendVO> = new Vector.<LegendVO>;
 		
 		/**
 		 */		
