@@ -77,7 +77,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			var stack:StackedSeries;
 			var seriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs.length = 0;
+			dataItemVOsForRender.length = 0;
 			horizontalValues.length = 0;
 			verticalValues.length = 0;
 			
@@ -86,7 +86,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			{
 				stack.dataProvider = this.dataProvider;
 				stack.initData();
-				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
+				dataItemVOsForRender = dataItemVOsForRender.concat(stack.dataItemVOsForRender);
 			}
 			
 			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
@@ -95,7 +95,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				fullValue = 0;
 				for each (stack in stacks) // 求和
 				{
-					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataPoint;
+					seriesDataItem = stack.dataItemVOsForRender[i] as StackedSeriesDataPoint;
 					seriesDataItem.index = i;
 					xValue = seriesDataItem.xVerifyValue;
 					yValue = Number(seriesDataItem.yVerifyValue);
@@ -105,7 +105,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				positiveValue = percent = 0;
 				for each (stack in stacks)
 				{
-					seriesDataItem = stack.dataItemVOs[i] as StackedSeriesDataPoint;
+					seriesDataItem = stack.dataItemVOsForRender[i] as StackedSeriesDataPoint;
 					
 					yValue = Number(seriesDataItem.yValue);
 					seriesDataItem.startValue = positiveValue / fullValue * 100;

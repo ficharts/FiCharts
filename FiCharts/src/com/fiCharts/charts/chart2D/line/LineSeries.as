@@ -122,8 +122,8 @@ package com.fiCharts.charts.chart2D.line
 		 */		
 		public function renderSimleLine(canvas:Graphics, startIndex:uint, endIndex:uint, offset:uint = 0):void
 		{
-			var firstX:Number = (dataItemVOs[startIndex] as SeriesDataPoint).x; 
-			var firstY:Number = (dataItemVOs[startIndex] as SeriesDataPoint).y - baseLine - offset;
+			var firstX:Number = (dataItemVOsForRender[startIndex] as SeriesDataPoint).x; 
+			var firstY:Number = (dataItemVOsForRender[startIndex] as SeriesDataPoint).y - baseLine - offset;
 			
 			var item:SeriesDataPoint;
 			var i:uint;
@@ -135,7 +135,7 @@ package com.fiCharts.charts.chart2D.line
 				var stepY:Number = firstY;
 				for (i = startIndex; i <= endIndex; i ++)
 				{
-					item = dataItemVOs[i];
+					item = dataItemVOsForRender[i];
 					canvas.lineTo(item.x, stepY);
 					canvas.lineTo(item.x, item.y - baseLine - offset);
 					stepY = item.y - baseLine - offset;
@@ -148,7 +148,7 @@ package com.fiCharts.charts.chart2D.line
 				
 				for (i = startIndex; i <= endIndex; i ++)
 				{
-					item = dataItemVOs[i];
+					item = dataItemVOsForRender[i];
 					point = new Point();
 					point.x = (item as SeriesDataPoint).x;
 					point.y = (item as SeriesDataPoint).y - baseLine - offset;
@@ -164,7 +164,7 @@ package com.fiCharts.charts.chart2D.line
 				
 				for (i = startIndex; i <= endIndex; i ++)
 				{
-					item = dataItemVOs[i];
+					item = dataItemVOsForRender[i];
 					canvas.lineTo(item.x, item.y - baseLine - offset);
 				}
 			}

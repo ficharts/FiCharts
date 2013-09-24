@@ -72,8 +72,8 @@ package com.fiCharts.charts.chart2D.area2D
 					series.dataOffsetter.minIndex, series.dataOffsetter.maxIndex);
 				
 				//绘制闭合区域以便填充
-				var startPoint:SeriesDataPoint = series.dataItemVOs[series.dataOffsetter.minIndex] as SeriesDataPoint;
-				var endPoint:SeriesDataPoint = series.dataItemVOs[series.dataOffsetter.maxIndex] as SeriesDataPoint;
+				var startPoint:SeriesDataPoint = series.dataItemVOsForRender[series.dataOffsetter.minIndex] as SeriesDataPoint;
+				var endPoint:SeriesDataPoint = series.dataItemVOsForRender[series.dataOffsetter.maxIndex] as SeriesDataPoint;
 				
 				series.canvas.graphics.lineStyle(0, 0, 0);
 				series.canvas.graphics.lineTo(endPoint.x, - series.baseLine);

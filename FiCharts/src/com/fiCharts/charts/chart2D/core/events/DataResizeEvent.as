@@ -67,6 +67,12 @@ package com.fiCharts.charts.chart2D.core.events
 		}
 		
 		/**
+		 * field=坐标轴时，为节点x轴的坐标值
+		 */		
+		public var label:String;
+		
+		/**
+		 * 线性轴中表示坐标轴鼠标位置的值
 		 */		
 		public var data:Number = 0;
 		

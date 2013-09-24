@@ -69,7 +69,7 @@ package com.fiCharts.charts.chart2D.line
 					
 					var linePartUI:PartLineUI;
 					series.partUIs = new Vector.<PartLineUI>;
-					for each (var itemDataVO:SeriesDataPoint in series.dataItemVOs)
+					for each (var itemDataVO:SeriesDataPoint in series.dataItemVOsForRender)
 					{
 						linePartUI = new PartLineUI(itemDataVO);
 						linePartUI.partUIRender = this;
