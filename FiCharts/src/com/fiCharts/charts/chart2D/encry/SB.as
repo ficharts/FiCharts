@@ -219,6 +219,7 @@ package com.fiCharts.charts.chart2D.encry
 		private function updateTipByIndex(evt:DataResizeEvent):void
 		{
 			_updateTipsData(evt.data);
+			trace(evt.data);
 		}
 		
 		/**

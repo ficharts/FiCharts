@@ -277,7 +277,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function valueToSize(value:Object, index:int):Number
 		{
-			if (index == - 1)// 此时是坐标轴Label位置计算， 因label位置信息是独立的体系
+			//if (index == - 1)// 此时是坐标轴Label位置计算， 因label位置信息是独立的体系
 				index = dataScaleProxy.currentSourceData.indexOf(value)
 					
 			var result:Number = axis.unitSize * .5 + index * axis.unitSize
