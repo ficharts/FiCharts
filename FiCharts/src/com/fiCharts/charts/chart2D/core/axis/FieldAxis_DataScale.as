@@ -26,14 +26,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 * 找到离鼠标位置最近的点
+		 * 
+		 * 这里是以全局坐标来判定节点位置
 		 */		
 		public function updateTipsData():void
 		{
 			var evt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.UPDATE_TIPS_BY_INDEX);
 			
 			var curPerc:Number = posToPercent(axis.mouseX);
-			evt.start = Math.floor(curPerc * dataScaleProxy.maxIndex);
-			evt.end =  Math.ceil(curPerc * dataScaleProxy.maxIndex);
+			evt.start = Math.floor(curPerc * dataScaleProxy.sourceDataLen);
+			evt.end =  Math.ceil(curPerc * dataScaleProxy.sourceDataLen);
 			
 			var prePerc:Number = dataScaleProxy.getPercentByData(evt.start);
 			var nexPerc:Number = dataScaleProxy.getPercentByData(evt.end);
@@ -45,6 +47,10 @@ package com.fiCharts.charts.chart2D.core.axis
 			else
 				evt.data = evt.end;
 			
+			evt.label = axis.sourceValues[evt.data];
+			evt.start = axis.mouseX;
+			evt.end = dataScaleProxy.fullSize;	
+			//这里又
 			axis.dispatchEvent(evt);
 		}
 		

@@ -71,7 +71,7 @@ package com.fiCharts.charts.chart2D.column2D
 				StyleManager.setShapeStyle(series.currState, series.canvas.graphics, series);
 				for (var i:uint = series.dataOffsetter.minIndex; i <= series.dataOffsetter.maxIndex; i ++)
 				{
-					dataItem = series.dataItemVOs[i] as ColumnDataPoint;
+					dataItem = series.dataItemVOsForRender[i] as ColumnDataPoint;
 					
 					w = series.horizontalAxis.unitSize - 1;
 					h = series.baseLine - dataItem.y;

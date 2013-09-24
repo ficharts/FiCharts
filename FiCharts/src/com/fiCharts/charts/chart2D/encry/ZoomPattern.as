@@ -589,7 +589,8 @@ package com.fiCharts.charts.chart2D.encry
 				for each (var series:SB in chartMain.series)
 				{
 					// 别忘了图例可以控制序列的隐藏
-					if(series.visible)
+					// 空数据节点没有tip信息
+					if(series.visible && series.tipItem.metaData)
 						tipsHolder.pushTip(series.tipItem);
 				}
 				

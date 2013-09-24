@@ -92,7 +92,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 			adjustColumnWidth();
 			
 			var item:SeriesDataPoint;
-			for each (item in dataItemVOs)
+			for each (item in dataItemVOsForRender)
 			{
 				item.x = this.horizontalAxis.valueToX((item as StackedSeriesDataPoint).startValue, NaN) - baseLine;
 				item.dataItemX = horizontalAxis.valueToX((item as StackedSeriesDataPoint).endValue, NaN);
@@ -165,7 +165,7 @@ package com.fiCharts.charts.chart2D.bar.stack
 			var combleSeriesDataItem:SeriesDataPoint;
 			var stackedSeriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs.length = 0;
+			dataItemVOsForRender.length = 0;
 			horizontalValues.length = 0;
 			verticalValues.length = 0;
 			fullDataItems.length = 0;
@@ -176,10 +176,10 @@ package com.fiCharts.charts.chart2D.bar.stack
 				stack.value = "xValue"
 				stack.dataProvider = this.dataProvider;
 				stack.initData();
-				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
+				dataItemVOsForRender = dataItemVOsForRender.concat(stack.dataItemVOsForRender);
 			}
 			
-			if (dataItemVOs.length == 0) return;
+			if (dataItemVOsForRender.length == 0) return;
 			
 			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
 			for (var i:uint = 0; i < length; i++)
@@ -188,12 +188,12 @@ package com.fiCharts.charts.chart2D.bar.stack
 				
 				for each (stack in stacks)
 				{
-					if (stack.dataItemVOs.length <= i)
+					if (stack.dataItemVOsForRender.length <= i)
 						continue;
 					
-					xValue = Number(stack.dataItemVOs[i].xVerifyValue);
-					yValue = stack.dataItemVOs[i].yVerifyValue;
-					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataPoint);
+					xValue = Number(stack.dataItemVOsForRender[i].xVerifyValue);
+					yValue = stack.dataItemVOsForRender[i].yVerifyValue;
+					stackedSeriesDataItem = (stack.dataItemVOsForRender[i] as StackedSeriesDataPoint);
 					
 					if (xValue >= 0)
 					{

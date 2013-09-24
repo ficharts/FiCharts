@@ -19,7 +19,10 @@ package com.fiCharts.charts.chart2D.core.series
 			super();
 			
 			this.addChild(seriesCanvas);
+			
+			dataLine.visible = false;
 			this.addChild(dataLine);
+			
 			this.addChild(itemRenderCanvas);
 			this.addChild(valueLabelsCanvas);
 			valueLabelsCanvas.mouseEnabled = valueLabelsCanvas.mouseChildren = false;

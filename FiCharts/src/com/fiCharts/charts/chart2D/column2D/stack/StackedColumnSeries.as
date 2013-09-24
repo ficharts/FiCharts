@@ -121,11 +121,11 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			
 			var item:SeriesDataPoint;
 			var i:int;
-			var len:uint = dataItemVOs.length;
+			var len:uint = dataItemVOsForRender.length;
 			
 			for (i = 0; i < len; i += step)
 			{
-				item = dataItemVOs[i];
+				item = dataItemVOsForRender[i];
 				
 				item.x = horizontalAxis.valueToX(item.xVerifyValue, - 1) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
@@ -214,7 +214,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			var combleSeriesDataItem:SeriesDataPoint;
 			var stackedSeriesDataItem:StackedSeriesDataPoint;
 			
-			dataItemVOs.length = 0;
+			dataItemVOsForRender.length = 0;
 			horizontalValues.length = 0;
 			verticalValues.length = 0;
 			fullDataItems.length = 0;
@@ -225,10 +225,10 @@ package com.fiCharts.charts.chart2D.column2D.stack
 			{
 				stack.dataProvider = this.dataProvider;
 				stack.initData();
-				dataItemVOs = dataItemVOs.concat(stack.dataItemVOs);
+				dataItemVOsForRender = dataItemVOsForRender.concat(stack.dataItemVOsForRender);
 			}
 			
-			if (dataItemVOs.length == 0) return;
+			if (dataItemVOsForRender.length == 0) return;
 			
 			// 将子序列的数值叠加， 因坐标轴的数值显示的是总量�
 			for (var i:uint = 0; i < length; i++)
@@ -236,10 +236,10 @@ package com.fiCharts.charts.chart2D.column2D.stack
 				positiveValue = negativeValue = 0;
 				for each (stack in stacks)
 				{
-					if (stack.dataItemVOs.length <= i)
+					if (stack.dataItemVOsForRender.length <= i)
 						continue;
 						
-					stackedSeriesDataItem = (stack.dataItemVOs[i] as StackedSeriesDataPoint);
+					stackedSeriesDataItem = (stack.dataItemVOsForRender[i] as StackedSeriesDataPoint);
 					stackedSeriesDataItem.index = i;
 					
 					xVerifyValue = stackedSeriesDataItem.xVerifyValue;

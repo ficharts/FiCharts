@@ -58,7 +58,7 @@ package com.fiCharts.charts.chart2D.column2D.stack
 					series.columnUIs = new Vector.<Column2DUI>;
 					for each (var stack:StackedSeries in series.stacks)
 					{
-						for each (var itemDataVO:SeriesDataPoint in stack.dataItemVOs)
+						for each (var itemDataVO:SeriesDataPoint in stack.dataItemVOsForRender)
 						{
 							if (series.ifNullData(itemDataVO))
 								continue;
