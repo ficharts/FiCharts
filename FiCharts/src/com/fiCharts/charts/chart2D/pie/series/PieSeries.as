@@ -292,7 +292,8 @@ package com.fiCharts.charts.chart2D.pie.series
 			{
 				seriesDataItem = new PieDataItem;
 				
-				seriesDataItem.metaData = item;
+				seriesDataItem.metaData = {};
+				seriesDataItem.metaData.source = item;
 				//XMLVOMapper.pushXMLDataToVO(item, seriesDataItem.metaData);//将XML转化为对象
 				
 				seriesDataItem.label = item[this.labelField]; 

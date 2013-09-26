@@ -3,7 +3,7 @@
 	<chartBGpaddingTop='1'/>
 <tooltip>
 	<label>
-		<![CDATA[时间:${xValue}<br>数值:${yLabel}]]>
+		<![CDATA[时间:${xValue}<br>数值:${yLabel}<br>${source.value60201860}]]>
 	</label>
 </tooltip>
 <axis>

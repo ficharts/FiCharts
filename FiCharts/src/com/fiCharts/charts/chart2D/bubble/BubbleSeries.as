@@ -232,16 +232,17 @@ package com.fiCharts.charts.chart2D.bubble
 			{
 				seriesDataItem = new BubbleDataPoint();
 				
-				seriesDataItem.metaData = item;
+				seriesDataItem.metaData = {};
+				seriesDataItem.metaData.source = item;
 				
-				seriesDataItem.xValue = seriesDataItem.metaData[xField]; // xValue.
-				seriesDataItem.yValue = seriesDataItem.metaData[yField]; // yValue.
-				seriesDataItem.zValue = seriesDataItem.metaData[radiusField];
+				seriesDataItem.xValue = item[xField]; // xValue.
+				seriesDataItem.yValue = item[yField]; // yValue.
+				seriesDataItem.zValue = item[radiusField];
 				
 				seriesDataItem.xVerifyValue = this.horizontalAxis.getVerifyData(seriesDataItem.xValue);
 				seriesDataItem.yVerifyValue = this.verticalAxis.getVerifyData(seriesDataItem.yValue);
 				
-				setItemColor(seriesDataItem.metaData, seriesDataItem);
+				setItemColor(item, seriesDataItem);
 				seriesDataItem.seriesName = seriesName;
 				
 				horizontalValues.push(seriesDataItem.xValue);

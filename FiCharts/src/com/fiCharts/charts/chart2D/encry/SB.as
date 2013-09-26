@@ -248,6 +248,7 @@ package com.fiCharts.charts.chart2D.encry
 			if (index >= 0 && index < dataProvider.length)
 			{
 				item = this.seriesDataItem;
+				
 				preInitDtaItem(item, dataProvider[index]);
 				
 				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, index);
@@ -261,14 +262,13 @@ package com.fiCharts.charts.chart2D.encry
 					
 				simpleDataRender.y = item.y;
 				
-				trace(index, item.x);
-				
 				if (simpleDataRender.visible == false)
 					this.horizontalAxis.dispatchEvent(new DataResizeEvent(DataResizeEvent.IF_SHOW_DATA_RENDER));
 				
 				if (ifDataInvalid(item))
 				{
 					tipItem.metaData = null;
+					simpleDataRender.visible = false;
 				}
 				else
 				{
@@ -1128,6 +1128,8 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function preInitDtaItem(seriesDataItem:SeriesDataPoint, item:Object):void
 		{
+			seriesDataItem.metaData = {};
+			seriesDataItem.metaData.source = item;
 			seriesDataItem.xValue = item[xField]; // xValue.
 			seriesDataItem.yValue = item[yField]; // yValue.
 			
@@ -1147,8 +1149,6 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function initDataItem(seriesDataItem:SeriesDataPoint):void
 		{
-			seriesDataItem.metaData = {};
-			
 			seriesDataItem.xLabel = horizontalAxis.getXLabel(seriesDataItem.xVerifyValue);
 			seriesDataItem.yLabel = verticalAxis.getYLabel(seriesDataItem.yVerifyValue);
 			
