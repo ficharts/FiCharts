@@ -390,7 +390,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function onWebMouseWheel(value:Number):void
 		{
-			if(chartMain.chartModel.zoom.enable)
+			if(chartMain.chartModel.zoom.enable && chartMain.chartModel.zoom.mouseWheel)
 			{
 				var percent:Number = chartMain.mouseX / chartMain.chartWidth;
 				var ifZoomIn:Boolean = value > 0 ? true : false; 

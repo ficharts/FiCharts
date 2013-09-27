@@ -6,11 +6,11 @@
 	</tooltip>
 	<axis>
 		<y type="linear" title='数值' baseAtZero='false'/>
-		<x type='date' title='月份' input='YYYYMMDD'/>
+		<x type='field' title='月份' input='YYYYMMDD'/>
 	</axis>
 	<series>
-		<line xField='label' yField='value'/>
+		<column xField='label' yField='value'/>
 	</series>
-	<zoom enable='true' start='19950601' end='19990526'/>
+	<zoom enable='true' start='19950601' end='19990526' mouseWheel='false'/>
 	
 </config>

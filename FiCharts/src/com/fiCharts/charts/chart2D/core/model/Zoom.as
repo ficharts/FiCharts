@@ -19,6 +19,8 @@ package com.fiCharts.charts.chart2D.core.model
 	 * 5.主程序会存在两种状态，缩放态和经典态，而且可以相互变态；
 	 * 
 	 * 6.主程序的状态切换会映射到坐标轴和序列上；
+	 * 
+	 * 7.当关闭缩放条和滚轮缩放功能时，大数据进入简装版，和经典模式看起来差不多，但是渲染效率深不可测
 	 *  
 	 */	
 	public class Zoom
@@ -105,6 +107,26 @@ package com.fiCharts.charts.chart2D.core.model
 				XMLVOLib.dispatchCreation(CB.TO_CLASSIC_PATTERN);
 		}
 		
+		/**
+		 * 默认大数据下滚轮缩放时开启的，也可以禁用滚轮缩放
+		 */		
+		private var _mouseWheel:Object = true;
+
+		/**
+		 */
+		public function get mouseWheel():Object
+		{
+			return _mouseWheel;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set mouseWheel(value:Object):void
+		{
+			_mouseWheel = XMLVOMapper.boolean(value);
+		}
+
 		/**
 		 */		
 		private var _start:String;

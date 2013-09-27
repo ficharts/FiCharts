@@ -210,7 +210,9 @@ package com.fiCharts.charts.chart2D.core.axis
 			{
 				var value:Number = Number(axis.labelVOes[index].value);
 				
-				if (value >= axis.minLabel && value <= axis.maxLabel)
+				if ((value - axis.interval) < axis.maxLabel && value >= axis.maxLabel)
+					return true;
+				if (axis.minLabel < (value + axis.interval) && axis.minLabel >= value)
 					return true;
 				else
 					return false;
