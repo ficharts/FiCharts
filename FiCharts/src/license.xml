@@ -5,7 +5,8 @@
 		<url>www.ficharts.com</url>
 		<url>ficharts.com</url>
 		<url>localhost:8088</url>
-		<url>192.168.10.158</url>
+		<url>127.0.0.1</url>
+		<url>10.180.67.202</url>
 	</servers>
 	<desc>未授权版本,内部试用</desc>
 </license>

@@ -692,13 +692,13 @@ package com.fiCharts.charts.chart2D.encry
 					flash.net.navigateToURL(new URLRequest('http://weibo.com/u/2431448684'), '_blank');
 				});
 				
-				myContextMenu.customItems.push(item);
+				//myContextMenu.customItems.push(item);
 				
 				item = new ContextMenuItem("QQ群:184587429");
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(evt:Event):void{
 					flash.net.navigateToURL(new URLRequest('http://qun.qzone.qq.com/group#!/184587429/home'), '_blank');
 				});
-				myContextMenu.customItems.push(item);
+				//myContextMenu.customItems.push(item);
 				
 				item = new ContextMenuItem(menu.about + " FiCharts");
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);

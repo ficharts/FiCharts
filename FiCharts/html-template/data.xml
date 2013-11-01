@@ -1,28 +1,25 @@
-<?xml version="1.0"?>
-<config precision="1" title='过程线' minTopPadding='30' ySuffix='' xSuffix=''  bgVisible='true'>
-	<chartBGpaddingTop='1'/>
-<tooltip>
-	<label>
-		<![CDATA[时间:${xValue}<br>数值:${yLabel}<br>${source.value60201860}]]>
-	</label>
-</tooltip>
-<axis>
-	<x type='field' title='时间'></x>
-	<y type='linear' title=''  baseAtZero='false'></y>
-</axis> 
-<series>
-	<line xField='label' yField='value12345678' smooth='false'> <dataRender enable='false'/> </line>
-	<line xField='label' yField='value60201860' smooth='false' > <dataRender enable='false'/> </line>
-	<line xField='label' yField='value60202030' smooth='false' > <dataRender enable='false'/> </line>
-	<line xField='label' yField='value60204680' smooth='false' > <dataRender enable='false'/> </line> 
-</series>
-<data>
-	<item label='2008-01-01 00:00:00'  value12345678='565.000'  value60201860='473.000'  value60202030='450.000'  value60204680='573.000'  />
-	<item label='2008-01-01 01:00:00'  value12345678='533.000'  value60201860='528.000'  value60202030='617.000'  value60204680='512.000'  />
-	<item label='2008-01-01 02:00:00'  value12345678=''         value60201860='479.000'  value60202030='595.000'  value60204680='452.000'  />
-	<item label='2008-01-01 03:00:00'  value12345678='634.000'  value60201860='536.000'  value60202030='590.000'  value60204680='585.000'/>
-	<item label='2008-01-01 04:00:00'  value12345678='520.000'  value60201860='544.000'  value60202030='540.000'  value60204680='634.000'  />
-</data> 
-<zoom enable='true' /> 
-<zoomBar visible='false'/>
+<config title='产品销量状况' ySuffix='K'>
+    <axis>
+        <x type="field" title='月份' />
+        <y type="linear" title='产量' displayName='实际产量'/>
+    </axis>
+    <series>
+        <column xField='label' yField='valueA'/>
+        <column xField='label' yField='value'/>
+    </series>
+    <legend enable='true'/>
+    <data>
+        <set label='1月' value='279' valueA='400'/>
+        <set label='2月' value='410' valueA='300'/>
+        <set label='3月' value='325' valueA='250'/>
+        <set label='4月' value='572' valueA='100'/>
+        <set label='5月' value='629' valueA='300'/>
+        <set label='6月' value='710' valueA='400'/>
+        <set label='7月' value='489' valueA='600'/>
+        <set label='8月' value='635' valueA='800'/>
+        <set label='9月' value='750' valueA='600'/>
+        <set label='10月' value='600' valueA='400'/>
+        <set label='11月' value='760' valueA='350'/>
+        <set label='12月' value='950' valueA='300'/>
+    </data>
 </config>
