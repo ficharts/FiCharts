@@ -319,7 +319,7 @@ package com.fiCharts.charts.chart2D.core.axis
 
 		/**
 		 */
-		public function get ifExpend():Boolean
+		public function get ifExpend():Object
 		{
 			return _ifExpend;
 		}
@@ -327,9 +327,9 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * @private
 		 */
-		public function set ifExpend(value:Boolean):void
+		public function set ifExpend(value:Object):void
 		{
-			_ifExpend = value;
+			_ifExpend = XMLVOMapper.boolean(value);
 		}
 
 		/**
