@@ -6,7 +6,12 @@
 		<url>ficharts.com</url>
 		<url>localhost:8088</url>
 		<url>127.0.0.1</url>
-		<url>10.180.67.202</url>
+
+<!----------------预设----------------->
+
+		<url>1.26.1.20</url>
+		<url>1.26.1.10</url>
+
 	</servers>
-	<desc>未授权版本,内部试用</desc>
+	<desc></desc>
 </license>

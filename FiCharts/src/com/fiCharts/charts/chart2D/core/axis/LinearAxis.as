@@ -28,6 +28,9 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			var axis:LinearAxis = new LinearAxis;
 			initClone(axis);
+			axis.baseAtZero = this.baseAtZero;
+			//axis.maximum = this.maximum;
+			//axis.minimum = this.minimum;
 			
 			return axis;
 		}
@@ -74,11 +77,14 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */
 		override public function pushValues(values:Vector.<Object>):void
 		{
-			var item:Number, i:uint = sourceValues.length;
+			var item:Object, i:uint = sourceValues.length;
 			for each (item in values)
 			{
-				sourceValues[i] = item;
-				i ++;				
+				if (item != '')
+				{
+					sourceValues[i] = Number(item);
+					i ++;
+				}
 			}
 		}
 		
@@ -523,8 +529,13 @@ package com.fiCharts.charts.chart2D.core.axis
 			var item:Object, i:Number = yScrollData.length;
 			for each(item in value)
 			{
-				yScrollData[i] = item;
-				i ++
+				if (item != '')
+				{
+					yScrollData[i] = Number(item);
+					
+					i ++
+				}
+				
 			}
 		}
 		

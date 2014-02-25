@@ -313,6 +313,8 @@ package com.fiCharts.charts.chart2D.pie.series
 				
 				if (color)
 					seriesDataItem.color = uint(color);
+				else if (item.hasOwnProperty('color'))
+					seriesDataItem.color = uint(item['color']);
 				else
 					seriesDataItem.color = chartColorManager.chartColor;
 				

@@ -1,7 +1,7 @@
 <config valueSuffix='亿部' precision="2" bgVisible='true'>
 	<legend enable='true' position='left'/>
     <data>
-        <set label="Nokia" value="4.171"/>
+        <set label="Nokia" value="4.171" color='#000000'/>
         <set label="Samsung" value="3.294"/>
         <set label="Apple" value="0.932"/>
         <set label="LG" value="0.881"/>

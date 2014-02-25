@@ -1109,7 +1109,7 @@ package com.fiCharts.charts.chart2D.encry
 				else
 					dataItem = dataItemVOsForRender[j] = sourceDataItemsForRender[i];
 				
-				if (dataItem.metaData == null)
+				//if (dataItem.metaData == null)
 					initDataItem(dataItem);
 				
 				horValues[j] = this.horizontalValues[i];

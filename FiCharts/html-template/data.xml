@@ -4,12 +4,12 @@
         <y type="linear" title='产量' displayName='实际产量'/>
     </axis>
     <series>
-        <column xField='label' yField='valueA'/>
+        <column xField='label' yField='valueA' colorField='color' labelDisplay='normal'/>
         <column xField='label' yField='value'/>
     </series>
     <legend enable='true'/>
     <data>
-        <set label='1月' value='279' valueA='400'/>
+        <set label='1月' value='279' valueA='400' color='#FF0000'/>
         <set label='2月' value='410' valueA='300'/>
         <set label='3月' value='325' valueA='250'/>
         <set label='4月' value='572' valueA='100'/>
