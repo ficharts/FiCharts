@@ -13,14 +13,25 @@
         <script type="text/javascript">
         	
             var chartDemo = new Chart2D({id: 'chart', width: '100%', height: '100%', style: 'Simple'});
-            chartDemo.setConfigFile('data.xml');
+            //chartDemo.setConfigFile('data.xml');
             
-            //chartDemo.setConfigFile('stockConfig.xml');
+            chartDemo.setConfigFile('stockConfig.xml');
 
 
- 
+            var jesondata = [{"value":"102.800","label":"2014-02-25 00:00:00"},{"value":"","label":"2014-02-25 00:05:00"},{"value":"","label":"2014-02-25 00:10:00"},{"value":"102.800","label":"2014-02-25 00:15:00"},{"value":"102.800","label":"2014-02-25 00:20:00"},{"value":"102.800","label":"2014-02-25 00:25:00"},{"value":"102.800","label":"2014-02-25 00:30:00"}];
 
-           //chartDemo.setCSVData("date.csv", ["label", "value"])
+
+            //chartDemo.setConfigXML("<config title='Ê¯ÇÅË®Î»¹ý³ÌÏß' minTopPadding='30' ySuffix='Ã×' xSuffix=''  bgVisible='true'><chartBG paddingTop='1'/><tooltip><label><![CDATA[Ê±¼ä:${xValue}<br>ÊýÖµ:${yValue}]]></label></tooltip><axis><x type='date' title='Ê±¼ä' input='YYYY-MM-DD hh:mm:ss' output='YYYY-MM-DD hh'/><y type='linear' title=''  baseAtZero='false' > </y></axis> <series><line xField='label' yField='value'  smooth='false'  >  <dataRender enable='false'/> </line> </series> <zoom enable='true' /> <zoomBar visible='false'/></config>");
+
+            chartDemo.onReady(function(){
+
+               // chartDemo.setJsonData(jesondata);
+               // chartDemo.render();
+
+            })
+
+            
+           chartDemo.setCSVData("date.csv", ["label", "value"])
 			
         </script>
     </head>

@@ -185,6 +185,8 @@ package com.fiCharts.charts.chart2D.encry
 		public function preConfig():void
 		{
 			preConfigScrollAxis();
+			
+			(chartMain.vAxises[0] as LinearAxis).ifExpend = true;
 		}
 		
 		/**
@@ -597,12 +599,22 @@ package com.fiCharts.charts.chart2D.encry
 				// 显示tips
 				// 别忘了序列都被图例隐藏的情况
 				if(tipsHolder.tipLength)
+				{
 					chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.SHOW_TOOL_TIPS, tipsHolder));
+					
+					series = chartMain.series[0];
+					chartMain.chartCanvas.dataLine.visible = true;
+					chartMain.chartCanvas.updataDataLinePos(series.simpleDataRender.x, series.simpleDataRender.y);
+				}
+				else
+				{
+					chartMain.chartCanvas.dataLine.visible = false;
+					chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
+				}
+					
 				
 				
-				series = chartMain.series[0];
-				chartMain.chartCanvas.dataLine.visible = true;
-				chartMain.chartCanvas.updataDataLinePos(series.simpleDataRender.x, series.simpleDataRender.y);
+				
 			}
 		}
 		
