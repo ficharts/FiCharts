@@ -33,6 +33,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
+	import com.fiCharts.utils.dec.NullPad;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
@@ -286,6 +287,7 @@ package com.fiCharts.charts.chart2D.encry
 			var curData:Number = 0;
 			var minDis:Number = evt.end - evt.start;
 			var index:int = - 1; 
+			tipItem.metaData = null;
 			
 			for (i = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
 			{
@@ -304,11 +306,17 @@ package com.fiCharts.charts.chart2D.encry
 			if (index >= 0 && index <= maxDataItemIndex)
 			{
 				var item:SeriesDataPoint = this.dataItemVOsForRender[index];
+				if (RexUtil.ifTextNull(item.yValue))
+				{
+					simpleDataRender.visible = false;
+					return;
+				}
+				
 				simpleDataRender.x = item.x;
 				simpleDataRender.y = item.y;
 				
 				if (simpleDataRender.visible == false)
-				this.horizontalAxis.dispatchEvent(new DataResizeEvent(DataResizeEvent.IF_SHOW_DATA_RENDER));
+					this.horizontalAxis.dispatchEvent(new DataResizeEvent(DataResizeEvent.IF_SHOW_DATA_RENDER));
 				
 				tipItem.metaData = item.metaData;
 			}
@@ -1177,7 +1185,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function ifDataInvalid(item:SeriesDataPoint):Boolean
 		{
-			if (RexUtil.ifTextNull(item.xValue) || RexUtil.ifTextNull(item.yValue))
+			if (RexUtil.ifTextNull(item.xValue) && RexUtil.ifTextNull(item.yValue))
 				return true;
 			else 
 				return false;
