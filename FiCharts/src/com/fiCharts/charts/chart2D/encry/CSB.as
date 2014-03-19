@@ -1015,7 +1015,7 @@ package com.fiCharts.charts.chart2D.encry
 		 * 
 		 * Flash/AIR项目中根据需要关闭此特性，手动设置图表尺寸�
 		 */		
-		public var ifAutoResizeToStage:Boolean = true;
+		private var ifAutoResizeToStage:Boolean = true;
 		
 		/**
 		 */		

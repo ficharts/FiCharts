@@ -287,7 +287,7 @@ package com.fiCharts.charts.chart2D.encry
 			var curData:Number = 0;
 			var minDis:Number = evt.end - evt.start;
 			var index:int = - 1; 
-			tipItem.metaData = null;
+			//tipItem.metaData = null;
 			
 			for (i = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
 			{
@@ -308,17 +308,20 @@ package com.fiCharts.charts.chart2D.encry
 				var item:SeriesDataPoint = this.dataItemVOsForRender[index];
 				if (RexUtil.ifTextNull(item.yValue))
 				{
-					simpleDataRender.visible = false;
+					//simpleDataRender.visible = false;
 					return;
 				}
+				else
+				{
+					simpleDataRender.x = item.x;
+					simpleDataRender.y = item.y;
+					
+					if (simpleDataRender.visible == false)
+						this.horizontalAxis.dispatchEvent(new DataResizeEvent(DataResizeEvent.IF_SHOW_DATA_RENDER));
+					
+					tipItem.metaData = item.metaData;
+				}
 				
-				simpleDataRender.x = item.x;
-				simpleDataRender.y = item.y;
-				
-				if (simpleDataRender.visible == false)
-					this.horizontalAxis.dispatchEvent(new DataResizeEvent(DataResizeEvent.IF_SHOW_DATA_RENDER));
-				
-				tipItem.metaData = item.metaData;
 			}
 		}
 		

@@ -1,9 +1,12 @@
-<config title='·ÖÎö¹ý³ÌÏß' minTopPadding='30' minLeftPadding='2' bgVisible='true'>
+<config title='·ÖÎö¹ý³ÌÏß' minTopPadding='30' minLeftPadding='2' bgVisible='true' precision='2'>
 	<chartBG paddingTop='1'/> 
 	<legend enable='true'/> 
 	<axis>
 		<x type='date' title='Ê±¼ä' input='YYYYMMDD'/>      
-		<y type='linear' title='Ë®Î»'>            
+		<y type='linear' title='Ë®Î»'>  
+			<label>
+				<text value='${value}{round:2}kk'/>
+			</label>          
 		</y>  
 	</axis>  
 	<series> 
