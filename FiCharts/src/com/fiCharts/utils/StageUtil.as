@@ -1,11 +1,14 @@
 package com.fiCharts.utils
 {
 	import flash.display.Sprite;
+	import flash.display.StageScaleMode;
 
 	/**
 	 */	
 	public class StageUtil
 	{
+		public static var scaleMode:String = StageScaleMode.NO_SCALE;
+		
 		/**
 		 */		
 		public function StageUtil()
@@ -36,6 +39,8 @@ package com.fiCharts.utils
 //
 //-------------------------------------
 
+
+import com.fiCharts.utils.StageUtil;
 
 import flash.display.Sprite;
 import flash.display.Stage;
@@ -113,9 +118,11 @@ class App
 		stage.tabChildren = false;
 		
 		stage.quality = StageQuality.BEST;
-		stage.scaleMode = StageScaleMode.NO_SCALE;
+		stage.scaleMode = StageUtil.scaleMode;
 		stage.align = StageAlign.TOP_LEFT;
 	}
+	
+	
 	
 	/**
 	 */		

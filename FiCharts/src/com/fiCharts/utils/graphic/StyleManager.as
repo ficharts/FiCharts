@@ -296,7 +296,6 @@ package com.fiCharts.utils.graphic
 				else
 					value = textStyle.value;
 			}
-				
 			else
 				value = RexUtil.getTagValueFromMataData(textStyle.value, mataData).toString();
 			
