@@ -10,28 +10,46 @@
         		padding: 0;
         	}
         </style>
+
         <script type="text/javascript">
+             var myChart = new Chart2D({id: 'chart', width: '100%', height: '100%', style: 'Simple'});
+            myChart.setSize(822, 400);
+            var configXML = '<config precision="1" title="图表分析1" ySuffix="分">' +
+                                        '<axis>' +
+                                           ' <x title="" type="field"/>' +
+                                            '<y title="" type="linear"/>' +
+                                        '</axis>' +
+                                        '<series>' +
+                                            '<line xField="label" yField="value" labelDisplay="normal"/>' +
+                                            
+                                        '</series>' + 
+                                      '</config>';
+
+             var configXML2 = '<config precision="1" title="图表分析2" ySuffix="分">' +
+                                        '<axis>' +
+                                           ' <x title="" type="field"/>' +
+                                            '<y title="" type="linear"/>' +
+                                        '</axis>' +
+                                        '<series>' +
+                                            '<line xField="label" yField="value" labelDisplay="normal"/>' +
+                                            
+                                        '</series>' + 
+                                      '</config>';
+                    
+            var jsonData = [{"label":"2014-05-15","value":9},{"label":"2014-05-14","value":10},{"label":"2014-05-12","value":5}];
+            var jsonData2 = [{"label":"2014-05-15","value":10},{"label":"2014-05-14","value":10},{"label":"2014-05-12","value":5}];
+
+            
+
+            test(jsonData, configXML);
+            //test(jsonData2, configXML2);
+
+            function test(jsonData,config){
+                myChart.setConfigXML(config);
+                myChart.setJsonData(jsonData);              
+                myChart.render();
+            }      
         	
-            var chartDemo = new Chart2D({id: 'chart', width: '100%', height: '100%', style: 'Simple'});
-            //chartDemo.setConfigFile('data.xml');
-            
-            chartDemo.setConfigFile('stockConfig.xml');
-
-
-            var jesondata = [{"value":"","label":"2014-02-25 00:00:00"},{"value":"105.800","label":"2014-02-25 00:05:00"},{"value":"","label":"2014-02-25 00:10:00"},{"value":"103.800","label":"2014-02-25 00:15:00"},{"value":"102.800","label":"2014-02-25 00:20:00"},{"value":"110.800","label":"2014-02-25 00:25:00"},{"value":"102.800","label":"2014-02-25 00:30:00"}];
-
-
-            //chartDemo.setConfigXML("<config title='Ê¯ÇÅË®Î»¹ý³ÌÏß' minTopPadding='30' ySuffix='Ã×' xSuffix=''  bgVisible='true'><chartBG paddingTop='1'/><tooltip><label><![CDATA[Ê±¼ä:${xValue}<br>ÊýÖµ:${yValue}]]></label></tooltip><axis><x type='date' title='Ê±¼ä' input='YYYY-MM-DD hh:mm:ss' output='YYYY-MM-DD hh'/><y type='linear' title=''  baseAtZero='false' > </y></axis> <series><line xField='label' yField='value'  smooth='false'  >  <dataRender enable='false'/> </line> </series> <zoom enable='true' /> <zoomBar visible='false'/></config>");
-
-            chartDemo.onReady(function(){
-
-                //chartDemo.setJsonData(jesondata);
-                //chartDemo.render();
-
-            })
-
-            
-           chartDemo.setCSVData("date.csv", ["label", "value"])
 			
         </script>
     </head>

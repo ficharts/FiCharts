@@ -370,7 +370,7 @@ package com.fiCharts.charts.chart2D.encry
 				title.render();
 				title.x = this.originX;
 				
-				if (chartModel.legend.enable && chartModel.legend.position == 'top')
+				if (chartModel.legend && chartModel.legend.enable && chartModel.legend.position == 'top')
 				{
 					title.y = (topSpace - this.topAxisContainer.height - legendPanel.height - title.boxHeight - legendPanel.style.vMargin * 2) * .5;
 				}
