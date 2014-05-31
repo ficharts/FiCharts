@@ -84,6 +84,11 @@ package com.fiCharts.charts.chart2D.column2D
 						gutter = 1;
 					
 					w = series.horizontalAxis.unitSize - gutter;
+					
+					
+					if (w > series.maxItemSize)
+						w = series.maxItemSize;
+					
 					h = series.baseLine - dataItem.y;
 					
 					px = dataItem.x - w / 2;
