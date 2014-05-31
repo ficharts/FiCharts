@@ -2,7 +2,7 @@
 	<chartBG paddingTop='1'/> 
 	<legend enable='true'/> 
 	<axis>
-		<x type='date' title='Ê±¼ä' input='YYYYMMDD'/>      
+		<x type='field' title='Ê±¼ä' input='YYYYMMDD'/>      
 		<y type='linear' title='Ë®Î»'>  
 			<label>
 				<text value='${value}{round:2}kk'/>
@@ -10,8 +10,8 @@
 		</y>  
 	</axis>  
 	<series> 
-		<line seriesName='2013Äê' xField='label' yField='value' smooth='false' > 
-		</line>
+		<column maxItemSize="20" seriesName='2013Äê' xField='label' yField='value' smooth='false' > 
+		</column>
 		</series> 
 		<zoom enable='true' />
 	</config>

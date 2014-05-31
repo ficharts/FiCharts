@@ -32,8 +32,10 @@
             var jsonData2 = [{"label":"2014-05-15","value":10},{"label":"2014-05-14","value":10},{"label":"2014-05-12","value":5}];
 
             
+              myChart.setConfigFile('stockConfig.xml');
+            myChart.setCSVData("date.csv", ["label", "value"])
 
-            test(jsonData, configXML);
+            //test(jsonData, configXML);
             //test(jsonData2, configXML2);
 
             function test(jsonData,config){
