@@ -9,7 +9,17 @@
 
 		<url>113.19.81.6</url>
 		<url>192.168.10.158</url>
-
+		
+		<!-- 猎头者 -->
+		<url>115.28.136.63</url>
+		<url>xiaozhao.lietouzhe.com</url>
+		
+		<!-- 陈志刚，印度 -->
+		<url>117.218.1.57</url>
+		<url>192.168.1.12</url>
+		
+		<!-- 世俗看客，旗舰版 -->
+		<url>61.132.106.54</url>
 	</servers>
 	<desc></desc>
 </license>
