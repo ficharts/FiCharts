@@ -547,7 +547,7 @@
 		    <chart>
 		    	<border color='097DDA' thikness='1' alpha='1' pixelHinting='true'/>
 	            <fill color='097DDA' alpha='0.3'/>
-	            <xAxis output='YYYY' minUintSize='80' ifHideEdgeLabel='true'>
+	            <xAxis output='MM-DD' minUintSize='80' ifHideEdgeLabel='true'>
 		            <tickMark color='E4E2E2' thikness='1' alpha='1'/>
 		            <label margin='0'>
 		                <format color='555555' font='微软雅黑'/>
@@ -794,7 +794,9 @@
 			</bubble>
 
 			<zoomBar style='Simple'/>
-
+			<dataLine>
+				<border color='#097DDA'/>
+			</dataLine>
 			<template>
             </template>
 
@@ -905,7 +907,9 @@
 				<dataRender style='ClassicBubble'/>
 			</bubble>
 			<zoomBar style='Classic'/>
-
+			<dataLine>
+				<border color='#097DDA'/>
+			</dataLine>
 			<template></template>
 			<colors>RGB</colors>
 		</Classic>
@@ -1017,7 +1021,10 @@
 			</bubble>
 
 			<zoomBar style='Black'/>
-
+			<dataLine>
+				<border color='#EEEEEE'/>
+			</dataLine>
+			
 			<template></template>
 			<colors>RGB</colors>
 		</Black>

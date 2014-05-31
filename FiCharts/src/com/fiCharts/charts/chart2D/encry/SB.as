@@ -33,6 +33,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IFreshElement;
 	import com.fiCharts.utils.XMLConfigKit.style.elements.IStyleElement;
+	import com.fiCharts.utils.dec.NullPad;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
 	import flash.display.Sprite;
@@ -57,7 +58,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function setZoomBarData(zoomBar:ZoomBar):void
 		{
-			zoomBar.setData(dataItemVOs.concat(), verticalValues.concat());
+			zoomBar.setData(dataItemVOsForRender.concat(), verticalValues.concat());
 		}
 		
 		/**
@@ -132,11 +133,8 @@ package com.fiCharts.charts.chart2D.encry
 			else
 				curRenderPattern = getClassicPattern();
 			
-			if (simpleDataRender && simpleDataRender.parent)
-			{
-				this.removeChild(simpleDataRender)
-				simpleDataRender = null;
-			}
+			if (simpleDataRender)
+				simpleDataRender.graphics.clear();
 			
 			if (tipItem)
 			{
@@ -154,14 +152,10 @@ package com.fiCharts.charts.chart2D.encry
 			else
 				curRenderPattern = getSimplePattern();
 			
-			if (simpleDataRender == null)
+			if (simpleDataRender)
 			{
-				simpleDataRender = new Sprite;
-				simpleDataRender.graphics.clear();
-				
 				dataRender.toHover();
 				dataRender.render(simpleDataRender, this);
-				this.addChild(simpleDataRender);
 			}
 			
 			if (tipItem == null)
@@ -222,10 +216,67 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 
+		 * 
 		 */		
 		private function updateTipByIndex(evt:DataResizeEvent):void
 		{
-			_updateTipsData(evt.data);
+			var item:SeriesDataPoint;
+			var index:int = evt.data;
+			
+			//被注释掉的这一段是因性能太差
+		/*	var label:String = evt.label;
+			tipItem.metaData = null;
+			
+			for each(item in dataItemVOsForRender)
+			{
+				if (item.xValue == label)
+				{
+					simpleDataRender.x = item.x;
+					simpleDataRender.y = item.y;
+					
+					if (simpleDataRender.visible == false)
+						this.horizontalAxis.dispatchEvent(new DataResizeEvent(DataResizeEvent.IF_SHOW_DATA_RENDER));
+					
+					tipItem.metaData = item.metaData;
+					
+					break;
+				}
+			}
+			
+			return;*/
+			
+			if (index >= 0 && index < dataProvider.length)
+			{
+				item = this.seriesDataItem;
+				
+				preInitDtaItem(item, dataProvider[index]);
+				
+				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, index);
+				item.dataItemY = item.y = (verticalAxis.valueToY(item.yVerifyValue));
+				
+				// 根据全局数据得出的坐标不一定是有效坐标
+				if (item.x >= 0 && item.x <= evt.end)
+					simpleDataRender.x = item.x;
+				else
+					simpleDataRender.x = evt.start;
+					
+				simpleDataRender.y = item.y;
+				
+				if (simpleDataRender.visible == false)
+					this.horizontalAxis.dispatchEvent(new DataResizeEvent(DataResizeEvent.IF_SHOW_DATA_RENDER));
+				
+				if (ifDataInvalid(item))
+				{
+					tipItem.metaData = null;
+					simpleDataRender.visible = false;
+				}
+				else
+				{
+					initDataItem(item);
+					tipItem.metaData = item.metaData;
+				}
+			}
 		}
 		
 		/**
@@ -236,6 +287,7 @@ package com.fiCharts.charts.chart2D.encry
 			var curData:Number = 0;
 			var minDis:Number = evt.end - evt.start;
 			var index:int = - 1; 
+			//tipItem.metaData = null;
 			
 			for (i = dataOffsetter.minIndex; i <= dataOffsetter.maxIndex; i ++)
 			{
@@ -251,29 +303,33 @@ package com.fiCharts.charts.chart2D.encry
 				}
 			}
 			
-			_updateTipsData(index);
-		}
-		
-		/**
-		 */		
-		private function _updateTipsData(index:uint):void
-		{
 			if (index >= 0 && index <= maxDataItemIndex)
 			{
-				var item:SeriesDataPoint = this.dataItemVOs[index];
-				simpleDataRender.x = item.x;
-				simpleDataRender.y = item.y;
+				var item:SeriesDataPoint = this.dataItemVOsForRender[index];
+				if (RexUtil.ifTextNull(item.yValue))
+				{
+					//simpleDataRender.visible = false;
+					return;
+				}
+				else
+				{
+					simpleDataRender.x = item.x;
+					simpleDataRender.y = item.y;
+					
+					if (simpleDataRender.visible == false)
+						this.horizontalAxis.dispatchEvent(new DataResizeEvent(DataResizeEvent.IF_SHOW_DATA_RENDER));
+					
+					tipItem.metaData = item.metaData;
+				}
 				
-				if (simpleDataRender.visible == false)
-					this.horizontalAxis.dispatchEvent(new DataResizeEvent(DataResizeEvent.IF_SHOW_DATA_RENDER));
-				
-				tipItem.metaData = item.metaData;
 			}
 		}
 		
+		
 		/**
+		 * 每个序列拥有一个渲染节点，用于数据缩放类型的图表
 		 */		
-		private var simpleDataRender:Sprite;
+		public var simpleDataRender:Sprite = new Sprite;
 		
 		/**
 		 * 数据缩放时的信息提示数据节点�每个序列仅有一个节�
@@ -350,7 +406,7 @@ package com.fiCharts.charts.chart2D.encry
 		public function render():void
 		{
 			// 只有当序列中有数据时，才渲染
-			if (this.dataItemVOs.length)
+			if (this.dataItemVOsForRender.length)
 				this.curRenderPattern.render();
 		}
 		
@@ -597,7 +653,7 @@ package com.fiCharts.charts.chart2D.encry
 		public function createItemRenders():void
 		{
 			itemRenders = [];
-			for each (var item:SeriesDataPoint in dataItemVOs)
+			for each (var item:SeriesDataPoint in dataItemVOsForRender)
 				initItemRender(itemRender, item);
 		}
 		
@@ -705,7 +761,7 @@ package com.fiCharts.charts.chart2D.encry
 			var i:uint = 0;
 			for (i = startIndex; i <= endIndex; i +=step)
 			{
-				item = dataItemVOs[i];
+				item = dataItemVOsForRender[i];
 				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, i);
 				item.dataItemY = item.y = (verticalAxis.valueToY(item.yVerifyValue));
 			}
@@ -967,10 +1023,10 @@ package com.fiCharts.charts.chart2D.encry
 			var souceDataIndex:uint = 0;
 			var actualDataIndex:uint = 0;
 			
-			dataItemVOs.length = 0;
+			dataItemVOsForRender.length = 0;
 			horizontalValues.length = 0; 
 			verticalValues.length = 0;
-			sourceDataItems.length = 0;
+			sourceDataItemsForRender.length = 0;
 			
 			var precision:uint = 0;
 			var temPrecision:uint = 0;
@@ -979,8 +1035,7 @@ package com.fiCharts.charts.chart2D.encry
 			{
 				seriesDataItem = this.seriesDataItem;
 				
-				seriesDataItem.xValue = item[xField]; // xValue.
-				seriesDataItem.yValue = item[yField]; // yValue.
+				preInitDtaItem(seriesDataItem, item);
 				
 				if (seriesDataItem.xValue == null && seriesDataItem.yValue == null)
 				{
@@ -988,19 +1043,14 @@ package com.fiCharts.charts.chart2D.encry
 					continue;
 				}
 				
-				setItemColor(item, seriesDataItem);
-				
-				seriesDataItem.xVerifyValue = this.horizontalAxis.getVerifyData(seriesDataItem.xValue);
-				seriesDataItem.yVerifyValue = this.verticalAxis.getVerifyData(seriesDataItem.yValue);
-				
 				horizontalValues[souceDataIndex] = seriesDataItem.xVerifyValue;
 				verticalValues[souceDataIndex] = seriesDataItem.yVerifyValue;
 				
-				if (RexUtil.ifTextNull(seriesDataItem.xValue) || RexUtil.ifTextNull(seriesDataItem.yValue))
+				if (ifDataInvalid(seriesDataItem))
 					seriesDataItem = null;
 				else
 				{
-					dataItemVOs[actualDataIndex] = sourceDataItems[actualDataIndex] = seriesDataItem;
+					dataItemVOsForRender[actualDataIndex] = sourceDataItemsForRender[actualDataIndex] = seriesDataItem;
 					actualDataIndex += 1;
 					
 					temPrecision = RexUtil.checkPrecision(seriesDataItem[this.value].toString())
@@ -1028,11 +1078,16 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 经典图表序列渲染前调用，目前序列渲染时才调用此方法，
+		 * 
+		 * 会造成一个图例数据的漏洞，图例数据是序列没渲染之前设定的
+		 * 
+		 * 这样会造成图例内容部分信息为空，和预先布局测算的不准确性
 		 */		
 		public function initData():void
 		{
 			var seriesDataItem:SeriesDataPoint;
-			for each (seriesDataItem in dataItemVOs)
+			for each (seriesDataItem in dataItemVOsForRender)
 				initDataItem(seriesDataItem);
 		}
 		
@@ -1045,24 +1100,27 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function rateDataItems(evt:DataResizeEvent):void
 		{
-			if (sourceDataItems == null) return;
+			if (sourceDataItemsForRender == null) return;
 			
 			PerformaceTest.start("构建数据节点");
 			
-			this.dataItemVOs.length = this.horValues.length = verValues.length = 0;
+			this.dataItemVOsForRender.length = this.horValues.length = verValues.length = 0;
 			
-			var sourceDataLen:uint = this.sourceDataItems.length;
+			//原始数据的总量
+			var sourceDataLen:uint = this.sourceDataItemsForRender.length;
+			
 			var i:uint, j:uint = 0;
 			var dataItem:SeriesDataPoint;
 			
 			for (i = 0; i < sourceDataLen; i += evt.step)
 			{
+				//
 				if (i + evt.step >= sourceDataLen)
-					dataItem = dataItemVOs[j] = sourceDataItems[sourceDataLen - 1];
+					dataItem = dataItemVOsForRender[j] = sourceDataItemsForRender[sourceDataLen - 1];
 				else
-					dataItem = dataItemVOs[j] = sourceDataItems[i];
+					dataItem = dataItemVOsForRender[j] = sourceDataItemsForRender[i];
 				
-				if (dataItem.metaData == null)
+				//if (dataItem.metaData == null)
 					initDataItem(dataItem);
 				
 				horValues[j] = this.horizontalValues[i];
@@ -1077,11 +1135,31 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 从最原始数据中生成数据本序列需要的节点信息
+		 */		
+		private function preInitDtaItem(seriesDataItem:SeriesDataPoint, item:Object):void
+		{
+			seriesDataItem.metaData = {};
+			seriesDataItem.metaData.source = item;
+			seriesDataItem.xValue = item[xField]; // xValue.
+			seriesDataItem.yValue = item[yField]; // yValue.
+			
+			if (seriesDataItem.xValue == null && seriesDataItem.yValue == null)
+				return;
+			
+			setItemColor(item, seriesDataItem);
+			
+			seriesDataItem.xVerifyValue = this.horizontalAxis.getVerifyData(seriesDataItem.xValue);
+			seriesDataItem.yVerifyValue = this.verticalAxis.getVerifyData(seriesDataItem.yValue);
+		}
+		
+		/**
+		 * 丰富数据节点的元素据和补充信息，大数据中这个过程会很消耗性能，所以需要的时候才会动态
+		 * 
+		 * 调用此方法
 		 */		
 		protected function initDataItem(seriesDataItem:SeriesDataPoint):void
 		{
-			seriesDataItem.metaData = {};
-			
 			seriesDataItem.xLabel = horizontalAxis.getXLabel(seriesDataItem.xVerifyValue);
 			seriesDataItem.yLabel = verticalAxis.getYLabel(seriesDataItem.yVerifyValue);
 			
@@ -1101,6 +1179,19 @@ package com.fiCharts.charts.chart2D.encry
 			
 			this.initTipString(seriesDataItem, getXTip(seriesDataItem), getYTip(seriesDataItem),
 				getZTip(seriesDataItem), false); 
+		}
+		
+		/**
+		 * 判断数据节点是否有效，任何一个节点的x或y有空值，则此数据节点无效
+		 * 
+		 * 不会被渲染
+		 */		
+		private function ifDataInvalid(item:SeriesDataPoint):Boolean
+		{
+			if (RexUtil.ifTextNull(item.xValue) && RexUtil.ifTextNull(item.yValue))
+				return true;
+			else 
+				return false;
 		}
 		
 		/**
@@ -1128,15 +1219,16 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		protected function updateMaxIndex():void
 		{
-			if(dataItemVOs.length > 1)
-				dataOffsetter.maxIndex = maxDataItemIndex = dataItemVOs.length - 1;
+			if(dataItemVOsForRender.length > 1)
+				dataOffsetter.maxIndex = maxDataItemIndex = dataItemVOsForRender.length - 1;
 			else
 				dataOffsetter.maxIndex = maxDataItemIndex = 0;
 		}
 		
 		/**
+		 * 此序列有效的数据节点，这些节点都可用于渲染
 		 */		
-		protected var sourceDataItems:Vector.<SeriesDataPoint> = new Vector.<SeriesDataPoint>;;
+		protected var sourceDataItemsForRender:Vector.<SeriesDataPoint> = new Vector.<SeriesDataPoint>;;
 		
 		/**
 		 * 把节点总数存下来，后继节点渲染会频繁用于计算；
@@ -1173,7 +1265,7 @@ package com.fiCharts.charts.chart2D.encry
 			}
 			else
 			{
-				for each(var item:SeriesDataPoint in dataItemVOs)	
+				for each(var item:SeriesDataPoint in dataItemVOsForRender)	
 				{
 					legendVO = new LegendVO();
 					legendVO.metaData = item; // 用于精确控制节点的状�
@@ -1189,6 +1281,7 @@ package com.fiCharts.charts.chart2D.encry
 		}
 		
 		/**
+		 * 默认只有一个序列图例
 		 */		
 		public function get ifSeriesLegend():Object
 		{
@@ -1213,7 +1306,7 @@ package com.fiCharts.charts.chart2D.encry
 		
 		public function seriesHideLegendHandler(evt:LegendEvent):void
 		{
-			for each (var itemVO:SeriesDataPoint in dataItemVOs)
+			for each (var itemVO:SeriesDataPoint in dataItemVOsForRender)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_HIDE));
 			
 			this.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.UPDATE_VALUE_LABEL, false, true));
@@ -1223,7 +1316,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function seriesShowLegendHandler(evt:LegendEvent):void
 		{
-			for each (var itemVO:SeriesDataPoint in dataItemVOs)
+			for each (var itemVO:SeriesDataPoint in dataItemVOsForRender)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_SHOW));
 				
 			this.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.UPDATE_VALUE_LABEL, false, true));
@@ -1233,7 +1326,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function seriesLegendOverHandler(evt:LegendEvent):void
 		{
-			for each (var itemVO:SeriesDataPoint in dataItemVOs)
+			for each (var itemVO:SeriesDataPoint in dataItemVOsForRender)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_OVER));
 			
 		}
@@ -1242,7 +1335,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function seriesLegendOutHandler(evt:LegendEvent):void
 		{
-			for each (var itemVO:SeriesDataPoint in dataItemVOs)
+			for each (var itemVO:SeriesDataPoint in dataItemVOsForRender)
 				itemVO.dispatchEvent(new ItemRenderEvent(ItemRenderEvent.SERIES_OUT));
 		}
 		
@@ -1325,12 +1418,12 @@ package com.fiCharts.charts.chart2D.encry
 		 */
 		private var _dataItemVOs:Vector.<SeriesDataPoint> = new Vector.<SeriesDataPoint>;
 
-		public function get dataItemVOs():Vector.<SeriesDataPoint>
+		public function get dataItemVOsForRender():Vector.<SeriesDataPoint>
 		{
 			return _dataItemVOs;
 		}
 
-		public function set dataItemVOs(v:Vector.<SeriesDataPoint>):void
+		public function set dataItemVOsForRender(v:Vector.<SeriesDataPoint>):void
 		{
 			_dataItemVOs = v;
 		}

@@ -118,7 +118,7 @@ package com.fiCharts.charts.chart2D.bar
 			var item:SeriesDataPoint;
 			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{
-				item = dataItemVOs[i];
+				item = dataItemVOsForRender[i];
 					
 				item.x = this.horizontalAxis.valueToX(item.xVerifyValue, i);
 				item.y = verticalAxis.valueToY(item.yVerifyValue) - columnGoupWidth / 2 +

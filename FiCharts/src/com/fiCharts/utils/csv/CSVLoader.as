@@ -103,7 +103,7 @@ package com.fiCharts.utils.csv
 			}
 			
 			var byt:ByteArray = evt.target.data;
-			var source : Array = byt.readMultiByte(byt.bytesAvailable, codeType).split( '\r\n' );
+			var source : Array = byt.readMultiByte(byt.bytesAvailable, codeType).split( '\n' );
 			var rowsData : Array = new Array();
 			var rowIndex:uint = 0;
 			var rowSourceData:String;

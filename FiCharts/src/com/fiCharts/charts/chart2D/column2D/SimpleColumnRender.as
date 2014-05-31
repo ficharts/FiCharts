@@ -68,12 +68,27 @@ package com.fiCharts.charts.chart2D.column2D
 				var w:Number = 0;
 				var h:Number = 0;
 				
+				//柱体的间距, 防止柱子连到一起不好看
+				var gutter:Number = 1;
+				
 				StyleManager.setShapeStyle(series.currState, series.canvas.graphics, series);
 				for (var i:uint = series.dataOffsetter.minIndex; i <= series.dataOffsetter.maxIndex; i ++)
 				{
-					dataItem = series.dataItemVOs[i] as ColumnDataPoint;
+					dataItem = series.dataItemVOsForRender[i] as ColumnDataPoint;
 					
-					w = series.horizontalAxis.unitSize;
+					//给个间距好看一点
+					gutter = series.horizontalAxis.unitSize * 0.05;
+					if (gutter > 5)
+						gutter = 5;
+					else if (gutter < 1)
+						gutter = 1;
+					
+					w = series.horizontalAxis.unitSize - gutter;
+					
+					
+					if (w > series.maxItemSize)
+						w = series.maxItemSize;
+					
 					h = series.baseLine - dataItem.y;
 					
 					px = dataItem.x - w / 2;

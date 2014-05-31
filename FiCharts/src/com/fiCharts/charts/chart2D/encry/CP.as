@@ -14,6 +14,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.charts.chart2D.core.model.AxisModel;
 	import com.fiCharts.charts.chart2D.core.model.Chart2DModel;
 	import com.fiCharts.charts.chart2D.core.model.ChartBGStyle;
+	import com.fiCharts.charts.chart2D.core.model.DataLine;
 	import com.fiCharts.charts.chart2D.core.model.DataRender;
 	import com.fiCharts.charts.chart2D.core.model.GridFieldStyle;
 	import com.fiCharts.charts.chart2D.core.model.Series;
@@ -29,6 +30,7 @@ package com.fiCharts.charts.chart2D.encry
 	import com.fiCharts.ui.toolTips.TooltipStyle;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOLib;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.XMLConfigKit.style.Style;
 	
 	import flash.events.EventDispatcher;
 
@@ -41,6 +43,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			XMLVOLib.registerCustomClasses(<colors path='com.fiCharts.utils.XMLConfigKit.style.Colors'/>);
 			
+			
 			//-------------------数据缩放--------------------------------
 			ZoomWindowStyle;
 			XMLVOLib.registerCustomClasses(<window path='com.fiCharts.charts.chart2D.core.zoomBar.ZoomWindowStyle'/>);
@@ -50,16 +53,23 @@ package com.fiCharts.charts.chart2D.encry
 			XMLVOLib.setASStyleKey("grayChart");
 			
 			XMLVOLib.registerCustomClasses(<zoom path='com.fiCharts.charts.chart2D.core.model.Zoom'/>);
+			XMLVOLib.resisterClass('dataLine', DataLine);
+			
+			
 			//------------------数据缩放---------------------------------
 			
 			
 			ChartBGStyle;
-			XMLVOLib.registerCustomClasses(<chartBG path='com.fiCharts.charts.chart2D.core.model.ChartBGStyle'/>);
+			//XMLVOLib.registerCustomClasses(<chartBG path='com.fiCharts.charts.chart2D.core.model.ChartBGStyle'/>);
+			XMLVOLib.resisterClass('chartBG', ChartBGStyle);
 			
 			GridFieldStyle;
-			XMLVOLib.registerCustomClasses(<gridField path='com.fiCharts.charts.chart2D.core.model.GridFieldStyle'/>);
-			XMLVOLib.registerCustomClasses(<hGrid path='com.fiCharts.utils.XMLConfigKit.style.Style'/>);
-			XMLVOLib.registerCustomClasses(<vGrid path='com.fiCharts.utils.XMLConfigKit.style.Style'/>);
+			//XMLVOLib.registerCustomClasses(<gridField path='com.fiCharts.charts.chart2D.core.model.GridFieldStyle'/>);
+			XMLVOLib.resisterClass('gridField', GridFieldStyle);
+			//XMLVOLib.registerCustomClasses(<hGrid path='com.fiCharts.utils.XMLConfigKit.style.Style'/>);
+			//XMLVOLib.registerCustomClasses(<vGrid path='com.fiCharts.utils.XMLConfigKit.style.Style'/>);
+			XMLVOLib.resisterClass('hGrid', Style);
+			XMLVOLib.resisterClass('vGrid', Style);
 			
 			ChartDataFormatter;
 			XMLVOLib.registerCustomClasses(<dataFormatter path='com.fiCharts.charts.common.ChartDataFormatter'/>);

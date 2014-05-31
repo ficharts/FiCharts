@@ -122,11 +122,23 @@ package com.fiCharts.charts.chart2D.line
 		 */		
 		public function renderSimleLine(canvas:Graphics, startIndex:uint, endIndex:uint, offset:uint = 0):void
 		{
-			var firstX:Number = (dataItemVOs[startIndex] as SeriesDataPoint).x; 
-			var firstY:Number = (dataItemVOs[startIndex] as SeriesDataPoint).y - baseLine - offset;
-			
 			var item:SeriesDataPoint;
 			var i:uint;
+			
+			for (i = startIndex; i <= endIndex; i ++)
+			{
+				item = dataItemVOsForRender[i];
+				
+				if (RexUtil.ifHasText(item.xValue) && RexUtil.ifHasText(item.yValue))
+				{
+					startIndex = i;
+					break;
+				}
+			}
+			
+			var firstX:Number = (dataItemVOsForRender[startIndex] as SeriesDataPoint).x; 
+			var firstY:Number = (dataItemVOsForRender[startIndex] as SeriesDataPoint).y - baseLine - offset;
+			
 			
 			if (this.step)// 渐进线段方式
 			{
@@ -135,10 +147,14 @@ package com.fiCharts.charts.chart2D.line
 				var stepY:Number = firstY;
 				for (i = startIndex; i <= endIndex; i ++)
 				{
-					item = dataItemVOs[i];
-					canvas.lineTo(item.x, stepY);
-					canvas.lineTo(item.x, item.y - baseLine - offset);
-					stepY = item.y - baseLine - offset;
+					item = dataItemVOsForRender[i];
+					
+					if (RexUtil.ifHasText(item.xValue) && RexUtil.ifHasText(item.yValue))
+					{
+						canvas.lineTo(item.x, stepY);
+						canvas.lineTo(item.x, item.y - baseLine - offset);
+						stepY = item.y - baseLine - offset;
+					}
 				}
 			}
 			else if (smooth)//曲线连接方式
@@ -148,11 +164,15 @@ package com.fiCharts.charts.chart2D.line
 				
 				for (i = startIndex; i <= endIndex; i ++)
 				{
-					item = dataItemVOs[i];
-					point = new Point();
-					point.x = (item as SeriesDataPoint).x;
-					point.y = (item as SeriesDataPoint).y - baseLine - offset;
-					pointArr.push(point);
+					item = dataItemVOsForRender[i];
+					
+					if (RexUtil.ifHasText(item.xValue) && RexUtil.ifHasText(item.yValue))
+					{
+						point = new Point();
+						point.x = (item as SeriesDataPoint).x;
+						point.y = (item as SeriesDataPoint).y - baseLine - offset;
+						pointArr.push(point);
+					}
 				}
 				
 				//绘制贝塞尔曲
@@ -164,8 +184,10 @@ package com.fiCharts.charts.chart2D.line
 				
 				for (i = startIndex; i <= endIndex; i ++)
 				{
-					item = dataItemVOs[i];
-					canvas.lineTo(item.x, item.y - baseLine - offset);
+					item = dataItemVOsForRender[i];
+					
+					if (RexUtil.ifHasText(item.xValue) && RexUtil.ifHasText(item.yValue))
+						canvas.lineTo(item.x, item.y - baseLine - offset);
 				}
 			}
 			

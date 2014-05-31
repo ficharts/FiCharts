@@ -113,7 +113,7 @@ package com.fiCharts.charts.chart2D.marker
 			this.canvas.graphics.clear();	
 			canvas.graphics.beginFill(0, 0);
 			
-			for each (var item:SeriesDataPoint in this.dataItemVOs)
+			for each (var item:SeriesDataPoint in this.dataItemVOsForRender)
 				canvas.graphics.drawCircle(item.x, item.y, 10);// TODO
 		}
 		
@@ -125,7 +125,7 @@ package com.fiCharts.charts.chart2D.marker
 			var item:SeriesDataPoint;
 			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{	
-				item = dataItemVOs[i];
+				item = dataItemVOsForRender[i];
 				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, i);
 				item.dataItemY = (verticalAxis.valueToY(item.yVerifyValue));
 				item.offset = this.baseLine;

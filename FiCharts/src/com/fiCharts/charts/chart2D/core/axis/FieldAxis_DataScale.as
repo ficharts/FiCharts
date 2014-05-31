@@ -26,14 +26,16 @@ package com.fiCharts.charts.chart2D.core.axis
 		
 		/**
 		 * 找到离鼠标位置最近的点
+		 * 
+		 * 这里是以全局坐标来判定节点位置
 		 */		
 		public function updateTipsData():void
 		{
 			var evt:DataResizeEvent = new DataResizeEvent(DataResizeEvent.UPDATE_TIPS_BY_INDEX);
 			
 			var curPerc:Number = posToPercent(axis.mouseX);
-			evt.start = Math.floor(curPerc * dataScaleProxy.maxIndex);
-			evt.end =  Math.ceil(curPerc * dataScaleProxy.maxIndex);
+			evt.start = Math.floor(curPerc * dataScaleProxy.sourceDataLen);
+			evt.end =  Math.ceil(curPerc * dataScaleProxy.sourceDataLen);
 			
 			var prePerc:Number = dataScaleProxy.getPercentByData(evt.start);
 			var nexPerc:Number = dataScaleProxy.getPercentByData(evt.end);
@@ -45,6 +47,10 @@ package com.fiCharts.charts.chart2D.core.axis
 			else
 				evt.data = evt.end;
 			
+			evt.label = axis.sourceValues[evt.data];
+			evt.start = axis.mouseX;
+			evt.end = dataScaleProxy.fullSize;	
+			//这里又
 			axis.dispatchEvent(evt);
 		}
 		
@@ -277,7 +283,7 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */		
 		public function valueToSize(value:Object, index:int):Number
 		{
-			if (index == - 1)// 此时是坐标轴Label位置计算， 因label位置信息是独立的体系
+			//if (index == - 1)// 此时是坐标轴Label位置计算， 因label位置信息是独立的体系
 				index = dataScaleProxy.currentSourceData.indexOf(value)
 					
 			var result:Number = axis.unitSize * .5 + index * axis.unitSize
@@ -331,6 +337,13 @@ package com.fiCharts.charts.chart2D.core.axis
 				result = 1;
 			
 			return result;
+		}
+		
+		/**
+		 */		
+		public function checkIfShowLabel(index:uint):Boolean
+		{
+			return true;
 		}
 		
 		

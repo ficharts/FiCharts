@@ -5,7 +5,7 @@
         <y title="销量" type="linear"/>
     </axis>
     <series>
-        <column xField="label" yField="value" singleColor="false">
+        <column xField="label" yField="value" singleColor="false" ifSeriesLegend='false'>
             <label><![CDATA[${yValue}{round: 1}亿部]]></label>
         </column>
     </series>

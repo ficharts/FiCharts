@@ -124,7 +124,7 @@ package com.fiCharts.charts.chart2D.column2D
 			var item:SeriesDataPoint;
 			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{
-				item = dataItemVOs[i]
+				item = dataItemVOsForRender[i]
 				item.x = horizontalAxis.valueToX(item.xVerifyValue, i) - columnGoupWidth / 2 +
 					this.columnSeriesIndex * (partColumnWidth + columnGroupInnerSpaceUint) + partColumnWidth / 2;
 				

@@ -10,11 +10,40 @@
         		padding: 0;
         	}
         </style>
+
         <script type="text/javascript">
+             var myChart = new Chart2D({id: 'chart', width: '100%', height: '100%', style: 'Simple'});
+           
+            var configXML = '<config precision="0" title="图表分析" ySuffix="人">' +
+                                '<axis>' +
+                                   ' <x title="" type="field"/>' +
+                                    '<y title="" type="linear" enable="false"/>' +
+                                '</axis>' +
+                                '<series>' +
+                                    '<column xField="label" yField="value" labelDisplay="normal"   />' +
+                                '</series>' + 
+                                '<zoom enable="true"/>' +
+                              '</config>';
+
+             
+                    
+            var jsonData = [{"label":"1题","value":9},{"label":"2题","value":9},{"label":"3题","value":10},{"label":"4题","value":5},{"label":"5题","value":5},{"label":"6题","value":5},{"label":"7题","value":5},{"label":"8题","value":5},{"label":"9题","value":5},{"label":"10题","value":5},{"label":"11题","value":5},{"label":"12题","value":5},{"label":"13题","value":5},{"label":"14题","value":5},{"label":"15题","value":5},{"label":"16题","value":5},{"label":"17题","value":5},{"label":"18题","value":5},{"label":"19题","value":5}];
+
+            var jsonData2 = [{"label":"2014-05-15","value":10},{"label":"2014-05-14","value":10},{"label":"2014-05-12","value":5}];
+
+            
+              myChart.setConfigFile('stockConfig.xml');
+            myChart.setCSVData("date.csv", ["label", "value"])
+
+            //test(jsonData, configXML);
+            //test(jsonData2, configXML2);
+
+            function test(jsonData,config){
+                myChart.setConfigXML(config);
+                myChart.setJsonData(jsonData);              
+                myChart.render();
+            }      
         	
-            var chartDemo = new Chart2D({id: 'chart', width: '100%', height: '100%', style: 'Simple'});
-            chartDemo.setConfigFile('data.xml');
-            //chartDemo.setCSVData("date.csv", ["label", "value"])
 			
         </script>
     </head>

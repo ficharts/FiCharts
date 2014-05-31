@@ -21,12 +21,12 @@
 			$(this).attr('src', './images/sina_over.jpg')
 		}).mouseout(function(){
 			$(this).attr('src', './images/sina_up.jpg')
-		})
+		}) 
 
 		$('#down img').mouseover(function(){
-			$(this).attr('src', './images/down_over.jpg')
+			$(this).attr('src', './images/buy_over.jpg')
 		}).mouseout(function(){
-			$(this).attr('src', './images/down_up.jpg')
+			$(this).attr('src', './images/buy_up.jpg')
 		})
 		
 	})

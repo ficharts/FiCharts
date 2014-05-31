@@ -157,6 +157,15 @@ package com.fiCharts.charts.chart2D.core.axis
 				axis.renderHoriLabelUIs(0, length - 1, length);
 		}
 		
+		/**
+		 */		
+		public function checkIfShowLabel(index:uint):Boolean
+		{
+			return true;
+		}
+		
+		
+		
 		
 	}
 }

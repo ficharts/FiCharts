@@ -3,11 +3,14 @@ package com.fiCharts.utils.graphic
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
+	import flash.display.Loader;
 	import flash.display.PixelSnapping;
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
+	import flash.utils.ByteArray;
 
 	/**
 	 * 截取显示对象
@@ -16,6 +19,13 @@ package com.fiCharts.utils.graphic
 	{
 		public function BitmapUtil()
 		{
+		}
+		
+		/**
+		 */		
+		public static function bitmapDataToByteArrar(bmd:Bitmap):ByteArray
+		{
+			return bmd.bitmapData.getPixels(bmd.bitmapData.rect);
 		}
 		
 		/**

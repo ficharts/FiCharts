@@ -144,7 +144,7 @@ package com.fiCharts.utils.graphic
 		
 		/**
 		 */		
-		public static function drawCircle(target:Sprite, style:Style, metaData:Object, x:Number = 0, y:Number = 0):void
+		public static function drawCircle(target:Sprite, style:Style, metaData:Object = null, x:Number = 0, y:Number = 0):void
 		{
 			setShapeStyle(style, target.graphics, metaData);
 			target.graphics.drawCircle(x, y, style.radius);
@@ -296,7 +296,6 @@ package com.fiCharts.utils.graphic
 				else
 					value = textStyle.value;
 			}
-				
 			else
 				value = RexUtil.getTagValueFromMataData(textStyle.value, mataData).toString();
 			
@@ -344,7 +343,8 @@ package com.fiCharts.utils.graphic
 				}
 				else
 				{
-					graphic.lineStyle(lineStyle.thikness, uint(getColor(metaData, lineStyle.color)), 
+					var thickness:Number = Number(RexUtil.getTagValueFromMataData(lineStyle.thikness, metaData));
+					graphic.lineStyle(thickness, uint(getColor(metaData, lineStyle.color)), 
 						Number(lineStyle.alpha), lineStyle.pixelHinting, lineStyle.scaleMode, lineStyle.caps, lineStyle.joints);
 				}
 			}
@@ -498,8 +498,11 @@ package com.fiCharts.utils.graphic
 		public static function getUintColor(value:Object):uint
 		{
 			var result:uint;
-			
-			if (String(value).indexOf('#') != - 1)
+			if (value is uint)
+			{
+			    return uint(value); 	
+			}
+			else if (String(value).indexOf('#') != - 1)
 			{
 				result = uint(String(value).replace('#', '0x'));
 			}

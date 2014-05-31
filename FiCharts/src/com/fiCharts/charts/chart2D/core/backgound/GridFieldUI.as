@@ -58,7 +58,7 @@ package com.fiCharts.charts.chart2D.core.backgound
 				var borderThikness:Number = 0;
 				
 				if (style.vGrid.border)
-					borderThikness = style.vGrid.getBorder.thikness;
+					borderThikness = Number(style.vGrid.getBorder.thikness);
 				else
 					borderThikness = 0;
 				
@@ -68,7 +68,7 @@ package com.fiCharts.charts.chart2D.core.backgound
 					style.width + borderThikness * 2, style.height, style.radius, style.radius);
 				
 				if (style.hGrid.border)
-					borderThikness = style.hGrid.getBorder.thikness;
+					borderThikness = Number(style.hGrid.getBorder.thikness);
 				else
 					borderThikness = 0;
 				

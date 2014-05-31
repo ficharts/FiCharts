@@ -1,27 +1,25 @@
-<config ySuffix="万" title='年度销售'  bgVisible="true">
-    <chartBG paddingTop='10'/>
+<config title='产品销量状况' ySuffix='K'>
     <axis>
-        <x type='field' title='月份'></x>
-        <y type='linear' title='销售额'></y>
+        <x type="field" title='月份' />
+        <y type="linear" title='产量' displayName='实际产量'/>
     </axis>
     <series>
-        <column xField='label' yField='value' />
-        <line xField='label' yField='valueB' />
-         <area xField='label' yField='valueC' />
+        <column xField='label' yField='valueA' colorField='color' labelDisplay='normal'/>
+        <column xField='label' yField='value'/>
     </series>
+    <legend enable='true'/>
     <data>
-        <set label='1月' valueB="26"/>
-        <set label='2月' valueB="38"/>
-        <set label='3月' valueB="56"/>
-        <set label='4月' value='572'/>
-        <set label='5月' value='629'/>
-        <set label='6月' value='710'/>
-        <set label='7月' value='489'/>
-        <set label='8月' value='635'/>
-        <set label='9月' valueC='750'/>
-        <set label='10月' valueC='600'/>
-        <set label='11月' valueC='760'/>
-        <set label='12月' valueC='950'/>
+        <set label='1月' value='279' valueA='400' color='#FF0000'/>
+        <set label='2月' value='410' valueA='300'/>
+        <set label='3月' value='325' valueA='250'/>
+        <set label='4月' value='572' valueA='100'/>
+        <set label='5月' value='629' valueA='300'/>
+        <set label='6月' value='710' valueA='400'/>
+        <set label='7月' value='489' valueA='600'/>
+        <set label='8月' value='635' valueA='800'/>
+        <set label='9月' value='750' valueA='600'/>
+        <set label='10月' value='600' valueA='400'/>
+        <set label='11月' value='760' valueA='350'/>
+        <set label='12月' value='950' valueA='300'/>
     </data>
 </config>
-

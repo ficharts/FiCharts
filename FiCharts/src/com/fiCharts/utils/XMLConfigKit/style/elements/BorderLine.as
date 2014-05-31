@@ -1,7 +1,7 @@
 package com.fiCharts.utils.XMLConfigKit.style.elements
 {
-	import com.fiCharts.utils.XMLConfigKit.effect.IEffectElement;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
+	import com.fiCharts.utils.XMLConfigKit.effect.IEffectElement;
 	import com.fiCharts.utils.graphic.StyleManager;
 
 	public class BorderLine extends Fill implements IFiElement
@@ -11,15 +11,34 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		}
 		
 		/**
-		 */		
-		private var _thikness:Number = 1;
+		 * 
+		 */
+		public function get thickness():Object
+		{
+			return _thikness;
+		}
+
+		public function set thickness(value:Object):void
+		{
+			_thikness = value;
+		}
 		
-		public function get thikness():Number
+		/**
+		 * 
+		 */		
+		private var _thikness:Object = 1;
+		
+		/**
+		 * 此为兼容性属性，之前写错了名字，旧的配置文件用到的
+		 * 
+		 * 地方很多，这里保留旧的，同时提供正确的 thickness
+		 */		
+		public function get thikness():Object
 		{
 			return _thikness;
 		}
 		
-		public function set thikness(value:Number):void
+		public function set thikness(value:Object):void
 		{
 			_thikness = value;
 		}
@@ -40,6 +59,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		}
 
 		/**
+		 * normal none
 		 */		
 		private var _scaleMode:String = 'normal';
 

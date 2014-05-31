@@ -53,7 +53,7 @@ package com.fiCharts.charts.chart2D.encry
 		/**
 		 * 版本�
 		 */	
-		public static const VARSION:String = "1.3.2";
+		public static const VARSION:String = "1.3.3";
 		
 		/**
 		 */		
@@ -488,7 +488,7 @@ package com.fiCharts.charts.chart2D.encry
 			for each (var item:Object in arr)
 				dataVOes.push(item);
 				
-			chart.dataVOes = dataVOes;
+			setDataVOes(dataVOes);
 		}
 		
 		/**
@@ -496,8 +496,24 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		public function setDataVOes(vos:Vector.<Object>):void
 		{
-			chart.dataVOes = vos;
+			if (ifReady)
+			{
+				chart.dataVOes = vos;
+			}
+			else
+			{
+				dataVOes = vos;
+				ifDataVOesChanged = true;
+			}
 		}
+		
+		/**
+		 */		
+		private var dataVOes:Vector.<Object>;
+		
+		/**
+		 */		
+		private var ifDataVOesChanged:Boolean = false;
 		
 		/**
 		 */		
@@ -676,13 +692,13 @@ package com.fiCharts.charts.chart2D.encry
 					flash.net.navigateToURL(new URLRequest('http://weibo.com/u/2431448684'), '_blank');
 				});
 				
-				myContextMenu.customItems.push(item);
+				//myContextMenu.customItems.push(item);
 				
 				item = new ContextMenuItem("QQ群:184587429");
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, function(evt:Event):void{
 					flash.net.navigateToURL(new URLRequest('http://qun.qzone.qq.com/group#!/184587429/home'), '_blank');
 				});
-				myContextMenu.customItems.push(item);
+				//myContextMenu.customItems.push(item);
 				
 				item = new ContextMenuItem(menu.about + " FiCharts");
 				item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, menuItemSelectHandler);
@@ -839,6 +855,12 @@ package com.fiCharts.charts.chart2D.encry
 				ifDataChanged = false;
 			}
 			
+			if (this.ifDataVOesChanged)
+			{
+				this.setDataVOes(this.dataVOes);
+				ifDataVOesChanged = false;
+			}
+			
 			if (this.ifStyleChanged)
 			{
 				this.setStyle(this._style);
@@ -993,7 +1015,7 @@ package com.fiCharts.charts.chart2D.encry
 		 * 
 		 * Flash/AIR项目中根据需要关闭此特性，手动设置图表尺寸�
 		 */		
-		public var ifAutoResizeToStage:Boolean = true;
+		private var ifAutoResizeToStage:Boolean = true;
 		
 		/**
 		 */		

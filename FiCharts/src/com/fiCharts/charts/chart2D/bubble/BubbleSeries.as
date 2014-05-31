@@ -64,7 +64,7 @@ package com.fiCharts.charts.chart2D.bubble
 			var item:SeriesDataPoint;
 			for (var i:uint = startIndex; i <= endIndex; i += step)
 			{
-				item = dataItemVOs[i];
+				item = dataItemVOsForRender[i];
 				item.dataItemX = item.x = horizontalAxis.valueToX(item.xVerifyValue, i);
 				item.dataItemY =  (verticalAxis.valueToY(item.yVerifyValue));
 				item.y = item.dataItemY - this.baseLine;
@@ -85,7 +85,7 @@ package com.fiCharts.charts.chart2D.bubble
 			this.canvas.graphics.clear();	
 			canvas.graphics.beginFill(0, 0);
 			
-			for each (var item:SeriesDataPoint in this.dataItemVOs)
+			for each (var item:SeriesDataPoint in this.dataItemVOsForRender)
 				canvas.graphics.drawCircle(item.x, item.y, item.z);
 		}
 		
@@ -219,7 +219,7 @@ package com.fiCharts.charts.chart2D.bubble
 		{
 			var seriesDataItem:SeriesDataPoint;
 			
-			dataItemVOs.length = 0;
+			dataItemVOsForRender.length = 0;
 			horizontalValues.length = 0;
 			verticalValues.length = 0;
 			radiusValues = new Vector.<Object>;
@@ -232,23 +232,24 @@ package com.fiCharts.charts.chart2D.bubble
 			{
 				seriesDataItem = new BubbleDataPoint();
 				
-				seriesDataItem.metaData = item;
+				seriesDataItem.metaData = {};
+				seriesDataItem.metaData.source = item;
 				
-				seriesDataItem.xValue = seriesDataItem.metaData[xField]; // xValue.
-				seriesDataItem.yValue = seriesDataItem.metaData[yField]; // yValue.
-				seriesDataItem.zValue = seriesDataItem.metaData[radiusField];
+				seriesDataItem.xValue = item[xField]; // xValue.
+				seriesDataItem.yValue = item[yField]; // yValue.
+				seriesDataItem.zValue = item[radiusField];
 				
 				seriesDataItem.xVerifyValue = this.horizontalAxis.getVerifyData(seriesDataItem.xValue);
 				seriesDataItem.yVerifyValue = this.verticalAxis.getVerifyData(seriesDataItem.yValue);
 				
-				setItemColor(seriesDataItem.metaData, seriesDataItem);
+				setItemColor(item, seriesDataItem);
 				seriesDataItem.seriesName = seriesName;
 				
 				horizontalValues.push(seriesDataItem.xValue);
 				verticalValues.push(seriesDataItem.yValue);
 				radiusValues.push(seriesDataItem.zValue);
 				
-				dataItemVOs.push(seriesDataItem);
+				dataItemVOsForRender.push(seriesDataItem);
 				
 				temYPrecision = RexUtil.checkPrecision(seriesDataItem.yValue.toString())
 				temZPrecision = RexUtil.checkPrecision(seriesDataItem.zValue.toString())	
@@ -263,7 +264,7 @@ package com.fiCharts.charts.chart2D.bubble
 			if (precision > verticalAxis.dataFormatter.precision)				
 				verticalAxis.dataFormatter.precision = precision;
 			
-			for each (seriesDataItem in dataItemVOs)
+			for each (seriesDataItem in dataItemVOsForRender)
 			{
 				seriesDataItem.xLabel = horizontalAxis.getXLabel(seriesDataItem.xVerifyValue);
 				seriesDataItem.yLabel = verticalAxis.getYLabel(seriesDataItem.yVerifyValue);
@@ -280,7 +281,7 @@ package com.fiCharts.charts.chart2D.bubble
 						'seriesName', 'color']);
 			}
 			
-			dataOffsetter.maxIndex = maxDataItemIndex = dataItemVOs.length - 1;
+			dataOffsetter.maxIndex = maxDataItemIndex = dataItemVOsForRender.length - 1;
 		}
 		
 		/**

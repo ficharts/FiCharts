@@ -1,5 +1,6 @@
 package com.fiCharts.utils.XMLConfigKit.style.elements
 {
+	import com.fiCharts.utils.RexUtil;
 	import com.fiCharts.utils.XMLConfigKit.XMLVOMapper;
 	import com.fiCharts.utils.graphic.StyleManager;
 	
@@ -33,24 +34,20 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 
 		/**
 		 */		
-		public function getFormat(metaData:Object):flash.text.TextFormat
+		public function getFormat(metaData:Object):TextFormat
 		{
-			if (_format)
-			{
-				_format.font = this.font;
-				_format.size = this.size;
-				_format.bold = this.bold;
-				_format.italic = this.italic;
-				_format.letterSpacing = this.letterSpacing;
-			}
-			else
-			{
-				_format = new flash.text.TextFormat(this.font, this.size, null, this.bold, this.italic);
-				_format.letterSpacing = this.letterSpacing;
-			}
-			
-			_format.leading = this.leading;
+			if (_format == null)
+				_format = new TextFormat();
+				
+			// 颜色和字体大小可设置元数据
 			_format.color = StyleManager.getColor(metaData, this.color);
+			_format.size = RexUtil.getTagValueFromMataData(this.size, metaData);
+			
+			_format.font = this.font;
+			_format.bold = this.bold;
+			_format.italic = this.italic;
+			_format.letterSpacing = this.letterSpacing;
+			_format.leading = this.leading;
 			
 			return _format;
 		}
@@ -61,7 +58,7 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 		
 		/**
 		 */		
-		private var _format:flash.text.TextFormat;
+		private var _format:TextFormat;
 		
 		/**
 		 */		
@@ -77,14 +74,14 @@ package com.fiCharts.utils.XMLConfigKit.style.elements
 			_font = value;
 		}
 
-		private var _size:uint = 12;
+		private var _size:Object = 12;
 
-		public function get size():uint
+		public function get size():Object
 		{
 			return _size;
 		}
 
-		public function set size(value:uint):void
+		public function set size(value:Object):void
 		{
 			_size = value;
 		}

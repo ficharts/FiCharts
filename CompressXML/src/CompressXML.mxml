@@ -16,6 +16,7 @@
 			import com.fiCharts.utils.dec.VI;
 			
 			
+			
 			private function compressLicenseXML(event:MouseEvent):void
 			{
 				file.addEventListener(Event.SELECT, licenseFileSelected, false, 0, true);
@@ -80,7 +81,7 @@
 			private function saveFile(fileByte:ByteArray):void
 			{
 				var myFileStream:FileStream = new FileStream();
-				var productFile:File = File.documentsDirectory.resolvePath(sourceNativePath + fileName + '.z');
+				var productFile:File = File.documentsDirectory.resolvePath(fileName + '.z');
 				myFileStream.open(productFile, FileMode.WRITE);
 				myFileStream.writeBytes(fileByte, 0, fileByte.length);
 				myFileStream.close();

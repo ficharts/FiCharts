@@ -92,8 +92,7 @@ package com.fiCharts.ui
 		public function render():void
 		{
 			//绘制标题
-			titleUI.text = title;
-			titleUI.render();
+			this.reTitle(title);
 			
 			updateLayout(); 
 		}
@@ -135,7 +134,7 @@ package com.fiCharts.ui
 		
 		/**
 		 */		
-		private var _barHeight:Number = 40;
+		private var _barHeight:Number = 50;
 		
 		/**
 		 */		
@@ -161,6 +160,16 @@ package com.fiCharts.ui
 		}
 		
 		/**
+		 * 绘制标题
+		 */		
+		public function reTitle(txt:String):void
+		{
+			titleUI.text = txt;
+			titleUI.render();
+			titleUI.y = (barHeight - titleUI.height) / 2;
+		}
+		
+		/**
 		 */		
 		private var _title:String = '';
 
@@ -181,8 +190,7 @@ package com.fiCharts.ui
 		
 		/**
 		 */		
-		private var titleUI:LabelUI = new LabelUI;
-		
+		protected var titleUI:LabelUI = new LabelUI;
 		
 		/**
 		 * 绘制背景的画布 
@@ -244,7 +252,7 @@ package com.fiCharts.ui
 		 */		
 		public var bgStyleXML:XML = <style>
 										<border color='#CCCCCC' alpha='0'/>
-										<fill color='#EFEFEF' alpha='0.5'/>
+										<fill color='#EFEFEF' alpha='0.7'/>
 									 </style>
 		/**
 		 * 头部背景样式

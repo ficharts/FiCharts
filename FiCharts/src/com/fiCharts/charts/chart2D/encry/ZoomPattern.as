@@ -185,6 +185,8 @@ package com.fiCharts.charts.chart2D.encry
 		public function preConfig():void
 		{
 			preConfigScrollAxis();
+			
+			(chartMain.vAxises[0] as LinearAxis).ifExpend = true;
 		}
 		
 		/**
@@ -390,7 +392,7 @@ package com.fiCharts.charts.chart2D.encry
 		 */		
 		private function onWebMouseWheel(value:Number):void
 		{
-			if(chartMain.chartModel.zoom.enable)
+			if(chartMain.chartModel.zoom.enable && chartMain.chartModel.zoom.mouseWheel)
 			{
 				var percent:Number = chartMain.mouseX / chartMain.chartWidth;
 				var ifZoomIn:Boolean = value > 0 ? true : false; 
@@ -533,9 +535,14 @@ package com.fiCharts.charts.chart2D.encry
 		private var zoomAxis:AxisBase;
 		
 		/**
+		 * 每个序列仅有一个数据节点
 		 */		
 		public function getItemRenderFromSereis():void
 		{
+			chartMain.chartCanvas.clearItemRenders();
+			
+			for each (var sereis:SB in chartMain.series)
+				chartMain.chartCanvas.addItemRender(sereis.simpleDataRender);
 		}
 		
 		/**
@@ -584,14 +591,30 @@ package com.fiCharts.charts.chart2D.encry
 				for each (var series:SB in chartMain.series)
 				{
 					// 别忘了图例可以控制序列的隐藏
-					if(series.visible)
+					// 空数据节点没有tip信息
+					if(series.visible && series.tipItem.metaData)
 						tipsHolder.pushTip(series.tipItem);
 				}
 				
 				// 显示tips
 				// 别忘了序列都被图例隐藏的情况
 				if(tipsHolder.tipLength)
+				{
 					chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.SHOW_TOOL_TIPS, tipsHolder));
+					
+					series = chartMain.series[0];
+					chartMain.chartCanvas.dataLine.visible = true;
+					chartMain.chartCanvas.updataDataLinePos(series.simpleDataRender.x, series.simpleDataRender.y);
+				}
+				else
+				{
+					chartMain.chartCanvas.dataLine.visible = false;
+					chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
+				}
+					
+				
+				
+				
 			}
 		}
 		
@@ -601,6 +624,7 @@ package com.fiCharts.charts.chart2D.encry
 		{
 			zoomAxis.hideDataRender();
 			chartMain.dispatchEvent(new ToolTipsEvent(ToolTipsEvent.HIDE_TOOL_TIPS));
+			chartMain.chartCanvas.dataLine.visible = false;
 		}
 		
 		/**

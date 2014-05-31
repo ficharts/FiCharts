@@ -70,7 +70,7 @@ package com.fiCharts.charts.chart2D.area2D
 					
 					var linePartUI:PartAreaUI;
 					series.partUIs = new Vector.<PartLineUI>;
-					for each (var itemDataVO:SeriesDataPoint in series.dataItemVOs)
+					for each (var itemDataVO:SeriesDataPoint in series.dataItemVOsForRender)
 					{
 						linePartUI = new PartAreaUI(itemDataVO);
 						linePartUI.partUIRender = this;
@@ -105,8 +105,8 @@ package com.fiCharts.charts.chart2D.area2D
 			series.renderPartLine(canvas, 0, renderIndex);
 			
 			// 绘制闭合线，以形成曲面
-			var startPoint:SeriesDataPoint = series.dataItemVOs[startIndex] as SeriesDataPoint;
-			var endPoint:SeriesDataPoint = series.dataItemVOs[endIndex] as SeriesDataPoint;
+			var startPoint:SeriesDataPoint = series.dataItemVOsForRender[startIndex] as SeriesDataPoint;
+			var endPoint:SeriesDataPoint = series.dataItemVOsForRender[endIndex] as SeriesDataPoint;
 			
 			canvas.graphics.lineStyle(0, 0, 0);
 			canvas.graphics.lineTo(endPoint.x, 0);

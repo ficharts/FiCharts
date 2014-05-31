@@ -61,7 +61,7 @@ package com.fiCharts.charts.chart2D.column2D
 					
 					var columnItemUI:Column2DUI;
 					series.columnUIs = new Vector.<Column2DUI>;
-					for each (var itemDataVO:SeriesDataPoint in series.dataItemVOs)
+					for each (var itemDataVO:SeriesDataPoint in series.dataItemVOsForRender)
 					{
 						//draw column or bar
 						columnItemUI = new Column2DUI(itemDataVO);

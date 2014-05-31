@@ -28,6 +28,9 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			var axis:LinearAxis = new LinearAxis;
 			initClone(axis);
+			axis.baseAtZero = this.baseAtZero;
+			//axis.maximum = this.maximum;
+			//axis.minimum = this.minimum;
 			
 			return axis;
 		}
@@ -74,11 +77,14 @@ package com.fiCharts.charts.chart2D.core.axis
 		 */
 		override public function pushValues(values:Vector.<Object>):void
 		{
-			var item:Number, i:uint = sourceValues.length;
+			var item:Object, i:uint = sourceValues.length;
 			for each (item in values)
 			{
-				sourceValues[i] = item;
-				i ++;				
+				if (item != '')
+				{
+					sourceValues[i] = Number(item);
+					i ++;
+				}
 			}
 		}
 		
@@ -313,7 +319,7 @@ package com.fiCharts.charts.chart2D.core.axis
 
 		/**
 		 */
-		public function get ifExpend():Boolean
+		public function get ifExpend():Object
 		{
 			return _ifExpend;
 		}
@@ -321,9 +327,9 @@ package com.fiCharts.charts.chart2D.core.axis
 		/**
 		 * @private
 		 */
-		public function set ifExpend(value:Boolean):void
+		public function set ifExpend(value:Object):void
 		{
-			_ifExpend = value;
+			_ifExpend = XMLVOMapper.boolean(value);
 		}
 
 		/**
@@ -440,6 +446,35 @@ package com.fiCharts.charts.chart2D.core.axis
 		{
 			assignedMaximum = v;
 		}
+		
+		/**
+		 * 位于此数值范围内的label才会被显示，默认label都显示
+		 */		
+		private var _minLabel:Number = NaN;
+		
+		public function get minLabel():Number
+		{
+			return _minLabel;
+		}
+		
+		public function set minLabel(value:Number):void
+		{
+			_minLabel = value;
+		}
+		
+		/**
+		 */		
+		private var _maxLabel:Number = NaN;
+		
+		public function get maxLabel():Number
+		{
+			return _maxLabel;
+		}
+		
+		public function set maxLabel(value:Number):void
+		{
+			_maxLabel = value;
+		}
 
 		/**
 		 */
@@ -494,8 +529,13 @@ package com.fiCharts.charts.chart2D.core.axis
 			var item:Object, i:Number = yScrollData.length;
 			for each(item in value)
 			{
-				yScrollData[i] = item;
-				i ++
+				if (item != '')
+				{
+					yScrollData[i] = Number(item);
+					
+					i ++
+				}
+				
 			}
 		}
 		
